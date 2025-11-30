@@ -1,0 +1,241 @@
+{
+    "common": {
+        "loading": "Chargement...",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "create": "Créer",
+        "update": "Mettre à jour",
+        "search": "Rechercher",
+        "searchPlaceholder": "Rechercher par nom ou description...",
+        "noResults": "Aucun résultat",
+        "actions": "Actions",
+        "yes": "Oui",
+        "no": "Non",
+        "confirm": "Confirmer",
+        "back": "Retour",
+        "close": "Fermer",
+        "name": "Nom",
+        "description": "Description",
+        "createdAt": "Créé le",
+        "updatedAt": "Modifié le",
+        "creator": "Créateur",
+        "clearSearch": "Effacer la recherche",
+        "user": "Utilisateur",
+        "support": "Support",
+        "viewAll": "Voir tout",
+        "new": "nouveau",
+        "beta": "beta"
+    },
+    "header": {
+        "search": "Rechercher ou taper une commande...",
+        "notifications": "Notifications",
+        "profile": "Profil",
+        "editProfile": "Modifier le profil",
+        "accountSettings": "Paramètres du compte",
+        "settings": "Paramètres",
+        "logout": "Déconnexion",
+        "signOut": "Se déconnecter"
+    },
+    "language": {
+        "title": "Langue",
+        "fr": "Français",
+        "en": "English"
+    },
+    "sidebar": {
+        "dashboard": "Tableau de bord",
+        "sites": "Sites",
+        "zones": "Zones",
+        "materials": "Matériels",
+        "items": "Articles",
+        "suppliers": "Fournisseurs",
+        "companies": "Entreprises",
+        "maintenances": "Maintenances",
+        "incidents": "Incidents",
+        "cleanings": "Nettoyages",
+        "users": "Utilisateurs",
+        "settings": "Paramètres",
+        "jobCategories": "Catégories métier",
+        "managementCategories": "Catégories gestion",
+        "manageMaintenances": "Gérer les maintenances",
+        "manageCompanies": "Gérer les entreprises",
+        "manageItems": "Gérer les articles",
+        "manageItemsMovements": "Gérer les mouvements",
+        "manageSuppliers": "Gérer les fournisseurs",
+        "manageMaterials": "Gérer les matériels",
+        "manageZones": "Gérer les zones",
+        "manageSites": "Gérer les sites",
+        "manageUsers": "Gérer les utilisateurs",
+        "rolesPermissions": "Rôles et permissions",
+        "manageRoles": "Gérer les rôles",
+        "managePermissions": "Gérer les permissions"
+    },
+    "dashboard": {
+        "title": "Tableau de bord",
+        "pageTitle": "Tableau de bord | XetaSuite",
+        "pageDescription": "Tableau de bord XetaSuite - Gestion des maintenances, incidents et stocks",
+        "welcome": "Bienvenue, {{name}}",
+        "stats": {
+            "maintenancesThisMonth": "Maintenances ce mois",
+            "openIncidents": "Incidents ouverts",
+            "itemsInStock": "Articles en stock",
+            "activeSites": "Sites actifs"
+        },
+        "charts": {
+            "maintenanceEvolution": "Évolution des maintenances",
+            "maintenanceEvolutionDesc": "Maintenances réalisées sur les 12 derniers mois",
+            "stockEvolution": "Évolution des stocks",
+            "stockEvolutionDesc": "Mouvements de stock sur les 12 derniers mois",
+            "incidentsByMonth": "Incidents par mois",
+            "incidentsByMonthDesc": "Nombre d'incidents signalés mensuellement"
+        },
+        "activity": {
+            "title": "Activité récente",
+            "status": {
+                "pending": "En attente",
+                "completed": "Terminé",
+                "inProgress": "En cours"
+            }
+        },
+        "incidents": {
+            "summary": "Résumé des incidents",
+            "open": "Ouverts",
+            "inProgress": "En cours",
+            "resolved": "Résolus",
+            "bySeverity": "Par sévérité",
+            "severity": {
+                "critical": "Critique",
+                "high": "Haute",
+                "medium": "Moyenne",
+                "low": "Basse"
+            }
+        },
+        "maintenances": {
+            "upcoming": "Maintenances à venir",
+            "schedule": "Planifier",
+            "priority": {
+                "low": "Basse",
+                "medium": "Moyenne",
+                "high": "Haute"
+            },
+            "type": {
+                "preventive": "Préventive",
+                "corrective": "Corrective"
+            }
+        },
+        "lowStock": {
+            "title": "Stock faible",
+            "itemsCount": "{{count}} articles"
+        }
+    },
+    "suppliers": {
+        "title": "Fournisseurs",
+        "description": "Gestion des fournisseurs",
+        "listTitle": "Liste des fournisseurs",
+        "create": "Nouveau fournisseur",
+        "edit": "Modifier le fournisseur",
+        "name": "Nom",
+        "nameLabel": "Nom *",
+        "items": "Articles",
+        "manageSuppliersAndTheirInformation": "Gérez vos fournisseurs et leurs informations",
+        "noSuppliers": "Aucun fournisseur trouvé",
+        "noSuppliersFor": "Aucun fournisseur trouvé pour \"{{search}}\"",
+        "deleteTitle": "Supprimer le fournisseur",
+        "deleteMessage": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible.",
+        "form": {
+            "namePlaceholder": "Nom du fournisseur",
+            "descriptionPlaceholder": "Description du fournisseur (optionnel)",
+            "descriptionLabel": "Description"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des fournisseurs",
+            "totalItems": "Articles total",
+            "itemsListTitle": "Articles du fournisseur",
+            "itemsListDescription": "Liste des articles fournis par {{name}}",
+            "searchItems": "Rechercher un article...",
+            "reference": "Référence",
+            "stock": "Stock",
+            "status": "État",
+            "price": "Prix d'achat",
+            "site": "Site",
+            "noItems": "Aucun article pour ce fournisseur",
+            "noItemsFor": "Aucun article trouvé pour \"{{search}}\"",
+            "stockStatus": {
+                "ok": "OK",
+                "warning": "Attention",
+                "critical": "Critique",
+                "empty": "Rupture"
+            }
+        },
+        "export": {
+            "button": "Exporter ({{count}})",
+            "exporting": "Export en cours...",
+            "selected": "{{count}} sélectionné(s)",
+            "selectAll": "Tout sélectionner",
+            "deselectAll": "Tout désélectionner",
+            "clearSelection": "Effacer la sélection",
+            "comingSoon": "L'export sera bientôt disponible"
+        }
+    },
+    "validation": {
+        "required": "Ce champ est requis",
+        "nameRequired": "Le nom est requis",
+        "email": "Veuillez entrer une adresse email valide",
+        "min": "Ce champ doit contenir au moins {{min}} caractères",
+        "max": "Ce champ ne doit pas dépasser {{max}} caractères",
+        "nameMaxLength": "Le nom ne peut pas dépasser 255 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 1000 caractères"
+    },
+    "auth": {
+        "login": "Connexion",
+        "logout": "Déconnexion",
+        "email": "Adresse email",
+        "emailPlaceholder": "Entrez votre email",
+        "password": "Mot de passe",
+        "passwordPlaceholder": "Entrez votre mot de passe",
+        "rememberMe": "Se souvenir de moi",
+        "forgotPassword": "Mot de passe oublié ?",
+        "forgotPasswordTitle": "Mot de passe oublié ?",
+        "forgotPasswordDesc": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+        "resetPassword": "Réinitialiser le mot de passe",
+        "resetPasswordTitle": "Réinitialiser votre mot de passe",
+        "resetPasswordDesc": "Entrez votre nouveau mot de passe ci-dessous.",
+        "loginButton": "Se connecter",
+        "signInToAccount": "Connectez-vous à votre compte",
+        "signingIn": "Connexion en cours...",
+        "backToSignIn": "Retour à la connexion",
+        "emailSent": "Email envoyé !",
+        "emailSentDesc": "Si un compte existe avec cette adresse email, vous recevrez bientôt un lien de réinitialisation.",
+        "sending": "Envoi en cours...",
+        "sendResetLink": "Envoyer le lien",
+        "newPassword": "Nouveau mot de passe",
+        "newPasswordPlaceholder": "Entrez votre nouveau mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "confirmPasswordPlaceholder": "Confirmez votre nouveau mot de passe",
+        "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+        "passwordMinLengthHint": "Doit contenir au moins 8 caractères",
+        "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+        "passwordResetSuccess": "Mot de passe réinitialisé avec succès. Veuillez vous connecter.",
+        "invalidLink": "Lien invalide",
+        "invalidLinkDesc": "Ce lien de réinitialisation est invalide ou a expiré. Veuillez en demander un nouveau.",
+        "resetting": "Réinitialisation en cours..."
+    },
+    "errors": {
+        "generic": "Une erreur est survenue",
+        "notFound": "Page non trouvée",
+        "unauthorized": "Accès non autorisé",
+        "unauthorizedDescription": "Vous n'avez pas les permissions nécessaires pour accéder à cette page. Veuillez contacter votre administrateur si vous pensez qu'il s'agit d'une erreur.",
+        "backToDashboard": "Retour au tableau de bord",
+        "forbidden": "Accès interdit"
+    },
+    "pagination": {
+        "showing": "Affichage de {{from}} à {{to}} sur {{total}} résultats",
+        "showingText": "Affichage de",
+        "to": "à",
+        "of": "sur",
+        "results": "résultats",
+        "previous": "Précédent",
+        "next": "Suivant"
+    }
+}
