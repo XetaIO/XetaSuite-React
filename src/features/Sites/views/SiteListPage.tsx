@@ -315,7 +315,7 @@ const SiteListPage: FC = () => {
                                     </button>
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("common.description")}
+                                    {t("sites.detail.managers")}
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
@@ -415,7 +415,9 @@ const SiteListPage: FC = () => {
                                             </Link>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            —
+                                            {site.managers && site.managers.length > 0
+                                                ? site.managers.map((manager) => manager.full_name).join(", ")
+                                                : t("sites.detail.noManagers")}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
                                             <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
