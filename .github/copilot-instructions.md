@@ -15,22 +15,40 @@ React SPA frontend for XetaSuite multi-tenant ERP application. Communicates with
 
 ```
 src/
-├── App.tsx              # Main app with routes
-├── main.tsx             # Entry point
-├── index.css            # Global styles & Tailwind theme
-├── components/
-│   ├── icons/           # Custom SVG icons
-│   ├── layout/          # AppLayout, Sidebar, Header, AuthLayout
-│   └── ui/              # Reusable UI components (Button, Input, Alert)
-├── contexts/            # React contexts (Auth, Sidebar, Theme)
-├── hooks/               # Custom hooks (RequireAuth, RequireGuest)
-├── pages/
-│   ├── auth/            # Login, ForgotPassword, ResetPassword
-│   └── dashboard/       # Dashboard page
-├── services/
-│   └── api.ts           # Axios instance & API functions
-└── types/
-    └── index.ts         # TypeScript interfaces
+├── app/                                 # Point d'entrée application
+│   ├── routes/
+│   │   ├── types.ts               # RouteConfig interface
+│   │   ├── config.ts              # Configuration des routes
+│   │   └── index.ts
+│   ├── App.tsx                     # App principale avec providers
+│   ├── AppRoutes.tsx       # Générateur de routes
+│   └── index.ts
+├── shared/                          # Code partagé
+│   ├── api/
+│   │   ├── httpClient.ts     # Axios instance
+│   │   └── urlBuilder.ts      # Construction d'URLs
+│   ├── types/
+│   │   ├── pagination.ts    # PaginationMeta, PaginatedResponse
+│   │   ├── api.ts                   # SingleResponse, ManagerResult
+│   │   └── user.ts                 # User, Role, Permission
+│   ├── components/
+│   │   ├── ui/                        # Button, Modal, Alert, Table
+│   │   ├── form/                  # Input, Label, Checkbox
+│   │   └── common/           # Pagination, DeleteConfirmModal
+│   └── hooks/
+│       ├── useModal.ts
+│       └── useGoBack.ts
+└── features/
+    ├── Auth/                         # Feature authentification
+    │   ├── types/
+    │   ├── services/             # AuthRepository + AuthManager
+    │   ├── store/                   # AuthContext
+    │   ├── hooks/                 # useAuth, useRequireAuth
+    │   └── views/                  # SignIn, ForgotPassword, ResetPassword
+    └── Suppliers/                # Feature fournisseurs
+        ├── types/
+        ├── services/             # SupplierRepository + SupplierManager
+        └── views/                 # SupplierListPage, SupplierDetailPage, SupplierModal
 ```
 
 ## Conventions

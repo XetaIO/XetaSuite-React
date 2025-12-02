@@ -1,19 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import './i18n/index.ts';
-import "./index.css";
+import "./app/styles/index.css";
 import "swiper/swiper-bundle.css";
 import "flatpickr/dist/flatpickr.css";
-import App from "./App.tsx";
-import { AppWrapper } from "./components/common/PageMeta.tsx";
-import { ThemeProvider } from "./contexts/ThemeContext.tsx";
+import "@/app/i18n";
+import { App } from "@/app";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider>
-      <AppWrapper>
-        <App />
-      </AppWrapper>
-    </ThemeProvider>
-  </StrictMode>,
+    <App />
+  </StrictMode>
 );
