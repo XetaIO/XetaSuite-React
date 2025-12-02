@@ -9,18 +9,18 @@ import { Checkbox } from "@/shared/components/form";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
-import { SupplierManager } from "../services";
-import { SupplierModal } from "./SupplierModal";
-import type { Supplier, SupplierFilters } from "../types";
+import { SiteManager } from "../services";
+import { SiteModal } from "./SiteModal";
+import type { Site, SiteFilters } from "../types";
 import type { PaginationMeta } from "@/shared/types";
 
-type SortField = "name" | "item_count" | "created_at";
+type SortField = "name" | "zone_count" | "created_at";
 type SortDirection = "asc" | "desc";
 
-const SupplierListPage: FC = () => {
+const SiteListPage: FC = () => {
     const { t } = useTranslation();
     const { hasPermission } = useAuth();
-    const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+    const [sites, setSites] = useState<Site[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -32,8 +32,8 @@ const SupplierListPage: FC = () => {
     const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
     const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
-    // Selected supplier for edit/delete
-    const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
+    // Selected site for edit/delete
+    const [selectedSite, setSelectedSite] = useState<Site | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
     // Selection for export
@@ -41,13 +41,13 @@ const SupplierListPage: FC = () => {
     const [isExporting, setIsExporting] = useState(false);
 
     // Permissions
-    const canCreate = hasPermission("supplier.create");
-    const canUpdate = hasPermission("supplier.update");
-    const canDelete = hasPermission("supplier.delete");
-    const canExport = hasPermission("supplier.export");
+    const canCreate = hasPermission("site.create");
+    const canUpdate = hasPermission("site.update");
+    const canDelete = hasPermission("site.delete");
+    const canExport = hasPermission("site.export");
 
     // Modals
-    const supplierModal = useModal();
+    const siteModal = useModal();
     const deleteModal = useModal();
 
     // Debounce search input
@@ -60,12 +60,12 @@ const SupplierListPage: FC = () => {
         return () => clearTimeout(timer);
     }, [searchQuery]);
 
-    const fetchSuppliers = useCallback(async (filters: SupplierFilters) => {
+    const fetchSites = useCallback(async (filters: SiteFilters) => {
         setIsLoading(true);
         setError(null);
-        const result = await SupplierManager.getAll(filters);
+        const result = await SiteManager.getAll(filters);
         if (result.success && result.data) {
-            setSuppliers(result.data.data);
+            setSites(result.data.data);
             setMeta(result.data.meta);
         } else {
             setError(result.error || t("errors.generic"));
@@ -74,14 +74,14 @@ const SupplierListPage: FC = () => {
     }, [t]);
 
     useEffect(() => {
-        const filters: SupplierFilters = {
+        const filters: SiteFilters = {
             page: currentPage,
             search: debouncedSearch || undefined,
             sort_by: sortBy,
             sort_direction: sortBy ? sortDirection : undefined,
         };
-        fetchSuppliers(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchSuppliers]);
+        fetchSites(filters);
+    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchSites]);
 
     // Clear selection only when search changes
     useEffect(() => {
@@ -118,36 +118,36 @@ const SupplierListPage: FC = () => {
     };
 
     const handleCreate = () => {
-        setSelectedSupplier(null);
-        supplierModal.openModal();
+        setSelectedSite(null);
+        siteModal.openModal();
     };
 
-    const handleEdit = (supplier: Supplier) => {
-        setSelectedSupplier(supplier);
-        supplierModal.openModal();
+    const handleEdit = (site: Site) => {
+        setSelectedSite(site);
+        siteModal.openModal();
     };
 
-    const handleDeleteClick = (supplier: Supplier) => {
-        setSelectedSupplier(supplier);
+    const handleDeleteClick = (site: Site) => {
+        setSelectedSite(site);
         deleteModal.openModal();
     };
 
     const handleDeleteConfirm = async () => {
-        if (!selectedSupplier) return;
+        if (!selectedSite) return;
 
         setIsDeleting(true);
-        const result = await SupplierManager.delete(selectedSupplier.id);
+        const result = await SiteManager.delete(selectedSite.id);
         if (result.success) {
-            showSuccess(t("suppliers.messages.deleted", { name: selectedSupplier.name }));
+            showSuccess(t("sites.messages.deleted", { name: selectedSite.name }));
             deleteModal.closeModal();
-            setSelectedSupplier(null);
-            const filters: SupplierFilters = {
+            setSelectedSite(null);
+            const filters: SiteFilters = {
                 page: currentPage,
                 search: debouncedSearch || undefined,
                 sort_by: sortBy,
                 sort_direction: sortBy ? sortDirection : undefined,
             };
-            fetchSuppliers(filters);
+            fetchSites(filters);
         } else {
             showError(result.error || t("errors.generic"));
         }
@@ -155,13 +155,13 @@ const SupplierListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        const filters: SupplierFilters = {
+        const filters: SiteFilters = {
             page: currentPage,
             search: debouncedSearch || undefined,
             sort_by: sortBy,
             sort_direction: sortBy ? sortDirection : undefined,
         };
-        fetchSuppliers(filters);
+        fetchSites(filters);
     };
 
     // Selection handlers
@@ -185,8 +185,8 @@ const SupplierListPage: FC = () => {
         setSelectedIds(newSelected);
     };
 
-    const currentPageIds = suppliers.map((s) => s.id);
-    const isAllCurrentPageSelected = suppliers.length > 0 && currentPageIds.every((id) => selectedIds.has(id));
+    const currentPageIds = sites.map((s) => s.id);
+    const isAllCurrentPageSelected = sites.length > 0 && currentPageIds.every((id) => selectedIds.has(id));
     const isSomeCurrentPageSelected = currentPageIds.some((id) => selectedIds.has(id)) && !isAllCurrentPageSelected;
 
     // Export handler
@@ -196,7 +196,7 @@ const SupplierListPage: FC = () => {
         setIsExporting(true);
         try {
             // TODO: Implement export API call
-            alert(t("suppliers.export.comingSoon"));
+            alert(t("sites.export.comingSoon"));
         } finally {
             setIsExporting(false);
         }
@@ -204,18 +204,18 @@ const SupplierListPage: FC = () => {
 
     return (
         <>
-            <PageMeta title={`${t("suppliers.title")} | XetaSuite`} description={t("suppliers.description")} />
-            <PageBreadcrumb pageTitle={t("suppliers.title")} />
+            <PageMeta title={`${t("sites.title")} | XetaSuite`} description={t("sites.description")} />
+            <PageBreadcrumb pageTitle={t("sites.title")} />
 
             <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
                 {/* Header */}
                 <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t("suppliers.listTitle")}
+                            {t("sites.listTitle")}
                         </h3>
                         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("suppliers.manageSuppliersAndTheirInformation")}
+                            {t("sites.manageSitesAndTheirInformation")}
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
@@ -228,8 +228,8 @@ const SupplierListPage: FC = () => {
                                 disabled={isExporting}
                             >
                                 {isExporting
-                                    ? t("suppliers.export.exporting")
-                                    : t("suppliers.export.button", { count: selectedIds.size })}
+                                    ? t("sites.export.exporting")
+                                    : t("sites.export.button", { count: selectedIds.size })}
                             </Button>
                         )}
                         {canCreate && (
@@ -239,7 +239,7 @@ const SupplierListPage: FC = () => {
                                 startIcon={<FaPlus className="h-4 w-4" />}
                                 onClick={handleCreate}
                             >
-                                {t("suppliers.create")}
+                                {t("sites.create")}
                             </Button>
                         )}
                     </div>
@@ -271,12 +271,12 @@ const SupplierListPage: FC = () => {
                         </div>
                         {canExport && selectedIds.size > 0 && (
                             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                                <span>{t("suppliers.export.selected", { count: selectedIds.size })}</span>
+                                <span>{t("sites.export.selected", { count: selectedIds.size })}</span>
                                 <button
                                     onClick={() => setSelectedIds(new Set())}
                                     className="text-brand-500 hover:text-brand-600"
                                 >
-                                    {t("suppliers.export.clearSelection")}
+                                    {t("sites.export.clearSelection")}
                                 </button>
                             </div>
                         )}
@@ -301,7 +301,7 @@ const SupplierListPage: FC = () => {
                                             checked={isAllCurrentPageSelected}
                                             indeterminate={isSomeCurrentPageSelected}
                                             onChange={handleSelectAll}
-                                            title={isAllCurrentPageSelected ? t("suppliers.export.deselectAll") : t("suppliers.export.selectAll")}
+                                            title={isAllCurrentPageSelected ? t("sites.export.deselectAll") : t("sites.export.selectAll")}
                                         />
                                     </TableCell>
                                 )}
@@ -319,11 +319,11 @@ const SupplierListPage: FC = () => {
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
-                                        onClick={() => handleSort("item_count")}
+                                        onClick={() => handleSort("zone_count")}
                                         className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
                                     >
-                                        {t("suppliers.items")}
-                                        {renderSortIcon("item_count")}
+                                        {t("sites.zones")}
+                                        {renderSortIcon("zone_count")}
                                     </button>
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -376,12 +376,12 @@ const SupplierListPage: FC = () => {
                                         )}
                                     </TableRow>
                                 ))
-                            ) : suppliers.length === 0 ? (
+                            ) : sites.length === 0 ? (
                                 <TableRow>
                                     <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={canExport ? 7 : 6}>
                                         {debouncedSearch ? (
                                             <div>
-                                                <p>{t("suppliers.noSuppliersFor", { search: debouncedSearch })}</p>
+                                                <p>{t("sites.noSitesFor", { search: debouncedSearch })}</p>
                                                 <button
                                                     onClick={() => setSearchQuery("")}
                                                     className="mt-2 text-sm text-brand-500 hover:text-brand-600"
@@ -390,54 +390,50 @@ const SupplierListPage: FC = () => {
                                                 </button>
                                             </div>
                                         ) : (
-                                            t("suppliers.noSuppliers")
+                                            t("sites.noSites")
                                         )}
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                suppliers.map((supplier) => (
+                                sites.map((site) => (
                                     <TableRow
-                                        key={supplier.id}
-                                        className={`border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 ${selectedIds.has(supplier.id) ? "bg-brand-50/50 dark:bg-brand-500/5" : ""
+                                        key={site.id}
+                                        className={`border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 ${selectedIds.has(site.id) ? "bg-brand-50/50 dark:bg-brand-500/5" : ""
                                             }`}
                                     >
                                         {canExport && (
                                             <TableCell className="px-6 py-4">
-                                                <Checkbox checked={selectedIds.has(supplier.id)} onChange={() => handleSelectOne(supplier.id)} />
+                                                <Checkbox checked={selectedIds.has(site.id)} onChange={() => handleSelectOne(site.id)} />
                                             </TableCell>
                                         )}
                                         <TableCell className="px-6 py-4">
                                             <Link
-                                                to={`/suppliers/${supplier.id}`}
+                                                to={`/sites/${site.id}`}
                                                 className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
                                             >
-                                                {supplier.name}
+                                                {site.name}
                                             </Link>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {supplier.description ? (
-                                                <span className="line-clamp-1">{supplier.description}</span>
-                                            ) : (
-                                                <span className="text-gray-400 dark:text-gray-500">—</span>
-                                            )}
+                                            —
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
                                             <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
-                                                {supplier.item_count}
+                                                {site.zone_count}
                                             </span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {supplier.creator?.full_name || <span className="text-gray-400 dark:text-gray-500">—</span>}
+                                            —
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {SupplierManager.formatDate(supplier.created_at)}
+                                            {SiteManager.formatDate(site.created_at)}
                                         </TableCell>
                                         {(canUpdate || canDelete) && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="flex items-center justify-end gap-2">
                                                     {canUpdate && (
                                                         <button
-                                                            onClick={() => handleEdit(supplier)}
+                                                            onClick={() => handleEdit(site)}
                                                             className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-brand-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-brand-400"
                                                             title={t("common.edit")}
                                                         >
@@ -446,7 +442,7 @@ const SupplierListPage: FC = () => {
                                                     )}
                                                     {canDelete && (
                                                         <button
-                                                            onClick={() => handleDeleteClick(supplier)}
+                                                            onClick={() => handleDeleteClick(site)}
                                                             className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-error-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-error-400"
                                                             title={t("common.delete")}
                                                         >
@@ -468,10 +464,10 @@ const SupplierListPage: FC = () => {
             </div>
 
             {/* Create/Edit Modal */}
-            <SupplierModal
-                isOpen={supplierModal.isOpen}
-                onClose={supplierModal.closeModal}
-                supplier={selectedSupplier}
+            <SiteModal
+                isOpen={siteModal.isOpen}
+                onClose={siteModal.closeModal}
+                site={selectedSite}
                 onSuccess={handleModalSuccess}
             />
 
@@ -481,11 +477,11 @@ const SupplierListPage: FC = () => {
                 onClose={deleteModal.closeModal}
                 onConfirm={handleDeleteConfirm}
                 isLoading={isDeleting}
-                title={t("suppliers.deleteTitle")}
-                message={t("common.confirmDelete", { name: selectedSupplier?.name })}
+                title={t("sites.deleteTitle")}
+                message={t("common.confirmDelete", { name: selectedSite?.name })}
             />
         </>
     );
 };
 
-export default SupplierListPage;
+export default SiteListPage;

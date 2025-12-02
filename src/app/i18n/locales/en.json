@@ -26,7 +26,22 @@
         "support": "Support",
         "viewAll": "View all",
         "new": "new",
-        "beta": "beta"
+        "beta": "beta",
+        "export": {
+            "button": "Export ({{count}})",
+            "exporting": "Exporting...",
+            "selected": "{{count}} selected",
+            "selectAll": "Select all",
+            "deselectAll": "Deselect all",
+            "clearSelection": "Clear selection",
+            "comingSoon": "Export feature coming soon"
+        },
+        "messages": {
+            "created": "\"{{name}}\" has been created successfully",
+            "updated": "\"{{name}}\" has been updated successfully",
+            "deleted": "\"{{name}}\" has been deleted successfully"
+        },
+        "confirmDelete": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
     },
     "header": {
         "search": "Search or type command...",
@@ -146,7 +161,6 @@
         "noSuppliers": "No suppliers found",
         "noSuppliersFor": "No suppliers found for \"{{search}}\"",
         "deleteTitle": "Delete supplier",
-        "deleteMessage": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
         "form": {
             "namePlaceholder": "Supplier name",
             "descriptionPlaceholder": "Supplier description (optional)",
@@ -185,6 +199,66 @@
             "created": "Supplier \"{{name}}\" has been created successfully",
             "updated": "Supplier \"{{name}}\" has been updated successfully",
             "deleted": "Supplier \"{{name}}\" has been deleted successfully"
+        }
+    },
+    "sites": {
+        "title": "Sites",
+        "description": "Manage sites",
+        "listTitle": "Sites list",
+        "notFound": "Site not found",
+        "notFoundMessage": "The site you are looking for does not exist or has been deleted.",
+        "create": "New site",
+        "edit": "Edit site",
+        "name": "Name",
+        "nameLabel": "Name *",
+        "zones": "Zones",
+        "manageSitesAndTheirInformation": "Manage your sites and their information",
+        "noSites": "No sites found",
+        "noSitesFor": "No sites found for \"{{search}}\"",
+        "deleteTitle": "Delete site",
+        "form": {
+            "namePlaceholder": "Site name",
+            "managers": "Managers",
+            "managersHint": "Select the users who will manage this site",
+            "noUsersAvailable": "No users available",
+            "email": "Email",
+            "emailPlaceholder": "email@example.com",
+            "officePhone": "Office phone",
+            "officePhonePlaceholder": "01 23 45 67 89",
+            "cellPhone": "Cell phone",
+            "cellPhonePlaceholder": "06 12 34 56 78",
+            "address": "Address",
+            "addressPlaceholder": "123 Main Street",
+            "postalCode": "Postal code",
+            "postalCodePlaceholder": "75001",
+            "city": "City",
+            "cityPlaceholder": "Paris"
+        },
+        "detail": {
+            "backToList": "Back to sites list",
+            "headquarters": "Headquarters",
+            "totalZones": "Zones",
+            "totalUsers": "Users",
+            "contactInfo": "Contact information",
+            "noContact": "No contact information",
+            "managers": "Managers",
+            "noManagers": "No managers assigned",
+            "zonesListTitle": "Site zones",
+            "zonesListDescription": "List of zones in {{name}}"
+        },
+        "export": {
+            "button": "Export ({{count}})",
+            "exporting": "Exporting...",
+            "selected": "{{count}} selected",
+            "selectAll": "Select all",
+            "deselectAll": "Deselect all",
+            "clearSelection": "Clear selection",
+            "comingSoon": "Export feature coming soon"
+        },
+        "messages": {
+            "created": "Site \"{{name}}\" has been created successfully",
+            "updated": "Site \"{{name}}\" has been updated successfully",
+            "deleted": "Site \"{{name}}\" has been deleted successfully"
         }
     },
     "validation": {

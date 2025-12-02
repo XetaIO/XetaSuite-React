@@ -48,4 +48,10 @@ export const API_ENDPOINTS = {
         DETAIL: (id: number) => `/api/v1/suppliers/${id}`,
         ITEMS: (id: number) => `/api/v1/suppliers/${id}/items`,
     },
+    // Sites
+    SITES: {
+        BASE: '/api/v1/sites',
+        DETAIL: (id: number) => `/api/v1/sites/${id}`,
+        USERS: (id: number) => `/api/v1/sites/${id}/users`,
+    },
 } as const;

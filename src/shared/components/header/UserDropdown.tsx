@@ -24,6 +24,11 @@ export default function UserDropdown() {
             >
                 <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
                     {/*TODO: Replace with Avatar component*/}
+                    <img
+                        src={user?.avatar || '/default-avatar.png'}
+                        alt={user?.full_name || 'User Avatar'}
+                    //className="h-11 w-11 object-cover"
+                    />
                 </span>
 
                 <span className="block mr-1 font-medium text-theme-sm">{user?.full_name ?? t('common.user')}</span>

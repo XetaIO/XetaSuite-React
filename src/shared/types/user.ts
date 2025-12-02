@@ -12,6 +12,7 @@ export interface User {
     first_name: string;
     last_name: string;
     full_name: string;
+    avatar: string;
     email: string;
     locale: 'fr' | 'en';
     current_site_id?: number;
@@ -36,15 +37,6 @@ export interface Permission {
     id: number;
     name: string;
     guard_name: string;
-    created_at: string;
-    updated_at: string;
-}
-
-// Team type for multi-tenancy
-export interface Site {
-    id: number;
-    name: string;
-    slug: string;
     created_at: string;
     updated_at: string;
 }

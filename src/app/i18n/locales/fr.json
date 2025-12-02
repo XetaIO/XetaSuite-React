@@ -26,7 +26,22 @@
         "support": "Support",
         "viewAll": "Voir tout",
         "new": "nouveau",
-        "beta": "beta"
+        "beta": "beta",
+        "export": {
+            "button": "Exporter ({{count}})",
+            "exporting": "Export en cours...",
+            "selected": "{{count}} sélectionné(s)",
+            "selectAll": "Tout sélectionner",
+            "deselectAll": "Tout désélectionner",
+            "clearSelection": "Effacer la sélection",
+            "comingSoon": "L'export sera bientôt disponible"
+        },
+        "messages": {
+            "created": "\"{{name}}\" a été créé avec succès",
+            "updated": "\"{{name}}\" a été mis à jour avec succès",
+            "deleted": "\"{{name}}\" a été supprimé avec succès"
+        },
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible."
     },
     "header": {
         "search": "Rechercher ou taper une commande...",
@@ -146,7 +161,6 @@
         "noSuppliers": "Aucun fournisseur trouvé",
         "noSuppliersFor": "Aucun fournisseur trouvé pour \"{{search}}\"",
         "deleteTitle": "Supprimer le fournisseur",
-        "deleteMessage": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible.",
         "form": {
             "namePlaceholder": "Nom du fournisseur",
             "descriptionPlaceholder": "Description du fournisseur (optionnel)",
@@ -185,6 +199,66 @@
             "created": "Le fournisseur \"{{name}}\" a été créé avec succès",
             "updated": "Le fournisseur \"{{name}}\" a été mis à jour avec succès",
             "deleted": "Le fournisseur \"{{name}}\" a été supprimé avec succès"
+        }
+    },
+    "sites": {
+        "title": "Sites",
+        "description": "Gestion des sites",
+        "listTitle": "Liste des sites",
+        "notFound": "Site introuvable",
+        "notFoundMessage": "Le site que vous recherchez n'existe pas ou a été supprimé.",
+        "create": "Nouveau site",
+        "edit": "Modifier le site",
+        "name": "Nom",
+        "nameLabel": "Nom *",
+        "zones": "Zones",
+        "manageSitesAndTheirInformation": "Gérez vos sites et leurs informations",
+        "noSites": "Aucun site trouvé",
+        "noSitesFor": "Aucun site trouvé pour \"{{search}}\"",
+        "deleteTitle": "Supprimer le site",
+        "form": {
+            "namePlaceholder": "Nom du site",
+            "managers": "Gestionnaires",
+            "managersHint": "Sélectionnez les utilisateurs qui géreront ce site",
+            "noUsersAvailable": "Aucun utilisateur disponible",
+            "email": "Email",
+            "emailPlaceholder": "email@exemple.com",
+            "officePhone": "Téléphone bureau",
+            "officePhonePlaceholder": "01 23 45 67 89",
+            "cellPhone": "Téléphone portable",
+            "cellPhonePlaceholder": "06 12 34 56 78",
+            "address": "Adresse",
+            "addressPlaceholder": "123 rue Principale",
+            "postalCode": "Code postal",
+            "postalCodePlaceholder": "75001",
+            "city": "Ville",
+            "cityPlaceholder": "Paris"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des sites",
+            "headquarters": "Siège social",
+            "totalZones": "Zones",
+            "totalUsers": "Utilisateurs",
+            "contactInfo": "Informations de contact",
+            "noContact": "Aucune information de contact",
+            "managers": "Gestionnaires",
+            "noManagers": "Aucun gestionnaire assigné",
+            "zonesListTitle": "Zones du site",
+            "zonesListDescription": "Liste des zones de {{name}}"
+        },
+        "export": {
+            "button": "Exporter ({{count}})",
+            "exporting": "Export en cours...",
+            "selected": "{{count}} sélectionné(s)",
+            "selectAll": "Tout sélectionner",
+            "deselectAll": "Tout désélectionner",
+            "clearSelection": "Effacer la sélection",
+            "comingSoon": "L'export sera bientôt disponible"
+        },
+        "messages": {
+            "created": "Le site \"{{name}}\" a été créé avec succès",
+            "updated": "Le site \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "Le site \"{{name}}\" a été supprimé avec succès"
         }
     },
     "validation": {

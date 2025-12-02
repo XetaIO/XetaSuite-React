@@ -313,7 +313,7 @@
 /* React Toastify - Position below header */
 :root {
   --toastify-toast-top: 94px !important;
-  --toastify-color-dark: color-mix(in oklab, var(--color-white) 3%, transparent) !important;
+  --toastify-color-dark: #171f2f !important;
 }
 
 .Toastify__toast {

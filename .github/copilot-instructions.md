@@ -1,7 +1,8 @@
 # XetaSuite-React - Copilot Instructions
 
 ## Project Overview
-React SPA frontend for XetaSuite multi-tenant ERP application. Communicates with Laravel backend via Sanctum stateful API authentication.
+
+XetaSuite-React is the **React SPA frontend** for XetaSuite multi-tenant ERP application. Communicates with Laravel backend via **Sanctum stateful API authentication** (cookies, not tokens).
 
 ## Tech Stack
 - **React** 19.2 with TypeScript 5.9
@@ -9,7 +10,232 @@ React SPA frontend for XetaSuite multi-tenant ERP application. Communicates with
 - **Tailwind CSS** 4.1 with `@tailwindcss/vite` plugin
 - **React Router DOM** 7.9 for routing
 - **Axios** for API requests
+- **react-i18next** for internationalization
 - **TailAdmin** design system (custom theme)
+
+## Sanctum SPA Authentication (Critical)
+
+### How It Works
+XetaSuite uses **Sanctum stateful authentication** with cookies (not API tokens). The Vite proxy forwards requests to the Laravel backend.
+
+### Vite Proxy Configuration (`vite.config.ts`)
+```typescript
+server: {
+  proxy: {
+    '/sanctum': {
+      target: 'https://xetasuite.test',
+      changeOrigin: true,
+      secure: false,
+    },
+    '/api': {
+      target: 'https://xetasuite.test',
+      changeOrigin: true,
+      secure: false,
+    }
+  },
+}
+```
+
+### Authentication Flow
+1. **CSRF Cookie**: Call `GET /sanctum/csrf-cookie` before login/logout
+2. **Login**: `POST /api/v1/auth/login` with credentials
+3. **Session**: Laravel creates session cookie, browser stores it
+4. **API Calls**: All subsequent requests include session cookie automatically
+
+### HTTP Client Configuration (`shared/api/httpClient.ts`)
+```typescript
+const httpClient = axios.create({
+    baseURL: import.meta.env.VITE_API_URL || '',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+    },
+    withCredentials: true,   // Required for Sanctum cookies
+    withXSRFToken: true,     // Auto-include XSRF-TOKEN header
+});
+```
+
+### Login Implementation (`AuthRepository.ts`)
+```typescript
+login: async (credentials: LoginCredentials): Promise<void> => {
+    await getCsrfCookie();  // CRITICAL: Must call before login
+    await httpClient.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
+},
+```
+
+## Architecture: Repository + Manager Pattern
+
+### Data Layer Structure
+```
+features/{Feature}/
+├── services/
+│   ├── {Feature}Repository.ts  # Raw API calls (no error handling)
+│   └── {Feature}Manager.ts     # Business logic + error handling
+├── store/
+│   └── {Feature}Context.tsx    # React context with state
+├── hooks/
+│   └── use{Feature}.ts         # Hook to access context
+├── types/
+│   └── index.ts                # TypeScript interfaces
+└── views/
+    └── {Feature}Page.tsx       # UI components
+```
+
+### Repository Pattern (Boundary Layer)
+```typescript
+// Repository: Raw API calls, no error handling
+export const SupplierRepository = {
+    getAll: async (params?: QueryParams): Promise<PaginatedResponse<Supplier>> => {
+        const response = await httpClient.get<PaginatedResponse<Supplier>>(
+            buildUrl(API_ENDPOINTS.SUPPLIERS.BASE, params)
+        );
+        return response.data;
+    },
+};
+```
+
+### Manager Pattern (Business Layer)
+```typescript
+// Manager: Error handling + data transformation
+export const SupplierManager = {
+    getAll: async (params?: QueryParams): Promise<ManagerResult<PaginatedResponse<Supplier>>> => {
+        try {
+            const data = await SupplierRepository.getAll(params);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+};
+```
+
+## Site-Scoped Permissions (Multi-Tenancy)
+
+### How Permissions Work
+- Users have roles/permissions **per site** (team-based via `spatie/laravel-permission`)
+- Backend returns flat `roles: string[]` and `permissions: string[]` for current site
+- `current_site_id` determines which site's permissions are active
+
+### User Type with Permissions
+```typescript
+export interface User {
+    id: number;
+    username: string;
+    first_name: string;
+    last_name: string;
+    full_name: string;
+    email: string;
+    locale: 'fr' | 'en';
+    current_site_id?: number;
+    roles: string[];           // Roles for current site
+    permissions: string[];     // Permissions for current site
+    sites: UserSite[];         // All sites user has access to
+}
+```
+
+### Checking Permissions in Components
+```tsx
+import { useAuth } from '@/features/Auth/hooks';
+
+function MyComponent() {
+    const { hasPermission, hasRole, hasAnyPermission } = useAuth();
+
+    return (
+        <div>
+            {hasPermission('supplier.create') && <Button>Create Supplier</Button>}
+            {hasRole('admin') && <AdminPanel />}
+            {hasAnyPermission(['supplier.update', 'supplier.delete']) && <EditMenu />}
+        </div>
+    );
+}
+```
+
+### Protected Routes with Permissions
+```tsx
+<Route element={
+    <RequireAuth permissions={['supplier.viewAny']}>
+        <AppLayout />
+    </RequireAuth>
+}>
+    <Route path="/suppliers" element={<SupplierListPage />} />
+</Route>
+```
+
+## Site Switching (current_site_id)
+
+### How It Works
+1. User selects a site from `SiteSwitcher` dropdown
+2. `switchSite(siteId)` calls `PATCH /api/v1/user/site`
+3. Backend updates `current_site_id`, returns updated user with new permissions
+4. **Page reloads** to refresh all UI with new site context
+
+### SiteSwitcher Component Flow
+```tsx
+const handleSiteChange = async (site: UserSite) => {
+    await switchSite(site.id);
+    window.location.reload();  // Refresh permissions & UI
+};
+```
+
+### AuthContext Integration
+```typescript
+const switchSite = useCallback(async (siteId: number) => {
+    const updatedUser = await AuthManager.updateSite(siteId);
+    setUser(updatedUser);  // Permissions now reflect new site
+}, []);
+```
+
+## Internationalization (i18n)
+
+### Configuration (`app/i18n/index.ts`)
+```typescript
+i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+        resources: {
+            en: { translation: en },
+            fr: { translation: fr },
+        },
+        fallbackLng: 'en',
+        detection: {
+            order: ['cookie', 'localStorage', 'navigator'],
+            caches: ['cookie'],
+        }
+    });
+```
+
+### Translation Files
+- `src/app/i18n/locales/en.json` - English translations
+- `src/app/i18n/locales/fr.json` - French translations
+
+### Using Translations
+```tsx
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+    const { t } = useTranslation();
+
+    return <h1>{t('common.welcome')}</h1>;
+}
+```
+
+### Language Sync with Backend
+```typescript
+// On login, sync i18next with user's locale preference
+const syncLocale = useCallback((userLocale: string | undefined) => {
+    if (userLocale && ['fr', 'en'].includes(userLocale) && i18n.language !== userLocale) {
+        i18n.changeLanguage(userLocale);
+    }
+}, [i18n]);
+
+// On language change, persist to backend
+const handleLanguageChange = async (lang: Language) => {
+    await i18n.changeLanguage(lang.code);
+    await httpClient.patch(API_ENDPOINTS.USER.LOCALE, { locale: lang.code });
+};
+```
 
 ## Project Structure
 
@@ -135,39 +361,48 @@ import { GridIcon, BuildingIcon, PackageIcon } from '@/components/icons';
 
 Available icons: `GridIcon`, `ChevronDownIcon`, `HorizontalDotsIcon`, `PackageIcon`, `BuildingIcon`, `WrenchIcon`, `AlertIcon`, `CleaningIcon`, `MenuIcon`, `XIcon`, `SunIcon`, `MoonIcon`, `BellIcon`, `SearchIcon`, `LogoutIcon`, `UserCircleIcon`, `CogIcon`
 
-## Authentication
+## Auth Context Usage
 
-### Sanctum Setup
-- Backend: Laravel Sanctum stateful SPA authentication
-- Vite proxy forwards `/api` and `/sanctum` to `https://xetasuite.test`
-- CSRF cookie obtained before login/logout via `/sanctum/csrf-cookie`
-
-### Auth Context
+### Basic Auth Hook
 ```tsx
-import { useAuth } from '@/contexts';
+import { useAuth } from '@/features/Auth/hooks';
 
 function MyComponent() {
-  const { user, isAuthenticated, isLoading, login, logout } = useAuth();
+  const {
+    user,               // Current user or null
+    isAuthenticated,    // Boolean
+    isLoading,          // Auth check in progress
+    login,              // (credentials) => Promise
+    logout,             // () => Promise
+    switchSite,         // (siteId) => Promise
+    hasPermission,      // (permission) => boolean
+    hasRole,            // (role) => boolean
+    hasAnyPermission,   // (permissions[]) => boolean
+    hasAnyRole,         // (roles[]) => boolean
+  } = useAuth();
 
-  if (isLoading) return <Loading />;
-  if (!isAuthenticated) return <Redirect to="/auth/login" />;
+  if (isLoading) return <LoadingScreen />;
+  if (!isAuthenticated) return <Navigate to="/auth/login" />;
 
-  return <div>Hello, {user?.name}</div>;
+  return <div>Hello, {user?.full_name}</div>;
 }
 ```
 
 ### Protected Routes
 ```tsx
-import { RequireAuth, RequireGuest } from '@/hooks';
-
-// Protected route
+// Protected route - requires authentication
 <Route element={<RequireAuth><AppLayout /></RequireAuth>}>
   <Route path="/dashboard" element={<DashboardPage />} />
 </Route>
 
-// Guest-only route
+// Protected route - requires specific permissions
+<Route element={<RequireAuth permissions={['supplier.viewAny']}><AppLayout /></RequireAuth>}>
+  <Route path="/suppliers" element={<SupplierListPage />} />
+</Route>
+
+// Guest-only route (login page)
 <Route element={<RequireGuest><AuthLayout /></RequireGuest>}>
-  <Route path="/auth/login" element={<LoginPage />} />
+  <Route path="/auth/login" element={<SignInPage />} />
 </Route>
 ```
 
@@ -337,15 +572,25 @@ This frontend manages:
 - **Incidents**: Issue reports
 - **Cleanings**: Cleaning schedules and records
 - **Companies**: External maintenance providers
-- **Suppliers**: Item suppliers
+- **Suppliers**: Item suppliers (HQ-only)
 - **Users**: With role-based permissions per site
 
-## Roles & Permissions
-- Roles define sets of permissions (e.g., Admin, Technician, Viewer)
-- Permissions control access to features (e.g., site.view, site.create, site.update, site.delete)
-- Users can have multiple roles across different sites
-- Check permissions in components/pages to conditionally render features
+## Roles & Permissions (Summary)
+
+Permissions are **scoped to the current site** (team-based multi-tenancy):
+
 ```tsx
-{hasPermission('site.create') && <Button>Create Site</Button>}
+// In components - use useAuth hook
+const { hasPermission, hasRole, hasAnyPermission, hasAnyRole } = useAuth();
+
+// Conditional rendering based on permissions
+{hasPermission('supplier.create') && <Button>Create Supplier</Button>}
+{hasRole('admin') && <AdminPanel />}
+
+// In routes - use RequireAuth with permissions/roles
+<Route element={<RequireAuth permissions={['material.viewAny']} />}>
+  <Route path="/materials" element={<MaterialsPage />} />
+</Route>
 ```
-API Laravel use spatie/laravel-permission package for roles and permissions management.
+
+**Important**: When user switches site via `SiteSwitcher`, the page reloads to refresh permissions.

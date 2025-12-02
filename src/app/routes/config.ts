@@ -14,6 +14,10 @@ const NotFoundPage = lazy(() => import("@/shared/components/errors/NotFoundPage"
 const SupplierListPage = lazy(() => import("@/features/Suppliers/views/SupplierListPage"));
 const SupplierDetailPage = lazy(() => import("@/features/Suppliers/views/SupplierDetailPage"));
 
+// Lazy load Sites feature
+const SiteListPage = lazy(() => import("@/features/Sites/views/SiteListPage"));
+const SiteDetailPage = lazy(() => import("@/features/Sites/views/SiteDetailPage"));
+
 /**
  * Guest-only routes (login, register, forgot password)
  */
@@ -61,6 +65,20 @@ export const protectedRoutes: RouteConfig[] = [
         element: SupplierDetailPage,
         requireAuth: true,
         permission: "supplier.view",
+        requiresHQ: true,
+    },
+    {
+        path: "/sites",
+        element: SiteListPage,
+        requireAuth: true,
+        permission: "site.viewAny",
+        requiresHQ: true,
+    },
+    {
+        path: "/sites/:id",
+        element: SiteDetailPage,
+        requireAuth: true,
+        permission: "site.view",
         requiresHQ: true,
     },
     // Catch-all for unknown routes within authenticated layout
