@@ -1,26 +1,25 @@
 import { useState, useEffect, useCallback, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaPenToSquare, FaTrash, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaFileExport } from "react-icons/fa6";
+import { FaPlus, FaPenToSquare, FaTrash, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaLayerGroup, FaWrench } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
 import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
-import { Checkbox } from "@/shared/components/form";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
-import { SupplierManager } from "../services";
-import { SupplierModal } from "./SupplierModal";
-import type { Supplier, SupplierFilters } from "../types";
+import { ZoneManager } from "../services";
+import { ZoneModal } from "./ZoneModal";
+import type { Zone, ZoneFilters } from "../types";
 import type { PaginationMeta } from "@/shared/types";
 
-type SortField = "name" | "item_count" | "created_at";
+type SortField = "name" | "children_count" | "materials_count" | "created_at";
 type SortDirection = "asc" | "desc";
 
-const SupplierListPage: FC = () => {
+const ZoneListPage: FC = () => {
     const { t } = useTranslation();
     const { hasPermission } = useAuth();
-    const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+    const [zones, setZones] = useState<Zone[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -32,22 +31,17 @@ const SupplierListPage: FC = () => {
     const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
     const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
-    // Selected supplier for edit/delete
-    const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
+    // Selected zone for edit/delete
+    const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    // Selection for export
-    const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
-    const [isExporting, setIsExporting] = useState(false);
-
     // Permissions
-    const canCreate = hasPermission("supplier.create");
-    const canUpdate = hasPermission("supplier.update");
-    const canDelete = hasPermission("supplier.delete");
-    const canExport = hasPermission("supplier.export");
+    const canCreate = hasPermission("zone.create");
+    const canUpdate = hasPermission("zone.update");
+    const canDelete = hasPermission("zone.delete");
 
     // Modals
-    const supplierModal = useModal();
+    const zoneModal = useModal();
     const deleteModal = useModal();
 
     // Debounce search input
@@ -60,12 +54,12 @@ const SupplierListPage: FC = () => {
         return () => clearTimeout(timer);
     }, [searchQuery]);
 
-    const fetchSuppliers = useCallback(async (filters: SupplierFilters) => {
+    const fetchZones = useCallback(async (filters: ZoneFilters) => {
         setIsLoading(true);
         setError(null);
-        const result = await SupplierManager.getAll(filters);
+        const result = await ZoneManager.getAll(filters);
         if (result.success && result.data) {
-            setSuppliers(result.data.data);
+            setZones(result.data.data);
             setMeta(result.data.meta);
         } else {
             setError(result.error || t("errors.generic"));
@@ -74,19 +68,14 @@ const SupplierListPage: FC = () => {
     }, [t]);
 
     useEffect(() => {
-        const filters: SupplierFilters = {
+        const filters: ZoneFilters = {
             page: currentPage,
             search: debouncedSearch || undefined,
             sort_by: sortBy,
             sort_direction: sortBy ? sortDirection : undefined,
         };
-        fetchSuppliers(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchSuppliers]);
-
-    // Clear selection only when search changes
-    useEffect(() => {
-        setSelectedIds(new Set());
-    }, [debouncedSearch]);
+        fetchZones(filters);
+    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchZones]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -118,36 +107,36 @@ const SupplierListPage: FC = () => {
     };
 
     const handleCreate = () => {
-        setSelectedSupplier(null);
-        supplierModal.openModal();
+        setSelectedZone(null);
+        zoneModal.openModal();
     };
 
-    const handleEdit = (supplier: Supplier) => {
-        setSelectedSupplier(supplier);
-        supplierModal.openModal();
+    const handleEdit = (zone: Zone) => {
+        setSelectedZone(zone);
+        zoneModal.openModal();
     };
 
-    const handleDeleteClick = (supplier: Supplier) => {
-        setSelectedSupplier(supplier);
+    const handleDeleteClick = (zone: Zone) => {
+        setSelectedZone(zone);
         deleteModal.openModal();
     };
 
     const handleDeleteConfirm = async () => {
-        if (!selectedSupplier) return;
+        if (!selectedZone) return;
 
         setIsDeleting(true);
-        const result = await SupplierManager.delete(selectedSupplier.id);
+        const result = await ZoneManager.delete(selectedZone.id);
         if (result.success) {
-            showSuccess(t("suppliers.messages.deleted", { name: selectedSupplier.name }));
+            showSuccess(t("zones.messages.deleted", { name: selectedZone.name }));
             deleteModal.closeModal();
-            setSelectedSupplier(null);
-            const filters: SupplierFilters = {
+            setSelectedZone(null);
+            const filters: ZoneFilters = {
                 page: currentPage,
                 search: debouncedSearch || undefined,
                 sort_by: sortBy,
                 sort_direction: sortBy ? sortDirection : undefined,
             };
-            fetchSuppliers(filters);
+            fetchZones(filters);
         } else {
             showError(result.error || t("errors.generic"));
         }
@@ -155,59 +144,21 @@ const SupplierListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        const filters: SupplierFilters = {
+        const filters: ZoneFilters = {
             page: currentPage,
             search: debouncedSearch || undefined,
             sort_by: sortBy,
             sort_direction: sortBy ? sortDirection : undefined,
         };
-        fetchSuppliers(filters);
-    };
-
-    // Selection handlers
-    const handleSelectAll = () => {
-        const newSelected = new Set(selectedIds);
-        if (isAllCurrentPageSelected) {
-            currentPageIds.forEach((id) => newSelected.delete(id));
-        } else {
-            currentPageIds.forEach((id) => newSelected.add(id));
-        }
-        setSelectedIds(newSelected);
-    };
-
-    const handleSelectOne = (id: number) => {
-        const newSelected = new Set(selectedIds);
-        if (newSelected.has(id)) {
-            newSelected.delete(id);
-        } else {
-            newSelected.add(id);
-        }
-        setSelectedIds(newSelected);
-    };
-
-    const currentPageIds = suppliers.map((s) => s.id);
-    const isAllCurrentPageSelected = suppliers.length > 0 && currentPageIds.every((id) => selectedIds.has(id));
-    const isSomeCurrentPageSelected = currentPageIds.some((id) => selectedIds.has(id)) && !isAllCurrentPageSelected;
-
-    // Export handler
-    const handleExport = async () => {
-        if (selectedIds.size === 0) return;
-
-        setIsExporting(true);
-        try {
-            // TODO: Implement export API call
-            alert(t("suppliers.export.comingSoon"));
-        } finally {
-            setIsExporting(false);
-        }
+        fetchZones(filters);
     };
 
     return (
         <>
-            <PageMeta title={`${t("suppliers.title")} | XetaSuite`} description={t("suppliers.description")} />
+            <PageMeta title={`${t("zones.title")} | XetaSuite`} description={t("zones.description")} />
             <PageBreadcrumb
-                pageTitle={t("suppliers.title")}
-                breadcrumbs={[{ label: t("suppliers.title") }]}
+                pageTitle={t("zones.title")}
+                breadcrumbs={[{ label: t("zones.title") }]}
             />
 
             <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
@@ -215,26 +166,13 @@ const SupplierListPage: FC = () => {
                 <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t("suppliers.listTitle")}
+                            {t("zones.listTitle")}
                         </h3>
                         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("suppliers.manageSuppliersAndTheirInformation")}
+                            {t("zones.manageZonesAndTheirInformation")}
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        {canExport && selectedIds.size > 0 && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                startIcon={<FaFileExport className="h-4 w-4" />}
-                                onClick={handleExport}
-                                disabled={isExporting}
-                            >
-                                {isExporting
-                                    ? t("suppliers.export.exporting")
-                                    : t("suppliers.export.button", { count: selectedIds.size })}
-                            </Button>
-                        )}
                         {canCreate && (
                             <Button
                                 variant="primary"
@@ -242,7 +180,7 @@ const SupplierListPage: FC = () => {
                                 startIcon={<FaPlus className="h-4 w-4" />}
                                 onClick={handleCreate}
                             >
-                                {t("suppliers.create")}
+                                {t("zones.create")}
                             </Button>
                         )}
                     </div>
@@ -272,17 +210,6 @@ const SupplierListPage: FC = () => {
                                 </button>
                             )}
                         </div>
-                        {canExport && selectedIds.size > 0 && (
-                            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                                <span>{t("suppliers.export.selected", { count: selectedIds.size })}</span>
-                                <button
-                                    onClick={() => setSelectedIds(new Set())}
-                                    className="text-brand-500 hover:text-brand-600"
-                                >
-                                    {t("suppliers.export.clearSelection")}
-                                </button>
-                            </div>
-                        )}
                     </div>
                 </div>
 
@@ -298,16 +225,6 @@ const SupplierListPage: FC = () => {
                     <Table>
                         <TableHeader>
                             <TableRow className="border-b border-gray-200 dark:border-gray-800">
-                                {canExport && (
-                                    <TableCell isHeader className="w-12 px-6 py-3">
-                                        <Checkbox
-                                            checked={isAllCurrentPageSelected}
-                                            indeterminate={isSomeCurrentPageSelected}
-                                            onChange={handleSelectAll}
-                                            title={isAllCurrentPageSelected ? t("suppliers.export.deselectAll") : t("suppliers.export.selectAll")}
-                                        />
-                                    </TableCell>
-                                )}
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
                                         onClick={() => handleSort("name")}
@@ -318,19 +235,28 @@ const SupplierListPage: FC = () => {
                                     </button>
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("common.description")}
+                                    {t("zones.site")}
+                                </TableCell>
+                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t("zones.parent")}
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
-                                        onClick={() => handleSort("item_count")}
+                                        onClick={() => handleSort("children_count")}
                                         className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
                                     >
-                                        {t("suppliers.items")}
-                                        {renderSortIcon("item_count")}
+                                        {t("zones.children")}
+                                        {renderSortIcon("children_count")}
                                     </button>
                                 </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("common.creator")}
+                                <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    <button
+                                        onClick={() => handleSort("materials_count")}
+                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
+                                    >
+                                        {t("zones.materials")}
+                                        {renderSortIcon("materials_count")}
+                                    </button>
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
@@ -352,22 +278,20 @@ const SupplierListPage: FC = () => {
                             {isLoading ? (
                                 [...Array(6)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        {canExport && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
                                             <div className="mx-auto h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-28 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        <TableCell className="px-6 py-4 text-center">
+                                            <div className="mx-auto h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
@@ -379,12 +303,12 @@ const SupplierListPage: FC = () => {
                                         )}
                                     </TableRow>
                                 ))
-                            ) : suppliers.length === 0 ? (
+                            ) : zones.length === 0 ? (
                                 <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={canExport ? 7 : 6}>
+                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={7}>
                                         {debouncedSearch ? (
                                             <div>
-                                                <p>{t("suppliers.noSuppliersFor", { search: debouncedSearch })}</p>
+                                                <p>{t("zones.noZonesFor", { search: debouncedSearch })}</p>
                                                 <button
                                                     onClick={() => setSearchQuery("")}
                                                     className="mt-2 text-sm text-brand-500 hover:text-brand-600"
@@ -393,54 +317,58 @@ const SupplierListPage: FC = () => {
                                                 </button>
                                             </div>
                                         ) : (
-                                            t("suppliers.noSuppliers")
+                                            t("zones.noZones")
                                         )}
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                suppliers.map((supplier) => (
+                                zones.map((zone) => (
                                     <TableRow
-                                        key={supplier.id}
-                                        className={`border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 ${selectedIds.has(supplier.id) ? "bg-brand-50/50 dark:bg-brand-500/5" : ""
-                                            }`}
+                                        key={zone.id}
+                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
-                                        {canExport && (
-                                            <TableCell className="px-6 py-4">
-                                                <Checkbox checked={selectedIds.has(supplier.id)} onChange={() => handleSelectOne(supplier.id)} />
-                                            </TableCell>
-                                        )}
                                         <TableCell className="px-6 py-4">
-                                            <Link
-                                                to={`/suppliers/${supplier.id}`}
-                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                            >
-                                                {supplier.name}
-                                            </Link>
+                                            <div className="flex items-center gap-2">
+                                                <Link
+                                                    to={`/zones/${zone.id}`}
+                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                >
+                                                    {zone.name}
+                                                </Link>
+                                                {zone.allow_material && (
+                                                    <span className="inline-flex items-center rounded-full bg-success-50 px-2 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/10 dark:text-success-400" title={t("zones.allowsMaterials")}>
+                                                        <FaWrench className="h-3 w-3" />
+                                                    </span>
+                                                )}
+                                            </div>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {supplier.description ? (
-                                                <span className="line-clamp-1">{supplier.description}</span>
-                                            ) : (
-                                                <span className="text-gray-400 dark:text-gray-500">—</span>
-                                            )}
+                                            {zone.site?.name || "-"}
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                            {zone.parent?.name || "-"}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
-                                            <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
-                                                {supplier.item_count}
+                                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                                                <FaLayerGroup className="h-3 w-3" />
+                                                {zone.children_count}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-center">
+                                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                                                <FaWrench className="h-3 w-3" />
+                                                {zone.materials_count}
                                             </span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {supplier.creator?.full_name || <span className="text-gray-400 dark:text-gray-500">—</span>}
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {formatDate(supplier.created_at)}
+                                            {formatDate(zone.created_at)}
                                         </TableCell>
                                         {(canUpdate || canDelete) && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="flex items-center justify-end gap-2">
                                                     {canUpdate && (
                                                         <button
-                                                            onClick={() => handleEdit(supplier)}
+                                                            onClick={() => handleEdit(zone)}
                                                             className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-brand-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-brand-400"
                                                             title={t("common.edit")}
                                                         >
@@ -449,7 +377,7 @@ const SupplierListPage: FC = () => {
                                                     )}
                                                     {canDelete && (
                                                         <button
-                                                            onClick={() => handleDeleteClick(supplier)}
+                                                            onClick={() => handleDeleteClick(zone)}
                                                             className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-error-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-error-400"
                                                             title={t("common.delete")}
                                                         >
@@ -471,10 +399,10 @@ const SupplierListPage: FC = () => {
             </div>
 
             {/* Create/Edit Modal */}
-            <SupplierModal
-                isOpen={supplierModal.isOpen}
-                onClose={supplierModal.closeModal}
-                supplier={selectedSupplier}
+            <ZoneModal
+                isOpen={zoneModal.isOpen}
+                onClose={zoneModal.closeModal}
+                zone={selectedZone}
                 onSuccess={handleModalSuccess}
             />
 
@@ -484,11 +412,11 @@ const SupplierListPage: FC = () => {
                 onClose={deleteModal.closeModal}
                 onConfirm={handleDeleteConfirm}
                 isLoading={isDeleting}
-                title={t("suppliers.deleteTitle")}
-                message={t("common.confirmDelete", { name: selectedSupplier?.name })}
+                title={t("zones.deleteTitle")}
+                message={t("common.confirmDelete", { name: selectedZone?.name })}
             />
         </>
     );
 };
 
-export default SupplierListPage;
+export default ZoneListPage;

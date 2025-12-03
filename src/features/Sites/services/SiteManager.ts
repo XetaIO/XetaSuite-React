@@ -1,6 +1,6 @@
 import { handleApiError } from "@/shared/api";
 import type { PaginatedResponse, SingleResponse } from "@/shared/types";
-import type { Site, SiteFormData, SiteFilters, UserOption } from "../types";
+import type { Site, SiteFormData, SiteFilters, UserOption, SiteMember } from "../types";
 import { SiteRepository } from "./SiteRepository";
 
 interface ManagerResult<T> {
@@ -87,13 +87,14 @@ export const SiteManager = {
     },
 
     /**
-     * Format date for display
+     * Get paginated members of a site with their roles
      */
-    formatDate: (dateString: string): string => {
-        return new Date(dateString).toLocaleDateString("fr-FR", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        });
+    getMembers: async (siteId: number, page: number = 1, search?: string): Promise<ManagerResult<PaginatedResponse<SiteMember>>> => {
+        try {
+            const data = await SiteRepository.getMembers(siteId, page, search);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
     },
 };

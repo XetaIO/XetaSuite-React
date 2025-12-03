@@ -10,6 +10,8 @@
         "search": "Rechercher",
         "searchPlaceholder": "Rechercher par nom ou description...",
         "noResults": "Aucun résultat",
+        "noSearchResults": "Aucun résultat pour cette recherche",
+        "notAvailable": "Non disponible",
         "actions": "Actions",
         "yes": "Oui",
         "no": "Non",
@@ -22,6 +24,7 @@
         "updatedAt": "Modifié le",
         "creator": "Créateur",
         "clearSearch": "Effacer la recherche",
+        "collaborators": "Collaborateurs",
         "user": "Utilisateur",
         "support": "Support",
         "viewAll": "Voir tout",
@@ -218,8 +221,8 @@
         "deleteTitle": "Supprimer le site",
         "form": {
             "namePlaceholder": "Nom du site",
-            "managers": "Gestionnaires",
-            "managersHint": "Sélectionnez les utilisateurs qui géreront ce site",
+            "managers": "Managers",
+            "managersHint": "Sélectionnez les collaborateurs qui géreront ce site",
             "noUsersAvailable": "Aucun utilisateur disponible",
             "email": "Email",
             "emailPlaceholder": "email@exemple.com",
@@ -229,8 +232,8 @@
             "cellPhonePlaceholder": "06 12 34 56 78",
             "address": "Adresse",
             "addressPlaceholder": "123 rue Principale",
-            "postalCode": "Code postal",
-            "postalCodePlaceholder": "75001",
+            "zipCode": "Code postal",
+            "zipCodePlaceholder": "75001",
             "city": "Ville",
             "cityPlaceholder": "Paris"
         },
@@ -241,10 +244,19 @@
             "totalUsers": "Utilisateurs",
             "contactInfo": "Informations de contact",
             "noContact": "Aucune information de contact",
-            "managers": "Gestionnaires",
+            "managers": "Managers",
             "noManagers": "Aucun gestionnaire assigné",
             "zonesListTitle": "Zones du site",
-            "zonesListDescription": "Liste des zones de {{name}}"
+            "zonesListDescription": "Liste des zones de {{name}}",
+            "members": "Membres du site",
+            "membersDescription": "Utilisateurs ayant accès à ce site",
+            "noMembers": "Aucun membre sur ce site"
+        },
+        "table": {
+            "fullName": "Nom complet",
+            "email": "Email",
+            "roles": "Rôles",
+            "createdAt": "Date de création"
         },
         "export": {
             "button": "Exporter ({{count}})",
@@ -261,9 +273,69 @@
             "deleted": "Le site \"{{name}}\" a été supprimé avec succès"
         }
     },
+    "zones": {
+        "title": "Zones",
+        "description": "Gestion des zones",
+        "listTitle": "Liste des zones",
+        "notFound": "Zone introuvable",
+        "notFoundMessage": "La zone que vous recherchez n'existe pas ou a été supprimée.",
+        "create": "Nouvelle zone",
+        "edit": "Modifier la zone",
+        "manageZonesAndTheirInformation": "Gérez vos zones et leurs informations",
+        "noZones": "Aucune zone trouvée",
+        "noZonesFor": "Aucune zone trouvée pour \"{{search}}\"",
+        "deleteTitle": "Supprimer la zone",
+        "site": "Site",
+        "parent": "Zone parente",
+        "children": "Enfants",
+        "materials": "Matériels",
+        "allowMaterial": "Autoriser les matériels",
+        "allowsMaterials": "Autorise les matériels",
+        "form": {
+            "selectSite": "Sélectionner un site",
+            "namePlaceholder": "Nom de la zone",
+            "noParent": "Aucune zone parente (zone racine)",
+            "parentHint": "Sélectionnez une zone parente optionnelle",
+            "allowMaterial": "Cette zone peut contenir des matériels",
+            "allowMaterialHint": "Activez si cette zone peut contenir directement des matériels"
+        },
+        "table": {
+            "name": "Nom",
+            "allowMaterial": "Autorise les matériels",
+            "childrenCount": "Sous-zones",
+            "materialCount": "Matériels",
+            "materialName": "Nom du matériel",
+            "materialDescription": "Description"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des zones",
+            "allowsMaterials": "Autorise les matériels",
+            "info": "Informations de la zone",
+            "siteInfo": "Site associé",
+            "totalChildZones": "Sous-zones",
+            "totalMaterials": "Matériels",
+            "childZones": "Zones enfants",
+            "childZonesDescription": "Sous-zones contenues dans cette zone",
+            "materials": "Matériels",
+            "materialsDescription": "Matériels assignés à cette zone",
+            "noChildren": "Aucune zone enfant",
+            "noMaterials": "Aucun matériel assigné",
+            "emptyZone": "Cette zone ne contient ni sous-zones ni matériels"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger la zone",
+            "notFound": "Zone introuvable"
+        },
+        "messages": {
+            "created": "La zone \"{{name}}\" a été créée avec succès",
+            "updated": "La zone \"{{name}}\" a été mise à jour avec succès",
+            "deleted": "La zone \"{{name}}\" a été supprimée avec succès"
+        }
+    },
     "validation": {
         "required": "Ce champ est requis",
         "nameRequired": "Le nom est requis",
+        "siteRequired": "Le site est requis",
         "email": "Veuillez entrer une adresse email valide",
         "min": "Ce champ doit contenir au moins {{min}} caractères",
         "max": "Ce champ ne doit pas dépasser {{max}} caractères",

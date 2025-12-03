@@ -7,7 +7,7 @@ import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/com
 import { Button } from "@/shared/components/ui";
 import { Checkbox } from "@/shared/components/form";
 import { useModal } from "@/shared/hooks";
-import { showSuccess, showError } from "@/shared/utils";
+import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
 import { SiteManager } from "../services";
 import { SiteModal } from "./SiteModal";
@@ -205,7 +205,10 @@ const SiteListPage: FC = () => {
     return (
         <>
             <PageMeta title={`${t("sites.title")} | XetaSuite`} description={t("sites.description")} />
-            <PageBreadcrumb pageTitle={t("sites.title")} />
+            <PageBreadcrumb
+                pageTitle={t("sites.title")}
+                breadcrumbs={[{ label: t("sites.title") }]}
+            />
 
             <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
                 {/* Header */}
@@ -327,7 +330,7 @@ const SiteListPage: FC = () => {
                                     </button>
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("common.creator")}
+                                    {t("common.collaborators")}
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
@@ -425,10 +428,12 @@ const SiteListPage: FC = () => {
                                             </span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            —
+                                            <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                                                {site.user_count}
+                                            </span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {SiteManager.formatDate(site.created_at)}
+                                            {formatDate(site.created_at)}
                                         </TableCell>
                                         {(canUpdate || canDelete) && (
                                             <TableCell className="px-6 py-4">

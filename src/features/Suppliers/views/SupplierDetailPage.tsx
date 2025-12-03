@@ -9,6 +9,7 @@ import { SupplierManager } from "../services";
 import type { Supplier } from "../types";
 import type { Item, ItemFilters } from "../types/item";
 import type { PaginationMeta } from "@/shared/types";
+import { formatDate } from "@/shared/utils";
 
 type SortField = "name" | "reference" | "current_stock" | "purchase_price";
 type SortDirection = "asc" | "desc";
@@ -229,7 +230,7 @@ const SupplierDetailPage: FC = () => {
                         </div>
                         <div>
                             <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                {SupplierManager.formatDate(supplier.created_at)}
+                                {formatDate(supplier.created_at)}
                             </p>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{t("common.createdAt")}</p>
                         </div>

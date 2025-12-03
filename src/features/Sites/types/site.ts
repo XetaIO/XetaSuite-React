@@ -8,9 +8,8 @@ export interface Site {
     email?: string;
     office_phone?: string;
     cell_phone?: string;
-    address_line_1?: string;
-    address_line_2?: string;
-    postal_code?: string;
+    address?: string;
+    zip_code?: string;
     city?: string;
     country?: string;
     managers?: SiteUser[];
@@ -32,14 +31,15 @@ export interface SiteFormData {
     email?: string;
     office_phone?: string;
     cell_phone?: string;
-    address_line_1?: string;
-    postal_code?: string;
+    address?: string;
+    zip_code?: string;
     city?: string;
     manager_ids?: number[];
 }
 
 export interface SiteFilters {
     page?: number;
+    per_page?: number;
     search?: string;
     sort_by?: 'name' | 'zone_count' | 'created_at';
     sort_direction?: 'asc' | 'desc';
@@ -52,4 +52,14 @@ export interface UserOption {
     last_name: string;
     full_name: string;
     avatar: string;
+    roles: string[];
+}
+
+export interface SiteMember {
+    id: number;
+    full_name: string;
+    email: string;
+    avatar: string;
+    roles: string[];
+    created_at: string;
 }

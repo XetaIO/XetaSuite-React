@@ -10,6 +10,8 @@
         "search": "Search",
         "searchPlaceholder": "Search by name or description...",
         "noResults": "No results",
+        "noSearchResults": "No results found for this search",
+        "notAvailable": "Not available",
         "actions": "Actions",
         "yes": "Yes",
         "no": "No",
@@ -22,6 +24,7 @@
         "updatedAt": "Updated at",
         "creator": "Creator",
         "clearSearch": "Clear search",
+        "collaborators": "Collaborators",
         "user": "User",
         "support": "Support",
         "viewAll": "View all",
@@ -229,8 +232,8 @@
             "cellPhonePlaceholder": "06 12 34 56 78",
             "address": "Address",
             "addressPlaceholder": "123 Main Street",
-            "postalCode": "Postal code",
-            "postalCodePlaceholder": "75001",
+            "zipCode": "Postal code",
+            "zipCodePlaceholder": "75001",
             "city": "City",
             "cityPlaceholder": "Paris"
         },
@@ -244,7 +247,16 @@
             "managers": "Managers",
             "noManagers": "No managers assigned",
             "zonesListTitle": "Site zones",
-            "zonesListDescription": "List of zones in {{name}}"
+            "zonesListDescription": "List of zones in {{name}}",
+            "members": "Site members",
+            "membersDescription": "Users with access to this site",
+            "noMembers": "No members on this site"
+        },
+        "table": {
+            "fullName": "Full name",
+            "email": "Email",
+            "roles": "Roles",
+            "createdAt": "Created at"
         },
         "export": {
             "button": "Export ({{count}})",
@@ -261,9 +273,69 @@
             "deleted": "Site \"{{name}}\" has been deleted successfully"
         }
     },
+    "zones": {
+        "title": "Zones",
+        "description": "Manage zones",
+        "listTitle": "Zones list",
+        "notFound": "Zone not found",
+        "notFoundMessage": "The zone you are looking for does not exist or has been deleted.",
+        "create": "New zone",
+        "edit": "Edit zone",
+        "manageZonesAndTheirInformation": "Manage your zones and their information",
+        "noZones": "No zones found",
+        "noZonesFor": "No zones found for \"{{search}}\"",
+        "deleteTitle": "Delete zone",
+        "site": "Site",
+        "parent": "Parent zone",
+        "children": "Children",
+        "materials": "Materials",
+        "allowMaterial": "Allow materials",
+        "allowsMaterials": "Allows materials",
+        "form": {
+            "selectSite": "Select a site",
+            "namePlaceholder": "Zone name",
+            "noParent": "No parent zone (root zone)",
+            "parentHint": "Select an optional parent zone",
+            "allowMaterial": "This zone can contain materials",
+            "allowMaterialHint": "Enable if this zone can directly contain materials"
+        },
+        "table": {
+            "name": "Name",
+            "allowMaterial": "Allows materials",
+            "childrenCount": "Sub-zones",
+            "materialCount": "Materials",
+            "materialName": "Material name",
+            "materialDescription": "Description"
+        },
+        "detail": {
+            "backToList": "Back to zones list",
+            "allowsMaterials": "Allows materials",
+            "info": "Zone information",
+            "siteInfo": "Associated site",
+            "totalChildZones": "Sub-zones",
+            "totalMaterials": "Materials",
+            "childZones": "Child zones",
+            "childZonesDescription": "Sub-zones contained within this zone",
+            "materials": "Materials",
+            "materialsDescription": "Materials assigned to this zone",
+            "noChildren": "No child zones",
+            "noMaterials": "No materials assigned",
+            "emptyZone": "This zone contains neither sub-zones nor materials"
+        },
+        "errors": {
+            "loadFailed": "Unable to load zone",
+            "notFound": "Zone not found"
+        },
+        "messages": {
+            "created": "Zone \"{{name}}\" has been created successfully",
+            "updated": "Zone \"{{name}}\" has been updated successfully",
+            "deleted": "Zone \"{{name}}\" has been deleted successfully"
+        }
+    },
     "validation": {
         "required": "This field is required",
         "nameRequired": "Name is required",
+        "siteRequired": "Site is required",
         "email": "Please enter a valid email address",
         "min": "This field must be at least {{min}} characters",
         "max": "This field must not exceed {{max}} characters",

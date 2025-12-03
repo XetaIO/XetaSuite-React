@@ -1,4 +1,4 @@
-import { useState, useEffect, type FC } from "react";
+import { useState, useEffect, useCallback, type FC } from "react";
 import { useParams, Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -11,15 +11,18 @@ import {
     FaMobile,
     FaLocationDot,
     FaPenToSquare,
+    FaMagnifyingGlass,
 } from "react-icons/fa6";
-import { PageMeta, PageBreadcrumb } from "@/shared/components/common";
-import { Button } from "@/shared/components/ui";
+import { PageMeta, PageBreadcrumb, Pagination } from "@/shared/components/common";
+import { Button, Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { useModal } from "@/shared/hooks";
+import type { PaginationMeta } from "@/shared/types";
+import { formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
 import { SiteManager } from "../services";
 import { SiteModal } from "./SiteModal";
-import type { Site } from "../types";
+import type { Site, SiteMember } from "../types";
 
 const SiteDetailPage: FC = () => {
     const { t } = useTranslation();
@@ -31,6 +34,13 @@ const SiteDetailPage: FC = () => {
     const [site, setSite] = useState<Site | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    // Members state
+    const [members, setMembers] = useState<SiteMember[]>([]);
+    const [membersMeta, setMembersMeta] = useState<PaginationMeta | null>(null);
+    const [membersPage, setMembersPage] = useState(1);
+    const [membersSearch, setMembersSearch] = useState("");
+    const [isMembersLoading, setIsMembersLoading] = useState(false);
 
     // Permissions
     const canUpdate = hasPermission("site.update");
@@ -56,6 +66,32 @@ const SiteDetailPage: FC = () => {
 
         fetchSite();
     }, [siteId, t]);
+
+    // Fetch members with pagination and search
+    const fetchMembers = useCallback(async (page: number, search: string) => {
+        if (!siteId) return;
+
+        setIsMembersLoading(true);
+        const result = await SiteManager.getMembers(siteId, page, search || undefined);
+        if (result.success && result.data) {
+            setMembers(result.data.data);
+            setMembersMeta(result.data.meta);
+        }
+        setIsMembersLoading(false);
+    }, [siteId]);
+
+    useEffect(() => {
+        fetchMembers(membersPage, membersSearch);
+    }, [fetchMembers, membersPage, membersSearch]);
+
+    const handleMembersPageChange = (page: number) => {
+        setMembersPage(page);
+    };
+
+    const handleMembersSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMembersSearch(e.target.value);
+        setMembersPage(1); // Reset to first page on search
+    };
 
     const handleEditSuccess = async () => {
         // Refresh site data after edit
@@ -163,7 +199,7 @@ const SiteDetailPage: FC = () => {
                         </div>
                         <div>
                             <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                {SiteManager.formatDate(site.created_at)}
+                                {formatDate(site.created_at)}
                             </p>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{t("common.createdAt")}</p>
                         </div>
@@ -232,12 +268,12 @@ const SiteDetailPage: FC = () => {
                             <div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t("sites.form.address")}</p>
                                 <p className="text-gray-900 dark:text-white">
-                                    {site.address_line_1 || site.city || site.postal_code ? (
+                                    {site.address || site.city || site.zip_code ? (
                                         <>
-                                            {site.address_line_1 && <span>{site.address_line_1}<br /></span>}
-                                            {(site.postal_code || site.city) && (
+                                            {site.address && <span>{site.address}<br /></span>}
+                                            {(site.zip_code || site.city) && (
                                                 <span>
-                                                    {site.postal_code} {site.city}
+                                                    {site.zip_code} {site.city}
                                                 </span>
                                             )}
                                         </>
@@ -273,6 +309,171 @@ const SiteDetailPage: FC = () => {
                         <p className="text-gray-500 dark:text-gray-400">{t("sites.detail.noManagers")}</p>
                     )}
                 </div>
+            </div>
+
+            {/* Site Members Table */}
+            <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                {/* Header */}
+                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
+                            {t("sites.detail.members")}
+                        </h3>
+                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            {t("sites.detail.membersDescription")}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Search */}
+                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                    <div className="relative max-w-md">
+                        <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder={t("common.search")}
+                            value={membersSearch}
+                            onChange={handleMembersSearchChange}
+                            className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                        />
+                        {membersSearch && (
+                            <button
+                                onClick={() => {
+                                    setMembersSearch("");
+                                    setMembersPage(1);
+                                }}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                title={t("common.clearSearch")}
+                            >
+                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Table */}
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="border-b border-gray-200 dark:border-gray-800">
+                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t("sites.table.fullName")}
+                                </TableCell>
+                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t("sites.table.email")}
+                                </TableCell>
+                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t("sites.table.roles")}
+                                </TableCell>
+                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t("sites.table.createdAt")}
+                                </TableCell>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {isMembersLoading ? (
+                                [...Array(5)].map((_, index) => (
+                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                        <TableCell className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                                                <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-40 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            ) : members.length === 0 ? (
+                                <TableRow>
+                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={4}>
+                                        {membersSearch ? (
+                                            <div>
+                                                <p>{t("common.noSearchResults")}</p>
+                                                <button
+                                                    onClick={() => {
+                                                        setMembersSearch("");
+                                                        setMembersPage(1);
+                                                    }}
+                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
+                                                >
+                                                    {t("common.clearSearch")}
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            t("sites.detail.noMembers")
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                members.map((member) => (
+                                    <TableRow
+                                        key={member.id}
+                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+                                    >
+                                        <TableCell className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                {member.avatar ? (
+                                                    <img
+                                                        src={member.avatar}
+                                                        alt={member.full_name}
+                                                        className="h-8 w-8 rounded-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
+                                                        {member.full_name.charAt(0).toUpperCase()}
+                                                    </div>
+                                                )}
+                                                <span className="font-medium text-gray-900 dark:text-white">
+                                                    {member.full_name}
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                            <a
+                                                href={`mailto:${member.email}`}
+                                                className="text-brand-600 hover:text-brand-700 dark:text-brand-400"
+                                            >
+                                                {member.email}
+                                            </a>
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="flex flex-wrap gap-1">
+                                                {member.roles.length > 0 ? (
+                                                    member.roles.map((role) => (
+                                                        <span
+                                                            key={role}
+                                                            className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                                                        >
+                                                            {role}
+                                                        </span>
+                                                    ))
+                                                ) : (
+                                                    <span className="text-gray-400">—</span>
+                                                )}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                            {formatDate(member.created_at)}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+
+                {/* Pagination */}
+                {membersMeta && <Pagination meta={membersMeta} onPageChange={handleMembersPageChange} />}
             </div>
 
             {/* Edit Modal */}

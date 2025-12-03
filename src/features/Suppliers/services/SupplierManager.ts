@@ -87,17 +87,6 @@ export const SupplierManager = {
     },
 
     /**
-     * Format date for display
-     */
-    formatDate: (dateString: string): string => {
-        return new Date(dateString).toLocaleDateString("fr-FR", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        });
-    },
-
-    /**
      * Format currency for display
      */
     formatCurrency: (amount: number | null, currency: string = "EUR"): string => {
