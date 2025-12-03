@@ -30,6 +30,7 @@
         "viewAll": "Voir tout",
         "new": "nouveau",
         "beta": "beta",
+        "error": "Erreur",
         "export": {
             "button": "Exporter ({{count}})",
             "exporting": "Export en cours...",
@@ -289,6 +290,7 @@
         "parent": "Zone parente",
         "children": "Enfants",
         "materials": "Matériels",
+        "subZones": "Sous-zones",
         "allowMaterial": "Autoriser les matériels",
         "allowsMaterials": "Autorise les matériels",
         "form": {
@@ -302,7 +304,6 @@
         "table": {
             "name": "Nom",
             "allowMaterial": "Autorise les matériels",
-            "childrenCount": "Sous-zones",
             "materialCount": "Matériels",
             "materialName": "Nom du matériel",
             "materialDescription": "Description"

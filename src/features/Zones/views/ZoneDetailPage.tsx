@@ -7,11 +7,12 @@ import { ZoneModal } from './ZoneModal';
 import type { Zone, ZoneChild, ZoneMaterial } from '../types/zone';
 import PageBreadcrumb from '@/shared/components/common/PageBreadcrumb';
 import PageMeta from '@/shared/components/common/PageMeta';
-import { Button, Alert } from '@/shared/components/ui';
+import { Button, Badge } from '@/shared/components/ui';
 import { Table, TableHeader, TableBody, TableRow, TableCell } from '@/shared/components/ui/table';
 import { useModal } from '@/shared/hooks';
 import { useAuth } from '@/features/Auth/hooks';
 import { formatDate } from "@/shared/utils";
+import { NotFoundContent } from '@/shared/components/errors';
 
 export function ZoneDetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -21,7 +22,7 @@ export function ZoneDetailPage() {
     // Zone state
     const [zone, setZone] = useState<Zone | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [zoneError, setZoneError] = useState<string | null>(null);
 
     // Children state (for parent zones)
     const [children, setChildren] = useState<ZoneChild[]>([]);
@@ -60,14 +61,14 @@ export function ZoneDetailPage() {
         if (!id) return;
 
         setIsLoading(true);
-        setError(null);
+        setZoneError(null);
 
         const result = await ZoneManager.getById(parseInt(id));
 
         if (result.success && result.data) {
             setZone(result.data.data);
         } else {
-            setError(result.error || t('zones.errors.loadFailed'));
+            setZoneError(result.error || t('zones.errors.loadFailed'));
         }
 
         setIsLoading(false);
@@ -131,15 +132,17 @@ export function ZoneDetailPage() {
         );
     }
 
-    if (error || !zone) {
+    if (zoneError || !zone) {
         return (
-            <div className="p-6">
-                <Alert
-                    variant="error"
-                    title={t('common.error')}
-                    message={error || t('zones.errors.notFound')}
+            <>
+                <PageMeta title={`${t("errors.notFound")} | XetaSuite`} description={t("errors.pageNotFound")} />
+                <NotFoundContent
+                    title={t("zones.notFound")}
+                    message={t("zones.notFoundMessage")}
+                    backTo="/zones"
+                    backLabel={t("zones.detail.backToList")}
                 />
-            </div>
+            </>
         );
     }
 
@@ -148,7 +151,7 @@ export function ZoneDetailPage() {
 
     return (
         <>
-            <PageMeta title={zone.name} description={t('zones.description')} />
+            <PageMeta title={`${zone.name} | ${t("zones.title")} | XetaSuite`} description={t('zones.description')} />
             <PageBreadcrumb
                 pageTitle={zone.name}
                 breadcrumbs={[{ label: t('zones.title'), path: '/zones' }, { label: zone.name }]}
@@ -213,7 +216,7 @@ export function ZoneDetailPage() {
                             <FaGear className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
                         <div>
-                            <p className="text-2xl font-semibold text-gray-900 dark:text-white">{zone.materials_count}</p>
+                            <p className="text-2xl font-semibold text-gray-900 dark:text-white">{zone.material_count}</p>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{t('zones.detail.totalMaterials')}</p>
                         </div>
                     </div>
@@ -264,12 +267,9 @@ export function ZoneDetailPage() {
                             <div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('zones.allowMaterial')}</p>
                                 <p className="text-gray-900 dark:text-white">
-                                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${zone.allow_material
-                                        ? 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-400'
-                                        : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                                        }`}>
+                                    <Badge color={zone.allow_material ? "success" : "dark"}>
                                         {zone.allow_material ? t('common.yes') : t('common.no')}
-                                    </span>
+                                    </Badge>
                                 </p>
                             </div>
                         </div>
@@ -406,18 +406,18 @@ export function ZoneDetailPage() {
                                                 </Link>
                                             </TableCell>
                                             <TableCell className="px-6 py-4">
-                                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${child.allow_material
-                                                    ? 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-400'
-                                                    : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                                                    }`}>
+                                                <Badge
+                                                    color={child.allow_material ? "success" : "dark"}
+                                                    size='sm'
+                                                >
                                                     {child.allow_material ? t('common.yes') : t('common.no')}
-                                                </span>
+                                                </Badge>
                                             </TableCell>
                                             <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                                 {child.children_count}
                                             </TableCell>
                                             <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                                {child.materials_count}
+                                                {child.material_count}
                                             </TableCell>
                                         </TableRow>
                                     ))

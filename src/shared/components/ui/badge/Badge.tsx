@@ -1,7 +1,7 @@
 type BadgeVariant = "light" | "solid";
 type BadgeSize = "sm" | "md";
-type BadgeColor =
-  | "primary"
+export type BadgeColor =
+  | "brand"
   | "success"
   | "error"
   | "warning"
@@ -10,6 +10,8 @@ type BadgeColor =
   | "dark";
 
 interface BadgeProps {
+  title?: string; // Tooltip text
+  extraClass?: string; // Additional CSS classes
   variant?: BadgeVariant; // Light or solid variant
   size?: BadgeSize; // Badge size
   color?: BadgeColor; // Badge color
@@ -19,39 +21,36 @@ interface BadgeProps {
 }
 
 const Badge: React.FC<BadgeProps> = ({
+  title,
+  extraClass,
   variant = "light",
-  color = "primary",
-  size = "md",
+  color = "brand",
+  size = "sm",
   startIcon,
   endIcon,
   children,
 }) => {
-  const baseStyles =
-    "inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium";
+  const baseStyles = "inline-flex items-center px-2.5 py-0.5 justify-center gap-1 rounded-full font-medium";
 
   // Define size styles
   const sizeStyles = {
-    sm: "text-theme-xs", // Smaller padding and font size
-    md: "text-sm", // Default padding and font size
+    sm: "text-sm", // Smaller padding and font size
+    md: "text-md", // Default padding and font size
   };
 
   // Define color styles for variants
   const variants = {
     light: {
-      primary:
-        "bg-brand-50 text-brand-500 dark:bg-brand-500/15 dark:text-brand-400",
-      success:
-        "bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500",
-      error:
-        "bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500",
-      warning:
-        "bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400",
-      info: "bg-blue-light-50 text-blue-light-500 dark:bg-blue-light-500/15 dark:text-blue-light-500",
+      brand: "bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400",
+      success: "bg-success-50 text-success-600 dark:bg-success-500/10 dark:text-success-400",
+      error: "bg-error-50 text-error-600 dark:bg-error-500/10 dark:text-error-400",
+      warning: "bg-warning-50 text-warning-600 dark:bg-warning-500/10 dark:text-orange-400",
+      info: "bg-blue-light-50 text-blue-light-600 dark:bg-blue-light-500/10 dark:text-blue-light-400",
       light: "bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80",
       dark: "bg-gray-500 text-white dark:bg-white/5 dark:text-white",
     },
     solid: {
-      primary: "bg-brand-500 text-white dark:text-white",
+      brand: "bg-brand-500 text-white dark:text-white",
       success: "bg-success-500 text-white dark:text-white",
       error: "bg-error-500 text-white dark:text-white",
       warning: "bg-warning-500 text-white dark:text-white",
@@ -66,7 +65,7 @@ const Badge: React.FC<BadgeProps> = ({
   const colorStyles = variants[variant][color];
 
   return (
-    <span className={`${baseStyles} ${sizeClass} ${colorStyles}`}>
+    <span className={`${baseStyles} ${sizeClass} ${colorStyles} ${extraClass}`} title={`${title}`}>
       {startIcon && <span className="mr-1">{startIcon}</span>}
       {children}
       {endIcon && <span className="ml-1">{endIcon}</span>}

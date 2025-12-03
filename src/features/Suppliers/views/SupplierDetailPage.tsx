@@ -1,15 +1,18 @@
 import { useState, useEffect, useCallback, type FC } from "react";
 import { useParams, Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaArrowLeft, FaArrowUp, FaArrowDown, FaMagnifyingGlass, FaCubes, FaCalendar, FaUser } from "react-icons/fa6";
+import { FaArrowLeft, FaArrowUp, FaArrowDown, FaMagnifyingGlass, FaCubes, FaCalendar, FaUser, FaPenToSquare } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, Button } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { SupplierManager } from "../services";
 import type { Supplier } from "../types";
 import type { Item, ItemFilters } from "../types/item";
 import type { PaginationMeta } from "@/shared/types";
 import { formatDate } from "@/shared/utils";
+import { useAuth } from "@/features/Auth/hooks";
+import { useModal } from "@/shared/hooks";
+import SupplierModal from "./SupplierModal";
 
 type SortField = "name" | "reference" | "current_stock" | "purchase_price";
 type SortDirection = "asc" | "desc";
@@ -18,6 +21,7 @@ const SupplierDetailPage: FC = () => {
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const supplierId = Number(id);
+    const { hasPermission } = useAuth();
 
     // Supplier state
     const [supplier, setSupplier] = useState<Supplier | null>(null);
@@ -36,6 +40,12 @@ const SupplierDetailPage: FC = () => {
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
     const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+
+    // Modal
+    const editModal = useModal();
+
+    // Permissions
+    const canUpdate = hasPermission('supplier.update');
 
     // Fetch supplier details
     useEffect(() => {
@@ -124,26 +134,19 @@ const SupplierDetailPage: FC = () => {
         );
     };
 
-    const getStockStatusBadge = (status: string, color: string) => {
-        const colorClasses: Record<string, string> = {
-            green: "bg-success-50 text-success-600 dark:bg-success-500/10 dark:text-success-400",
-            yellow: "bg-warning-50 text-warning-600 dark:bg-warning-500/10 dark:text-warning-400",
-            orange: "bg-warning-50 text-warning-700 dark:bg-warning-500/10 dark:text-warning-500",
-            red: "bg-error-50 text-error-600 dark:bg-error-500/10 dark:text-error-400",
-        };
+    const statusLabels: Record<string, string> = {
+        ok: t("suppliers.detail.stockStatus.ok"),
+        warning: t("suppliers.detail.stockStatus.warning"),
+        critical: t("suppliers.detail.stockStatus.critical"),
+        empty: t("suppliers.detail.stockStatus.empty"),
+    };
 
-        const statusLabels: Record<string, string> = {
-            ok: t("suppliers.detail.stockStatus.ok"),
-            warning: t("suppliers.detail.stockStatus.warning"),
-            critical: t("suppliers.detail.stockStatus.critical"),
-            empty: t("suppliers.detail.stockStatus.empty"),
-        };
-
-        return (
-            <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${colorClasses[color] || colorClasses.green}`}>
-                {statusLabels[status] || status}
-            </span>
-        );
+    const handleEditSuccess = async () => {
+        // Refresh site data after edit
+        const result = await SupplierManager.getById(supplierId);
+        if (result.success && result.data) {
+            setSupplier(result.data.data);
+        }
     };
 
     // Loading state for supplier
@@ -200,6 +203,17 @@ const SupplierDetailPage: FC = () => {
                         </div>
                         {supplier.description && <p className="mt-3 text-gray-600 dark:text-gray-400">{supplier.description}</p>}
                     </div>
+
+                    {canUpdate && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            startIcon={<FaPenToSquare className="h-4 w-4" />}
+                            onClick={() => editModal.openModal()}
+                        >
+                            {t("common.edit")}
+                        </Button>
+                    )}
                 </div>
 
                 {/* Stats */}
@@ -394,7 +408,12 @@ const SupplierDetailPage: FC = () => {
                                             <span className="font-medium text-gray-900 dark:text-white">{item.current_stock}</span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
-                                            {getStockStatusBadge(item.stock_status, item.stock_status_color)}
+                                            <Badge
+                                                color={item.stock_status_color}
+                                                size='sm'
+                                            >
+                                                {statusLabels[item.stock_status]}
+                                            </Badge>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-right text-gray-500 dark:text-gray-400">
                                             {SupplierManager.formatCurrency(item.purchase_price, item.currency)}
@@ -412,6 +431,14 @@ const SupplierDetailPage: FC = () => {
                 {/* Pagination */}
                 {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
             </div>
+
+            {/* Edit Modal */}
+            <SupplierModal
+                isOpen={editModal.isOpen}
+                onClose={editModal.closeModal}
+                supplier={supplier}
+                onSuccess={handleEditSuccess}
+            />
         </>
     );
 };

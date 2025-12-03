@@ -30,6 +30,7 @@
         "viewAll": "View all",
         "new": "new",
         "beta": "beta",
+        "error": "Error",
         "export": {
             "button": "Export ({{count}})",
             "exporting": "Exporting...",
@@ -289,6 +290,7 @@
         "parent": "Parent zone",
         "children": "Children",
         "materials": "Materials",
+        "subZones": "Sub-zones",
         "allowMaterial": "Allow materials",
         "allowsMaterials": "Allows materials",
         "form": {
@@ -302,7 +304,6 @@
         "table": {
             "name": "Name",
             "allowMaterial": "Allows materials",
-            "childrenCount": "Sub-zones",
             "materialCount": "Materials",
             "materialName": "Material name",
             "materialDescription": "Description"

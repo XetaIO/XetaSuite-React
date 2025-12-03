@@ -149,6 +149,7 @@ const SiteListPage: FC = () => {
             };
             fetchSites(filters);
         } else {
+            deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);

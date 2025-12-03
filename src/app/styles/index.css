@@ -314,6 +314,7 @@
 :root {
   --toastify-toast-top: 94px !important;
   --toastify-color-dark: #171f2f !important;
+  --toastify-text-color-dark: var(--color-gray-300) !important;
 }
 
 .Toastify__toast {

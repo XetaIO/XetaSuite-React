@@ -10,7 +10,7 @@ export interface Zone {
     children?: ZoneChild[];
     materials?: ZoneMaterial[];
     children_count: number;
-    materials_count: number;
+    material_count: number;
     created_at: string;
     updated_at?: string;
 }
@@ -30,7 +30,7 @@ export interface ZoneChild {
     name: string;
     allow_material: boolean;
     children_count: number;
-    materials_count: number;
+    material_count: number;
 }
 
 export interface ZoneMaterial {
@@ -49,7 +49,7 @@ export interface ZoneFilters {
     page?: number;
     search?: string;
     parent_id?: number | null;
-    sort_by?: 'name' | 'children_count' | 'materials_count' | 'created_at';
+    sort_by?: 'name' | 'children_count' | 'material_count' | 'created_at';
     sort_direction?: 'asc' | 'desc';
 }
 

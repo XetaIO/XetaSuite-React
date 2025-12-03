@@ -1,4 +1,6 @@
 // Item types for stock management
+import { BadgeColor } from "@/shared/components/ui/badge/Badge";
+
 export interface Item {
     id: number;
     name: string;
@@ -8,7 +10,7 @@ export interface Item {
     // Stock
     current_stock: number;
     stock_status: StockStatus;
-    stock_status_color: string;
+    stock_status_color: BadgeColor;
 
     // Pricing
     purchase_price: number | null;

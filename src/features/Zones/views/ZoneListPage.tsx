@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FaPlus, FaPenToSquare, FaTrash, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaLayerGroup, FaWrench } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
@@ -13,7 +13,7 @@ import { ZoneModal } from "./ZoneModal";
 import type { Zone, ZoneFilters } from "../types";
 import type { PaginationMeta } from "@/shared/types";
 
-type SortField = "name" | "children_count" | "materials_count" | "created_at";
+type SortField = "name" | "children_count" | "material_count" | "created_at";
 type SortDirection = "asc" | "desc";
 
 const ZoneListPage: FC = () => {
@@ -138,6 +138,7 @@ const ZoneListPage: FC = () => {
             };
             fetchZones(filters);
         } else {
+            deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
@@ -245,17 +246,17 @@ const ZoneListPage: FC = () => {
                                         onClick={() => handleSort("children_count")}
                                         className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
                                     >
-                                        {t("zones.children")}
+                                        {t("zones.subZones")}
                                         {renderSortIcon("children_count")}
                                     </button>
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
-                                        onClick={() => handleSort("materials_count")}
+                                        onClick={() => handleSort("material_count")}
                                         className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
                                     >
                                         {t("zones.materials")}
-                                        {renderSortIcon("materials_count")}
+                                        {renderSortIcon("material_count")}
                                     </button>
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -336,9 +337,13 @@ const ZoneListPage: FC = () => {
                                                     {zone.name}
                                                 </Link>
                                                 {zone.allow_material && (
-                                                    <span className="inline-flex items-center rounded-full bg-success-50 px-2 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/10 dark:text-success-400" title={t("zones.allowsMaterials")}>
+                                                    <Badge
+                                                        extraClass="py-1.5"
+                                                        color="success"
+                                                        title={t("zones.allowsMaterials")}
+                                                    >
                                                         <FaWrench className="h-3 w-3" />
-                                                    </span>
+                                                    </Badge>
                                                 )}
                                             </div>
                                         </TableCell>
@@ -349,16 +354,16 @@ const ZoneListPage: FC = () => {
                                             {zone.parent?.name || "-"}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
-                                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                                            <Badge color="brand">
                                                 <FaLayerGroup className="h-3 w-3" />
                                                 {zone.children_count}
-                                            </span>
+                                            </Badge>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
-                                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                                            <Badge color="brand">
                                                 <FaWrench className="h-3 w-3" />
-                                                {zone.materials_count}
-                                            </span>
+                                                {zone.material_count}
+                                            </Badge>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(zone.created_at)}

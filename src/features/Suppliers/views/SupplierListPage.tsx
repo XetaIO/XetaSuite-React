@@ -149,6 +149,7 @@ const SupplierListPage: FC = () => {
             };
             fetchSuppliers(filters);
         } else {
+            deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
