@@ -1,6 +1,8 @@
 import React from "react";
 
 interface TextareaProps {
+  id?: string; // Optional ID for the textarea
+  name?: string; // Optional name attribute
   placeholder?: string; // Placeholder text
   rows?: number; // Number of rows
   value?: string; // Current value
@@ -12,6 +14,8 @@ interface TextareaProps {
 }
 
 const TextArea: React.FC<TextareaProps> = ({
+  id,
+  name,
   placeholder = "Enter your message", // Default placeholder
   rows = 3, // Default number of rows
   value = "", // Default value
@@ -46,12 +50,13 @@ const TextArea: React.FC<TextareaProps> = ({
         onChange={handleChange}
         disabled={disabled}
         className={textareaClasses}
+        id={id}
+        name={name}
       />
       {hint && (
         <p
-          className={`mt-2 text-sm ${
-            error ? "text-error-500" : "text-gray-500 dark:text-gray-400"
-          }`}
+          className={`mt-2 text-sm ${error ? "text-error-500" : "text-gray-500 dark:text-gray-400"
+            }`}
         >
           {hint}
         </p>

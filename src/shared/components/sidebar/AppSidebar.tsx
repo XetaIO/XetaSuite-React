@@ -11,7 +11,6 @@ import {
     FaChevronDown,
     FaCubes,
     FaGear,
-    FaMicrochip,
     FaRightLeft,
     FaScrewdriverWrench,
     FaShieldHalved,
@@ -21,6 +20,7 @@ import {
     FaUsersGear,
     FaUserShield,
     FaUserTie,
+    FaWrench,
 } from "react-icons/fa6";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -111,11 +111,11 @@ const navItems: NavItem[] = [
         permission: "cleaning.viewAny",
     },
     {
-        icon: <FaMicrochip />,
+        icon: <FaWrench />,
         nameKey: "sidebar.materials",
         subItems: [
             {
-                icon: <FaMicrochip />,
+                icon: <FaWrench />,
                 nameKey: "sidebar.manageMaterials",
                 path: "/materials",
                 permission: "material.viewAny",

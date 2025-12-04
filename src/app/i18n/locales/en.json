@@ -31,6 +31,8 @@
         "new": "new",
         "beta": "beta",
         "error": "Error",
+        "disabled": "Disabled",
+        "enabled": "Enabled",
         "export": {
             "button": "Export ({{count}})",
             "exporting": "Exporting...",
@@ -333,10 +335,74 @@
             "deleted": "Zone \"{{name}}\" has been deleted successfully"
         }
     },
+    "materials": {
+        "title": "Materials",
+        "description": "Manage materials",
+        "listTitle": "Materials list",
+        "notFound": "Material not found",
+        "notFoundMessage": "The material you are looking for does not exist or has been deleted.",
+        "create": "New material",
+        "edit": "Edit material",
+        "manageMaterialsAndTheirInformation": "Manage your materials and their information",
+        "noMaterials": "No materials found",
+        "noMaterialsFor": "No materials found for \"{{search}}\"",
+        "deleteTitle": "Delete material",
+        "zone": "Zone",
+        "createdBy": "Created by",
+        "cleaningAlert": "Cleaning alert",
+        "cleaningAlertSettings": "Cleaning alert settings",
+        "cleaningAlertEnabled": "Cleaning alert enabled",
+        "cleaningAlertDisabled": "Cleaning alert disabled",
+        "emailNotificationEnabled": "Email notification enabled",
+        "emailEnabled": "Email enabled",
+        "lastCleaning": "Last cleaning",
+        "neverCleaned": "Never cleaned",
+        "frequency": "Frequency",
+        "every": "Every",
+        "frequencyDaily": "day(s)",
+        "frequencyWeekly": "week(s)",
+        "frequencyMonthly": "month(s)",
+        "recipients": "Recipients",
+        "stats": {
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Cleanings",
+            "items": "Items"
+        },
+        "form": {
+            "selectZone": "Select a zone",
+            "namePlaceholder": "Material name",
+            "descriptionPlaceholder": "Material description (optional)",
+            "zoneHint": "Only zones that allow materials are displayed",
+            "enableCleaningAlert": "Enable cleaning alerts",
+            "enableCleaningAlertHint": "Receive reminders for cleaning this material",
+            "enableEmailNotification": "Send alerts by email",
+            "enableEmailNotificationHint": "Recipients will receive an email when alerts are triggered",
+            "frequencyEvery": "Every",
+            "frequencyType": "Period",
+            "recipients": "Alert recipients",
+            "recipientsHint": "Select users who will receive the alerts",
+            "noRecipientsAvailable": "No users available"
+        },
+        "detail": {
+            "backToList": "Back to materials list",
+            "info": "Material information"
+        },
+        "errors": {
+            "loadFailed": "Unable to load material",
+            "notFound": "Material not found"
+        },
+        "messages": {
+            "created": "Material \"{{name}}\" has been created successfully",
+            "updated": "Material \"{{name}}\" has been updated successfully",
+            "deleted": "Material \"{{name}}\" has been deleted successfully"
+        }
+    },
     "validation": {
         "required": "This field is required",
         "nameRequired": "Name is required",
         "siteRequired": "Site is required",
+        "zoneRequired": "Zone is required",
         "email": "Please enter a valid email address",
         "min": "This field must be at least {{min}} characters",
         "max": "This field must not exceed {{max}} characters",

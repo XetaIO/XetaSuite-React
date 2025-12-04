@@ -63,4 +63,11 @@ export const API_ENDPOINTS = {
         MATERIALS: (id: number) => `/api/v1/zones/${id}/materials`,
         AVAILABLE_PARENTS: '/api/v1/zones-available-parents',
     },
+    // Materials
+    MATERIALS: {
+        BASE: '/api/v1/materials',
+        DETAIL: (id: number) => `/api/v1/materials/${id}`,
+        AVAILABLE_ZONES: '/api/v1/materials-available-zones',
+        AVAILABLE_RECIPIENTS: '/api/v1/materials-available-recipients',
+    },
 } as const;

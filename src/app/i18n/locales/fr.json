@@ -31,6 +31,8 @@
         "new": "nouveau",
         "beta": "beta",
         "error": "Erreur",
+        "enabled": "Activé",
+        "disabled": "Désactivé",
         "export": {
             "button": "Exporter ({{count}})",
             "exporting": "Export en cours...",
@@ -333,10 +335,74 @@
             "deleted": "La zone \"{{name}}\" a été supprimée avec succès"
         }
     },
+    "materials": {
+        "title": "Matériels",
+        "description": "Gestion des matériels",
+        "listTitle": "Liste des matériels",
+        "notFound": "Matériel introuvable",
+        "notFoundMessage": "Le matériel que vous recherchez n'existe pas ou a été supprimé.",
+        "create": "Nouveau matériel",
+        "edit": "Modifier le matériel",
+        "manageMaterialsAndTheirInformation": "Gérez vos matériels et leurs informations",
+        "noMaterials": "Aucun matériel trouvé",
+        "noMaterialsFor": "Aucun matériel trouvé pour \"{{search}}\"",
+        "deleteTitle": "Supprimer le matériel",
+        "zone": "Zone",
+        "createdBy": "Créé par",
+        "cleaningAlert": "Alerte de nettoyage",
+        "cleaningAlertSettings": "Paramètres d'alerte de nettoyage",
+        "cleaningAlertEnabled": "Alerte de nettoyage activée",
+        "cleaningAlertDisabled": "Alerte de nettoyage désactivée",
+        "emailNotificationEnabled": "Notification par email activée",
+        "emailEnabled": "Email activé",
+        "lastCleaning": "Dernier nettoyage",
+        "neverCleaned": "Jamais nettoyé",
+        "frequency": "Fréquence",
+        "every": "Tous les",
+        "frequencyDaily": "jour(s)",
+        "frequencyWeekly": "semaine(s)",
+        "frequencyMonthly": "mois",
+        "recipients": "Destinataires",
+        "stats": {
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Nettoyages",
+            "items": "Articles"
+        },
+        "form": {
+            "selectZone": "Sélectionner une zone",
+            "namePlaceholder": "Nom du matériel",
+            "descriptionPlaceholder": "Description du matériel (optionnel)",
+            "zoneHint": "Seules les zones autorisant les matériels sont affichées",
+            "enableCleaningAlert": "Activer les alertes de nettoyage",
+            "enableCleaningAlertHint": "Recevez des rappels pour le nettoyage de ce matériel",
+            "enableEmailNotification": "Envoyer les alertes par email",
+            "enableEmailNotificationHint": "Les destinataires recevront un email lors des alertes",
+            "frequencyEvery": "Tous les",
+            "frequencyType": "Période",
+            "recipients": "Destinataires des alertes",
+            "recipientsHint": "Sélectionnez les utilisateurs qui recevront les alertes",
+            "noRecipientsAvailable": "Aucun utilisateur disponible"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des matériels",
+            "info": "Informations du matériel"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger le matériel",
+            "notFound": "Matériel introuvable"
+        },
+        "messages": {
+            "created": "Le matériel \"{{name}}\" a été créé avec succès",
+            "updated": "Le matériel \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "Le matériel \"{{name}}\" a été supprimé avec succès"
+        }
+    },
     "validation": {
         "required": "Ce champ est requis",
         "nameRequired": "Le nom est requis",
         "siteRequired": "Le site est requis",
+        "zoneRequired": "La zone est requise",
         "email": "Veuillez entrer une adresse email valide",
         "min": "Ce champ doit contenir au moins {{min}} caractères",
         "max": "Ce champ ne doit pas dépasser {{max}} caractères",
