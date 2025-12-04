@@ -1,0 +1,601 @@
+{
+    "common": {
+        "loading": "Chargement...",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "create": "Créer",
+        "update": "Mettre à jour",
+        "search": "Rechercher",
+        "searchPlaceholder": "Rechercher par nom ou description...",
+        "noResults": "Aucun résultat",
+        "noSearchResults": "Aucun résultat pour cette recherche",
+        "notAvailable": "Non disponible",
+        "actions": "Actions",
+        "yes": "Oui",
+        "no": "Non",
+        "confirm": "Confirmer",
+        "back": "Retour",
+        "close": "Fermer",
+        "name": "Nom",
+        "description": "Description",
+        "createdAt": "Créé le",
+        "createdBy": "Créé par",
+        "updatedAt": "Modifié le",
+        "creator": "Créateur",
+        "clearSearch": "Effacer la recherche",
+        "clearFilters": "Effacer les filtres",
+        "collaborators": "Collaborateurs",
+        "user": "Utilisateur",
+        "support": "Support",
+        "viewAll": "Voir tout",
+        "new": "nouveau",
+        "beta": "beta",
+        "error": "Erreur",
+        "enabled": "Activé",
+        "disabled": "Désactivé",
+        "export": {
+            "button": "Exporter ({{count}})",
+            "exporting": "Export en cours...",
+            "selected": "{{count}} sélectionné(s)",
+            "selectAll": "Tout sélectionner",
+            "deselectAll": "Tout désélectionner",
+            "clearSelection": "Effacer la sélection",
+            "comingSoon": "L'export sera bientôt disponible"
+        },
+        "messages": {
+            "created": "\"{{name}}\" a été créé avec succès",
+            "updated": "\"{{name}}\" a été mis à jour avec succès",
+            "deleted": "\"{{name}}\" a été supprimé avec succès"
+        },
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible."
+    },
+    "header": {
+        "search": "Rechercher ou taper une commande...",
+        "notifications": "Notifications",
+        "profile": "Profil",
+        "editProfile": "Modifier le profil",
+        "accountSettings": "Paramètres du compte",
+        "settings": "Paramètres",
+        "logout": "Déconnexion",
+        "signOut": "Se déconnecter",
+        "switchSite": "Changer de site",
+        "selectSite": "Sélectionner un site"
+    },
+    "language": {
+        "title": "Langue",
+        "fr": "Français",
+        "en": "English"
+    },
+    "sidebar": {
+        "dashboard": "Tableau de bord",
+        "sites": "Sites",
+        "zones": "Zones",
+        "materials": "Matériels",
+        "items": "Articles",
+        "suppliers": "Fournisseurs",
+        "companies": "Entreprises",
+        "maintenances": "Maintenances",
+        "incidents": "Incidents",
+        "cleanings": "Nettoyages",
+        "users": "Utilisateurs",
+        "settings": "Paramètres",
+        "jobCategories": "Catégories métier",
+        "managementCategories": "Catégories gestion",
+        "manageMaintenances": "Gérer les maintenances",
+        "manageCompanies": "Gérer les entreprises",
+        "manageItems": "Gérer les articles",
+        "manageItemsMovements": "Gérer les mouvements",
+        "manageSuppliers": "Gérer les fournisseurs",
+        "manageMaterials": "Gérer les matériels",
+        "manageZones": "Gérer les zones",
+        "manageSites": "Gérer les sites",
+        "manageUsers": "Gérer les utilisateurs",
+        "rolesPermissions": "Rôles et permissions",
+        "manageRoles": "Gérer les rôles",
+        "managePermissions": "Gérer les permissions"
+    },
+    "dashboard": {
+        "title": "Tableau de bord",
+        "pageTitle": "Tableau de bord | XetaSuite",
+        "pageDescription": "Tableau de bord XetaSuite - Gestion des maintenances, incidents et stocks",
+        "welcome": "Bienvenue, {{name}}",
+        "stats": {
+            "maintenancesThisMonth": "Maintenances ce mois",
+            "openIncidents": "Incidents ouverts",
+            "itemsInStock": "Articles en stock",
+            "activeSites": "Sites actifs"
+        },
+        "charts": {
+            "maintenanceEvolution": "Évolution des maintenances",
+            "maintenanceEvolutionDesc": "Maintenances réalisées sur les 12 derniers mois",
+            "stockEvolution": "Évolution des stocks",
+            "stockEvolutionDesc": "Mouvements de stock sur les 12 derniers mois",
+            "incidentsByMonth": "Incidents par mois",
+            "incidentsByMonthDesc": "Nombre d'incidents signalés mensuellement"
+        },
+        "activity": {
+            "title": "Activité récente",
+            "status": {
+                "pending": "En attente",
+                "completed": "Terminé",
+                "inProgress": "En cours"
+            }
+        },
+        "incidents": {
+            "summary": "Résumé des incidents",
+            "open": "Ouverts",
+            "inProgress": "En cours",
+            "resolved": "Résolus",
+            "bySeverity": "Par sévérité",
+            "severity": {
+                "critical": "Critique",
+                "high": "Haute",
+                "medium": "Moyenne",
+                "low": "Basse"
+            }
+        },
+        "maintenances": {
+            "upcoming": "Maintenances à venir",
+            "schedule": "Planifier",
+            "priority": {
+                "low": "Basse",
+                "medium": "Moyenne",
+                "high": "Haute"
+            },
+            "type": {
+                "preventive": "Préventive",
+                "corrective": "Corrective"
+            }
+        },
+        "lowStock": {
+            "title": "Stock faible",
+            "itemsCount": "{{count}} articles"
+        }
+    },
+    "suppliers": {
+        "title": "Fournisseurs",
+        "description": "Gestion des fournisseurs",
+        "listTitle": "Liste des fournisseurs",
+        "notFound": "Fournisseur introuvable",
+        "notFoundMessage": "Le fournisseur que vous recherchez n'existe pas ou a été supprimé.",
+        "create": "Nouveau fournisseur",
+        "edit": "Modifier le fournisseur",
+        "name": "Nom",
+        "nameLabel": "Nom *",
+        "items": "Articles",
+        "manageSuppliersAndTheirInformation": "Gérez vos fournisseurs et leurs informations",
+        "noSuppliers": "Aucun fournisseur trouvé",
+        "noSuppliersFor": "Aucun fournisseur trouvé pour \"{{search}}\"",
+        "deleteTitle": "Supprimer le fournisseur",
+        "form": {
+            "namePlaceholder": "Nom du fournisseur",
+            "descriptionPlaceholder": "Description du fournisseur (optionnel)",
+            "descriptionLabel": "Description"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des fournisseurs",
+            "totalItems": "Articles total",
+            "itemsListTitle": "Articles du fournisseur",
+            "itemsListDescription": "Liste des articles fournis par {{name}}",
+            "searchItems": "Rechercher un article...",
+            "reference": "Référence",
+            "stock": "Stock",
+            "status": "État",
+            "price": "Prix d'achat",
+            "site": "Site",
+            "noItems": "Aucun article pour ce fournisseur",
+            "noItemsFor": "Aucun article trouvé pour \"{{search}}\"",
+            "stockStatus": {
+                "ok": "OK",
+                "warning": "Attention",
+                "critical": "Critique",
+                "empty": "Rupture"
+            }
+        },
+        "export": {
+            "button": "Exporter ({{count}})",
+            "exporting": "Export en cours...",
+            "selected": "{{count}} sélectionné(s)",
+            "selectAll": "Tout sélectionner",
+            "deselectAll": "Tout désélectionner",
+            "clearSelection": "Effacer la sélection",
+            "comingSoon": "L'export sera bientôt disponible"
+        },
+        "messages": {
+            "created": "Le fournisseur \"{{name}}\" a été créé avec succès",
+            "updated": "Le fournisseur \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "Le fournisseur \"{{name}}\" a été supprimé avec succès"
+        }
+    },
+    "items": {
+        "title": "Articles",
+        "description": "Gestion des articles en stock",
+        "listTitle": "Liste des articles",
+        "notFound": "Article introuvable",
+        "notFoundMessage": "L'article que vous recherchez n'existe pas ou a été supprimé.",
+        "backToList": "Retour à la liste",
+        "create": "Nouvel article",
+        "edit": "Modifier l'article",
+        "manageItemsAndStock": "Gérez vos articles et niveaux de stock",
+        "noItems": "Aucun article trouvé",
+        "noItemsFor": "Aucun article trouvé pour cette recherche",
+        "noSupplier": "Aucun fournisseur",
+        "noMaterialsAvailable": "Aucun matériel disponible",
+        "noRecipientsAvailable": "Aucun destinataire disponible",
+        "searchPlaceholder": "Rechercher par nom ou référence...",
+        "detail": {
+            "info": "Informations"
+        },
+        "fields": {
+            "name": "Nom",
+            "reference": "Référence",
+            "description": "Description",
+            "stock": "Stock",
+            "currentStock": "Stock actuel",
+            "status": "Statut",
+            "price": "Prix",
+            "purchasePrice": "Prix d'achat",
+            "currency": "Devise",
+            "supplier": "Fournisseur",
+            "supplierReference": "Référence fournisseur",
+            "qrCodeScans": "Scans QR code"
+        },
+        "filters": {
+            "allStatuses": "Tous les statuts",
+            "stockStatus": "Filtrer par statut"
+        },
+        "stockStatus": {
+            "ok": "OK",
+            "warning": "Attention",
+            "critical": "Critique",
+            "empty": "Épuisé"
+        },
+        "sections": {
+            "basicInfo": "Informations générales",
+            "pricing": "Tarification",
+            "supplier": "Fournisseur",
+            "stockAlerts": "Alertes de stock",
+            "materials": "Matériels associés",
+            "recipients": "Destinataires des alertes"
+        },
+        "materialsHelp": "Sélectionnez les matériels qui utilisent cet article",
+        "recipientsHelp": "Utilisateurs qui recevront les alertes de stock",
+        "alerts": {
+            "warning": "Seuil d'alerte",
+            "warningDescription": "Alerte lorsque le stock est faible",
+            "critical": "Seuil critique",
+            "criticalDescription": "Alerte lorsque le stock est très faible",
+            "enableWarning": "Activer l'alerte d'attention",
+            "enableCritical": "Activer l'alerte critique",
+            "warningThresholdHelp": "Alerte lorsque le stock passe sous ce niveau",
+            "criticalThresholdHelp": "Alerte critique lorsque le stock passe sous ce niveau"
+        },
+        "validation": {
+            "criticalLessThanWarning": "Le seuil critique doit être inférieur au seuil d'attention"
+        },
+        "stats": {
+            "title": "Mouvements de stock",
+            "entries": "Entrées",
+            "exits": "Sorties",
+            "totalEntries": "Total entrées",
+            "totalExits": "Total sorties",
+            "noData": "Aucune donnée de mouvement disponible"
+        },
+        "movements": {
+            "entry": "Entrée",
+            "exit": "Sortie",
+            "addEntry": "Ajouter une entrée",
+            "addExit": "Ajouter une sortie",
+            "confirmEntry": "Confirmer l'entrée",
+            "confirmExit": "Confirmer la sortie",
+            "history": "Historique des mouvements",
+            "noMovements": "Aucun mouvement enregistré",
+            "availableStock": "Disponible : {{count}} unités",
+            "totalPrice": "Total",
+            "fields": {
+                "date": "Date",
+                "type": "Type",
+                "quantity": "Quantité",
+                "price": "Prix",
+                "unitPrice": "Prix unitaire",
+                "supplier": "Fournisseur",
+                "invoiceNumber": "N° de facture",
+                "invoiceDate": "Date de facture",
+                "notes": "Notes",
+                "createdBy": "Créé par"
+            },
+            "validation": {
+                "quantityRequired": "La quantité est requise",
+                "insufficientStock": "Stock insuffisant (disponible : {{available}})"
+            },
+            "messages": {
+                "entryCreated": "Entrée de {{quantity}} unités enregistrée",
+                "exitCreated": "Sortie de {{quantity}} unités enregistrée"
+            }
+        },
+        "qrCode": {
+            "title": "QR Code",
+            "size": "Taille",
+            "download": "Télécharger",
+            "print": "Imprimer",
+            "help": "Scannez ce QR code pour accéder rapidement aux détails de l'article",
+            "printTitle": "QR Code - {{name}}"
+        },
+        "delete": {
+            "title": "Supprimer l'article",
+            "message": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible."
+        },
+        "messages": {
+            "created": "L'article \"{{name}}\" a été créé avec succès",
+            "updated": "L'article \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "L'article \"{{name}}\" a été supprimé avec succès"
+        }
+    },
+    "sites": {
+        "title": "Sites",
+        "description": "Gestion des sites",
+        "listTitle": "Liste des sites",
+        "notFound": "Site introuvable",
+        "notFoundMessage": "Le site que vous recherchez n'existe pas ou a été supprimé.",
+        "create": "Nouveau site",
+        "edit": "Modifier le site",
+        "name": "Nom",
+        "nameLabel": "Nom *",
+        "zones": "Zones",
+        "manageSitesAndTheirInformation": "Gérez vos sites et leurs informations",
+        "noSites": "Aucun site trouvé",
+        "noSitesFor": "Aucun site trouvé pour \"{{search}}\"",
+        "deleteTitle": "Supprimer le site",
+        "form": {
+            "namePlaceholder": "Nom du site",
+            "managers": "Managers",
+            "managersHint": "Sélectionnez les collaborateurs qui géreront ce site",
+            "noUsersAvailable": "Aucun utilisateur disponible",
+            "email": "Email",
+            "emailPlaceholder": "email@exemple.com",
+            "officePhone": "Téléphone bureau",
+            "officePhonePlaceholder": "01 23 45 67 89",
+            "cellPhone": "Téléphone portable",
+            "cellPhonePlaceholder": "06 12 34 56 78",
+            "address": "Adresse",
+            "addressPlaceholder": "123 rue Principale",
+            "zipCode": "Code postal",
+            "zipCodePlaceholder": "75001",
+            "city": "Ville",
+            "cityPlaceholder": "Paris"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des sites",
+            "headquarters": "Siège social",
+            "totalZones": "Zones",
+            "totalUsers": "Utilisateurs",
+            "contactInfo": "Informations de contact",
+            "noContact": "Aucune information de contact",
+            "managers": "Managers",
+            "noManagers": "Aucun gestionnaire assigné",
+            "zonesListTitle": "Zones du site",
+            "zonesListDescription": "Liste des zones de {{name}}",
+            "members": "Membres du site",
+            "membersDescription": "Utilisateurs ayant accès à ce site",
+            "noMembers": "Aucun membre sur ce site"
+        },
+        "table": {
+            "fullName": "Nom complet",
+            "email": "Email",
+            "roles": "Rôles",
+            "createdAt": "Date de création"
+        },
+        "export": {
+            "button": "Exporter ({{count}})",
+            "exporting": "Export en cours...",
+            "selected": "{{count}} sélectionné(s)",
+            "selectAll": "Tout sélectionner",
+            "deselectAll": "Tout désélectionner",
+            "clearSelection": "Effacer la sélection",
+            "comingSoon": "L'export sera bientôt disponible"
+        },
+        "messages": {
+            "created": "Le site \"{{name}}\" a été créé avec succès",
+            "updated": "Le site \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "Le site \"{{name}}\" a été supprimé avec succès"
+        }
+    },
+    "zones": {
+        "title": "Zones",
+        "description": "Gestion des zones",
+        "listTitle": "Liste des zones",
+        "notFound": "Zone introuvable",
+        "notFoundMessage": "La zone que vous recherchez n'existe pas ou a été supprimée.",
+        "create": "Nouvelle zone",
+        "edit": "Modifier la zone",
+        "manageZonesAndTheirInformation": "Gérez vos zones et leurs informations",
+        "noZones": "Aucune zone trouvée",
+        "noZonesFor": "Aucune zone trouvée pour \"{{search}}\"",
+        "deleteTitle": "Supprimer la zone",
+        "site": "Site",
+        "parent": "Zone parente",
+        "children": "Enfants",
+        "materials": "Matériels",
+        "subZones": "Sous-zones",
+        "allowMaterial": "Autoriser les matériels",
+        "allowsMaterials": "Autorise les matériels",
+        "form": {
+            "selectSite": "Sélectionner un site",
+            "namePlaceholder": "Nom de la zone",
+            "noParent": "Aucune zone parente (zone racine)",
+            "parentHint": "Sélectionnez une zone parente optionnelle",
+            "allowMaterial": "Cette zone peut contenir des matériels",
+            "allowMaterialHint": "Activez si cette zone peut contenir directement des matériels"
+        },
+        "table": {
+            "name": "Nom",
+            "allowMaterial": "Autorise les matériels",
+            "materialCount": "Matériels",
+            "materialName": "Nom du matériel",
+            "materialDescription": "Description"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des zones",
+            "allowsMaterials": "Autorise les matériels",
+            "info": "Informations de la zone",
+            "siteInfo": "Site associé",
+            "totalChildZones": "Sous-zones",
+            "totalMaterials": "Matériels",
+            "childZones": "Zones enfants",
+            "childZonesDescription": "Sous-zones contenues dans cette zone",
+            "materials": "Matériels",
+            "materialsDescription": "Matériels assignés à cette zone",
+            "noChildren": "Aucune zone enfant",
+            "noMaterials": "Aucun matériel assigné",
+            "emptyZone": "Cette zone ne contient ni sous-zones ni matériels"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger la zone",
+            "notFound": "Zone introuvable"
+        },
+        "messages": {
+            "created": "La zone \"{{name}}\" a été créée avec succès",
+            "updated": "La zone \"{{name}}\" a été mise à jour avec succès",
+            "deleted": "La zone \"{{name}}\" a été supprimée avec succès"
+        }
+    },
+    "materials": {
+        "title": "Matériels",
+        "description": "Gestion des matériels",
+        "listTitle": "Liste des matériels",
+        "notFound": "Matériel introuvable",
+        "notFoundMessage": "Le matériel que vous recherchez n'existe pas ou a été supprimé.",
+        "create": "Nouveau matériel",
+        "edit": "Modifier le matériel",
+        "manageMaterialsAndTheirInformation": "Gérez vos matériels et leurs informations",
+        "noMaterials": "Aucun matériel trouvé",
+        "noMaterialsFor": "Aucun matériel trouvé pour \"{{search}}\"",
+        "deleteTitle": "Supprimer le matériel",
+        "zone": "Zone",
+        "createdBy": "Créé par",
+        "cleaningAlert": "Alerte de nettoyage",
+        "cleaningAlertSettings": "Paramètres d'alerte de nettoyage",
+        "cleaningAlertEnabled": "Alerte de nettoyage activée",
+        "cleaningAlertDisabled": "Alerte de nettoyage désactivée",
+        "emailNotificationEnabled": "Notification par email activée",
+        "emailEnabled": "Email activé",
+        "lastCleaning": "Dernier nettoyage",
+        "neverCleaned": "Jamais nettoyé",
+        "frequency": "Fréquence",
+        "every": "Tous les",
+        "frequencyDaily": "jour(s)",
+        "frequencyWeekly": "semaine(s)",
+        "frequencyMonthly": "mois",
+        "recipients": "Destinataires",
+        "stats": {
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Nettoyages",
+            "items": "Articles"
+        },
+        "form": {
+            "selectZone": "Sélectionner une zone",
+            "namePlaceholder": "Nom du matériel",
+            "descriptionPlaceholder": "Description du matériel (optionnel)",
+            "zoneHint": "Seules les zones autorisant les matériels sont affichées",
+            "enableCleaningAlert": "Activer les alertes de nettoyage",
+            "enableCleaningAlertHint": "Recevez des rappels pour le nettoyage de ce matériel",
+            "enableEmailNotification": "Envoyer les alertes par email",
+            "enableEmailNotificationHint": "Les destinataires recevront un email lors des alertes",
+            "frequencyEvery": "Tous les",
+            "frequencyType": "Période",
+            "recipients": "Destinataires des alertes",
+            "recipientsHint": "Sélectionnez les utilisateurs qui recevront les alertes",
+            "noRecipientsAvailable": "Aucun utilisateur disponible"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des matériels",
+            "info": "Informations du matériel"
+        },
+        "charts": {
+            "incidentsMaintenances": "Incidents & Maintenances",
+            "incidentsMaintenancesDesc": "Incidents et maintenances mensuels sur les 12 derniers mois",
+            "cleaningsItemMovements": "Nettoyages & Utilisation d'articles",
+            "cleaningsItemMovementsDesc": "Nettoyages et utilisation d'articles (sorties) mensuels sur les 12 derniers mois",
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Nettoyages",
+            "itemMovements": "Sorties d'articles"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger le matériel",
+            "notFound": "Matériel introuvable"
+        },
+        "messages": {
+            "created": "Le matériel \"{{name}}\" a été créé avec succès",
+            "updated": "Le matériel \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "Le matériel \"{{name}}\" a été supprimé avec succès"
+        }
+    },
+    "validation": {
+        "required": "Ce champ est requis",
+        "nameRequired": "Le nom est requis",
+        "siteRequired": "Le site est requis",
+        "zoneRequired": "La zone est requise",
+        "email": "Veuillez entrer une adresse email valide",
+        "min": "Ce champ doit contenir au moins {{min}} caractères",
+        "max": "Ce champ ne doit pas dépasser {{max}} caractères",
+        "nameMaxLength": "Le nom ne peut pas dépasser 255 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 1000 caractères"
+    },
+    "auth": {
+        "login": "Connexion",
+        "logout": "Déconnexion",
+        "email": "Adresse email",
+        "emailPlaceholder": "Entrez votre email",
+        "password": "Mot de passe",
+        "passwordPlaceholder": "Entrez votre mot de passe",
+        "rememberMe": "Se souvenir de moi",
+        "forgotPassword": "Mot de passe oublié ?",
+        "forgotPasswordTitle": "Mot de passe oublié ?",
+        "forgotPasswordDesc": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+        "resetPassword": "Réinitialiser le mot de passe",
+        "resetPasswordTitle": "Réinitialiser votre mot de passe",
+        "resetPasswordDesc": "Entrez votre nouveau mot de passe ci-dessous.",
+        "loginButton": "Se connecter",
+        "signInToAccount": "Connectez-vous à votre compte",
+        "signingIn": "Connexion en cours...",
+        "backToSignIn": "Retour à la connexion",
+        "emailSent": "Email envoyé !",
+        "emailSentDesc": "Si un compte existe avec cette adresse email, vous recevrez bientôt un lien de réinitialisation.",
+        "sending": "Envoi en cours...",
+        "sendResetLink": "Envoyer le lien",
+        "newPassword": "Nouveau mot de passe",
+        "newPasswordPlaceholder": "Entrez votre nouveau mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "confirmPasswordPlaceholder": "Confirmez votre nouveau mot de passe",
+        "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+        "passwordMinLengthHint": "Doit contenir au moins 8 caractères",
+        "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+        "passwordResetSuccess": "Mot de passe réinitialisé avec succès. Veuillez vous connecter.",
+        "invalidLink": "Lien invalide",
+        "invalidLinkDesc": "Ce lien de réinitialisation est invalide ou a expiré. Veuillez en demander un nouveau.",
+        "resetting": "Réinitialisation en cours..."
+    },
+    "errors": {
+        "generic": "Une erreur est survenue",
+        "notFound": "Page non trouvée",
+        "pageNotFound": "La page que vous recherchez n'existe pas.",
+        "backToHome": "Retour à l'accueil",
+        "unauthorized": "Accès non autorisé",
+        "unauthorizedDescription": "Vous n'avez pas les permissions nécessaires pour accéder à cette page. Veuillez contacter votre administrateur si vous pensez qu'il s'agit d'une erreur.",
+        "backToDashboard": "Retour au tableau de bord",
+        "forbidden": "Accès interdit"
+    },
+    "pagination": {
+        "showing": "Affichage de {{from}} à {{to}} sur {{total}} résultats",
+        "showingText": "Affichage de",
+        "to": "à",
+        "of": "sur",
+        "results": "résultats",
+        "previous": "Précédent",
+        "next": "Suivant"
+    }
+}

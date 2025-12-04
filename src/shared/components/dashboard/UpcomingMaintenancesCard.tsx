@@ -1,0 +1,80 @@
+import { useTranslation } from "react-i18next";
+
+interface Maintenance {
+    id: number;
+    title: string;
+    location: string;
+    date: string;
+    priority: "low" | "medium" | "high";
+    type: "preventive" | "corrective";
+}
+
+const priorityColors = {
+    low: "bg-success-50 text-success-600 dark:bg-success-500/10 dark:text-success-400",
+    medium: "bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400",
+    high: "bg-error-50 text-error-600 dark:bg-error-500/10 dark:text-error-400",
+};
+
+interface UpcomingMaintenancesCardProps {
+    maintenances: Maintenance[];
+}
+
+export default function UpcomingMaintenancesCard({ maintenances }: UpcomingMaintenancesCardProps) {
+    const { t } = useTranslation();
+
+    const priorityLabels = {
+        low: t('dashboard.maintenances.priority.low'),
+        medium: t('dashboard.maintenances.priority.medium'),
+        high: t('dashboard.maintenances.priority.high'),
+    };
+
+    const typeLabels = {
+        preventive: t('dashboard.maintenances.type.preventive'),
+        corrective: t('dashboard.maintenances.type.corrective'),
+    };
+
+    return (
+        <div className="h-full rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
+                    {t('dashboard.maintenances.upcoming')}
+                </h3>
+                <button className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">
+                    {t('dashboard.maintenances.schedule')}
+                </button>
+            </div>
+            <div className="p-4">
+                <div className="space-y-3">
+                    {maintenances.map((maintenance) => (
+                        <div
+                            key={maintenance.id}
+                            className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50"
+                        >
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                    <h4 className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                        {maintenance.title}
+                                    </h4>
+                                    <span className="shrink-0 rounded bg-gray-200 px-1.5 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                        {typeLabels[maintenance.type]}
+                                    </span>
+                                </div>
+                                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                    📍 {maintenance.location}
+                                </p>
+                                <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                                    📅 {maintenance.date}
+                                </p>
+                            </div>
+                            <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${priorityColors[maintenance.priority]}`}>
+                                {priorityLabels[maintenance.priority]}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export type { Maintenance };
