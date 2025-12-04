@@ -8,7 +8,7 @@ XetaSuite-React is the **React SPA frontend** for XetaSuite multi-tenant ERP app
 - **React** 19.2 with TypeScript 5.9
 - **Vite** 7.2 (build tool & dev server)
 - **Tailwind CSS** 4.1 with `@tailwindcss/vite` plugin
-- **React Router DOM** 7.9 for routing
+- **React Router** 7.9 for routing
 - **Axios** for API requests
 - **react-i18next** for internationalization
 - **TailAdmin** design system (custom theme)

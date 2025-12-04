@@ -21,9 +21,11 @@
         "name": "Name",
         "description": "Description",
         "createdAt": "Created at",
+        "createdBy": "Created by",
         "updatedAt": "Updated at",
         "creator": "Creator",
         "clearSearch": "Clear search",
+        "clearFilters": "Clear filters",
         "collaborators": "Collaborators",
         "user": "User",
         "support": "Support",
@@ -207,6 +209,130 @@
             "deleted": "Supplier \"{{name}}\" has been deleted successfully"
         }
     },
+    "items": {
+        "title": "Items",
+        "description": "Manage stock items",
+        "listTitle": "Items list",
+        "notFound": "Item not found",
+        "notFoundMessage": "The item you are looking for does not exist or has been deleted.",
+        "backToList": "Back to list",
+        "create": "New item",
+        "edit": "Edit item",
+        "manageItemsAndStock": "Manage your items and stock levels",
+        "noItems": "No items found",
+        "noItemsFor": "No items found for this search",
+        "noSupplier": "No supplier",
+        "noMaterialsAvailable": "No materials available",
+        "noRecipientsAvailable": "No recipients available",
+        "searchPlaceholder": "Search by name or reference...",
+        "detail": {
+            "info": "Information"
+        },
+        "fields": {
+            "name": "Name",
+            "reference": "Reference",
+            "description": "Description",
+            "stock": "Stock",
+            "currentStock": "Current stock",
+            "status": "Status",
+            "price": "Price",
+            "purchasePrice": "Purchase price",
+            "currency": "Currency",
+            "supplier": "Supplier",
+            "supplierReference": "Supplier reference",
+            "qrCodeScans": "QR code scans"
+        },
+        "filters": {
+            "allStatuses": "All statuses",
+            "stockStatus": "Filter by status"
+        },
+        "stockStatus": {
+            "ok": "OK",
+            "warning": "Warning",
+            "critical": "Critical",
+            "empty": "Out of stock"
+        },
+        "sections": {
+            "basicInfo": "Basic information",
+            "pricing": "Pricing",
+            "supplier": "Supplier",
+            "stockAlerts": "Stock alerts",
+            "materials": "Associated materials",
+            "recipients": "Alert recipients"
+        },
+        "materialsHelp": "Select materials that use this item",
+        "recipientsHelp": "Users who will receive stock alerts",
+        "alerts": {
+            "warning": "Warning threshold",
+            "warningDescription": "Alert when stock is low",
+            "critical": "Critical threshold",
+            "criticalDescription": "Alert when stock is very low",
+            "enableWarning": "Enable warning alert",
+            "enableCritical": "Enable critical alert",
+            "warningThresholdHelp": "Alert when stock falls below this level",
+            "criticalThresholdHelp": "Critical alert when stock falls below this level"
+        },
+        "validation": {
+            "criticalLessThanWarning": "Critical threshold must be less than warning threshold"
+        },
+        "stats": {
+            "title": "Stock movements",
+            "entries": "Entries",
+            "exits": "Exits",
+            "totalEntries": "Total entries",
+            "totalExits": "Total exits",
+            "noData": "No movement data available"
+        },
+        "movements": {
+            "entry": "Entry",
+            "exit": "Exit",
+            "addEntry": "Add entry",
+            "addExit": "Add exit",
+            "confirmEntry": "Confirm entry",
+            "confirmExit": "Confirm exit",
+            "history": "Movement history",
+            "noMovements": "No movements recorded",
+            "availableStock": "Available: {{count}} units",
+            "totalPrice": "Total",
+            "fields": {
+                "date": "Date",
+                "type": "Type",
+                "quantity": "Quantity",
+                "price": "Price",
+                "unitPrice": "Unit price",
+                "supplier": "Supplier",
+                "invoiceNumber": "Invoice number",
+                "invoiceDate": "Invoice date",
+                "notes": "Notes",
+                "createdBy": "Created by"
+            },
+            "validation": {
+                "quantityRequired": "Quantity is required",
+                "insufficientStock": "Insufficient stock (available: {{available}})"
+            },
+            "messages": {
+                "entryCreated": "Entry of {{quantity}} units recorded",
+                "exitCreated": "Exit of {{quantity}} units recorded"
+            }
+        },
+        "qrCode": {
+            "title": "QR Code",
+            "size": "Size",
+            "download": "Download",
+            "print": "Print",
+            "help": "Scan this QR code to quickly access item details",
+            "printTitle": "QR Code - {{name}}"
+        },
+        "delete": {
+            "title": "Delete item",
+            "message": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+        },
+        "messages": {
+            "created": "Item \"{{name}}\" has been created successfully",
+            "updated": "Item \"{{name}}\" has been updated successfully",
+            "deleted": "Item \"{{name}}\" has been deleted successfully"
+        }
+    },
     "sites": {
         "title": "Sites",
         "description": "Manage sites",
@@ -387,6 +513,16 @@
         "detail": {
             "backToList": "Back to materials list",
             "info": "Material information"
+        },
+        "charts": {
+            "incidentsMaintenances": "Incidents & Maintenances",
+            "incidentsMaintenancesDesc": "Monthly incidents and maintenances over the last 12 months",
+            "cleaningsItemMovements": "Cleanings & Item Usage",
+            "cleaningsItemMovementsDesc": "Monthly cleanings and item usage (exits) over the last 12 months",
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Cleanings",
+            "itemMovements": "Item exits"
         },
         "errors": {
             "loadFailed": "Unable to load material",

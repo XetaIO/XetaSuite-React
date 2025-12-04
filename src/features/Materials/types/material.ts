@@ -78,3 +78,11 @@ export interface AvailableRecipient {
     full_name: string;
     email: string;
 }
+
+export interface MaterialMonthlyStats {
+    months: string[];
+    incidents: number[];
+    maintenances: number[];
+    cleanings: number[];
+    item_movements: number[];
+}

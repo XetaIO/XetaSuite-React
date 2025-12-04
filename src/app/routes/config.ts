@@ -26,6 +26,10 @@ const ZoneDetailPage = lazy(() => import("@/features/Zones/views/ZoneDetailPage"
 const MaterialListPage = lazy(() => import("@/features/Materials/views/MaterialListPage"));
 const MaterialDetailPage = lazy(() => import("@/features/Materials/views/MaterialDetailPage"));
 
+// Lazy load Items feature
+const ItemListPage = lazy(() => import("@/features/Items/views/ItemListPage"));
+const ItemDetailPage = lazy(() => import("@/features/Items/views/ItemDetailPage"));
+
 /**
  * Guest-only routes (login, register, forgot password)
  */
@@ -112,6 +116,18 @@ export const protectedRoutes: RouteConfig[] = [
         element: MaterialDetailPage,
         requireAuth: true,
         permission: "material.view"
+    },
+    {
+        path: "/items",
+        element: ItemListPage,
+        requireAuth: true,
+        permission: "item.viewAny"
+    },
+    {
+        path: "/items/:id",
+        element: ItemDetailPage,
+        requireAuth: true,
+        permission: "item.view"
     },
     // Catch-all for unknown routes within authenticated layout
     {

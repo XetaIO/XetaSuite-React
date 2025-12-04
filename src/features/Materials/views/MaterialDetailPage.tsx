@@ -18,6 +18,7 @@ import {
 import { MaterialManager } from '../services/MaterialManager';
 import { MaterialModal } from './MaterialModal';
 import type { MaterialDetail } from '../types';
+import { MaterialStatsCharts } from '../components/MaterialStatsCharts';
 import PageBreadcrumb from '@/shared/components/common/PageBreadcrumb';
 import PageMeta from '@/shared/components/common/PageMeta';
 import { Button, Badge } from '@/shared/components/ui';
@@ -332,6 +333,9 @@ export function MaterialDetailPage() {
                     )}
                 </div>
             </div>
+
+            {/* Statistics Charts */}
+            <MaterialStatsCharts materialId={material.id} />
 
             {/* Edit Modal */}
             <MaterialModal

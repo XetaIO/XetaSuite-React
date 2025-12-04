@@ -7,6 +7,7 @@ import type {
     MaterialFilters,
     AvailableZone,
     AvailableRecipient,
+    MaterialMonthlyStats,
 } from '../types';
 import { MaterialRepository } from './MaterialRepository';
 
@@ -99,6 +100,18 @@ export const MaterialManager = {
     getAvailableRecipients: async (): Promise<ManagerResult<AvailableRecipient[]>> => {
         try {
             const data = await MaterialRepository.getAvailableRecipients();
+            return { success: true, data: data.data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+
+    /**
+     * Get monthly statistics for a material
+     */
+    getStats: async (id: number): Promise<ManagerResult<MaterialMonthlyStats>> => {
+        try {
+            const data = await MaterialRepository.getStats(id);
             return { success: true, data: data.data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };

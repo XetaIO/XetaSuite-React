@@ -8,6 +8,7 @@ import type {
     MaterialFilters,
     AvailableZone,
     AvailableRecipient,
+    MaterialMonthlyStats,
 } from '../types';
 
 /**
@@ -86,6 +87,16 @@ export const MaterialRepository = {
     getAvailableRecipients: async (): Promise<{ data: AvailableRecipient[] }> => {
         const response = await httpClient.get<{ data: AvailableRecipient[] }>(
             API_ENDPOINTS.MATERIALS.AVAILABLE_RECIPIENTS
+        );
+        return response.data;
+    },
+
+    /**
+     * Get monthly statistics for a material over the last 12 months
+     */
+    getStats: async (id: number): Promise<{ data: MaterialMonthlyStats }> => {
+        const response = await httpClient.get<{ data: MaterialMonthlyStats }>(
+            API_ENDPOINTS.MATERIALS.STATS(id)
         );
         return response.data;
     },

@@ -61,13 +61,26 @@ export const API_ENDPOINTS = {
         DETAIL: (id: number) => `/api/v1/zones/${id}`,
         CHILDREN: (id: number) => `/api/v1/zones/${id}/children`,
         MATERIALS: (id: number) => `/api/v1/zones/${id}/materials`,
-        AVAILABLE_PARENTS: '/api/v1/zones-available-parents',
+        AVAILABLE_PARENTS: '/api/v1/zones/available-parents',
     },
     // Materials
     MATERIALS: {
         BASE: '/api/v1/materials',
         DETAIL: (id: number) => `/api/v1/materials/${id}`,
-        AVAILABLE_ZONES: '/api/v1/materials-available-zones',
-        AVAILABLE_RECIPIENTS: '/api/v1/materials-available-recipients',
+        STATS: (id: number) => `/api/v1/materials/${id}/stats`,
+        AVAILABLE_ZONES: '/api/v1/materials/available-zones',
+        AVAILABLE_RECIPIENTS: '/api/v1/materials/available-recipients',
+    },
+    // Items
+    ITEMS: {
+        BASE: '/api/v1/items',
+        DETAIL: (id: number) => `/api/v1/items/${id}`,
+        STATS: (id: number) => `/api/v1/items/${id}/stats`,
+        MOVEMENTS: (id: number) => `/api/v1/items/${id}/movements`,
+        QR_CODE: (id: number) => `/api/v1/items/${id}/qr-code`,
+        DASHBOARD: '/api/v1/items-dashboard',
+        AVAILABLE_SUPPLIERS: '/api/v1/items/available-suppliers',
+        AVAILABLE_MATERIALS: '/api/v1/items/available-materials',
+        AVAILABLE_RECIPIENTS: '/api/v1/items/available-recipients',
     },
 } as const;

@@ -21,9 +21,11 @@
         "name": "Nom",
         "description": "Description",
         "createdAt": "Créé le",
+        "createdBy": "Créé par",
         "updatedAt": "Modifié le",
         "creator": "Créateur",
         "clearSearch": "Effacer la recherche",
+        "clearFilters": "Effacer les filtres",
         "collaborators": "Collaborateurs",
         "user": "Utilisateur",
         "support": "Support",
@@ -207,6 +209,130 @@
             "deleted": "Le fournisseur \"{{name}}\" a été supprimé avec succès"
         }
     },
+    "items": {
+        "title": "Articles",
+        "description": "Gestion des articles en stock",
+        "listTitle": "Liste des articles",
+        "notFound": "Article introuvable",
+        "notFoundMessage": "L'article que vous recherchez n'existe pas ou a été supprimé.",
+        "backToList": "Retour à la liste",
+        "create": "Nouvel article",
+        "edit": "Modifier l'article",
+        "manageItemsAndStock": "Gérez vos articles et niveaux de stock",
+        "noItems": "Aucun article trouvé",
+        "noItemsFor": "Aucun article trouvé pour cette recherche",
+        "noSupplier": "Aucun fournisseur",
+        "noMaterialsAvailable": "Aucun matériel disponible",
+        "noRecipientsAvailable": "Aucun destinataire disponible",
+        "searchPlaceholder": "Rechercher par nom ou référence...",
+        "detail": {
+            "info": "Informations"
+        },
+        "fields": {
+            "name": "Nom",
+            "reference": "Référence",
+            "description": "Description",
+            "stock": "Stock",
+            "currentStock": "Stock actuel",
+            "status": "Statut",
+            "price": "Prix",
+            "purchasePrice": "Prix d'achat",
+            "currency": "Devise",
+            "supplier": "Fournisseur",
+            "supplierReference": "Référence fournisseur",
+            "qrCodeScans": "Scans QR code"
+        },
+        "filters": {
+            "allStatuses": "Tous les statuts",
+            "stockStatus": "Filtrer par statut"
+        },
+        "stockStatus": {
+            "ok": "OK",
+            "warning": "Attention",
+            "critical": "Critique",
+            "empty": "Épuisé"
+        },
+        "sections": {
+            "basicInfo": "Informations générales",
+            "pricing": "Tarification",
+            "supplier": "Fournisseur",
+            "stockAlerts": "Alertes de stock",
+            "materials": "Matériels associés",
+            "recipients": "Destinataires des alertes"
+        },
+        "materialsHelp": "Sélectionnez les matériels qui utilisent cet article",
+        "recipientsHelp": "Utilisateurs qui recevront les alertes de stock",
+        "alerts": {
+            "warning": "Seuil d'alerte",
+            "warningDescription": "Alerte lorsque le stock est faible",
+            "critical": "Seuil critique",
+            "criticalDescription": "Alerte lorsque le stock est très faible",
+            "enableWarning": "Activer l'alerte d'attention",
+            "enableCritical": "Activer l'alerte critique",
+            "warningThresholdHelp": "Alerte lorsque le stock passe sous ce niveau",
+            "criticalThresholdHelp": "Alerte critique lorsque le stock passe sous ce niveau"
+        },
+        "validation": {
+            "criticalLessThanWarning": "Le seuil critique doit être inférieur au seuil d'attention"
+        },
+        "stats": {
+            "title": "Mouvements de stock",
+            "entries": "Entrées",
+            "exits": "Sorties",
+            "totalEntries": "Total entrées",
+            "totalExits": "Total sorties",
+            "noData": "Aucune donnée de mouvement disponible"
+        },
+        "movements": {
+            "entry": "Entrée",
+            "exit": "Sortie",
+            "addEntry": "Ajouter une entrée",
+            "addExit": "Ajouter une sortie",
+            "confirmEntry": "Confirmer l'entrée",
+            "confirmExit": "Confirmer la sortie",
+            "history": "Historique des mouvements",
+            "noMovements": "Aucun mouvement enregistré",
+            "availableStock": "Disponible : {{count}} unités",
+            "totalPrice": "Total",
+            "fields": {
+                "date": "Date",
+                "type": "Type",
+                "quantity": "Quantité",
+                "price": "Prix",
+                "unitPrice": "Prix unitaire",
+                "supplier": "Fournisseur",
+                "invoiceNumber": "N° de facture",
+                "invoiceDate": "Date de facture",
+                "notes": "Notes",
+                "createdBy": "Créé par"
+            },
+            "validation": {
+                "quantityRequired": "La quantité est requise",
+                "insufficientStock": "Stock insuffisant (disponible : {{available}})"
+            },
+            "messages": {
+                "entryCreated": "Entrée de {{quantity}} unités enregistrée",
+                "exitCreated": "Sortie de {{quantity}} unités enregistrée"
+            }
+        },
+        "qrCode": {
+            "title": "QR Code",
+            "size": "Taille",
+            "download": "Télécharger",
+            "print": "Imprimer",
+            "help": "Scannez ce QR code pour accéder rapidement aux détails de l'article",
+            "printTitle": "QR Code - {{name}}"
+        },
+        "delete": {
+            "title": "Supprimer l'article",
+            "message": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible."
+        },
+        "messages": {
+            "created": "L'article \"{{name}}\" a été créé avec succès",
+            "updated": "L'article \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "L'article \"{{name}}\" a été supprimé avec succès"
+        }
+    },
     "sites": {
         "title": "Sites",
         "description": "Gestion des sites",
@@ -387,6 +513,16 @@
         "detail": {
             "backToList": "Retour à la liste des matériels",
             "info": "Informations du matériel"
+        },
+        "charts": {
+            "incidentsMaintenances": "Incidents & Maintenances",
+            "incidentsMaintenancesDesc": "Incidents et maintenances mensuels sur les 12 derniers mois",
+            "cleaningsItemMovements": "Nettoyages & Utilisation d'articles",
+            "cleaningsItemMovementsDesc": "Nettoyages et utilisation d'articles (sorties) mensuels sur les 12 derniers mois",
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Nettoyages",
+            "itemMovements": "Sorties d'articles"
         },
         "errors": {
             "loadFailed": "Impossible de charger le matériel",
