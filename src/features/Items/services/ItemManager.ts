@@ -6,15 +6,15 @@ import type {
     ItemFormData,
     ItemFilters,
     ItemMovement,
-    ItemMovementFormData,
-    ItemMovementFilters,
     ItemMonthlyStats,
-    ItemDashboardStats,
+    ItemMaterial,
+    ItemPriceHistory,
     AvailableSupplier,
     AvailableMaterial,
     AvailableRecipient,
     StockStatus,
 } from "../types";
+import type { ItemMovementFilters } from "@/features/ItemMovements/types";
 import { ItemRepository } from "./ItemRepository";
 
 interface ManagerResult<T> {
@@ -113,12 +113,12 @@ export const ItemManager = {
     },
 
     /**
-     * Create a new movement
+     * Get paginated materials for an item
      */
-    createMovement: async (id: number, data: ItemMovementFormData): Promise<ManagerResult<SingleResponse<ItemMovement>>> => {
+    getMaterials: async (id: number, page: number = 1, perPage: number = 5): Promise<ManagerResult<PaginatedResponse<ItemMaterial>>> => {
         try {
-            const response = await ItemRepository.createMovement(id, data);
-            return { success: true, data: response };
+            const data = await ItemRepository.getMaterials(id, page, perPage);
+            return { success: true, data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };
         }
@@ -137,23 +137,11 @@ export const ItemManager = {
     },
 
     /**
-     * Get dashboard statistics
-     */
-    getDashboard: async (): Promise<ManagerResult<ItemDashboardStats>> => {
-        try {
-            const response = await ItemRepository.getDashboard();
-            return { success: true, data: response.data };
-        } catch (error) {
-            return { success: false, error: handleApiError(error) };
-        }
-    },
-
-    /**
      * Get available suppliers for dropdown
      */
-    getAvailableSuppliers: async (): Promise<ManagerResult<AvailableSupplier[]>> => {
+    getAvailableSuppliers: async (search?: string): Promise<ManagerResult<AvailableSupplier[]>> => {
         try {
-            const data = await ItemRepository.getAvailableSuppliers();
+            const data = await ItemRepository.getAvailableSuppliers(search);
             return { success: true, data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };
@@ -185,14 +173,15 @@ export const ItemManager = {
     },
 
     /**
-     * Format currency for display
+     * Get price history with statistics
      */
-    formatCurrency: (amount: number | null, currency: string = "EUR"): string => {
-        if (amount === null) return "—";
-        return new Intl.NumberFormat("fr-FR", {
-            style: "currency",
-            currency,
-        }).format(amount);
+    getPriceHistory: async (id: number, limit: number = 20): Promise<ManagerResult<ItemPriceHistory>> => {
+        try {
+            const data = await ItemRepository.getPriceHistory(id, limit);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
     },
 
     /**
@@ -209,19 +198,6 @@ export const ItemManager = {
     },
 
     /**
-     * Map backend color to Badge color
-     */
-    getStockStatusBadgeColor: (backendColor: string): "success" | "warning" | "error" | "dark" => {
-        const colorMap: Record<string, "success" | "warning" | "error" | "dark"> = {
-            green: "success",
-            orange: "warning",
-            red: "error",
-            dark: "dark",
-        };
-        return colorMap[backendColor] || "dark";
-    },
-
-    /**
      * Format quantity with sign for movements
      */
     formatMovementQuantity: (type: 'entry' | 'exit', quantity: number): string => {
@@ -235,7 +211,7 @@ export const ItemManager = {
         name: "",
         reference: "",
         description: "",
-        purchase_price: null,
+        current_price: null,
         currency: "EUR",
         supplier_id: null,
         supplier_reference: "",
@@ -254,7 +230,7 @@ export const ItemManager = {
         name: item.name,
         reference: item.reference || "",
         description: item.description || "",
-        purchase_price: item.purchase_price,
+        current_price: item.current_price,
         currency: item.currency || "EUR",
         supplier_id: item.supplier_id,
         supplier_reference: item.supplier_reference || "",

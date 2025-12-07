@@ -26,6 +26,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
     const [formData, setFormData] = useState<ItemFormData>(ItemManager.getDefaultFormData());
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingDropdowns, setIsLoadingDropdowns] = useState(false);
+    const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(false);
     const [isLoadingMaterials, setIsLoadingMaterials] = useState(false);
     const [isLoadingRecipients, setIsLoadingRecipients] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -36,10 +37,12 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
     const [recipients, setRecipients] = useState<AvailableRecipient[]>([]);
 
     // Search filters
+    const [supplierSearch, setSupplierSearch] = useState("");
     const [materialSearch, setMaterialSearch] = useState("");
     const [recipientSearch, setRecipientSearch] = useState("");
 
     // Debounce refs
+    const supplierSearchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const materialSearchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const recipientSearchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -50,6 +53,16 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
         { value: "GBP", label: "GBP (£)" },
         { value: "CHF", label: "CHF" },
     ];
+
+    // Search suppliers with debounce
+    const searchSuppliers = useCallback(async (search: string) => {
+        setIsLoadingSuppliers(true);
+        const result = await ItemManager.getAvailableSuppliers(search || undefined);
+        if (result.success && result.data) {
+            setSuppliers(result.data);
+        }
+        setIsLoadingSuppliers(false);
+    }, []);
 
     // Search materials with debounce
     const searchMaterials = useCallback(async (search: string) => {
@@ -70,6 +83,17 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
         }
         setIsLoadingRecipients(false);
     }, []);
+
+    // Handle supplier search with debounce
+    const handleSupplierSearch = (value: string) => {
+        setSupplierSearch(value);
+        if (supplierSearchTimeout.current) {
+            clearTimeout(supplierSearchTimeout.current);
+        }
+        supplierSearchTimeout.current = setTimeout(() => {
+            searchSuppliers(value);
+        }, 300);
+    };
 
     // Handle material search with debounce
     const handleMaterialSearch = (value: string) => {
@@ -138,6 +162,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                 setFormData(ItemManager.getDefaultFormData());
             }
             setErrors({});
+            setSupplierSearch("");
             setMaterialSearch("");
             setRecipientSearch("");
         }
@@ -181,8 +206,8 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
         if (!formData.reference.trim()) {
             newErrors.reference = t("validation.required");
         }
-        if (formData.purchase_price !== null && formData.purchase_price < 0) {
-            newErrors.purchase_price = t("validation.min", { min: 0 });
+        if (formData.current_price !== null && formData.current_price < 0) {
+            newErrors.current_price = t("validation.min", { min: 0 });
         }
         if (formData.number_warning_enabled && formData.number_warning_minimum < 0) {
             newErrors.number_warning_minimum = t("validation.min", { min: 0 });
@@ -292,18 +317,18 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
 
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
-                                <Label htmlFor="purchase_price">{t("items.fields.purchasePrice")}</Label>
+                                <Label htmlFor="current_price">{t("items.fields.purchasePrice")}</Label>
                                 <Input
-                                    id="purchase_price"
+                                    id="current_price"
                                     type="number"
                                     step={0.01}
                                     min="0"
-                                    value={formData.purchase_price ?? ""}
+                                    value={formData.current_price ?? ""}
                                     onChange={(e) =>
-                                        handleChange("purchase_price", e.target.value ? parseFloat(e.target.value) : null)
+                                        handleChange("current_price", e.target.value ? parseFloat(e.target.value) : null)
                                     }
-                                    error={!!errors.purchase_price}
-                                    hint={errors.purchase_price}
+                                    error={!!errors.current_price}
+                                    hint={errors.current_price}
                                     disabled={isLoading}
                                 />
                             </div>
@@ -335,22 +360,65 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
 
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
-                                <Label htmlFor="supplier_id">{t("items.fields.supplier")}</Label>
-                                <select
-                                    id="supplier_id"
-                                    value={formData.supplier_id ? String(formData.supplier_id) : ""}
-                                    onChange={(e) => handleChange("supplier_id", e.target.value ? parseInt(e.target.value) : null)}
-                                    disabled={isLoading || isLoadingDropdowns}
-                                    title={t("items.fields.supplier")}
-                                    className="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800 disabled:opacity-40 disabled:cursor-not-allowed"
-                                >
-                                    <option value="">{t("items.noSupplier")}</option>
-                                    {suppliers.map((s) => (
-                                        <option key={s.id} value={String(s.id)}>
-                                            {s.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                <Label>{t("items.fields.supplier")}</Label>
+                                <div className="space-y-2">
+                                    <Input
+                                        type="text"
+                                        placeholder={t("common.search")}
+                                        value={supplierSearch}
+                                        onChange={(e) => handleSupplierSearch(e.target.value)}
+                                        disabled={isLoading}
+                                    />
+                                    <div className="grid grid-cols-1 gap-1 max-h-32 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2">
+                                        {isLoadingDropdowns || isLoadingSuppliers ? (
+                                            <div className="text-sm text-gray-500 p-1">{t("common.loading")}</div>
+                                        ) : (
+                                            <>
+                                                <label
+                                                    className={`flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded ${!formData.supplier_id ? "bg-brand-50 dark:bg-brand-500/10" : ""
+                                                        }`}
+                                                >
+                                                    <input
+                                                        type="radio"
+                                                        name="supplier"
+                                                        checked={!formData.supplier_id}
+                                                        onChange={() => handleChange("supplier_id", null)}
+                                                        disabled={isLoading}
+                                                        className="text-brand-500 focus:ring-brand-500"
+                                                    />
+                                                    <span className="text-sm text-gray-500 dark:text-gray-400 italic">
+                                                        {t("items.noSupplier")}
+                                                    </span>
+                                                </label>
+                                                {suppliers.length === 0 && supplierSearch ? (
+                                                    <div className="text-sm text-gray-500 p-1">
+                                                        {t("common.noResults")}
+                                                    </div>
+                                                ) : (
+                                                    suppliers.map((supplier) => (
+                                                        <label
+                                                            key={supplier.id}
+                                                            className={`flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded ${formData.supplier_id === supplier.id ? "bg-brand-50 dark:bg-brand-500/10" : ""
+                                                                }`}
+                                                        >
+                                                            <input
+                                                                type="radio"
+                                                                name="supplier"
+                                                                checked={formData.supplier_id === supplier.id}
+                                                                onChange={() => handleChange("supplier_id", supplier.id)}
+                                                                disabled={isLoading}
+                                                                className="text-brand-500 focus:ring-brand-500"
+                                                            />
+                                                            <span className="text-sm text-gray-700 dark:text-gray-300">
+                                                                {supplier.name}
+                                                            </span>
+                                                        </label>
+                                                    ))
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <Label htmlFor="supplier_reference">{t("items.fields.supplierReference")}</Label>

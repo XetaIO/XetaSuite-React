@@ -1,8 +1,11 @@
+import { useSearchParams } from "react-router";
+import { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import PageMeta from "@/shared/components/common/PageMeta";
 import ComponentCard from "@/shared/components/common/ComponentCard";
 import LineChartOne from "@/shared/components/charts/line/LineChartOne";
 import BarChartOne from "@/shared/components/charts/bar/BarChartOne";
+import { QrCodeScanModal } from "@/features/Qrcode/views";
 import {
   StatCard,
   RecentActivityCard,
@@ -142,6 +145,46 @@ const incidentsSummary: IncidentsSummary = {
 
 export default function Home() {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // QR Code scan detection
+  const source = searchParams.get("source");
+  const materialId = searchParams.get("material");
+  const itemId = searchParams.get("item");
+
+  const qrScanInfo = useMemo(() => {
+    if (source !== "qr") return null;
+
+    if (materialId) {
+      const id = parseInt(materialId, 10);
+      if (!isNaN(id)) return { type: "material" as const, id };
+    }
+    if (itemId) {
+      const id = parseInt(itemId, 10);
+      if (!isNaN(id)) return { type: "item" as const, id };
+    }
+    return null;
+  }, [source, materialId, itemId]);
+
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (qrScanInfo) {
+      setIsQrModalOpen(true);
+    }
+  }, [qrScanInfo]);
+
+  const handleCloseQrModal = () => {
+    setIsQrModalOpen(false);
+    // Clean URL parameters
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete("source");
+    newParams.delete("material");
+    newParams.delete("item");
+    setSearchParams(newParams, { replace: true });
+  };
+
+
 
   return (
     <>
@@ -209,6 +252,16 @@ export default function Home() {
           </ComponentCard>
         </div>
       </div>
+
+      {/* QR Code Scan Modal */}
+      {qrScanInfo && (
+        <QrCodeScanModal
+          isOpen={isQrModalOpen}
+          onClose={handleCloseQrModal}
+          scanType={qrScanInfo.type}
+          scanId={qrScanInfo.id}
+        />
+      )}
     </>
   );
 }

@@ -35,6 +35,8 @@
         "error": "Error",
         "disabled": "Disabled",
         "enabled": "Enabled",
+        "qrCode": "QR Code",
+        "retry": "Retry",
         "export": {
             "button": "Export ({{count}})",
             "exporting": "Exporting...",
@@ -188,7 +190,7 @@
             "noItems": "No items for this supplier",
             "noItemsFor": "No items found for \"{{search}}\"",
             "stockStatus": {
-                "ok": "OK",
+                "ok": "In stock",
                 "warning": "Warning",
                 "critical": "Critical",
                 "empty": "Out of stock"
@@ -247,7 +249,7 @@
             "stockStatus": "Filter by status"
         },
         "stockStatus": {
-            "ok": "OK",
+            "ok": "In stock",
             "warning": "Warning",
             "critical": "Critical",
             "empty": "Out of stock"
@@ -313,7 +315,8 @@
             "messages": {
                 "entryCreated": "Entry of {{quantity}} units recorded",
                 "exitCreated": "Exit of {{quantity}} units recorded"
-            }
+            },
+            "itemSupplier": "Item's supplier"
         },
         "qrCode": {
             "title": "QR Code",
@@ -331,6 +334,58 @@
             "created": "Item \"{{name}}\" has been created successfully",
             "updated": "Item \"{{name}}\" has been updated successfully",
             "deleted": "Item \"{{name}}\" has been deleted successfully"
+        },
+        "priceHistory": {
+            "title": "Price History",
+            "price": "Price",
+            "currentPrice": "Current price",
+            "averagePrice": "Average price",
+            "minMax": "Min / Max",
+            "evolution": "Evolution",
+            "noData": "No price history available"
+        }
+    },
+    "itemMovements": {
+        "title": "Stock movements",
+        "description": "Track entries and exits of stock items",
+        "listTitle": "All movements",
+        "listDescription": "View all item stock movements",
+        "noMovements": "No stock movements recorded yet",
+        "noResultsWithFilters": "No movements matching the current filters",
+        "searchPlaceholder": "Search by item, supplier...",
+        "editTitle": "Edit movement",
+        "types": {
+            "entry": "Entry",
+            "exit": "Exit"
+        },
+        "filters": {
+            "allTypes": "All types",
+            "entries": "Entries only",
+            "exits": "Exits only"
+        },
+        "fields": {
+            "item": "Item",
+            "movementDate": "Date",
+            "date": "Date",
+            "type": "Type",
+            "quantity": "Quantity",
+            "price": "Price",
+            "unitPrice": "Unit price",
+            "totalPrice": "Total price",
+            "supplier": "Supplier",
+            "invoiceNumber": "Invoice number",
+            "invoiceDate": "Invoice date",
+            "notes": "Notes",
+            "createdBy": "Created by",
+            "createdAt": "Created at"
+        },
+        "deleteConfirm": {
+            "title": "Delete movement",
+            "message": "Are you sure you want to delete this stock movement? The item stock will be adjusted accordingly."
+        },
+        "messages": {
+            "updated": "Movement successfully updated",
+            "deleted": "Movement successfully deleted"
         }
     },
     "sites": {
@@ -532,6 +587,14 @@
             "created": "Material \"{{name}}\" has been created successfully",
             "updated": "Material \"{{name}}\" has been updated successfully",
             "deleted": "Material \"{{name}}\" has been deleted successfully"
+        },
+        "qrCode": {
+            "title": "QR Code",
+            "size": "Size",
+            "download": "Download",
+            "print": "Print",
+            "help": "Scan this QR code to quickly access material details",
+            "printTitle": "QR Code - {{name}}"
         }
     },
     "validation": {
@@ -597,5 +660,41 @@
         "results": "results",
         "previous": "Previous",
         "next": "Next"
+    },
+    "qrScan": {
+        "title": "QR Code Scan",
+        "loading": "Loading information...",
+        "error": "Unable to load information",
+        "zone": "Zone",
+        "site": "Site",
+        "stock": "Current stock",
+        "reference": "Reference",
+        "noDescription": "No description",
+        "unknownSite": "Unknown site",
+        "materialDescription": "Scanned material",
+        "itemDescription": "Scanned item",
+        "actionLabel": "Choose an action",
+        "selectAction": "Select an action...",
+        "noActionsAvailable": "No actions available for this element",
+        "switchingSite": "Switching site...",
+        "siteMismatch": {
+            "title": "Different site",
+            "description": "This item belongs to a site you don't have access to with your current session.",
+            "switchSite": "Switch site"
+        },
+        "actions": {
+            "title": "Available actions",
+            "cleaning": "Create cleaning",
+            "maintenance": "Create maintenance",
+            "incident": "Report incident",
+            "entry": "Stock entry",
+            "exit": "Stock exit",
+            "createCleaning": "Create cleaning",
+            "createMaintenance": "Create maintenance",
+            "createIncident": "Report incident",
+            "stockEntry": "Stock entry",
+            "stockExit": "Stock exit",
+            "noActions": "No actions available"
+        }
     }
 }

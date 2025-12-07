@@ -35,6 +35,8 @@
         "error": "Erreur",
         "enabled": "Activé",
         "disabled": "Désactivé",
+        "qrCode": "QR Code",
+        "retry": "Réessayer",
         "export": {
             "button": "Exporter ({{count}})",
             "exporting": "Export en cours...",
@@ -188,7 +190,7 @@
             "noItems": "Aucun article pour ce fournisseur",
             "noItemsFor": "Aucun article trouvé pour \"{{search}}\"",
             "stockStatus": {
-                "ok": "OK",
+                "ok": "En stock",
                 "warning": "Attention",
                 "critical": "Critique",
                 "empty": "Rupture"
@@ -247,7 +249,7 @@
             "stockStatus": "Filtrer par statut"
         },
         "stockStatus": {
-            "ok": "OK",
+            "ok": "En stock",
             "warning": "Attention",
             "critical": "Critique",
             "empty": "Épuisé"
@@ -313,7 +315,8 @@
             "messages": {
                 "entryCreated": "Entrée de {{quantity}} unités enregistrée",
                 "exitCreated": "Sortie de {{quantity}} unités enregistrée"
-            }
+            },
+            "itemSupplier": "Fournisseur de l'article"
         },
         "qrCode": {
             "title": "QR Code",
@@ -331,6 +334,50 @@
             "created": "L'article \"{{name}}\" a été créé avec succès",
             "updated": "L'article \"{{name}}\" a été mis à jour avec succès",
             "deleted": "L'article \"{{name}}\" a été supprimé avec succès"
+        },
+        "priceHistory": {
+            "title": "Historique des prix",
+            "price": "Prix",
+            "currentPrice": "Prix actuel",
+            "averagePrice": "Prix moyen",
+            "minMax": "Min / Max",
+            "evolution": "Évolution",
+            "noData": "Aucun historique de prix disponible"
+        }
+    },
+    "itemMovements": {
+        "title": "Mouvements d'articles",
+        "description": "Gestion des mouvements de stock (entrées et sorties)",
+        "listTitle": "Liste des mouvements",
+        "listDescription": "Historique de tous les mouvements de stock",
+        "noMovements": "Aucun mouvement enregistré",
+        "noResultsWithFilters": "Aucun mouvement ne correspond aux filtres",
+        "searchPlaceholder": "Rechercher par article, fournisseur, n° facture...",
+        "editTitle": "Modifier le mouvement",
+        "types": {
+            "entry": "Entrée",
+            "exit": "Sortie"
+        },
+        "filters": {
+            "allTypes": "Tous les types"
+        },
+        "fields": {
+            "movementDate": "Date",
+            "type": "Type",
+            "item": "Article",
+            "quantity": "Quantité",
+            "unitPrice": "Prix unitaire",
+            "totalPrice": "Prix total",
+            "supplier": "Fournisseur",
+            "createdBy": "Créé par"
+        },
+        "deleteConfirm": {
+            "title": "Supprimer le mouvement",
+            "message": "Êtes-vous sûr de vouloir supprimer ce mouvement ? Le stock de l'article sera ajusté en conséquence. Cette action est irréversible."
+        },
+        "messages": {
+            "deleted": "Le mouvement a été supprimé avec succès",
+            "updated": "Le mouvement a été mis à jour avec succès"
         }
     },
     "sites": {
@@ -532,6 +579,14 @@
             "created": "Le matériel \"{{name}}\" a été créé avec succès",
             "updated": "Le matériel \"{{name}}\" a été mis à jour avec succès",
             "deleted": "Le matériel \"{{name}}\" a été supprimé avec succès"
+        },
+        "qrCode": {
+            "title": "QR Code",
+            "size": "Taille",
+            "download": "Télécharger",
+            "print": "Imprimer",
+            "help": "Scannez ce QR code pour accéder rapidement aux détails du matériel",
+            "printTitle": "QR Code - {{name}}"
         }
     },
     "validation": {
@@ -597,5 +652,41 @@
         "results": "résultats",
         "previous": "Précédent",
         "next": "Suivant"
+    },
+    "qrScan": {
+        "title": "Scan QR Code",
+        "loading": "Chargement des informations...",
+        "error": "Impossible de charger les informations",
+        "zone": "Zone",
+        "site": "Site",
+        "stock": "Stock actuel",
+        "reference": "Référence",
+        "noDescription": "Aucune description",
+        "unknownSite": "Site inconnu",
+        "materialDescription": "Matériel scanné",
+        "itemDescription": "Article scanné",
+        "actionLabel": "Choisir une action",
+        "selectAction": "Sélectionner une action...",
+        "noActionsAvailable": "Aucune action disponible pour cet élément",
+        "switchingSite": "Changement de site en cours...",
+        "siteMismatch": {
+            "title": "Site différent",
+            "description": "Cet élément appartient à un site auquel vous n'avez pas accès avec votre session actuelle.",
+            "switchSite": "Changer de site"
+        },
+        "actions": {
+            "title": "Actions disponibles",
+            "cleaning": "Créer un nettoyage",
+            "maintenance": "Créer une maintenance",
+            "incident": "Signaler un incident",
+            "entry": "Entrée de stock",
+            "exit": "Sortie de stock",
+            "createCleaning": "Créer un nettoyage",
+            "createMaintenance": "Créer une maintenance",
+            "createIncident": "Signaler un incident",
+            "stockEntry": "Entrée de stock",
+            "stockExit": "Sortie de stock",
+            "noActions": "Aucune action disponible"
+        }
     }
 }

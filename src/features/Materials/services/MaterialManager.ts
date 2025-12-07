@@ -117,4 +117,16 @@ export const MaterialManager = {
             return { success: false, error: handleApiError(error) };
         }
     },
+
+    /**
+     * Get QR code for a material
+     */
+    getQrCode: async (id: number, size: number = 200): Promise<ManagerResult<{ svg: string; url: string; size: number }>> => {
+        try {
+            const data = await MaterialRepository.getQrCode(id, size);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
 };

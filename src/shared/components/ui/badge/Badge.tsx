@@ -21,7 +21,7 @@ interface BadgeProps {
 }
 
 const Badge: React.FC<BadgeProps> = ({
-  title,
+  title = "",
   extraClass,
   variant = "light",
   color = "brand",

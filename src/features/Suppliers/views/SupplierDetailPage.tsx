@@ -9,12 +9,12 @@ import { SupplierManager } from "../services";
 import type { Supplier } from "../types";
 import type { Item, ItemFilters } from "../types/item";
 import type { PaginationMeta } from "@/shared/types";
-import { formatDate } from "@/shared/utils";
+import { formatDate, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth/hooks";
 import { useModal } from "@/shared/hooks";
 import SupplierModal from "./SupplierModal";
 
-type SortField = "name" | "reference" | "current_stock" | "purchase_price";
+type SortField = "name" | "reference" | "current_stock" | "current_price";
 type SortDirection = "asc" | "desc";
 
 const SupplierDetailPage: FC = () => {
@@ -333,11 +333,11 @@ const SupplierDetailPage: FC = () => {
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
-                                        onClick={() => handleSort("purchase_price")}
+                                        onClick={() => handleSort("current_price")}
                                         className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
                                     >
                                         {t("suppliers.detail.price")}
-                                        {renderSortIcon("purchase_price")}
+                                        {renderSortIcon("current_price")}
                                     </button>
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -416,7 +416,7 @@ const SupplierDetailPage: FC = () => {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-right text-gray-500 dark:text-gray-400">
-                                            {SupplierManager.formatCurrency(item.purchase_price, item.currency)}
+                                            {formatCurrency(item.current_price, item.currency)}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {item.site?.name || <span className="text-gray-400 dark:text-gray-500">—</span>}

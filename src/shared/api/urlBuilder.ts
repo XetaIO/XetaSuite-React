@@ -68,6 +68,7 @@ export const API_ENDPOINTS = {
         BASE: '/api/v1/materials',
         DETAIL: (id: number) => `/api/v1/materials/${id}`,
         STATS: (id: number) => `/api/v1/materials/${id}/stats`,
+        QR_CODE: (id: number) => `/api/v1/materials/${id}/qr-code`,
         AVAILABLE_ZONES: '/api/v1/materials/available-zones',
         AVAILABLE_RECIPIENTS: '/api/v1/materials/available-recipients',
     },
@@ -76,11 +77,22 @@ export const API_ENDPOINTS = {
         BASE: '/api/v1/items',
         DETAIL: (id: number) => `/api/v1/items/${id}`,
         STATS: (id: number) => `/api/v1/items/${id}/stats`,
-        MOVEMENTS: (id: number) => `/api/v1/items/${id}/movements`,
+        MATERIALS: (id: number) => `/api/v1/items/${id}/materials`,
+        PRICE_HISTORY: (id: number) => `/api/v1/items/${id}/price-history`,
         QR_CODE: (id: number) => `/api/v1/items/${id}/qr-code`,
-        DASHBOARD: '/api/v1/items-dashboard',
         AVAILABLE_SUPPLIERS: '/api/v1/items/available-suppliers',
         AVAILABLE_MATERIALS: '/api/v1/items/available-materials',
         AVAILABLE_RECIPIENTS: '/api/v1/items/available-recipients',
+    },
+    // Item Movements
+    ITEM_MOVEMENTS: {
+        ALL: '/api/v1/item-movements',
+        BASE: (itemId: number) => `/api/v1/items/${itemId}/movements`,
+        DETAIL: (itemId: number, movementId: number) => `/api/v1/items/${itemId}/movements/${movementId}`,
+    },
+    // QR Code Scan
+    QR_SCAN: {
+        MATERIAL: (id: number) => `/api/v1/qr-scan/material/${id}`,
+        ITEM: (id: number) => `/api/v1/qr-scan/item/${id}`,
     },
 } as const;

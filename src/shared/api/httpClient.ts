@@ -14,7 +14,7 @@ const httpClient: AxiosInstance = axios.create({
         'Accept': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
     },
-    withCredentials: true, // Required for Sanctum cookie-based authentication
+    withCredentials: true,
     withXSRFToken: true,
 });
 

@@ -31,8 +31,9 @@ export default function SignInForm() {
 
         try {
             await login({ email, password, remember });
-            const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
-            navigate(from, { replace: true });
+            const from = location.state as { from?: { pathname: string; search?: string } } | null;
+            const redirectTo = from?.from ? `${from.from.pathname}${from.from.search || ''}` : '/';
+            navigate(redirectTo, { replace: true });
         } catch (err) {
             setError(err instanceof Error ? err.message : t('errors.generic'));
         } finally {

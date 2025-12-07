@@ -85,15 +85,4 @@ export const SupplierManager = {
             return { success: false, error: handleApiError(error) };
         }
     },
-
-    /**
-     * Format currency for display
-     */
-    formatCurrency: (amount: number | null, currency: string = "EUR"): string => {
-        if (amount === null) return "—";
-        return new Intl.NumberFormat("fr-FR", {
-            style: "currency",
-            currency,
-        }).format(amount);
-    },
 };

@@ -7,14 +7,14 @@ import type {
     ItemFormData,
     ItemFilters,
     ItemMovement,
-    ItemMovementFormData,
-    ItemMovementFilters,
     ItemMonthlyStats,
-    ItemDashboardStats,
+    ItemMaterial,
+    ItemPriceHistory,
     AvailableSupplier,
     AvailableMaterial,
     AvailableRecipient,
 } from '../types';
+import type { ItemMovementFilters } from '@/features/ItemMovements/types';
 
 /**
  * Item Repository - Responsible for interacting with the data source
@@ -90,7 +90,7 @@ export const ItemRepository = {
      * Get item movements
      */
     getMovements: async (id: number, filters: ItemMovementFilters = {}): Promise<PaginatedResponse<ItemMovement>> => {
-        const url = buildUrl(API_ENDPOINTS.ITEMS.MOVEMENTS(id), {
+        const url = buildUrl(API_ENDPOINTS.ITEM_MOVEMENTS.BASE(id), {
             page: filters.page,
             per_page: filters.per_page,
             type: filters.type,
@@ -102,13 +102,14 @@ export const ItemRepository = {
     },
 
     /**
-     * Create a new movement for an item
+     * Get paginated materials for an item
      */
-    createMovement: async (id: number, data: ItemMovementFormData): Promise<SingleResponse<ItemMovement>> => {
-        const response = await httpClient.post<SingleResponse<ItemMovement>>(
-            API_ENDPOINTS.ITEMS.MOVEMENTS(id),
-            data
-        );
+    getMaterials: async (id: number, page: number = 1, perPage: number = 5): Promise<PaginatedResponse<ItemMaterial>> => {
+        const url = buildUrl(API_ENDPOINTS.ITEMS.MATERIALS(id), {
+            page,
+            per_page: perPage,
+        });
+        const response = await httpClient.get<PaginatedResponse<ItemMaterial>>(url);
         return response.data;
     },
 
@@ -129,22 +130,11 @@ export const ItemRepository = {
     },
 
     /**
-     * Get dashboard statistics
-     */
-    getDashboard: async (): Promise<SingleResponse<ItemDashboardStats>> => {
-        const response = await httpClient.get<SingleResponse<ItemDashboardStats>>(
-            API_ENDPOINTS.ITEMS.DASHBOARD
-        );
-        return response.data;
-    },
-
-    /**
      * Get available suppliers for dropdown
      */
-    getAvailableSuppliers: async (): Promise<AvailableSupplier[]> => {
-        const response = await httpClient.get<{ suppliers: AvailableSupplier[] }>(
-            API_ENDPOINTS.ITEMS.AVAILABLE_SUPPLIERS
-        );
+    getAvailableSuppliers: async (search?: string, includeId?: number): Promise<AvailableSupplier[]> => {
+        const url = buildUrl(API_ENDPOINTS.ITEMS.AVAILABLE_SUPPLIERS, { search, include_id: includeId });
+        const response = await httpClient.get<{ suppliers: AvailableSupplier[] }>(url);
         return response.data.suppliers;
     },
 
@@ -164,5 +154,14 @@ export const ItemRepository = {
         const url = buildUrl(API_ENDPOINTS.ITEMS.AVAILABLE_RECIPIENTS, { search });
         const response = await httpClient.get<{ recipients: AvailableRecipient[] }>(url);
         return response.data.recipients;
+    },
+
+    /**
+     * Get price history with statistics for an item
+     */
+    getPriceHistory: async (id: number, limit: number = 20): Promise<ItemPriceHistory> => {
+        const url = buildUrl(API_ENDPOINTS.ITEMS.PRICE_HISTORY(id), { limit });
+        const response = await httpClient.get<{ data: ItemPriceHistory }>(url);
+        return response.data.data;
     },
 };

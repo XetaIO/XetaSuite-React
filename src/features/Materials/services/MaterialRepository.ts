@@ -100,4 +100,20 @@ export const MaterialRepository = {
         );
         return response.data;
     },
+
+    /**
+     * Get QR code SVG for a material
+     * Backend returns JSON with base64 encoded SVG
+     */
+    getQrCode: async (id: number, size: number = 200): Promise<{ svg: string; url: string; size: number }> => {
+        const url = buildUrl(API_ENDPOINTS.MATERIALS.QR_CODE(id), { size });
+        const response = await httpClient.get<{ data: { svg: string; url: string; size: number } }>(url);
+        // Decode base64 SVG
+        const svgContent = atob(response.data.data.svg);
+        return {
+            svg: svgContent,
+            url: response.data.data.url,
+            size: response.data.data.size,
+        };
+    },
 };

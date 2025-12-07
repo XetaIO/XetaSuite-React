@@ -145,7 +145,7 @@ export const ZoneModal: FC<ZoneModalProps> = ({
                 <div className="space-y-4">
                     {/* Name */}
                     <div>
-                        <Label htmlFor="name">{t("common.name")}</Label>
+                        <Label htmlFor="name">{t("common.name")} *</Label>
                         <Input
                             id="name"
                             name="name"
@@ -167,7 +167,7 @@ export const ZoneModal: FC<ZoneModalProps> = ({
                             title={t("zones.parent")}
                             value={formData.parent_id || ""}
                             onChange={handleChange}
-                            className="mt-1.5 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:focus:border-brand-800"
+                            className="mt-1.5 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:bg-gray-900 dark:focus:border-brand-800"
                         >
                             <option value="">{t("zones.form.noParent")}</option>
                             {isLoadingParents ? (

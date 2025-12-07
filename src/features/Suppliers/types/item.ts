@@ -13,7 +13,7 @@ export interface Item {
     stock_status_color: BadgeColor;
 
     // Pricing
-    purchase_price: number | null;
+    current_price: number | null;
     currency: string;
 
     // Relations
@@ -35,6 +35,6 @@ export type StockStatus = 'ok' | 'warning' | 'critical' | 'empty';
 export interface ItemFilters {
     page?: number;
     search?: string;
-    sort_by?: 'name' | 'description' | 'reference' | 'current_stock' | 'purchase_price' | 'created_at';
+    sort_by?: 'name' | 'description' | 'reference' | 'current_stock' | 'current_price' | 'created_at';
     sort_direction?: 'asc' | 'desc';
 }

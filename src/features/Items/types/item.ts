@@ -21,7 +21,7 @@ export interface Item {
     stock_status_color: BadgeColor;
 
     // Pricing
-    purchase_price: number | null;
+    current_price: number | null;
     currency: string;
 
     // Alert thresholds
@@ -134,6 +134,41 @@ export interface ItemMovement {
 /**
  * Item price history entry
  */
+export interface ItemPriceHistoryEntry {
+    id: number;
+    price: number;
+    effective_date: string;
+    supplier_name: string | null;
+    created_by_name: string | null;
+    notes: string | null;
+    created_at: string;
+}
+
+/**
+ * Item price statistics
+ */
+export interface ItemPriceStats {
+    current_price: number;
+    average_price: number;
+    min_price: number;
+    max_price: number;
+    price_change: number;
+    price_change_percent: number;
+    total_entries: number;
+}
+
+/**
+ * Item price history with stats response
+ */
+export interface ItemPriceHistory {
+    history: ItemPriceHistoryEntry[];
+    stats: ItemPriceStats;
+}
+
+/**
+ * @deprecated Use ItemPriceHistoryEntry instead
+ * Item price history entry (legacy)
+ */
 export interface ItemPrice {
     id: number;
     item_id: number;
@@ -157,24 +192,13 @@ export interface ItemMonthlyStats {
 }
 
 /**
- * Dashboard statistics for items
- */
-export interface ItemDashboardStats {
-    total_items: number;
-    total_stock_value: number;
-    items_in_critical: number;
-    items_in_warning: number;
-    recent_movements: ItemMovement[];
-}
-
-/**
  * Form data for creating/updating an item
  */
 export interface ItemFormData {
     name: string;
     reference: string;
     description: string;
-    purchase_price: number | null;
+    current_price: number | null;
     currency: string;
     supplier_id: number | null;
     supplier_reference: string;
@@ -187,22 +211,6 @@ export interface ItemFormData {
 }
 
 /**
- * Form data for creating a movement
- */
-export interface ItemMovementFormData {
-    type: MovementType;
-    quantity: number;
-    unit_price?: number;
-    supplier_id?: number;
-    supplier_invoice_number?: string;
-    invoice_date?: string;
-    movable_type?: string;
-    movable_id?: number;
-    notes?: string;
-    movement_date?: string;
-}
-
-/**
  * Filters for item list
  */
 export interface ItemFilters {
@@ -211,18 +219,7 @@ export interface ItemFilters {
     search?: string;
     supplier_id?: number;
     stock_status?: StockStatus;
-    sort_by?: 'name' | 'reference' | 'current_stock' | 'purchase_price' | 'created_at';
-    sort_direction?: 'asc' | 'desc';
-}
-
-/**
- * Filters for movement list
- */
-export interface ItemMovementFilters {
-    page?: number;
-    per_page?: number;
-    type?: MovementType;
-    sort_by?: 'movement_date' | 'quantity' | 'total_price' | 'created_at';
+    sort_by?: 'name' | 'reference' | 'current_stock' | 'current_price' | 'created_at';
     sort_direction?: 'asc' | 'desc';
 }
 

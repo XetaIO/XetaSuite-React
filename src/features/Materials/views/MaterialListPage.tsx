@@ -3,8 +3,6 @@ import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
-    FaPenToSquare,
-    FaTrash,
     FaMagnifyingGlass,
     FaArrowUp,
     FaArrowDown,
@@ -13,13 +11,14 @@ import {
     FaEnvelope,
 } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge } from '@/shared/components/ui';
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createMaterialActions } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
 import { MaterialManager } from '../services';
 import { MaterialModal } from './MaterialModal';
+import { MaterialQrCodeModal } from './MaterialQrCodeModal';
 import type { Material, MaterialFilters } from '../types';
 import type { PaginationMeta } from '@/shared/types';
 
@@ -41,7 +40,7 @@ const MaterialListPage: FC = () => {
     const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
     const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
-    // Selected material for edit/delete
+    // Selected material for edit/delete/qrcode
     const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -49,10 +48,12 @@ const MaterialListPage: FC = () => {
     const canCreate = hasPermission('material.create');
     const canUpdate = hasPermission('material.update');
     const canDelete = hasPermission('material.delete');
+    const canGenerateQrCode = hasPermission('material.generateQrCode');
 
     // Modals
     const materialModal = useModal();
     const deleteModal = useModal();
+    const qrCodeModal = useModal();
 
     // Debounce search input
     useEffect(() => {
@@ -157,6 +158,11 @@ const MaterialListPage: FC = () => {
         setIsDeleting(false);
     };
 
+    const handleQrCode = (material: Material) => {
+        setSelectedMaterial(material);
+        qrCodeModal.openModal();
+    };
+
     const handleModalSuccess = () => {
         const filters: MaterialFilters = {
             page: currentPage,
@@ -166,6 +172,15 @@ const MaterialListPage: FC = () => {
         };
         fetchMaterials(filters);
     };
+
+    const getMaterialActions = (material: Material) => [
+        { ...createMaterialActions.qrCode(() => handleQrCode(material), t), hidden: !canGenerateQrCode },
+        { ...createMaterialActions.edit(() => handleEdit(material), t), hidden: !canUpdate },
+        { ...createMaterialActions.delete(() => handleDeleteClick(material), t), hidden: !canDelete },
+    ];
+
+    // Check if any action is available
+    const hasAnyAction = canUpdate || canDelete || canGenerateQrCode;
 
     return (
         <>
@@ -289,7 +304,7 @@ const MaterialListPage: FC = () => {
                                         {renderSortIcon('created_at')}
                                     </button>
                                 </TableCell>
-                                {(canUpdate || canDelete) && (
+                                {hasAnyAction && (
                                     <TableCell
                                         isHeader
                                         className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400"
@@ -318,7 +333,7 @@ const MaterialListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -401,27 +416,10 @@ const MaterialListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(material.created_at)}
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {hasAnyAction && (
                                             <TableCell className="px-6 py-4">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    {canUpdate && (
-                                                        <button
-                                                            onClick={() => handleEdit(material)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-brand-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-brand-400"
-                                                            title={t('common.edit')}
-                                                        >
-                                                            <FaPenToSquare className="h-4 w-4" />
-                                                        </button>
-                                                    )}
-                                                    {canDelete && (
-                                                        <button
-                                                            onClick={() => handleDeleteClick(material)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-error-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-error-400"
-                                                            title={t('common.delete')}
-                                                        >
-                                                            <FaTrash className="h-4 w-4" />
-                                                        </button>
-                                                    )}
+                                                <div className="flex items-center justify-end">
+                                                    <ActionsDropdown actions={getMaterialActions(material)} />
                                                 </div>
                                             </TableCell>
                                         )}
@@ -452,6 +450,13 @@ const MaterialListPage: FC = () => {
                 isLoading={isDeleting}
                 title={t('materials.deleteTitle')}
                 message={t('common.confirmDelete', { name: selectedMaterial?.name })}
+            />
+
+            {/* QR Code Modal */}
+            <MaterialQrCodeModal
+                isOpen={qrCodeModal.isOpen}
+                onClose={qrCodeModal.closeModal}
+                material={selectedMaterial}
             />
         </>
     );

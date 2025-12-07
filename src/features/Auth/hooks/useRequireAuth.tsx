@@ -63,8 +63,9 @@ export function RequireGuest({ children }: { children: ReactNode }) {
     }
 
     if (isAuthenticated) {
-        const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
-        return <Navigate to={from} replace />;
+        const from = location.state as { from?: { pathname: string; search?: string } } | null;
+        const redirectTo = from?.from ? `${from.from.pathname}${from.from.search || ''}` : '/';
+        return <Navigate to={redirectTo} replace />;
     }
 
     return <>{children}</>;

@@ -14,9 +14,11 @@ import {
     FaTriangleExclamation,
     FaBroom,
     FaCubes,
+    FaQrcode,
 } from 'react-icons/fa6';
 import { MaterialManager } from '../services/MaterialManager';
 import { MaterialModal } from './MaterialModal';
+import { MaterialQrCodeModal } from './MaterialQrCodeModal';
 import type { MaterialDetail } from '../types';
 import { MaterialStatsCharts } from '../components/MaterialStatsCharts';
 import PageBreadcrumb from '@/shared/components/common/PageBreadcrumb';
@@ -43,11 +45,13 @@ export function MaterialDetailPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [materialError, setMaterialError] = useState<string | null>(null);
 
-    // Modal
+    // Modals
     const editModal = useModal();
+    const qrCodeModal = useModal();
 
     // Permissions
     const canUpdate = hasPermission('material.update');
+    const canGenerateQrCode = hasPermission('material.generateQrCode');
 
     // Load material details
     const loadMaterial = async () => {
@@ -133,16 +137,28 @@ export function MaterialDetailPage() {
                             )}
                         </div>
                     </div>
-                    {canUpdate && (
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            startIcon={<FaPenToSquare className="h-4 w-4" />}
-                            onClick={() => editModal.openModal()}
-                        >
-                            {t('common.edit')}
-                        </Button>
-                    )}
+                    <div className="flex flex-wrap items-center gap-2">
+                        {canGenerateQrCode && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                startIcon={<FaQrcode className="h-4 w-4" />}
+                                onClick={() => qrCodeModal.openModal()}
+                            >
+                                {t('common.qrCode')}
+                            </Button>
+                        )}
+                        {canUpdate && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                startIcon={<FaPenToSquare className="h-4 w-4" />}
+                                onClick={() => editModal.openModal()}
+                            >
+                                {t('common.edit')}
+                            </Button>
+                        )}
+                    </div>
                 </div>
 
                 {/* Stats */}
@@ -343,6 +359,13 @@ export function MaterialDetailPage() {
                 onClose={editModal.closeModal}
                 material={material}
                 onSuccess={handleMaterialUpdated}
+            />
+
+            {/* QR Code Modal */}
+            <MaterialQrCodeModal
+                isOpen={qrCodeModal.isOpen}
+                onClose={qrCodeModal.closeModal}
+                material={material}
             />
         </>
     );

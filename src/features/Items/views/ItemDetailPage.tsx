@@ -1,14 +1,8 @@
 import { useState, useEffect, useCallback, type FC } from "react";
-import { useParams, Link } from "react-router";
+import { useParams, Link, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
-    FaPenToSquare,
-    FaTrash,
-    FaQrcode,
-    FaArrowRightToBracket,
-    FaArrowRightFromBracket,
     FaArrowLeft,
-    FaBoxesStacked,
     FaArrowUp,
     FaArrowDown,
     FaMoneyBill,
@@ -21,40 +15,53 @@ import {
     FaCircleExclamation,
     FaWrench,
     FaUsers,
+    FaCubes,
+    FaQrcode,
+    FaArrowRightArrowLeft,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, DeleteConfirmModal, Pagination } from "@/shared/components/common";
-import { Button, Badge, Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/components/ui";
+import { Badge, Table, TableHeader, TableBody, TableRow, TableCell, ItemActionsDropdown, createItemActions } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { useModal } from "@/shared/hooks";
-import { showSuccess, showError, formatDateTime, formatDate } from "@/shared/utils";
+import { showSuccess, showError, formatDateTime, formatDate, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
+import { ItemMovementModal, type MovementType } from "@/features/ItemMovements";
 import { ItemManager } from "../services";
 import { ItemModal } from "./ItemModal";
 import { ItemQrCodeModal } from "./ItemQrCodeModal";
-import { ItemMovementModal } from "./ItemMovementModal";
 import { ItemStatsChart } from "./ItemStatsChart";
-import type { ItemDetail, ItemMovement, ItemMonthlyStats, MovementType } from "../types";
+import { ItemPriceHistoryChart } from "./ItemPriceHistoryChart";
+import type { ItemDetail, ItemMovement, ItemMonthlyStats, ItemMaterial, ItemPriceHistory } from "../types";
 import type { PaginationMeta } from "@/shared/types";
 
 const ItemDetailPage: FC = () => {
     const { id } = useParams<{ id: string }>();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
     const { hasPermission } = useAuth();
+    const [qrScanHandled, setQrScanHandled] = useState(false);
 
     const [item, setItem] = useState<ItemDetail | null>(null);
     const [movements, setMovements] = useState<ItemMovement[]>([]);
     const [movementsMeta, setMovementsMeta] = useState<PaginationMeta | null>(null);
+    const [materials, setMaterials] = useState<ItemMaterial[]>([]);
+    const [materialsMeta, setMaterialsMeta] = useState<PaginationMeta | null>(null);
     const [stats, setStats] = useState<ItemMonthlyStats[]>([]);
+    const [priceHistory, setPriceHistory] = useState<ItemPriceHistory | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isLoadingMovements, setIsLoadingMovements] = useState(false);
+    const [isLoadingMaterials, setIsLoadingMaterials] = useState(false);
+    const [isLoadingPriceHistory, setIsLoadingPriceHistory] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [movementsPage, setMovementsPage] = useState(1);
+    const [materialsPage, setMaterialsPage] = useState(1);
 
     // Permissions
     const canUpdate = hasPermission("item.update");
     const canDelete = hasPermission("item.delete");
-    const canCreateMovement = hasPermission("item.createMovement");
+    const canGenerateQrCode = hasPermission('item.generateQrCode');
+    const canCreateMovement = hasPermission("item-movement.create");
 
     // Modals
     const itemModal = useModal();
@@ -100,14 +107,63 @@ const ItemDetailPage: FC = () => {
         }
     }, [id]);
 
+    const loadMaterials = useCallback(async (page: number = 1) => {
+        if (!id) return;
+
+        setIsLoadingMaterials(true);
+        const result = await ItemManager.getMaterials(parseInt(id), page, 5);
+        if (result.success && result.data) {
+            setMaterials(result.data.data);
+            setMaterialsMeta(result.data.meta);
+        }
+        setIsLoadingMaterials(false);
+    }, [id]);
+
+    const loadPriceHistory = useCallback(async () => {
+        if (!id) return;
+
+        setIsLoadingPriceHistory(true);
+        const result = await ItemManager.getPriceHistory(parseInt(id), 20);
+        if (result.success && result.data) {
+            setPriceHistory(result.data);
+        }
+        setIsLoadingPriceHistory(false);
+    }, [id]);
+
     useEffect(() => {
         loadItem();
         loadStats();
-    }, [loadItem, loadStats]);
+        loadPriceHistory();
+    }, [loadItem, loadStats, loadPriceHistory]);
+
+    // Handle QR code scan redirect: ?action=entry|exit
+    useEffect(() => {
+        if (qrScanHandled || isLoading || !item) return;
+
+        const actionParam = searchParams.get("action");
+
+        if (actionParam && (actionParam === "entry" || actionParam === "exit")) {
+            // Mark as handled to prevent re-execution
+            setQrScanHandled(true);
+
+            // Clear URL params
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete("action");
+            setSearchParams(newParams, { replace: true });
+
+            // Open movement modal
+            setMovementType(actionParam as MovementType);
+            movementModal.openModal();
+        }
+    }, [item, isLoading, qrScanHandled, searchParams, setSearchParams, movementModal.openModal]);
 
     useEffect(() => {
         loadMovements(movementsPage);
     }, [loadMovements, movementsPage]);
+
+    useEffect(() => {
+        loadMaterials(materialsPage);
+    }, [loadMaterials, materialsPage]);
 
     const handleEdit = () => {
         itemModal.openModal();
@@ -198,9 +254,9 @@ const ItemDetailPage: FC = () => {
                         </Link>
                         <div>
                             <div className="flex items-center gap-2">
-                                <FaBoxesStacked className="h-5 w-5 text-gray-400" />
+                                <FaCubes className="h-5 w-5 text-gray-400" />
                                 <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{item.name}</h1>
-                                <Badge color={ItemManager.getStockStatusBadgeColor(item.stock_status_color)} size="md">
+                                <Badge color={item.stock_status_color} size="md">
                                     {t(ItemManager.getStockStatusLabelKey(item.stock_status))}
                                 </Badge>
                             </div>
@@ -214,56 +270,16 @@ const ItemDetailPage: FC = () => {
                             )}
                         </div>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            startIcon={<FaQrcode className="h-4 w-4" />}
-                            onClick={handleQrCode}
-                        >
-                            {t("items.qrCode.title")}
-                        </Button>
-                        {canCreateMovement && (
-                            <>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    startIcon={<FaArrowRightToBracket className="h-4 w-4 text-success-500" />}
-                                    onClick={() => handleMovement("entry")}
-                                >
-                                    {t("items.movements.entry")}
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    startIcon={<FaArrowRightFromBracket className="h-4 w-4 text-error-500" />}
-                                    onClick={() => handleMovement("exit")}
-                                >
-                                    {t("items.movements.exit")}
-                                </Button>
-                            </>
-                        )}
-                        {canUpdate && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                startIcon={<FaPenToSquare className="h-4 w-4" />}
-                                onClick={handleEdit}
-                            >
-                                {t("common.edit")}
-                            </Button>
-                        )}
-                        {canDelete && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                startIcon={<FaTrash className="h-4 w-4" />}
-                                onClick={() => deleteModal.openModal()}
-                                className="text-error-500 border-error-300 hover:bg-error-50 dark:border-error-800 dark:hover:bg-error-500/10"
-                            >
-                                {t("common.delete")}
-                            </Button>
-                        )}
+                    <div className="flex flex-wrap items-center gap-2">
+                        <ItemActionsDropdown
+                            actions={[
+                                { ...createItemActions.stockEntry(() => handleMovement("entry"), t), hidden: !canCreateMovement },
+                                { ...createItemActions.stockExit(() => handleMovement("exit"), t), hidden: !canCreateMovement },
+                                { ...createItemActions.qrCode(handleQrCode, t), hidden: !canGenerateQrCode },
+                                { ...createItemActions.edit(handleEdit, t), hidden: !canUpdate },
+                                { ...createItemActions.delete(() => deleteModal.openModal(), t), hidden: !canDelete },
+                            ]}
+                        />
                     </div>
                 </div>
 
@@ -271,7 +287,7 @@ const ItemDetailPage: FC = () => {
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
-                            <FaBoxesStacked className="h-5 w-5 text-brand-600 dark:text-brand-400" />
+                            <FaCubes className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                         </div>
                         <div>
                             <p className="text-2xl font-semibold text-gray-900 dark:text-white">
@@ -311,7 +327,7 @@ const ItemDetailPage: FC = () => {
                         </div>
                         <div>
                             <p className="text-2xl font-semibold text-gray-900 dark:text-white">
-                                {ItemManager.formatCurrency(item.purchase_price, item.currency)}
+                                {formatCurrency(item.current_price, item.currency)}
                             </p>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{t("items.fields.price")}</p>
                         </div>
@@ -383,7 +399,7 @@ const ItemDetailPage: FC = () => {
                         </div>
 
                         <div className="flex items-start gap-3">
-                            <FaChartLine className="mt-0.5 h-4 w-4 text-gray-400" />
+                            <FaQrcode className="mt-0.5 h-4 w-4 text-gray-400" />
                             <div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t("items.fields.qrCodeScans")}
@@ -451,39 +467,6 @@ const ItemDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    {/* Related Materials */}
-                    {item.materials && item.materials.length > 0 && (
-                        <div className="mt-6">
-                            <p className="mb-3 flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                <FaWrench className="h-4 w-4" />
-                                {t("items.sections.materials")} ({item.materials.length})
-                            </p>
-                            <div className="space-y-2">
-                                {item.materials.map((material) => (
-                                    <Link
-                                        key={material.id}
-                                        to={`/materials/${material.id}`}
-                                        className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800"
-                                    >
-                                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
-                                            <FaWrench className="h-3 w-3" />
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                                {material.name}
-                                            </p>
-                                            {material.zone && (
-                                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                                    {material.zone.name}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
                     {/* Related Recipients */}
                     {item.recipients && item.recipients.length > 0 && (
                         <div className="mt-6">
@@ -511,6 +494,64 @@ const ItemDetailPage: FC = () => {
                 </div>
             </div>
 
+            {/* Related Materials */}
+            {(materialsMeta && materialsMeta.total > 0) && (
+                <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                    <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                        <FaWrench className="h-5 w-5 text-brand-500" />
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                            {t("items.sections.materials")}
+                        </h3>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                            ({materialsMeta.total})
+                        </span>
+                    </div>
+
+                    <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                        {isLoadingMaterials ? (
+                            [...Array(3)].map((_, index) => (
+                                <div key={index} className="flex items-center gap-3 px-6 py-4">
+                                    <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                                    <div className="flex-1">
+                                        <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        <div className="mt-1 h-3 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            materials.map((material) => (
+                                <Link
+                                    key={material.id}
+                                    to={`/materials/${material.id}`}
+                                    className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                                >
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
+                                        <FaWrench className="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-gray-900 dark:text-white">
+                                            {material.name}
+                                        </p>
+                                        {material.zone && (
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                {material.zone.name}
+                                            </p>
+                                        )}
+                                    </div>
+                                </Link>
+                            ))
+                        )}
+                    </div>
+
+                    {materialsMeta && materialsMeta.last_page > 1 && (
+                        <Pagination
+                            meta={materialsMeta}
+                            onPageChange={setMaterialsPage}
+                        />
+                    )}
+                </div>
+            )}
+
             {/* Statistics Chart */}
             <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
                 <h3 className="mb-4 flex items-center gap-2 text-lg font-medium text-gray-900 dark:text-white">
@@ -523,7 +564,7 @@ const ItemDetailPage: FC = () => {
             {/* Movements History */}
             <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
                 <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <FaBoxesStacked className="h-5 w-5 text-brand-500" />
+                    <FaArrowRightArrowLeft className="h-5 w-5 text-brand-500" />
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                         {t("items.movements.history")}
                     </h3>
@@ -609,7 +650,7 @@ const ItemDetailPage: FC = () => {
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {movement.total_price > 0
-                                                ? ItemManager.formatCurrency(
+                                                ? formatCurrency(
                                                     movement.total_price,
                                                     item.currency
                                                 )
@@ -631,6 +672,19 @@ const ItemDetailPage: FC = () => {
                         onPageChange={setMovementsPage}
                     />
                 )}
+            </div>
+
+            {/* Price History Chart */}
+            <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                <h3 className="mb-4 flex items-center gap-2 text-lg font-medium text-gray-900 dark:text-white">
+                    <FaChartLine className="h-5 w-5 text-brand-500" />
+                    {t("items.priceHistory.title")}
+                </h3>
+                <ItemPriceHistoryChart
+                    priceHistory={priceHistory}
+                    currency={item.currency}
+                    isLoading={isLoadingPriceHistory}
+                />
             </div>
 
             {/* Modals */}
