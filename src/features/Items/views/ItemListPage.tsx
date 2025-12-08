@@ -9,7 +9,7 @@ import {
     FaCubes,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ItemActionsDropdown, createItemActions } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ActionsDropdown, createItemActions } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -451,7 +451,7 @@ const ItemListPage: FC = () => {
                                         {hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="flex items-center justify-end">
-                                                    <ItemActionsDropdown actions={getItemActions(item)} />
+                                                    <ActionsDropdown actions={getItemActions(item)} />
                                                 </div>
                                             </TableCell>
                                         )}

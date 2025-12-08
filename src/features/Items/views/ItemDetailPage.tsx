@@ -20,7 +20,7 @@ import {
     FaArrowRightArrowLeft,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, DeleteConfirmModal, Pagination } from "@/shared/components/common";
-import { Badge, Table, TableHeader, TableBody, TableRow, TableCell, ItemActionsDropdown, createItemActions } from "@/shared/components/ui";
+import { Badge, Table, TableHeader, TableBody, TableRow, TableCell, ActionsDropdown, createItemActions } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatDateTime, formatDate, formatCurrency } from "@/shared/utils";
@@ -271,7 +271,7 @@ const ItemDetailPage: FC = () => {
                         </div>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                        <ItemActionsDropdown
+                        <ActionsDropdown
                             actions={[
                                 { ...createItemActions.stockEntry(() => handleMovement("entry"), t), hidden: !canCreateMovement },
                                 { ...createItemActions.stockExit(() => handleMovement("exit"), t), hidden: !canCreateMovement },

@@ -35,6 +35,7 @@
         "error": "Error",
         "disabled": "Disabled",
         "enabled": "Enabled",
+        "optional": "optional",
         "qrCode": "QR Code",
         "retry": "Retry",
         "export": {
@@ -595,6 +596,47 @@
             "print": "Print",
             "help": "Scan this QR code to quickly access material details",
             "printTitle": "QR Code - {{name}}"
+        }
+    },
+    "incidents": {
+        "title": "Incidents",
+        "description": "Incident management",
+        "listTitle": "Incidents list",
+        "create": "New incident",
+        "edit": "Edit incident",
+        "manageIncidentsAndTheirInformation": "Manage incidents and their tracking",
+        "noIncidents": "No incidents found",
+        "noIncidentsFiltered": "No incidents match the selected filters",
+        "deleteTitle": "Delete incident",
+        "confirmDelete": "Are you sure you want to delete this incident? This action cannot be undone.",
+        "material": "Material",
+        "maintenance": "Maintenance",
+        "severity": "Severity",
+        "status": "Status",
+        "reportedBy": "Reported by",
+        "startedAt": "Started at",
+        "resolvedAt": "Resolved at",
+        "linkedToMaintenance": "Linked to maintenance",
+        "allStatuses": "All statuses",
+        "allSeverities": "All severities",
+        "noMaterialsAvailable": "No materials available",
+        "form": {
+            "selectMaterial": "Select a material",
+            "selectMaintenance": "Select a maintenance (optional)",
+            "noMaintenance": "No maintenance",
+            "selectSeverity": "Select a severity",
+            "selectStatus": "Select a status",
+            "descriptionPlaceholder": "Describe the incident in detail...",
+            "materialCannotBeChanged": "Material cannot be changed after creation",
+            "maintenanceHint": "Optionally associate this incident with an existing maintenance"
+        },
+        "validation": {
+            "materialRequired": "Material is required"
+        },
+        "messages": {
+            "created": "Incident has been created successfully",
+            "updated": "Incident has been updated successfully",
+            "deleted": "Incident has been deleted successfully"
         }
     },
     "validation": {

@@ -35,6 +35,7 @@
         "error": "Erreur",
         "enabled": "Activé",
         "disabled": "Désactivé",
+        "optional": "optionnel",
         "qrCode": "QR Code",
         "retry": "Réessayer",
         "export": {
@@ -587,6 +588,47 @@
             "print": "Imprimer",
             "help": "Scannez ce QR code pour accéder rapidement aux détails du matériel",
             "printTitle": "QR Code - {{name}}"
+        }
+    },
+    "incidents": {
+        "title": "Incidents",
+        "description": "Gestion des incidents",
+        "listTitle": "Liste des incidents",
+        "create": "Nouvel incident",
+        "edit": "Modifier l'incident",
+        "manageIncidentsAndTheirInformation": "Gérez les incidents et leur suivi",
+        "noIncidents": "Aucun incident trouvé",
+        "noIncidentsFiltered": "Aucun incident ne correspond aux filtres sélectionnés",
+        "deleteTitle": "Supprimer l'incident",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet incident ? Cette action est irréversible.",
+        "material": "Matériel",
+        "maintenance": "Maintenance",
+        "severity": "Sévérité",
+        "status": "Statut",
+        "reportedBy": "Signalé par",
+        "startedAt": "Débuté le",
+        "resolvedAt": "Résolu le",
+        "linkedToMaintenance": "Lié à la maintenance",
+        "allStatuses": "Tous les statuts",
+        "allSeverities": "Toutes les sévérités",
+        "noMaterialsAvailable": "Aucun matériel disponible",
+        "form": {
+            "selectMaterial": "Sélectionner un matériel",
+            "selectMaintenance": "Sélectionner une maintenance (optionnel)",
+            "noMaintenance": "Aucune maintenance",
+            "selectSeverity": "Sélectionner une sévérité",
+            "selectStatus": "Sélectionner un statut",
+            "descriptionPlaceholder": "Décrivez l'incident en détail...",
+            "materialCannotBeChanged": "Le matériel ne peut pas être modifié après création",
+            "maintenanceHint": "Associez optionnellement cet incident à une maintenance existante"
+        },
+        "validation": {
+            "materialRequired": "Le matériel est requis"
+        },
+        "messages": {
+            "created": "L'incident a été créé avec succès",
+            "updated": "L'incident a été mis à jour avec succès",
+            "deleted": "L'incident a été supprimé avec succès"
         }
     },
     "validation": {

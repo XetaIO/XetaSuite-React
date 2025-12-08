@@ -9,7 +9,7 @@ import {
     FaArrowRightFromBracket,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ItemActionsDropdown, createItemActions } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createItemActions } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -427,7 +427,7 @@ const ItemMovementListPage: FC = () => {
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center justify-end">
-                                                <ItemActionsDropdown actions={getMovementActions(movement)} />
+                                                <ActionsDropdown actions={getMovementActions(movement)} />
                                             </div>
                                         </TableCell>
                                     </TableRow>

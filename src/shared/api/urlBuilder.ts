@@ -95,4 +95,13 @@ export const API_ENDPOINTS = {
         MATERIAL: (id: number) => `/api/v1/qr-scan/material/${id}`,
         ITEM: (id: number) => `/api/v1/qr-scan/item/${id}`,
     },
+    // Incidents
+    INCIDENTS: {
+        BASE: '/api/v1/incidents',
+        DETAIL: (id: number) => `/api/v1/incidents/${id}`,
+        AVAILABLE_MATERIALS: '/api/v1/incidents/available-materials',
+        AVAILABLE_MAINTENANCES: '/api/v1/incidents/available-maintenances',
+        SEVERITY_OPTIONS: '/api/v1/incidents/severity-options',
+        STATUS_OPTIONS: '/api/v1/incidents/status-options',
+    },
 } as const;

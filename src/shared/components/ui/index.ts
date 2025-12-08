@@ -21,8 +21,8 @@ export {
 // Dropdown
 export { Dropdown } from "./dropdown/Dropdown";
 export { DropdownItem } from "./dropdown/DropdownItem";
-export { ActionsDropdown, ItemActionsDropdown, createItemActions, createMaterialActions } from "./dropdown/ItemActionsDropdown";
-export type { ActionItem } from "./dropdown/ItemActionsDropdown";
+export { ActionsDropdown, createItemActions, createMaterialActions, createIncidentActions } from "./dropdown/ActionsDropdown";
+export type { ActionItem } from "./dropdown/ActionsDropdown";
 
 // Avatar
 export { default as Avatar } from "./avatar/Avatar";

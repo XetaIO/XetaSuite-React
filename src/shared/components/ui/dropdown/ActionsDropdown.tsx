@@ -155,7 +155,7 @@ export const createItemActions = {
     }),
 };
 
-// Helper to create common action items for Materials
+
 export const createMaterialActions = {
     view: (onClick: () => void, t: (key: string) => string): ActionItem => ({
         key: "view",
@@ -184,5 +184,25 @@ export const createMaterialActions = {
     }),
 };
 
-// Alias for backward compatibility
-export const ItemActionsDropdown = ActionsDropdown;
+// Helper to create common action items for Incidents
+export const createIncidentActions = {
+    view: (onClick: () => void, t: (key: string) => string): ActionItem => ({
+        key: "view",
+        label: t("common.view"),
+        icon: <FaEye className="h-4 w-4" />,
+        onClick,
+    }),
+    edit: (onClick: () => void, t: (key: string) => string): ActionItem => ({
+        key: "edit",
+        label: t("common.edit"),
+        icon: <FaPenToSquare className="h-4 w-4" />,
+        onClick,
+    }),
+    delete: (onClick: () => void, t: (key: string) => string): ActionItem => ({
+        key: "delete",
+        label: t("common.delete"),
+        icon: <FaTrash className="h-4 w-4" />,
+        onClick,
+        variant: "danger",
+    }),
+};
