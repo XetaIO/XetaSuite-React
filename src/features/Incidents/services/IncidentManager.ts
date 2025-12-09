@@ -97,9 +97,9 @@ export const IncidentManager = {
     /**
      * Get available maintenances for incident creation
      */
-    getAvailableMaintenances: async (materialId?: number): Promise<ManagerResult<AvailableMaintenance[]>> => {
+    getAvailableMaintenances: async (materialId?: number, search?: string): Promise<ManagerResult<AvailableMaintenance[]>> => {
         try {
-            const result = await IncidentRepository.getAvailableMaintenances(materialId);
+            const result = await IncidentRepository.getAvailableMaintenances(materialId, search);
             return { success: true, data: result.data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };

@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef, type FC, type FormEvent } from 'react';
+import { useState, useEffect, useRef, useCallback, type FC, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaChevronDown, FaCheck } from 'react-icons/fa6';
-import { Modal, Button } from '@/shared/components/ui';
-import { Label, TextArea } from '@/shared/components/form';
+import { Modal, Button, SearchableDropdown } from '@/shared/components/ui';
+import { Label, Input, TextArea } from '@/shared/components/form';
 import { showSuccess, showError } from '@/shared/utils';
 import { IncidentManager } from '../services';
 import type {
@@ -45,16 +45,16 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
     const [severityOptions, setSeverityOptions] = useState<SeverityOption[]>([]);
     const [statusOptions, setStatusOptions] = useState<StatusOption[]>([]);
     const [isLoadingOptions, setIsLoadingOptions] = useState(false);
+    const [isLoadingMaintenances, setIsLoadingMaintenances] = useState(false);
 
-    // Dropdown states
-    const [isMaterialDropdownOpen, setIsMaterialDropdownOpen] = useState(false);
-    const [isMaintenanceDropdownOpen, setIsMaintenanceDropdownOpen] = useState(false);
+    // Dropdown states for severity and status (keep simple dropdowns for these)
     const [isSeverityDropdownOpen, setIsSeverityDropdownOpen] = useState(false);
     const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
 
-    // Refs for dropdowns
-    const materialDropdownRef = useRef<HTMLDivElement>(null);
-    const maintenanceDropdownRef = useRef<HTMLDivElement>(null);
+    // Check if resolved_at should be shown (resolved or closed status)
+    const showResolvedAt = formData.status === 'resolved' || formData.status === 'closed';
+
+    // Refs for severity and status dropdowns
     const severityDropdownRef = useRef<HTMLDivElement>(null);
     const statusDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -72,22 +72,14 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
         if (!isOpen) {
             setFormData(initialFormData);
             setErrors({});
-            setIsMaterialDropdownOpen(false);
-            setIsMaintenanceDropdownOpen(false);
             setIsSeverityDropdownOpen(false);
             setIsStatusDropdownOpen(false);
         }
     }, [isOpen]);
 
-    // Close dropdowns when clicking outside
+    // Close severity/status dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (materialDropdownRef.current && !materialDropdownRef.current.contains(event.target as Node)) {
-                setIsMaterialDropdownOpen(false);
-            }
-            if (maintenanceDropdownRef.current && !maintenanceDropdownRef.current.contains(event.target as Node)) {
-                setIsMaintenanceDropdownOpen(false);
-            }
             if (severityDropdownRef.current && !severityDropdownRef.current.contains(event.target as Node)) {
                 setIsSeverityDropdownOpen(false);
             }
@@ -162,11 +154,27 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
     };
 
     const loadMaintenances = async (materialId: number) => {
+        setIsLoadingMaintenances(true);
         const result = await IncidentManager.getAvailableMaintenances(materialId);
         if (result.success && result.data) {
             setAvailableMaintenances(result.data);
         }
+        setIsLoadingMaintenances(false);
     };
+
+    // Search maintenances via API (searches across all maintenances of the site)
+    const searchMaintenances = useCallback(async (search: string) => {
+        setIsLoadingMaintenances(true);
+        // When searching, don't filter by material_id to allow searching all site maintenances
+        const result = await IncidentManager.getAvailableMaintenances(
+            search ? undefined : formData.material_id || undefined,
+            search || undefined
+        );
+        if (result.success && result.data) {
+            setAvailableMaintenances(result.data);
+        }
+        setIsLoadingMaintenances(false);
+    }, [formData.material_id]);
 
     const validate = (): boolean => {
         const newErrors: Record<string, string> = {};
@@ -265,68 +273,27 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
                     {/* Material Selection */}
                     <div>
                         <Label>{t('incidents.material')} *</Label>
-                        <div className="relative mt-1.5" ref={materialDropdownRef}>
-                            <button
-                                type="button"
-                                onClick={() => setIsMaterialDropdownOpen(!isMaterialDropdownOpen)}
-                                disabled={isEditing}
-                                className={`flex w-full items-center justify-between rounded-lg border ${errors.material_id
-                                        ? 'border-error-500 focus:border-error-500 focus:ring-error-500/20'
-                                        : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800'
-                                    } bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:outline-none focus:ring-3 dark:bg-gray-900 dark:text-white/90 ${isEditing ? 'cursor-not-allowed opacity-60' : ''
-                                    }`}
-                            >
-                                <span className={formData.material_id ? '' : 'text-gray-500 dark:text-gray-400'}>
-                                    {formData.material_id
-                                        ? availableMaterials.find((m) => m.id === formData.material_id)?.name ||
-                                        t('incidents.form.selectMaterial')
-                                        : t('incidents.form.selectMaterial')}
-                                </span>
-                                <FaChevronDown
-                                    className={`h-4 w-4 text-gray-400 transition-transform ${isMaterialDropdownOpen ? 'rotate-180' : ''
-                                        }`}
-                                />
-                            </button>
-                            {isMaterialDropdownOpen && !isEditing && (
-                                <div className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-                                    {isLoadingOptions ? (
-                                        <div className="p-3 text-center text-sm text-gray-500">
-                                            {t('common.loading')}
-                                        </div>
-                                    ) : availableMaterials.length === 0 ? (
-                                        <div className="p-3 text-center text-sm text-gray-500">
-                                            {t('incidents.noMaterialsAvailable')}
-                                        </div>
-                                    ) : (
-                                        availableMaterials.map((material) => (
-                                            <button
-                                                key={material.id}
-                                                type="button"
-                                                onClick={() => {
-                                                    setFormData((prev) => ({
-                                                        ...prev,
-                                                        material_id: material.id,
-                                                        maintenance_id: null,
-                                                    }));
-                                                    setIsMaterialDropdownOpen(false);
-                                                    if (errors.material_id) {
-                                                        setErrors((prev) => ({ ...prev, material_id: '' }));
-                                                    }
-                                                }}
-                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
-                                            >
-                                                <span className="text-gray-800 dark:text-white/90">
-                                                    {material.name}
-                                                </span>
-                                                {formData.material_id === material.id && (
-                                                    <FaCheck className="h-4 w-4 text-brand-500" />
-                                                )}
-                                            </button>
-                                        ))
-                                    )}
-                                </div>
-                            )}
-                        </div>
+                        <SearchableDropdown
+                            value={formData.material_id || null}
+                            onChange={(value) => {
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    material_id: value || 0,
+                                    maintenance_id: null,
+                                }));
+                                if (errors.material_id) {
+                                    setErrors((prev) => ({ ...prev, material_id: '' }));
+                                }
+                            }}
+                            options={availableMaterials}
+                            placeholder={t('incidents.form.selectMaterial')}
+                            searchPlaceholder={t('incidents.form.searchMaterial')}
+                            noResultsText={t('common.noResults')}
+                            loadingText={t('common.loading')}
+                            disabled={isEditing}
+                            isLoading={isLoadingOptions}
+                            className="mt-1.5"
+                        />
                         {errors.material_id && <p className="mt-1 text-xs text-error-500">{errors.material_id}</p>}
                         {isEditing && (
                             <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -338,67 +305,36 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
                     {/* Maintenance Selection (Optional) */}
                     <div>
                         <Label>{t('incidents.maintenance')} ({t('common.optional')})</Label>
-                        <div className="relative mt-1.5" ref={maintenanceDropdownRef}>
-                            <button
-                                type="button"
-                                onClick={() => setIsMaintenanceDropdownOpen(!isMaintenanceDropdownOpen)}
-                                disabled={!formData.material_id || availableMaintenances.length === 0}
-                                className={`flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800 ${!formData.material_id || availableMaintenances.length === 0
-                                        ? 'cursor-not-allowed opacity-60'
-                                        : ''
-                                    }`}
-                            >
-                                <span
-                                    className={formData.maintenance_id ? '' : 'text-gray-500 dark:text-gray-400'}
-                                >
-                                    {formData.maintenance_id
-                                        ? availableMaintenances.find((m) => m.id === formData.maintenance_id)
-                                            ?.description || t('incidents.form.selectMaintenance')
-                                        : t('incidents.form.selectMaintenance')}
-                                </span>
-                                <FaChevronDown
-                                    className={`h-4 w-4 text-gray-400 transition-transform ${isMaintenanceDropdownOpen ? 'rotate-180' : ''
-                                        }`}
-                                />
-                            </button>
-                            {isMaintenanceDropdownOpen && (
-                                <div className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-                                    {/* Option to clear selection */}
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setFormData((prev) => ({ ...prev, maintenance_id: null }));
-                                            setIsMaintenanceDropdownOpen(false);
-                                        }}
-                                        className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
-                                    >
-                                        <span>{t('incidents.form.noMaintenance')}</span>
-                                        {!formData.maintenance_id && <FaCheck className="h-4 w-4 text-brand-500" />}
-                                    </button>
-                                    {availableMaintenances.map((maintenance) => (
-                                        <button
-                                            key={maintenance.id}
-                                            type="button"
-                                            onClick={() => {
-                                                setFormData((prev) => ({
-                                                    ...prev,
-                                                    maintenance_id: maintenance.id,
-                                                }));
-                                                setIsMaintenanceDropdownOpen(false);
-                                            }}
-                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
-                                        >
-                                            <span className="text-gray-800 dark:text-white/90 line-clamp-1">
-                                                {maintenance.description}
+                        <SearchableDropdown
+                            value={formData.maintenance_id}
+                            onChange={(value) => setFormData((prev) => ({ ...prev, maintenance_id: value }))}
+                            options={availableMaintenances.map(m => ({ ...m, name: `#${m.id} - ${m.description}` }))}
+                            placeholder={t('incidents.form.selectMaintenance')}
+                            searchPlaceholder={t('incidents.form.searchMaintenance')}
+                            noSelectionText={t('incidents.form.noMaintenance')}
+                            noResultsText={t('common.noResults')}
+                            loadingText={t('common.loading')}
+                            nullable
+                            disabled={!formData.material_id}
+                            isLoading={isLoadingMaintenances}
+                            onSearch={searchMaintenances}
+                            renderOption={(opt) => {
+                                const original = availableMaintenances.find(m => m.id === opt.id);
+                                return (
+                                    <div className="flex-1 min-w-0">
+                                        <span className="text-gray-800 dark:text-white/90">
+                                            #{opt.id} - <span className="line-clamp-1">{original?.description}</span>
+                                        </span>
+                                        {original?.material_name && (
+                                            <span className="block text-xs text-gray-500 dark:text-gray-400">
+                                                {original.material_name}
                                             </span>
-                                            {formData.maintenance_id === maintenance.id && (
-                                                <FaCheck className="h-4 w-4 text-brand-500" />
-                                            )}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                                        )}
+                                    </div>
+                                );
+                            }}
+                            className="mt-1.5"
+                        />
                         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                             {t('incidents.form.maintenanceHint')}
                         </p>
@@ -445,48 +381,90 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
                         </div>
                     </div>
 
-                    {/* Status Selection (only for editing) */}
-                    {isEditing && (
-                        <div>
-                            <Label>{t('incidents.status')}</Label>
-                            <div className="relative mt-1.5" ref={statusDropdownRef}>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
-                                    className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
-                                >
-                                    <span className={getStatusColor(formData.status || 'open')}>
-                                        {statusOptions.find((s) => s.value === formData.status)?.label ||
-                                            t('incidents.form.selectStatus')}
-                                    </span>
-                                    <FaChevronDown
-                                        className={`h-4 w-4 text-gray-400 transition-transform ${isStatusDropdownOpen ? 'rotate-180' : ''
-                                            }`}
-                                    />
-                                </button>
-                                {isStatusDropdownOpen && (
-                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-                                        {statusOptions.map((option) => (
-                                            <button
-                                                key={option.value}
-                                                type="button"
-                                                onClick={() => {
-                                                    setFormData((prev) => ({ ...prev, status: option.value }));
-                                                    setIsStatusDropdownOpen(false);
-                                                }}
-                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
-                                            >
-                                                <span className={getStatusColor(option.value)}>{option.label}</span>
-                                                {formData.status === option.value && (
-                                                    <FaCheck className="h-4 w-4 text-brand-500" />
-                                                )}
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                    {/* Status Selection */}
+                    <div>
+                        <Label>{t('incidents.status')}</Label>
+                        <div className="relative mt-1.5" ref={statusDropdownRef}>
+                            <button
+                                type="button"
+                                onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
+                                className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                            >
+                                <span className={getStatusColor(formData.status || 'open')}>
+                                    {statusOptions.find((s) => s.value === formData.status)?.label ||
+                                        t('incidents.form.selectStatus')}
+                                </span>
+                                <FaChevronDown
+                                    className={`h-4 w-4 text-gray-400 transition-transform ${isStatusDropdownOpen ? 'rotate-180' : ''
+                                        }`}
+                                />
+                            </button>
+                            {isStatusDropdownOpen && (
+                                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                                    {statusOptions.map((option) => (
+                                        <button
+                                            key={option.value}
+                                            type="button"
+                                            onClick={() => {
+                                                setFormData((prev) => ({ ...prev, status: option.value }));
+                                                setIsStatusDropdownOpen(false);
+                                            }}
+                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                        >
+                                            <span className={getStatusColor(option.value)}>{option.label}</span>
+                                            {formData.status === option.value && (
+                                                <FaCheck className="h-4 w-4 text-brand-500" />
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
+
+                    {/* Date fields */}
+                    <div className={`grid gap-4 ${showResolvedAt ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                        <div>
+                            <Label htmlFor="started_at">{t('incidents.startedAt')}</Label>
+                            <Input
+                                type="datetime-local"
+                                id="started_at"
+                                name="started_at"
+                                value={formData.started_at ? formData.started_at.slice(0, 16) : ''}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        started_at: value ? `${value}:00` : null,
+                                    }));
+                                }}
+                            />
+                            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                {t('incidents.form.startedAtHint')}
+                            </p>
+                        </div>
+                        {showResolvedAt && (
+                            <div>
+                                <Label htmlFor="resolved_at">{t('incidents.resolvedAt')}</Label>
+                                <Input
+                                    type="datetime-local"
+                                    id="resolved_at"
+                                    name="resolved_at"
+                                    value={formData.resolved_at ? formData.resolved_at.slice(0, 16) : ''}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            resolved_at: value ? `${value}:00` : null,
+                                        }));
+                                    }}
+                                />
+                                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                    {t('incidents.form.resolvedAtHint')}
+                                </p>
+                            </div>
+                        )}
+                    </div>
 
                     {/* Description */}
                     <div>

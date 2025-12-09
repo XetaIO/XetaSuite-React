@@ -282,7 +282,7 @@ const IncidentListPage: FC = () => {
 
                 {/* Search and Filters */}
                 <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         {/* Search */}
                         <div className="relative max-w-md flex-1">
                             <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -311,41 +311,44 @@ const IncidentListPage: FC = () => {
                             )}
                         </div>
 
-                        {/* Status Filter */}
-                        <select
-                            value={statusFilter}
-                            title={t('incidents.status')}
-                            onChange={(e) => {
-                                setStatusFilter(e.target.value as IncidentStatus | '');
-                                setCurrentPage(1);
-                            }}
-                            className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
-                        >
-                            <option value="">{t('incidents.allStatuses')}</option>
-                            {statusOptions.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="flex items-center gap-4">
+                            {/* Status Filter */}
+                            <select
+                                value={statusFilter}
+                                title={t('incidents.status')}
+                                onChange={(e) => {
+                                    setStatusFilter(e.target.value as IncidentStatus | '');
+                                    setCurrentPage(1);
+                                }}
+                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                            >
+                                <option value="">{t('incidents.allStatuses')}</option>
+                                {statusOptions.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
 
-                        {/* Severity Filter */}
-                        <select
-                            value={severityFilter}
-                            title={t('incidents.severity')}
-                            onChange={(e) => {
-                                setSeverityFilter(e.target.value as IncidentSeverity | '');
-                                setCurrentPage(1);
-                            }}
-                            className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
-                        >
-                            <option value="">{t('incidents.allSeverities')}</option>
-                            {severityOptions.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
+                            {/* Severity Filter */}
+                            <select
+                                value={severityFilter}
+                                title={t('incidents.severity')}
+                                onChange={(e) => {
+                                    setSeverityFilter(e.target.value as IncidentSeverity | '');
+                                    setCurrentPage(1);
+                                }}
+                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                            >
+                                <option value="">{t('incidents.allSeverities')}</option>
+                                {severityOptions.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
 
                         {/* Clear Filters */}
                         {hasActiveFilters && (

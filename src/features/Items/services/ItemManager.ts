@@ -139,9 +139,9 @@ export const ItemManager = {
     /**
      * Get available suppliers for dropdown
      */
-    getAvailableSuppliers: async (search?: string): Promise<ManagerResult<AvailableSupplier[]>> => {
+    getAvailableSuppliers: async (search?: string, includeId?: number): Promise<ManagerResult<AvailableSupplier[]>> => {
         try {
-            const data = await ItemRepository.getAvailableSuppliers(search);
+            const data = await ItemRepository.getAvailableSuppliers(search, includeId);
             return { success: true, data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };

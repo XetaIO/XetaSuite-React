@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef, type FC, type ChangeEvent, type FormEvent } from 'react';
+import { useState, useEffect, type FC, type ChangeEvent, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaChevronDown, FaCheck } from 'react-icons/fa6';
-import { Modal, Button } from '@/shared/components/ui';
+import { Modal, Button, SearchableDropdown } from '@/shared/components/ui';
 import { Label, Input, Checkbox, TextArea } from '@/shared/components/form';
 import { showSuccess, showError } from '@/shared/utils';
 import { MaterialManager } from '../services';
@@ -42,10 +41,6 @@ export const MaterialModal: FC<MaterialModalProps> = ({ isOpen, onClose, materia
     const [availableRecipients, setAvailableRecipients] = useState<AvailableRecipient[]>([]);
     const [isLoadingOptions, setIsLoadingOptions] = useState(false);
 
-    // Zone dropdown state
-    const [isZoneDropdownOpen, setIsZoneDropdownOpen] = useState(false);
-    const zoneDropdownRef = useRef<HTMLDivElement>(null);
-
     const isEditing = material !== null;
 
     // Load options and material details when modal opens
@@ -60,21 +55,8 @@ export const MaterialModal: FC<MaterialModalProps> = ({ isOpen, onClose, materia
         if (!isOpen) {
             setFormData(initialFormData);
             setErrors({});
-            setIsZoneDropdownOpen(false);
         }
     }, [isOpen]);
-
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (zoneDropdownRef.current && !zoneDropdownRef.current.contains(event.target as Node)) {
-                setIsZoneDropdownOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
 
     const loadOptionsAndMaterial = async () => {
         setIsLoadingOptions(true);
@@ -246,56 +228,22 @@ export const MaterialModal: FC<MaterialModalProps> = ({ isOpen, onClose, materia
                     {/* Zone Selection */}
                     <div>
                         <Label>{t('materials.zone')} *</Label>
-                        <div className="relative mt-1.5" ref={zoneDropdownRef}>
-                            <button
-                                type="button"
-                                onClick={() => setIsZoneDropdownOpen(!isZoneDropdownOpen)}
-                                className={`flex w-full items-center justify-between rounded-lg border ${errors.zone_id
-                                    ? 'border-error-500 focus:border-error-500 focus:ring-error-500/20'
-                                    : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800'
-                                    } bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:outline-none focus:ring-3 dark:bg-gray-900 dark:text-white/90`}
-                            >
-                                <span className={formData.zone_id ? '' : 'text-gray-500 dark:text-gray-400'}>
-                                    {formData.zone_id
-                                        ? availableZones.find((z) => z.id === formData.zone_id)?.name || t('materials.form.selectZone')
-                                        : t('materials.form.selectZone')}
-                                </span>
-                                <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isZoneDropdownOpen ? 'rotate-180' : ''}`} />
-                            </button>
-                            {isZoneDropdownOpen && (
-                                <div className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-                                    {isLoadingOptions ? (
-                                        <div className="p-3 text-center text-sm text-gray-500">
-                                            {t('common.loading')}
-                                        </div>
-                                    ) : availableZones.length === 0 ? (
-                                        <div className="p-3 text-center text-sm text-gray-500">
-                                            {t('zones.noZones')}
-                                        </div>
-                                    ) : (
-                                        availableZones.map((zone) => (
-                                            <button
-                                                key={zone.id}
-                                                type="button"
-                                                onClick={() => {
-                                                    setFormData((prev) => ({ ...prev, zone_id: zone.id }));
-                                                    setIsZoneDropdownOpen(false);
-                                                    if (errors.zone_id) {
-                                                        setErrors((prev) => ({ ...prev, zone_id: '' }));
-                                                    }
-                                                }}
-                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
-                                            >
-                                                <span className="text-gray-800 dark:text-white/90">{zone.name}</span>
-                                                {formData.zone_id === zone.id && (
-                                                    <FaCheck className="h-4 w-4 text-brand-500" />
-                                                )}
-                                            </button>
-                                        ))
-                                    )}
-                                </div>
-                            )}
-                        </div>
+                        <SearchableDropdown
+                            value={formData.zone_id || null}
+                            onChange={(value) => {
+                                setFormData((prev) => ({ ...prev, zone_id: value || 0 }));
+                                if (errors.zone_id) {
+                                    setErrors((prev) => ({ ...prev, zone_id: '' }));
+                                }
+                            }}
+                            options={availableZones}
+                            placeholder={t('materials.form.selectZone')}
+                            searchPlaceholder={t('materials.form.searchZone')}
+                            noResultsText={t('common.noResults')}
+                            loadingText={t('common.loading')}
+                            isLoading={isLoadingOptions}
+                            className="mt-1.5"
+                        />
                         {errors.zone_id && <p className="mt-1 text-xs text-error-500">{errors.zone_id}</p>}
                         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                             {t('materials.form.zoneHint')}

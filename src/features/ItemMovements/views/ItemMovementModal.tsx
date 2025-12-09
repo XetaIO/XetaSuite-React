@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useRef, type FC } from "react";
+import { useState, useEffect, useCallback, type FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowRightToBracket, FaArrowRightFromBracket, FaPen } from "react-icons/fa6";
-import { Modal, Button } from "@/shared/components/ui";
+import { Modal, Button, SearchableDropdown, type PinnedItem } from "@/shared/components/ui";
 import { Input, Label } from "@/shared/components/form";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { ItemMovementManager } from "../services";
@@ -73,29 +73,16 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [suppliers, setSuppliers] = useState<AvailableSupplier[]>([]);
     const [itemSupplier, setItemSupplier] = useState<AvailableSupplier | null>(null);
-    const [supplierSearch, setSupplierSearch] = useState("");
-    const supplierSearchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Search suppliers with debounce
+    // Search suppliers (includeId ensures current supplier is always included)
     const searchSuppliers = useCallback(async (search: string) => {
         setIsLoadingSuppliers(true);
-        const result = await ItemMovementManager.getAvailableSuppliers(search || undefined);
+        const result = await ItemMovementManager.getAvailableSuppliers(search || undefined, formData.supplier_id ?? itemSupplierId ?? undefined);
         if (result.success && result.data) {
             setSuppliers(result.data);
         }
         setIsLoadingSuppliers(false);
-    }, []);
-
-    // Handle supplier search with debounce
-    const handleSupplierSearch = (value: string) => {
-        setSupplierSearch(value);
-        if (supplierSearchTimeout.current) {
-            clearTimeout(supplierSearchTimeout.current);
-        }
-        supplierSearchTimeout.current = setTimeout(() => {
-            searchSuppliers(value);
-        }, 300);
-    };
+    }, [formData.supplier_id, itemSupplierId]);
 
     useEffect(() => {
         if (isOpen) {
@@ -125,7 +112,6 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
                 });
             }
             setErrors({});
-            setSupplierSearch("");
             setItemSupplier(null);
 
             // Load suppliers for entry (include item's supplier to ensure it's always in the list)
@@ -327,88 +313,25 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
                         {/* Supplier */}
                         <div>
                             <Label>{t("items.movements.fields.supplier")}</Label>
-                            <div className="space-y-2">
-                                <Input
-                                    type="text"
-                                    placeholder={t("common.search")}
-                                    value={supplierSearch}
-                                    onChange={(e) => handleSupplierSearch(e.target.value)}
-                                    disabled={isLoading}
-                                />
-                                <div className="grid grid-cols-1 gap-1 max-h-32 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2">
-                                    {isLoadingSuppliers ? (
-                                        <div className="text-sm text-gray-500 p-1">{t("common.loading")}</div>
-                                    ) : (
-                                        <>
-                                            <label
-                                                className={`flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded ${!formData.supplier_id ? "bg-brand-50 dark:bg-brand-500/10" : ""
-                                                    }`}
-                                            >
-                                                <input
-                                                    type="radio"
-                                                    name="supplier"
-                                                    checked={!formData.supplier_id}
-                                                    onChange={() => handleChange("supplier_id", undefined)}
-                                                    disabled={isLoading}
-                                                    className="text-brand-500 focus:ring-brand-500"
-                                                />
-                                                <span className="text-sm text-gray-500 dark:text-gray-400 italic">
-                                                    {t("items.noSupplier")}
-                                                </span>
-                                            </label>
-                                            {/* Item's supplier - always shown first if exists */}
-                                            {itemSupplier && !supplierSearch && (
-                                                <label
-                                                    className={`flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded border-l-2 border-brand-500 ${formData.supplier_id === itemSupplier.id ? "bg-brand-50 dark:bg-brand-500/10" : ""
-                                                        }`}
-                                                >
-                                                    <input
-                                                        type="radio"
-                                                        name="supplier"
-                                                        checked={formData.supplier_id === itemSupplier.id}
-                                                        onChange={() => handleChange("supplier_id", itemSupplier.id)}
-                                                        disabled={isLoading}
-                                                        className="text-brand-500 focus:ring-brand-500"
-                                                    />
-                                                    <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                                                        {itemSupplier.name}
-                                                    </span>
-                                                    <span className="text-xs bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 px-1.5 py-0.5 rounded">
-                                                        {t("items.movements.itemSupplier")}
-                                                    </span>
-                                                </label>
-                                            )}
-                                            {suppliers.length === 0 && supplierSearch ? (
-                                                <div className="text-sm text-gray-500 p-1">
-                                                    {t("common.noResults")}
-                                                </div>
-                                            ) : (
-                                                suppliers
-                                                    .filter(s => !itemSupplier || s.id !== itemSupplier.id || supplierSearch)
-                                                    .map((supplier) => (
-                                                        <label
-                                                            key={supplier.id}
-                                                            className={`flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded ${formData.supplier_id === supplier.id ? "bg-brand-50 dark:bg-brand-500/10" : ""
-                                                                }`}
-                                                        >
-                                                            <input
-                                                                type="radio"
-                                                                name="supplier"
-                                                                checked={formData.supplier_id === supplier.id}
-                                                                onChange={() => handleChange("supplier_id", supplier.id)}
-                                                                disabled={isLoading}
-                                                                className="text-brand-500 focus:ring-brand-500"
-                                                            />
-                                                            <span className="text-sm text-gray-700 dark:text-gray-300">
-                                                                {supplier.name}
-                                                            </span>
-                                                        </label>
-                                                    ))
-                                            )}
-                                        </>
-                                    )}
-                                </div>
-                            </div>
+                            <SearchableDropdown
+                                value={formData.supplier_id ?? null}
+                                onChange={(value) => handleChange("supplier_id", value ?? undefined)}
+                                options={suppliers}
+                                placeholder={t("items.form.selectSupplier")}
+                                searchPlaceholder={t("items.form.searchSupplier")}
+                                noSelectionText={t("items.noSupplier")}
+                                noResultsText={t("common.noResults")}
+                                loadingText={t("common.loading")}
+                                nullable
+                                disabled={isLoading}
+                                isLoading={isLoadingSuppliers}
+                                onSearch={searchSuppliers}
+                                pinnedItem={itemSupplier ? {
+                                    item: itemSupplier,
+                                    label: t("items.movements.itemSupplier"),
+                                } as PinnedItem<AvailableSupplier> : undefined}
+                                className="mt-1.5"
+                            />
                         </div>
 
                         {/* Invoice fields */}

@@ -96,6 +96,7 @@ export interface AvailableMaintenance {
     id: number;
     description: string;
     material_id: number;
+    material_name?: string | null;
 }
 
 export interface SeverityOption {

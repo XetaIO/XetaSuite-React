@@ -249,6 +249,10 @@
             "allStatuses": "All statuses",
             "stockStatus": "Filter by status"
         },
+        "form": {
+            "searchSupplier": "Search for a supplier...",
+            "selectSupplier": "Select a supplier"
+        },
         "stockStatus": {
             "ok": "In stock",
             "warning": "Warning",
@@ -553,6 +557,7 @@
         },
         "form": {
             "selectZone": "Select a zone",
+            "searchZone": "Search for a zone...",
             "namePlaceholder": "Material name",
             "descriptionPlaceholder": "Material description (optional)",
             "zoneHint": "Only zones that allow materials are displayed",
@@ -628,7 +633,11 @@
             "selectStatus": "Select a status",
             "descriptionPlaceholder": "Describe the incident in detail...",
             "materialCannotBeChanged": "Material cannot be changed after creation",
-            "maintenanceHint": "Optionally associate this incident with an existing maintenance"
+            "maintenanceHint": "Optionally associate this incident with an existing maintenance",
+            "searchMaterial": "Search for a material...",
+            "searchMaintenance": "Search by ID, description or material...",
+            "startedAtHint": "Incident start date",
+            "resolvedAtHint": "Incident resolution date"
         },
         "validation": {
             "materialRequired": "Material is required"

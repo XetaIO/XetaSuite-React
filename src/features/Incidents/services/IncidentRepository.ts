@@ -86,9 +86,10 @@ export const IncidentRepository = {
     /**
      * Get available maintenances for incident creation
      */
-    getAvailableMaintenances: async (materialId?: number): Promise<{ data: AvailableMaintenance[] }> => {
+    getAvailableMaintenances: async (materialId?: number, search?: string): Promise<{ data: AvailableMaintenance[] }> => {
         const url = buildUrl(API_ENDPOINTS.INCIDENTS.AVAILABLE_MAINTENANCES, {
             material_id: materialId,
+            search: search,
         });
         const response = await httpClient.get<{ data: AvailableMaintenance[] }>(url);
         return response.data;

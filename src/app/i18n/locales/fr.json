@@ -249,6 +249,10 @@
             "allStatuses": "Tous les statuts",
             "stockStatus": "Filtrer par statut"
         },
+        "form": {
+            "searchSupplier": "Rechercher un fournisseur...",
+            "selectSupplier": "Sélectionner un fournisseur"
+        },
         "stockStatus": {
             "ok": "En stock",
             "warning": "Attention",
@@ -545,6 +549,7 @@
         },
         "form": {
             "selectZone": "Sélectionner une zone",
+            "searchZone": "Rechercher une zone...",
             "namePlaceholder": "Nom du matériel",
             "descriptionPlaceholder": "Description du matériel (optionnel)",
             "zoneHint": "Seules les zones autorisant les matériels sont affichées",
@@ -620,7 +625,11 @@
             "selectStatus": "Sélectionner un statut",
             "descriptionPlaceholder": "Décrivez l'incident en détail...",
             "materialCannotBeChanged": "Le matériel ne peut pas être modifié après création",
-            "maintenanceHint": "Associez optionnellement cet incident à une maintenance existante"
+            "maintenanceHint": "Associez optionnellement cet incident à une maintenance existante",
+            "searchMaterial": "Rechercher un matériel...",
+            "searchMaintenance": "Rechercher par ID, description ou matériel...",
+            "startedAtHint": "Date de début de l'incident",
+            "resolvedAtHint": "Date de résolution de l'incident"
         },
         "validation": {
             "materialRequired": "Le matériel est requis"
