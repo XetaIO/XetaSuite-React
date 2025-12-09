@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, type FC } from "react";
 import { useTranslation } from "react-i18next";
-import { Modal, Button, SearchableDropdown } from "@/shared/components/ui";
+import { Modal, Button, SearchableDropdown, type PinnedItem } from "@/shared/components/ui";
 import { Input, Label, Checkbox } from "@/shared/components/form";
 import { showSuccess, showError } from "@/shared/utils";
 import { ItemManager } from "../services";
@@ -39,6 +39,9 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
     // Search filters for materials and recipients (supplier uses SearchableDropdown)
     const [materialSearch, setMaterialSearch] = useState("");
     const [recipientSearch, setRecipientSearch] = useState("");
+
+    // Original supplier for pinned item when editing
+    const [originalSupplier, setOriginalSupplier] = useState<AvailableSupplier | null>(null);
 
     // Debounce refs for materials and recipients
     const materialSearchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -132,7 +135,20 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
         setIsLoading(true);
         const result = await ItemManager.getById(item.id);
         if (result.success && result.data) {
-            setFormData(ItemManager.toFormData(result.data.data));
+            const itemData = result.data.data;
+            setFormData(ItemManager.toFormData(itemData));
+
+            // Save original supplier for pinned item
+            if (itemData.supplier_id && itemData.supplier) {
+                setOriginalSupplier({
+                    id: itemData.supplier_id,
+                    name: itemData.supplier.name,
+                    item: {
+                        id: itemData.id,
+                        name: itemData.name,
+                    },
+                });
+            }
         } else {
             showError(result.error || t("errors.generic"));
             onClose();
@@ -148,10 +164,13 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                 loadItemData();
             } else {
                 setFormData(ItemManager.getDefaultFormData());
+                setOriginalSupplier(null);
             }
             setErrors({});
             setMaterialSearch("");
             setRecipientSearch("");
+        } else {
+            setOriginalSupplier(null);
         }
     }, [isOpen, isEditing, item?.supplier_id, loadDropdownData, loadItemData]);
 
@@ -361,6 +380,11 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                                     disabled={isLoading}
                                     isLoading={isLoadingDropdowns || isLoadingSuppliers}
                                     onSearch={searchSuppliers}
+                                    pinnedItem={originalSupplier ? {
+                                        id: originalSupplier.id,
+                                        name: originalSupplier.name,
+                                        label: t("items.form.currentSupplier"),
+                                    } as PinnedItem : undefined}
                                     className="mt-1.5"
                                 />
                             </div>

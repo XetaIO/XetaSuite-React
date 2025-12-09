@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, type FC, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaChevronDown, FaCheck } from 'react-icons/fa6';
-import { Modal, Button, SearchableDropdown } from '@/shared/components/ui';
+import { Modal, Button, SearchableDropdown, type PinnedItem } from '@/shared/components/ui';
 import { Label, Input, TextArea } from '@/shared/components/form';
 import { showSuccess, showError } from '@/shared/utils';
 import { IncidentManager } from '../services';
@@ -51,6 +51,10 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
     const [isSeverityDropdownOpen, setIsSeverityDropdownOpen] = useState(false);
     const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
 
+    // Original material and maintenance for pinned items
+    const [originalMaterial, setOriginalMaterial] = useState<AvailableMaterial | null>(null);
+    const [originalMaintenance, setOriginalMaintenance] = useState<AvailableMaintenance | null>(null);
+
     // Check if resolved_at should be shown (resolved or closed status)
     const showResolvedAt = formData.status === 'resolved' || formData.status === 'closed';
 
@@ -74,6 +78,8 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
             setErrors({});
             setIsSeverityDropdownOpen(false);
             setIsStatusDropdownOpen(false);
+            setOriginalMaterial(null);
+            setOriginalMaintenance(null);
         }
     }, [isOpen]);
 
@@ -137,6 +143,24 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
                     started_at: detail.started_at,
                     resolved_at: detail.resolved_at,
                 });
+
+                // Save original material for pinned item
+                if (detail.material_id && detail.material_name) {
+                    setOriginalMaterial({
+                        id: detail.material_id,
+                        name: detail.material_name,
+                    });
+                }
+
+                // Save original maintenance for pinned item
+                if (detail.maintenance_id && detail.maintenance) {
+                    setOriginalMaintenance({
+                        id: detail.maintenance_id,
+                        description: detail.maintenance.description,
+                        material_id: detail.material_id || 0,
+                        material_name: detail.material_name,
+                    });
+                }
 
                 // Load maintenances for the selected material
                 if (detail.material_id) {
@@ -292,6 +316,11 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
                             loadingText={t('common.loading')}
                             disabled={isEditing}
                             isLoading={isLoadingOptions}
+                            pinnedItem={originalMaterial ? {
+                                id: originalMaterial.id,
+                                name: originalMaterial.name,
+                                label: t('incidents.form.currentMaterial'),
+                            } as PinnedItem : undefined}
                             className="mt-1.5"
                         />
                         {errors.material_id && <p className="mt-1 text-xs text-error-500">{errors.material_id}</p>}
@@ -318,6 +347,11 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
                             disabled={!formData.material_id}
                             isLoading={isLoadingMaintenances}
                             onSearch={searchMaintenances}
+                            pinnedItem={originalMaintenance ? {
+                                id: originalMaintenance.id,
+                                name: `#${originalMaintenance.id} - ${originalMaintenance.description}`,
+                                label: t('incidents.form.currentMaintenance'),
+                            } as PinnedItem : undefined}
                             renderOption={(opt) => {
                                 const original = availableMaintenances.find(m => m.id === opt.id);
                                 return (

@@ -251,7 +251,8 @@
         },
         "form": {
             "searchSupplier": "Rechercher un fournisseur...",
-            "selectSupplier": "Sélectionner un fournisseur"
+            "selectSupplier": "Sélectionner un fournisseur",
+            "currentSupplier": "Fournisseur actuel"
         },
         "stockStatus": {
             "ok": "En stock",
@@ -629,7 +630,9 @@
             "searchMaterial": "Rechercher un matériel...",
             "searchMaintenance": "Rechercher par ID, description ou matériel...",
             "startedAtHint": "Date de début de l'incident",
-            "resolvedAtHint": "Date de résolution de l'incident"
+            "resolvedAtHint": "Date de résolution de l'incident",
+            "currentMaterial": "Matériel actuel",
+            "currentMaintenance": "Maintenance actuelle"
         },
         "validation": {
             "materialRequired": "Le matériel est requis"

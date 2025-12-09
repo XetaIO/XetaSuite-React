@@ -12,8 +12,9 @@ export interface DropdownOption {
 /**
  * Pinned item configuration for highlighting a specific option at the top
  */
-export interface PinnedItem<T extends DropdownOption> {
-    item: T;
+export interface PinnedItem {
+    id: number;
+    name: string;
     label: string;
 }
 
@@ -48,7 +49,7 @@ export interface SearchableDropdownProps<T extends DropdownOption> {
     /** Debounce delay in ms for search (default: 300) */
     searchDebounceMs?: number;
     /** Pinned item to show at top of list (e.g., item's original supplier) */
-    pinnedItem?: PinnedItem<T>;
+    pinnedItem?: PinnedItem;
     /** Custom render function for option content */
     renderOption?: (option: T) => ReactNode;
     /** Custom render function for selected value display */
@@ -119,7 +120,7 @@ export function SearchableDropdown<T extends DropdownOption>({
 
     // Filter out pinned item from regular list when not searching
     const displayOptions = pinnedItem && !search
-        ? filteredOptions.filter((opt) => opt.id !== pinnedItem.item.id)
+        ? filteredOptions.filter((opt) => opt.id !== pinnedItem.id)
         : filteredOptions;
 
     // Close dropdown when clicking outside
@@ -160,8 +161,8 @@ export function SearchableDropdown<T extends DropdownOption>({
             return selectedOption.name;
         }
         // Check if value matches pinned item
-        if (pinnedItem && value === pinnedItem.item.id) {
-            return pinnedItem.item.name;
+        if (pinnedItem && value === pinnedItem.id) {
+            return pinnedItem.name;
         }
         return placeholder;
     };
@@ -232,18 +233,18 @@ export function SearchableDropdown<T extends DropdownOption>({
                                 {pinnedItem && !search && (
                                     <button
                                         type="button"
-                                        onClick={() => handleSelect(pinnedItem.item.id)}
+                                        onClick={() => handleSelect(pinnedItem.id)}
                                         className="flex w-full items-center justify-between border-l-2 border-brand-500 px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
                                     >
                                         <div className="flex items-center gap-2">
                                             <span className="font-medium text-gray-800 dark:text-white/90">
-                                                {pinnedItem.item.name}
+                                                {pinnedItem.name}
                                             </span>
                                             <span className="rounded bg-brand-100 px-1.5 py-0.5 text-xs text-brand-700 dark:bg-brand-500/20 dark:text-brand-300">
                                                 {pinnedItem.label}
                                             </span>
                                         </div>
-                                        {value === pinnedItem.item.id && (
+                                        {value === pinnedItem.id && (
                                             <FaCheck className="h-4 w-4 text-brand-500" />
                                         )}
                                     </button>

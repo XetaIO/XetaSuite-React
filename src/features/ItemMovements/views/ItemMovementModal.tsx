@@ -327,9 +327,10 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
                                 isLoading={isLoadingSuppliers}
                                 onSearch={searchSuppliers}
                                 pinnedItem={itemSupplier ? {
-                                    item: itemSupplier,
+                                    id: itemSupplier.id,
+                                    name: itemSupplier.name,
                                     label: t("items.movements.itemSupplier"),
-                                } as PinnedItem<AvailableSupplier> : undefined}
+                                } as PinnedItem : undefined}
                                 className="mt-1.5"
                             />
                         </div>

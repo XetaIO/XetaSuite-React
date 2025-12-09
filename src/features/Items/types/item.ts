@@ -229,6 +229,10 @@ export interface ItemFilters {
 export interface AvailableSupplier {
     id: number;
     name: string;
+    item: {
+        id: number;
+        name: string;
+    };
 }
 
 /**

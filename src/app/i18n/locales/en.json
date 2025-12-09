@@ -251,7 +251,8 @@
         },
         "form": {
             "searchSupplier": "Search for a supplier...",
-            "selectSupplier": "Select a supplier"
+            "selectSupplier": "Select a supplier",
+            "currentSupplier": "Current supplier"
         },
         "stockStatus": {
             "ok": "In stock",
@@ -637,7 +638,9 @@
             "searchMaterial": "Search for a material...",
             "searchMaintenance": "Search by ID, description or material...",
             "startedAtHint": "Incident start date",
-            "resolvedAtHint": "Incident resolution date"
+            "resolvedAtHint": "Incident resolution date",
+            "currentMaterial": "Current material",
+            "currentMaintenance": "Current maintenance"
         },
         "validation": {
             "materialRequired": "Material is required"
