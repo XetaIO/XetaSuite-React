@@ -14,7 +14,6 @@ export interface Item {
 
     // Pricing
     current_price: number | null;
-    currency: string;
 
     // Relations
     site?: {

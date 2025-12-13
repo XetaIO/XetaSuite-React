@@ -10,20 +10,21 @@ import {
     FaMoneyBill,
 } from "react-icons/fa6";
 import { formatCurrency } from "@/shared/utils";
+import { useSettings } from "@/features/Settings";
 import type { ItemPriceHistory } from "../types";
 
 interface ItemPriceHistoryChartProps {
     priceHistory: ItemPriceHistory | null;
-    currency: string;
     isLoading?: boolean;
 }
 
 export const ItemPriceHistoryChart: FC<ItemPriceHistoryChartProps> = ({
     priceHistory,
-    currency,
     isLoading = false,
 }) => {
     const { t, i18n } = useTranslation();
+    const { getCurrency } = useSettings();
+    const currency = getCurrency();
 
     // Prepare chart data
     const { labels, prices } = useMemo(() => {

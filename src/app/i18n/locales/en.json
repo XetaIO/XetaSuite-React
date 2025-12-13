@@ -38,6 +38,13 @@
         "optional": "optional",
         "qrCode": "QR Code",
         "retry": "Retry",
+        "increase": "Increase",
+        "decrease": "Decrease",
+        "view": "View",
+        "details": "Details",
+        "history": "History",
+        "notFound": "Not found",
+        "editedBy": "Edited by",
         "export": {
             "button": "Export ({{count}})",
             "exporting": "Exporting...",
@@ -649,6 +656,10 @@
             "created": "Incident has been created successfully",
             "updated": "Incident has been updated successfully",
             "deleted": "Incident has been deleted successfully"
+        },
+        "errors": {
+            "loadFailed": "Failed to load incident",
+            "notFound": "Incident not found"
         }
     },
     "validation": {
@@ -705,6 +716,139 @@
         "unauthorizedDescription": "You don't have the required permissions to access this page. Please contact your administrator if you believe this is an error.",
         "backToDashboard": "Back to dashboard",
         "forbidden": "Access forbidden"
+    },
+    "maintenances": {
+        "title": "Maintenances",
+        "description": "Maintenance management",
+        "maintenance": "Maintenance",
+        "reason": "Reason",
+        "listTitle": "Maintenance list",
+        "notFound": "Maintenance not found",
+        "notFoundMessage": "The maintenance you are looking for does not exist or has been deleted.",
+        "create": "New maintenance",
+        "edit": "Edit maintenance",
+        "manageMaintenances": "Manage your maintenances and their tracking",
+        "manageMaintenancesAndTheirInformation": "Manage your maintenances and their information",
+        "noMaintenancesFor": "No maintenance found for this search",
+        "deleteTitle": "Delete maintenance",
+        "forMaterial": "Material",
+        "searchPlaceholder": "Search by description...",
+        "spareParts": "Spare parts",
+        "resolvedAt": "Resolution date",
+        "operators": "Operators",
+        "companies": "Companies",
+        "incidents": "Incidents",
+        "fields": {
+            "description": "Description",
+            "descriptionPlaceholder": "Maintenance description...",
+            "reason": "Reason",
+            "reasonPlaceholder": "Maintenance reason...",
+            "type": "Type",
+            "status": "Status",
+            "realization": "Realization",
+            "material": "Material",
+            "selectMaterial": "Select a material",
+            "started_at": "Start date",
+            "resolved_at": "Resolution date",
+            "incidents": "Incidents",
+            "selectIncidents": "Select incidents",
+            "operators": "Operators",
+            "selectOperators": "Select operators",
+            "companies": "Companies",
+            "selectCompanies": "Select companies",
+            "spareParts": "Spare parts",
+            "addSpareParts": "Add spare parts"
+        },
+        "filters": {
+            "allStatuses": "All statuses",
+            "allTypes": "All types",
+            "allRealizations": "All realizations"
+        },
+        "status": {
+            "planned": "Planned",
+            "in_progress": "In progress",
+            "completed": "Completed",
+            "canceled": "Canceled"
+        },
+        "type": {
+            "corrective": "Corrective",
+            "preventive": "Preventive",
+            "inspection": "Inspection",
+            "improvement": "Improvement"
+        },
+        "realization": {
+            "internal": "Internal",
+            "external": "External",
+            "both": "Both"
+        },
+        "detail": {
+            "info": "Information",
+            "backToList": "Back to list",
+            "descriptionAndReason": "Description and Reason",
+            "operators": "Operators",
+            "companies": "Companies",
+            "linkedIncidents": "Linked incidents",
+            "spareParts": "Spare parts used",
+            "totalCost": "Total cost",
+            "incidentDescription": "Description",
+            "incidentStatus": "Status",
+            "incidentSeverity": "Severity",
+            "incidentStartedAt": "Start date",
+            "itemName": "Item",
+            "itemReference": "Reference",
+            "quantity": "Quantity",
+            "unitPrice": "Unit price",
+            "totalPrice": "Total price"
+        },
+        "stats": {
+            "incidents": "Incidents",
+            "operators": "Operators",
+            "companies": "Companies",
+            "spareParts": "Spare parts"
+        },
+        "form": {
+            "selectType": "Select a type",
+            "selectStatus": "Select a status",
+            "selectRealization": "Select a realization",
+            "selectMaterial": "Select a material",
+            "noMaterial": "No material selected",
+            "currentMaterial": "Current material",
+            "noMaterialsAvailable": "No materials available",
+            "noIncidentsAvailable": "No incidents available",
+            "noOperatorsAvailable": "No operators available",
+            "noCompaniesAvailable": "No companies available",
+            "noItemsAvailable": "No items available",
+            "searchMaterial": "Search for a material...",
+            "searchOperators": "Search for operators...",
+            "searchCompanies": "Search for companies...",
+            "searchIncidents": "Search for incidents...",
+            "searchItems": "Search for items...",
+            "operatorsRequired": "At least one operator is required for internal or mixed maintenance",
+            "companiesRequired": "At least one company is required for external or mixed maintenance",
+            "selectItem": "Select an item",
+            "selectOperators": "Select operators",
+            "selectCompanies": "Select companies",
+            "selectIncidents": "Select incidents",
+            "selected": "selected",
+            "incidentsSelected": "incident(s) selected",
+            "addSparePart": "Add a spare part",
+            "currentStock": "Current stock",
+            "itemPrice": "Price",
+            "stockAvailable": "Available stock",
+            "descriptionPlaceholder": "Maintenance description...",
+            "reasonPlaceholder": "Maintenance reason..."
+        },
+        "errors": {
+            "loadFailed": "Unable to load maintenance information",
+            "createFailed": "Unable to create maintenance",
+            "updateFailed": "Unable to update maintenance",
+            "deleteFailed": "Unable to delete maintenance"
+        },
+        "messages": {
+            "created": "Maintenance has been created successfully",
+            "updated": "Maintenance has been updated successfully",
+            "deleted": "Maintenance has been deleted successfully"
+        }
     },
     "pagination": {
         "showing": "Showing {{from}} to {{to}} of {{total}} results",

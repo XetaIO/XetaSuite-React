@@ -47,14 +47,6 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
     const materialSearchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const recipientSearchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Currency options
-    const currencyOptions = [
-        { value: "EUR", label: "EUR (€)" },
-        { value: "USD", label: "USD ($)" },
-        { value: "GBP", label: "GBP (£)" },
-        { value: "CHF", label: "CHF" },
-    ];
-
     // Search suppliers (includeId ensures current supplier is always included)
     const searchSuppliers = useCallback(async (search: string) => {
         setIsLoadingSuppliers(true);
@@ -321,40 +313,21 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                             {t("items.sections.pricing")}
                         </h4>
 
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                                <Label htmlFor="current_price">{t("items.fields.purchasePrice")}</Label>
-                                <Input
-                                    id="current_price"
-                                    type="number"
-                                    step={0.01}
-                                    min="0"
-                                    value={formData.current_price ?? ""}
-                                    onChange={(e) =>
-                                        handleChange("current_price", e.target.value ? parseFloat(e.target.value) : null)
-                                    }
-                                    error={!!errors.current_price}
-                                    hint={errors.current_price}
-                                    disabled={isLoading}
-                                />
-                            </div>
-                            <div>
-                                <Label htmlFor="currency">{t("items.fields.currency")}</Label>
-                                <select
-                                    id="currency"
-                                    value={formData.currency}
-                                    onChange={(e) => handleChange("currency", e.target.value)}
-                                    disabled={isLoading}
-                                    title={t("items.fields.currency")}
-                                    className="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
-                                >
-                                    {currencyOptions.map((opt) => (
-                                        <option key={opt.value} value={opt.value}>
-                                            {opt.label}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                        <div>
+                            <Label htmlFor="current_price">{t("items.fields.purchasePrice")}</Label>
+                            <Input
+                                id="current_price"
+                                type="number"
+                                step={0.01}
+                                min="0"
+                                value={formData.current_price ?? ""}
+                                onChange={(e) =>
+                                    handleChange("current_price", e.target.value ? parseFloat(e.target.value) : null)
+                                }
+                                error={!!errors.current_price}
+                                hint={errors.current_price}
+                                disabled={isLoading}
+                            />
                         </div>
                     </div>
 

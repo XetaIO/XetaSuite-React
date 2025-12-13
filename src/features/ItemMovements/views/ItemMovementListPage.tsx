@@ -9,7 +9,7 @@ import {
     FaArrowRightFromBracket,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createItemActions } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -180,9 +180,17 @@ const ItemMovementListPage: FC = () => {
     };
 
     const getMovementActions = (movement: ItemMovement) => [
-        { ...createItemActions.edit(() => handleEdit(movement), t), hidden: !canUpdate },
-        { ...createItemActions.delete(() => handleDeleteClick(movement), t), hidden: !canUpdate },
+        { ...createActions.edit(() => handleEdit(movement), t), hidden: !canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(movement), t), hidden: !canUpdate },
     ];
+
+    const handleClearFilters = () => {
+        setSearchQuery('');
+        setTypeFilter('');
+        setCurrentPage(1);
+    };
+
+    const hasActiveFilters = searchQuery || typeFilter;
 
     return (
         <>
@@ -219,7 +227,7 @@ const ItemMovementListPage: FC = () => {
                                 placeholder={t("itemMovements.searchPlaceholder")}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                             />
                             {searchQuery && (
                                 <button
@@ -239,22 +247,34 @@ const ItemMovementListPage: FC = () => {
                             )}
                         </div>
 
-                        {/* Type Filter */}
-                        <select
-                            value={typeFilter}
-                            onChange={(e) => {
-                                setTypeFilter(e.target.value as MovementType | "");
-                                setCurrentPage(1);
-                            }}
-                            title={t("itemMovements.filters.allTypes")}
-                            className="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-300 focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
-                        >
-                            {getTypeFilterOptions().map((option) => (
-                                <option key={option.value} value={option.value} className="dark:bg-gray-900">
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="flex items-center gap-4">
+                            {/* Clear Filters */}
+                            {hasActiveFilters && (
+                                <button
+                                    onClick={handleClearFilters}
+                                    className="text-sm text-brand-500 hover:text-brand-600"
+                                >
+                                    {t('common.clearFilters')}
+                                </button>
+                            )}
+                            {/* Type Filter */}
+                            <select
+                                value={typeFilter}
+                                onChange={(e) => {
+                                    setTypeFilter(e.target.value as MovementType | "");
+                                    setCurrentPage(1);
+                                }}
+                                title={t("itemMovements.filters.allTypes")}
+                                className="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-300 focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                            >
+                                {getTypeFilterOptions().map((option) => (
+                                    <option key={option.value} value={option.value} className="dark:bg-gray-900">
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
                     </div>
                 </div>
 
@@ -361,10 +381,7 @@ const ItemMovementListPage: FC = () => {
                                             <div>
                                                 <p>{t("itemMovements.noResultsWithFilters")}</p>
                                                 <button
-                                                    onClick={() => {
-                                                        setSearchQuery("");
-                                                        setTypeFilter("");
-                                                    }}
+                                                    onClick={handleClearFilters}
                                                     className="mt-2 text-sm text-brand-500 hover:text-brand-600"
                                                 >
                                                     {t("common.clearFilters")}
@@ -415,7 +432,7 @@ const ItemMovementListPage: FC = () => {
                                             {formatCurrency(movement.total_price)}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {movement.supplier_name || "—"}
+                                            {movement.supplier?.name || "—"}
                                             {movement.supplier_invoice_number && (
                                                 <span className="ml-1.5 text-xs">
                                                     ({movement.supplier_invoice_number})

@@ -113,7 +113,7 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({
 };
 
 // Helper to create common action items for Items
-export const createItemActions = {
+export const createActions = {
     view: (onClick: () => void, t: (key: string) => string): ActionItem => ({
         key: "view",
         label: t("common.view"),
@@ -150,58 +150,6 @@ export const createItemActions = {
         key: "stockExit",
         label: t("items.movements.addExit"),
         icon: <FaArrowRightFromBracket className="h-4 w-4" />,
-        onClick,
-        variant: "danger",
-    }),
-};
-
-
-export const createMaterialActions = {
-    view: (onClick: () => void, t: (key: string) => string): ActionItem => ({
-        key: "view",
-        label: t("common.view"),
-        icon: <FaEye className="h-4 w-4" />,
-        onClick,
-    }),
-    edit: (onClick: () => void, t: (key: string) => string): ActionItem => ({
-        key: "edit",
-        label: t("common.edit"),
-        icon: <FaPenToSquare className="h-4 w-4" />,
-        onClick,
-    }),
-    delete: (onClick: () => void, t: (key: string) => string): ActionItem => ({
-        key: "delete",
-        label: t("common.delete"),
-        icon: <FaTrash className="h-4 w-4" />,
-        onClick,
-        variant: "danger",
-    }),
-    qrCode: (onClick: () => void, t: (key: string) => string): ActionItem => ({
-        key: "qrCode",
-        label: t("materials.qrCode.title"),
-        icon: <FaQrcode className="h-4 w-4" />,
-        onClick,
-    }),
-};
-
-// Helper to create common action items for Incidents
-export const createIncidentActions = {
-    view: (onClick: () => void, t: (key: string) => string): ActionItem => ({
-        key: "view",
-        label: t("common.view"),
-        icon: <FaEye className="h-4 w-4" />,
-        onClick,
-    }),
-    edit: (onClick: () => void, t: (key: string) => string): ActionItem => ({
-        key: "edit",
-        label: t("common.edit"),
-        icon: <FaPenToSquare className="h-4 w-4" />,
-        onClick,
-    }),
-    delete: (onClick: () => void, t: (key: string) => string): ActionItem => ({
-        key: "delete",
-        label: t("common.delete"),
-        icon: <FaTrash className="h-4 w-4" />,
         onClick,
         variant: "danger",
     }),

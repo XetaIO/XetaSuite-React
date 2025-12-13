@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { ThemeProvider } from "@/shared/hooks";
 import { ThemedToastContainer } from "@/shared/components/common";
 import { AuthProvider } from "@/features/Auth/store/AuthContext";
+import { SettingsProvider } from "@/features/Settings";
 import AppRoutes from "./AppRoutes";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,10 +17,12 @@ const App: FC = () => {
         <HelmetProvider>
             <ThemeProvider>
                 <BrowserRouter>
-                    <AuthProvider>
-                        <AppRoutes />
-                        <ThemedToastContainer />
-                    </AuthProvider>
+                    <SettingsProvider>
+                        <AuthProvider>
+                            <AppRoutes />
+                            <ThemedToastContainer />
+                        </AuthProvider>
+                    </SettingsProvider>
                 </BrowserRouter>
             </ThemeProvider>
         </HelmetProvider>

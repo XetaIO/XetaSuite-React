@@ -20,11 +20,12 @@ import {
     FaArrowRightArrowLeft,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, DeleteConfirmModal, Pagination } from "@/shared/components/common";
-import { Badge, Table, TableHeader, TableBody, TableRow, TableCell, ActionsDropdown, createItemActions } from "@/shared/components/ui";
+import { Badge, Table, TableHeader, TableBody, TableRow, TableCell, ActionsDropdown, createActions } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatDateTime, formatDate, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
+import { useSettings } from "@/features/Settings";
 import { ItemMovementModal, type MovementType } from "@/features/ItemMovements";
 import { ItemManager } from "../services";
 import { ItemModal } from "./ItemModal";
@@ -39,6 +40,7 @@ const ItemDetailPage: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
     const { hasPermission } = useAuth();
+    const { getCurrency } = useSettings();
     const [qrScanHandled, setQrScanHandled] = useState(false);
 
     const [item, setItem] = useState<ItemDetail | null>(null);
@@ -273,11 +275,11 @@ const ItemDetailPage: FC = () => {
                     <div className="flex flex-wrap items-center gap-2">
                         <ActionsDropdown
                             actions={[
-                                { ...createItemActions.stockEntry(() => handleMovement("entry"), t), hidden: !canCreateMovement },
-                                { ...createItemActions.stockExit(() => handleMovement("exit"), t), hidden: !canCreateMovement },
-                                { ...createItemActions.qrCode(handleQrCode, t), hidden: !canGenerateQrCode },
-                                { ...createItemActions.edit(handleEdit, t), hidden: !canUpdate },
-                                { ...createItemActions.delete(() => deleteModal.openModal(), t), hidden: !canDelete },
+                                { ...createActions.stockEntry(() => handleMovement("entry"), t), hidden: !canCreateMovement },
+                                { ...createActions.stockExit(() => handleMovement("exit"), t), hidden: !canCreateMovement },
+                                { ...createActions.qrCode(handleQrCode, t), hidden: !canGenerateQrCode },
+                                { ...createActions.edit(handleEdit, t), hidden: !canUpdate },
+                                { ...createActions.delete(() => deleteModal.openModal(), t), hidden: !canDelete },
                             ]}
                         />
                     </div>
@@ -327,7 +329,7 @@ const ItemDetailPage: FC = () => {
                         </div>
                         <div>
                             <p className="text-2xl font-semibold text-gray-900 dark:text-white">
-                                {formatCurrency(item.current_price, item.currency)}
+                                {formatCurrency(item.current_price, getCurrency())}
                             </p>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{t("items.fields.price")}</p>
                         </div>
@@ -652,7 +654,7 @@ const ItemDetailPage: FC = () => {
                                             {movement.total_price > 0
                                                 ? formatCurrency(
                                                     movement.total_price,
-                                                    item.currency
+                                                    getCurrency()
                                                 )
                                                 : "—"}
                                         </TableCell>
@@ -682,7 +684,6 @@ const ItemDetailPage: FC = () => {
                 </h3>
                 <ItemPriceHistoryChart
                     priceHistory={priceHistory}
-                    currency={item.currency}
                     isLoading={isLoadingPriceHistory}
                 />
             </div>

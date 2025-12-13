@@ -104,4 +104,23 @@ export const API_ENDPOINTS = {
         SEVERITY_OPTIONS: '/api/v1/incidents/severity-options',
         STATUS_OPTIONS: '/api/v1/incidents/status-options',
     },
+    // Maintenances
+    MAINTENANCES: {
+        BASE: '/api/v1/maintenances',
+        DETAIL: (id: number) => `/api/v1/maintenances/${id}`,
+        INCIDENTS: (id: number) => `/api/v1/maintenances/${id}/incidents`,
+        ITEM_MOVEMENTS: (id: number) => `/api/v1/maintenances/${id}/item-movements`,
+        AVAILABLE_MATERIALS: '/api/v1/maintenances/available-materials',
+        AVAILABLE_INCIDENTS: '/api/v1/maintenances/available-incidents',
+        AVAILABLE_OPERATORS: '/api/v1/maintenances/available-operators',
+        AVAILABLE_COMPANIES: '/api/v1/maintenances/available-companies',
+        AVAILABLE_ITEMS: '/api/v1/maintenances/available-items',
+        TYPE_OPTIONS: '/api/v1/maintenances/type-options',
+        STATUS_OPTIONS: '/api/v1/maintenances/status-options',
+        REALIZATION_OPTIONS: '/api/v1/maintenances/realization-options',
+    },
+    // Settings
+    SETTINGS: {
+        BASE: '/api/v1/settings',
+    },
 } as const;

@@ -12,7 +12,6 @@ export interface ItemMovementItem {
     reference: string | null;
     current_stock?: number;
     current_price?: number;
-    currency?: string;
 }
 
 /**
@@ -28,6 +27,10 @@ export interface ItemMovement {
     supplier_id: number | null;
     supplier_name: string | null;
     supplier_invoice_number: string | null;
+    supplier?: {
+        id: number;
+        name: string;
+    };
     invoice_date: string | null;
     movable_type: string | null;
     movable_id: number | null;

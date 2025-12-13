@@ -9,10 +9,11 @@ import {
     FaCubes,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ActionsDropdown, createItemActions } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ActionsDropdown, createActions } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
+import { useSettings } from "@/features/Settings";
 import { ItemMovementModal } from "@/features/ItemMovements";
 import type { MovementType } from "@/features/ItemMovements";
 import { ItemManager } from "../services";
@@ -27,6 +28,7 @@ type SortDirection = "asc" | "desc";
 const ItemListPage: FC = () => {
     const { t } = useTranslation();
     const { hasPermission } = useAuth();
+    const { getCurrency } = useSettings();
     const [items, setItems] = useState<Item[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -180,11 +182,11 @@ const ItemListPage: FC = () => {
     };
 
     const getItemActions = (item: Item) => [
-        createItemActions.stockEntry(() => handleMovement(item, "entry"), t),
-        createItemActions.stockExit(() => handleMovement(item, "exit"), t),
-        { ...createItemActions.qrCode(() => handleQrCode(item), t), hidden: !canGenerateQrCode },
-        { ...createItemActions.edit(() => handleEdit(item), t), hidden: !canUpdate },
-        { ...createItemActions.delete(() => handleDeleteClick(item), t), hidden: !canDelete },
+        createActions.stockEntry(() => handleMovement(item, "entry"), t),
+        createActions.stockExit(() => handleMovement(item, "exit"), t),
+        { ...createActions.qrCode(() => handleQrCode(item), t), hidden: !canGenerateQrCode },
+        { ...createActions.edit(() => handleEdit(item), t), hidden: !canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(item), t), hidden: !canDelete },
     ];
 
     // Check if any action is available
@@ -197,6 +199,14 @@ const ItemListPage: FC = () => {
         { value: "critical", label: t("items.stockStatus.critical") },
         { value: "empty", label: t("items.stockStatus.empty") },
     ];
+
+    const handleClearFilters = () => {
+        setSearchQuery('');
+        setStockStatusFilter('');
+        setCurrentPage(1);
+    };
+
+    const hasActiveFilters = searchQuery || stockStatusFilter;
 
     return (
         <>
@@ -242,7 +252,7 @@ const ItemListPage: FC = () => {
                                 placeholder={t("items.searchPlaceholder")}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                             />
                             {searchQuery && (
                                 <button
@@ -262,22 +272,34 @@ const ItemListPage: FC = () => {
                             )}
                         </div>
 
-                        {/* Stock Status Filter */}
-                        <select
-                            value={stockStatusFilter}
-                            onChange={(e) => {
-                                setStockStatusFilter(e.target.value as StockStatus | "");
-                                setCurrentPage(1);
-                            }}
-                            title={t("items.filters.stockStatus")}
-                            className="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-300 focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
-                        >
-                            {getStockStatusOptions().map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="flex items-center gap-4">
+                            {/* Clear Filters */}
+                            {hasActiveFilters && (
+                                <button
+                                    onClick={handleClearFilters}
+                                    className="text-sm text-brand-500 hover:text-brand-600"
+                                >
+                                    {t('common.clearFilters')}
+                                </button>
+                            )}
+                            {/* Stock Status Filter */}
+                            <select
+                                value={stockStatusFilter}
+                                onChange={(e) => {
+                                    setStockStatusFilter(e.target.value as StockStatus | "");
+                                    setCurrentPage(1);
+                                }}
+                                title={t("items.filters.stockStatus")}
+                                className="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-300 focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                            >
+                                {getStockStatusOptions().map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
                     </div>
                 </div>
 
@@ -382,13 +404,11 @@ const ItemListPage: FC = () => {
                                         colSpan={7}
                                     >
                                         {debouncedSearch || stockStatusFilter ? (
-                                            <div>
+                                            <div className="flex flex-col items-center justify-center">
+                                                <FaCubes className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
                                                 <p>{t("items.noItemsFor")}</p>
                                                 <button
-                                                    onClick={() => {
-                                                        setSearchQuery("");
-                                                        setStockStatusFilter("");
-                                                    }}
+                                                    onClick={handleClearFilters}
                                                     className="mt-2 text-sm text-brand-500 hover:text-brand-600"
                                                 >
                                                     {t("common.clearFilters")}
@@ -443,7 +463,7 @@ const ItemListPage: FC = () => {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {formatCurrency(item.current_price, item.currency)}
+                                            {formatCurrency(item.current_price, getCurrency())}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {item.supplier?.name || "—"}

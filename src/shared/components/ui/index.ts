@@ -21,7 +21,7 @@ export {
 // Dropdown
 export { Dropdown } from "./dropdown/Dropdown";
 export { DropdownItem } from "./dropdown/DropdownItem";
-export { ActionsDropdown, createItemActions, createMaterialActions, createIncidentActions } from "./dropdown/ActionsDropdown";
+export { ActionsDropdown, createActions } from "./dropdown/ActionsDropdown";
 export type { ActionItem } from "./dropdown/ActionsDropdown";
 export { SearchableDropdown } from "./dropdown/SearchableDropdown";
 export type { DropdownOption, PinnedItem, SearchableDropdownProps } from "./dropdown/SearchableDropdown";

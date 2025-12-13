@@ -38,6 +38,13 @@
         "optional": "optionnel",
         "qrCode": "QR Code",
         "retry": "Réessayer",
+        "increase": "Augmenter",
+        "decrease": "Diminuer",
+        "view": "Voir",
+        "details": "Détails",
+        "history": "Historique",
+        "notFound": "Non trouvé",
+        "editedBy": "Modifié par",
         "export": {
             "button": "Exporter ({{count}})",
             "exporting": "Export en cours...",
@@ -641,6 +648,10 @@
             "created": "L'incident a été créé avec succès",
             "updated": "L'incident a été mis à jour avec succès",
             "deleted": "L'incident a été supprimé avec succès"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger l'incident",
+            "notFound": "Incident non trouvé"
         }
     },
     "validation": {
@@ -697,6 +708,139 @@
         "unauthorizedDescription": "Vous n'avez pas les permissions nécessaires pour accéder à cette page. Veuillez contacter votre administrateur si vous pensez qu'il s'agit d'une erreur.",
         "backToDashboard": "Retour au tableau de bord",
         "forbidden": "Accès interdit"
+    },
+    "maintenances": {
+        "title": "Maintenances",
+        "description": "Gestion des maintenances",
+        "maintenance": "Maintenance",
+        "reason": "Raison",
+        "listTitle": "Liste des maintenances",
+        "notFound": "Maintenance introuvable",
+        "notFoundMessage": "La maintenance que vous recherchez n'existe pas ou a été supprimée.",
+        "create": "Nouvelle maintenance",
+        "edit": "Modifier la maintenance",
+        "manageMaintenances": "Gérez vos maintenances et leur suivi",
+        "manageMaintenancesAndTheirInformation": "Gérez vos maintenances et leurs informations",
+        "noMaintenancesFor": "Aucune maintenance trouvée pour cette recherche",
+        "deleteTitle": "Supprimer la maintenance",
+        "forMaterial": "Matériel",
+        "searchPlaceholder": "Rechercher par description...",
+        "spareParts": "Pièces détachées",
+        "resolvedAt": "Date de résolution",
+        "operators": "Opérateurs",
+        "companies": "Entreprises",
+        "incidents": "Incidents",
+        "fields": {
+            "description": "Description",
+            "descriptionPlaceholder": "Description de la maintenance...",
+            "reason": "Raison",
+            "reasonPlaceholder": "Raison de la maintenance...",
+            "type": "Type",
+            "status": "Statut",
+            "realization": "Réalisation",
+            "material": "Matériel",
+            "selectMaterial": "Sélectionner un matériel",
+            "started_at": "Date de début",
+            "resolved_at": "Date de résolution",
+            "incidents": "Incidents",
+            "selectIncidents": "Sélectionner des incidents",
+            "operators": "Opérateurs",
+            "selectOperators": "Sélectionner des opérateurs",
+            "companies": "Entreprises",
+            "selectCompanies": "Sélectionner des entreprises",
+            "spareParts": "Pièces détachées",
+            "addSpareParts": "Ajouter des pièces détachées"
+        },
+        "filters": {
+            "allStatuses": "Tous les statuts",
+            "allTypes": "Tous les types",
+            "allRealizations": "Toutes les réalisations"
+        },
+        "status": {
+            "planned": "Planifiée",
+            "in_progress": "En cours",
+            "completed": "Terminée",
+            "canceled": "Annulée"
+        },
+        "type": {
+            "corrective": "Corrective",
+            "preventive": "Préventive",
+            "inspection": "Inspection",
+            "improvement": "Amélioration"
+        },
+        "realization": {
+            "internal": "Interne",
+            "external": "Externe",
+            "both": "Mixte"
+        },
+        "detail": {
+            "info": "Informations",
+            "backToList": "Retour à la liste",
+            "descriptionAndReason": "Description et Raison",
+            "operators": "Opérateurs",
+            "companies": "Entreprises",
+            "linkedIncidents": "Incidents liés",
+            "spareParts": "Pièces détachées utilisées",
+            "totalCost": "Coût total",
+            "incidentDescription": "Description",
+            "incidentStatus": "Statut",
+            "incidentSeverity": "Sévérité",
+            "incidentStartedAt": "Date de début",
+            "itemName": "Article",
+            "itemReference": "Référence",
+            "quantity": "Quantité",
+            "unitPrice": "Prix unitaire",
+            "totalPrice": "Prix total"
+        },
+        "stats": {
+            "incidents": "Incidents",
+            "operators": "Opérateurs",
+            "companies": "Entreprises",
+            "spareParts": "Pièces détachées"
+        },
+        "form": {
+            "selectType": "Sélectionner un type",
+            "selectStatus": "Sélectionner un statut",
+            "selectRealization": "Sélectionner une réalisation",
+            "selectMaterial": "Sélectionner un matériel",
+            "noMaterial": "Aucun matériel sélectionné",
+            "currentMaterial": "Matériel actuel",
+            "noMaterialsAvailable": "Aucun matériel disponible",
+            "noIncidentsAvailable": "Aucun incident disponible",
+            "noOperatorsAvailable": "Aucun opérateur disponible",
+            "noCompaniesAvailable": "Aucune entreprise disponible",
+            "noItemsAvailable": "Aucun article disponible",
+            "searchMaterial": "Rechercher un matériel...",
+            "searchOperators": "Rechercher des opérateurs...",
+            "searchCompanies": "Rechercher des entreprises...",
+            "searchIncidents": "Rechercher des incidents...",
+            "searchItems": "Rechercher des articles...",
+            "operatorsRequired": "Au moins un opérateur est requis pour une maintenance interne ou mixte",
+            "companiesRequired": "Au moins une entreprise est requise pour une maintenance externe ou mixte",
+            "selectItem": "Sélectionner un article",
+            "selectOperators": "Sélectionner des opérateurs",
+            "selectCompanies": "Sélectionner des entreprises",
+            "selectIncidents": "Sélectionner des incidents",
+            "selected": "sélectionné(s)",
+            "incidentsSelected": "incident(s) sélectionné(s)",
+            "addSparePart": "Ajouter une pièce détachée",
+            "currentStock": "Stock actuel",
+            "itemPrice": "Prix",
+            "stockAvailable": "Stock disponible",
+            "descriptionPlaceholder": "Description de la maintenance...",
+            "reasonPlaceholder": "Raison de la maintenance..."
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger les informations de maintenance",
+            "createFailed": "Impossible de créer la maintenance",
+            "updateFailed": "Impossible de mettre à jour la maintenance",
+            "deleteFailed": "Impossible de supprimer la maintenance"
+        },
+        "messages": {
+            "created": "La maintenance a été créée avec succès",
+            "updated": "La maintenance a été mise à jour avec succès",
+            "deleted": "La maintenance a été supprimée avec succès"
+        }
     },
     "pagination": {
         "showing": "Affichage de {{from}} à {{to}} sur {{total}} résultats",

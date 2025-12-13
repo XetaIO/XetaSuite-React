@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FaArrowLeft, FaPenToSquare, FaMagnifyingGlass, FaLayerGroup, FaGear, FaCalendar } from 'react-icons/fa6';
 import { ZoneManager } from '../services/ZoneManager';
 import { ZoneModal } from './ZoneModal';
-import type { Zone, ZoneChild, ZoneMaterial } from '../types/zone';
+import type { Zone, ZoneChild, ZoneMaterial } from '../types';
 import PageBreadcrumb from '@/shared/components/common/PageBreadcrumb';
 import PageMeta from '@/shared/components/common/PageMeta';
 import { Button, Badge } from '@/shared/components/ui';

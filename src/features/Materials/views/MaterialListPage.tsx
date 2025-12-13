@@ -11,7 +11,7 @@ import {
     FaEnvelope,
 } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createMaterialActions } from '@/shared/components/ui';
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
@@ -174,9 +174,9 @@ const MaterialListPage: FC = () => {
     };
 
     const getMaterialActions = (material: Material) => [
-        { ...createMaterialActions.qrCode(() => handleQrCode(material), t), hidden: !canGenerateQrCode },
-        { ...createMaterialActions.edit(() => handleEdit(material), t), hidden: !canUpdate },
-        { ...createMaterialActions.delete(() => handleDeleteClick(material), t), hidden: !canDelete },
+        { ...createActions.qrCode(() => handleQrCode(material), t), hidden: !canGenerateQrCode },
+        { ...createActions.edit(() => handleEdit(material), t), hidden: !canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(material), t), hidden: !canDelete },
     ];
 
     // Check if any action is available
@@ -222,7 +222,7 @@ const MaterialListPage: FC = () => {
                                 placeholder={t('common.searchPlaceholder')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                             />
                             {searchQuery && (
                                 <button
@@ -347,7 +347,8 @@ const MaterialListPage: FC = () => {
                                         colSpan={6}
                                     >
                                         {debouncedSearch ? (
-                                            <div>
+                                            <div className="flex flex-col items-center justify-center">
+                                                <FaWrench className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
                                                 <p>{t('materials.noMaterialsFor', { search: debouncedSearch })}</p>
                                                 <button
                                                     onClick={() => setSearchQuery('')}

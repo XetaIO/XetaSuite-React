@@ -4,6 +4,7 @@ import { FaArrowRightToBracket, FaArrowRightFromBracket, FaPen } from "react-ico
 import { Modal, Button, SearchableDropdown, type PinnedItem } from "@/shared/components/ui";
 import { Input, Label } from "@/shared/components/form";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
+import { useSettings } from "@/features/Settings";
 import { ItemMovementManager } from "../services";
 import type { MovementType, ItemMovementFormData, ItemMovement } from "../types";
 import type { AvailableSupplier } from "@/features/Items/types";
@@ -18,7 +19,6 @@ interface ItemMovementModalProps {
         reference?: string | null;
         current_stock: number;
         current_price?: number | null;
-        currency?: string;
         supplier_id?: number | null;
     } | null;
     type?: MovementType;
@@ -36,6 +36,7 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
     onSuccess,
 }) => {
     const { t } = useTranslation();
+    const { getCurrency } = useSettings();
 
     // Determine mode: edit if movement is provided, otherwise create
     const isEditMode = !!movement;
@@ -49,7 +50,6 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
         reference: movement.item.reference,
         current_stock: movement.item.current_stock ?? 0,
         current_price: movement.item.current_price ?? 0,
-        currency: movement.item.currency,
         supplier_id: movement.supplier_id,
     } : item;
 
@@ -303,7 +303,7 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
                                     <span className="font-semibold">
                                         {formatCurrency(
                                             (formData.unit_price ?? effectiveItem.current_price ?? 0) * formData.quantity,
-                                            effectiveItem.currency || 'EUR'
+                                            getCurrency()
                                         )}
                                     </span>
                                 </p>

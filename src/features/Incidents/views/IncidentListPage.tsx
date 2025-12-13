@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, type FC } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
@@ -16,7 +17,7 @@ import {
     TableCell,
     Badge,
     ActionsDropdown,
-    createIncidentActions,
+    createActions,
 } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
@@ -32,6 +33,7 @@ type SortDirection = 'asc' | 'desc';
 
 const IncidentListPage: FC = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const { hasPermission } = useAuth();
     const [incidents, setIncidents] = useState<Incident[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
@@ -57,6 +59,7 @@ const IncidentListPage: FC = () => {
 
     // Permissions
     const canCreate = hasPermission('incident.create');
+    const canView = hasPermission('incident.view');
     const canUpdate = hasPermission('incident.update');
     const canDelete = hasPermission('incident.delete');
 
@@ -204,8 +207,8 @@ const IncidentListPage: FC = () => {
     };
 
     const getIncidentActions = (incident: Incident) => [
-        { ...createIncidentActions.edit(() => handleEdit(incident), t), hidden: !canUpdate },
-        { ...createIncidentActions.delete(() => handleDeleteClick(incident), t), hidden: !canDelete },
+        { ...createActions.edit(() => handleEdit(incident), t), hidden: !canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(incident), t), hidden: !canDelete },
     ];
 
     // Check if any action is available
@@ -291,7 +294,7 @@ const IncidentListPage: FC = () => {
                                 placeholder={t('common.searchPlaceholder')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                             />
                             {searchQuery && (
                                 <button
@@ -312,6 +315,16 @@ const IncidentListPage: FC = () => {
                         </div>
 
                         <div className="flex items-center gap-4">
+                            {/* Clear Filters */}
+                            {hasActiveFilters && (
+                                <button
+                                    onClick={handleClearFilters}
+                                    className="text-sm text-brand-500 hover:text-brand-600"
+                                >
+                                    {t('common.clearFilters')}
+                                </button>
+                            )}
+
                             {/* Status Filter */}
                             <select
                                 value={statusFilter}
@@ -348,17 +361,6 @@ const IncidentListPage: FC = () => {
                                 ))}
                             </select>
                         </div>
-
-
-                        {/* Clear Filters */}
-                        {hasActiveFilters && (
-                            <button
-                                onClick={handleClearFilters}
-                                className="text-sm text-brand-500 hover:text-brand-600"
-                            >
-                                {t('common.clearFilters')}
-                            </button>
-                        )}
                     </div>
                 </div>
 
@@ -474,7 +476,8 @@ const IncidentListPage: FC = () => {
                                         colSpan={hasAnyAction ? 7 : 6}
                                     >
                                         {debouncedSearch || statusFilter || severityFilter ? (
-                                            <div>
+                                            <div className="flex flex-col items-center justify-center">
+                                                <FaTriangleExclamation className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
                                                 <p>{t('incidents.noIncidentsFiltered')}</p>
                                                 <button
                                                     onClick={handleClearFilters}
@@ -492,22 +495,44 @@ const IncidentListPage: FC = () => {
                                 incidents.map((incident) => (
                                     <TableRow
                                         key={incident.id}
-                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+                                        className={`border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 ${canView ? 'cursor-pointer' : ''}`}
+                                        onClick={canView ? () => navigate(`/incidents/${incident.id}`) : undefined}
                                     >
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-start gap-2">
                                                 <FaTriangleExclamation className="mt-0.5 h-4 w-4 shrink-0 text-warning-500" />
                                                 <div>
-                                                    <p className="font-medium text-gray-900 dark:text-white line-clamp-2">
-                                                        {incident.description}
-                                                    </p>
-                                                    {incident.maintenance && (
-                                                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                            {t('incidents.linkedToMaintenance')}:{' '}
-                                                            <span className="line-clamp-1">
-                                                                {incident.maintenance.description}
-                                                            </span>
-                                                        </p>
+                                                    {canView ? (
+                                                        <Link
+                                                            to={`/incidents/${incident.id}`}
+                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                        >
+                                                            <p className="font-medium text-gray-900 dark:text-white line-clamp-2">
+                                                                {incident.description}
+                                                            </p>
+                                                            {incident.maintenance && (
+                                                                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                                    {t('incidents.linkedToMaintenance')}:{' '}
+                                                                    <span className="line-clamp-1">
+                                                                        {incident.maintenance.description}
+                                                                    </span>
+                                                                </p>
+                                                            )}
+                                                        </Link>
+                                                    ) : (
+                                                        <>
+                                                            <p className="font-medium text-gray-900 dark:text-white line-clamp-2">
+                                                                {incident.description}
+                                                            </p>
+                                                            {incident.maintenance && (
+                                                                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                                    {t('incidents.linkedToMaintenance')}:{' '}
+                                                                    <span className="line-clamp-1">
+                                                                        {incident.maintenance.description}
+                                                                    </span>
+                                                                </p>
+                                                            )}
+                                                        </>
                                                     )}
                                                 </div>
                                             </div>
@@ -532,7 +557,7 @@ const IncidentListPage: FC = () => {
                                             {formatDate(incident.created_at)}
                                         </TableCell>
                                         {hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
+                                            <TableCell className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                                                 <div className="flex items-center justify-end">
                                                     <ActionsDropdown actions={getIncidentActions(incident)} />
                                                 </div>
