@@ -11,7 +11,6 @@ interface LowStockItemsCardProps {
 
 export default function LowStockItemsCard({ items, isLoading = false }: LowStockItemsCardProps) {
     const { t } = useTranslation();
-    console.log(items);
 
     const getStockPercentage = (current: number, min: number) => {
         return Math.min((current / min) * 100, 100);

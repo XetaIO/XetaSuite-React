@@ -402,9 +402,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
 
         let result;
         if (isEditing) {
-            // Don't send item_movements on update
-            const { item_movements, ...updateData } = submitData;
-            result = await MaintenanceManager.update(maintenance.id, updateData);
+            result = await MaintenanceManager.update(maintenance.id, submitData);
         } else {
             result = await MaintenanceManager.create(submitData);
         }

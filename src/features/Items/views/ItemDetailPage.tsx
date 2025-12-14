@@ -157,7 +157,7 @@ const ItemDetailPage: FC = () => {
             setMovementType(actionParam as MovementType);
             movementModal.openModal();
         }
-    }, [item, isLoading, qrScanHandled, searchParams, setSearchParams, movementModal.openModal]);
+    }, [item, isLoading, qrScanHandled, searchParams, setSearchParams, movementModal]);
 
     useEffect(() => {
         loadMovements(movementsPage);
