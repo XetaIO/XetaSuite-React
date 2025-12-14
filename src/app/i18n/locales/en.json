@@ -44,6 +44,7 @@
         "details": "Details",
         "history": "History",
         "notFound": "Not found",
+        "units": "units",
         "editedBy": "Edited by",
         "export": {
             "button": "Export ({{count}})",
@@ -111,11 +112,15 @@
         "pageTitle": "Dashboard | XetaSuite",
         "pageDescription": "XetaSuite Dashboard - Maintenance, incident and stock management",
         "welcome": "Welcome, {{name}}",
+        "headquartersView": "Headquarters View",
+        "aggregatedStats": "Aggregated statistics from all sites",
         "stats": {
             "maintenancesThisMonth": "Maintenances this month",
+            "maintenancesTrend": "Maintenances trend",
+            "cleaningsThisMonth": "Cleanings this month",
+            "cleaningsTrend": "Cleanings trend",
             "openIncidents": "Open incidents",
-            "itemsInStock": "Items in stock",
-            "activeSites": "Active sites"
+            "itemsInStock": "Items in stock"
         },
         "charts": {
             "maintenanceEvolution": "Maintenance evolution",
@@ -127,10 +132,13 @@
         },
         "activity": {
             "title": "Recent activity",
+            "noActivity": "No recent activity",
             "status": {
                 "pending": "Pending",
                 "completed": "Completed",
-                "inProgress": "In progress"
+                "inProgress": "In progress",
+                "entry": "Entry",
+                "exit": "Exit"
             }
         },
         "incidents": {
@@ -148,6 +156,7 @@
         },
         "maintenances": {
             "upcoming": "Upcoming maintenances",
+            "noUpcoming": "No upcoming maintenances",
             "schedule": "Schedule",
             "priority": {
                 "low": "Low",
@@ -161,7 +170,8 @@
         },
         "lowStock": {
             "title": "Low stock",
-            "itemsCount": "{{count}} items"
+            "itemsCount": "{{count}} items",
+            "noItems": "No low stock items"
         }
     },
     "suppliers": {
@@ -893,6 +903,57 @@
             "stockEntry": "Stock entry",
             "stockExit": "Stock exit",
             "noActions": "No actions available"
+        }
+    },
+    "cleanings": {
+        "title": "Cleanings",
+        "subtitle": "Manage material cleanings",
+        "description": "Cleaning management",
+        "create": "New cleaning",
+        "edit": "Edit cleaning",
+        "delete": "Delete cleaning",
+        "deleteConfirm": "Are you sure you want to delete this cleaning? This action cannot be undone.",
+        "search": "Search by material or description...",
+        "material": "Material",
+        "type": "Type",
+        "description": "Description",
+        "date": "Date",
+        "createdBy": "Created by",
+        "noMaterialsAvailable": "No materials available",
+        "filters": {
+            "allTypes": "All types"
+        },
+        "types": {
+            "daily": "Daily",
+            "weekly": "Weekly",
+            "bimonthly": "Bi-monthly",
+            "monthly": "Monthly",
+            "quarterly": "Quarterly",
+            "biannual": "Bi-annual",
+            "annual": "Annual",
+            "casual": "Casual"
+        },
+        "form": {
+            "selectMaterial": "Select a material",
+            "searchMaterial": "Search for a material...",
+            "selectType": "Select a type",
+            "descriptionPlaceholder": "Describe the cleaning performed...",
+            "materialCannotBeChanged": "Material cannot be changed after creation",
+            "currentMaterial": "Current material"
+        },
+        "empty": {
+            "title": "No cleanings",
+            "noData": "No cleanings have been recorded yet.",
+            "withFilters": "No cleanings match the selected filters."
+        },
+        "messages": {
+            "created": "Cleaning has been created successfully",
+            "updated": "Cleaning has been updated successfully",
+            "deleted": "Cleaning has been deleted successfully"
+        },
+        "errors": {
+            "loadFailed": "Failed to load cleaning",
+            "notFound": "Cleaning not found"
         }
     }
 }

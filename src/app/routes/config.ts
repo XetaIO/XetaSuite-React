@@ -41,6 +41,9 @@ const IncidentDetailPage = lazy(() => import("@/features/Incidents/views/Inciden
 const MaintenanceListPage = lazy(() => import("@/features/Maintenances/views/MaintenanceListPage"));
 const MaintenanceDetailPage = lazy(() => import("@/features/Maintenances/views/MaintenanceDetailPage"));
 
+// Lazy load Cleanings feature
+const CleaningListPage = lazy(() => import("@/features/Cleanings/views/CleaningListPage"));
+
 /**
  * Guest-only routes (login, register, forgot password)
  */
@@ -169,6 +172,12 @@ export const protectedRoutes: RouteConfig[] = [
         element: MaintenanceDetailPage,
         requireAuth: true,
         permission: "maintenance.view"
+    },
+    {
+        path: "/cleanings",
+        element: CleaningListPage,
+        requireAuth: true,
+        permission: "cleaning.viewAny"
     },
     // Catch-all for unknown routes within authenticated layout
     {

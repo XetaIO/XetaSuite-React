@@ -21,6 +21,7 @@ interface IncidentModalProps {
     onClose: () => void;
     incident: Incident | null;
     onSuccess: () => void;
+    preselectedMaterialId?: number | null;
 }
 
 const initialFormData: IncidentFormData = {
@@ -33,7 +34,13 @@ const initialFormData: IncidentFormData = {
     resolved_at: null,
 };
 
-export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, incident, onSuccess }) => {
+export const IncidentModal: FC<IncidentModalProps> = ({
+    isOpen,
+    onClose,
+    incident,
+    onSuccess,
+    preselectedMaterialId
+}) => {
     const { t } = useTranslation();
     const [formData, setFormData] = useState<IncidentFormData>(initialFormData);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -168,8 +175,19 @@ export const IncidentModal: FC<IncidentModalProps> = ({ isOpen, onClose, inciden
                 }
             }
         } else {
-            // Set default material if creating and materials available
-            if (materialsResult.success && materialsResult.data && materialsResult.data.length > 0) {
+            // Creating new cleaning
+            // Check for preselected material from QR scan
+            if (preselectedMaterialId) {
+                setFormData((prev) => ({ ...prev, material_id: preselectedMaterialId }));
+                // Find and set original material for display
+                if (materialsResult.success && materialsResult.data) {
+                    const preselected = materialsResult.data.find(m => m.id === preselectedMaterialId);
+                    if (preselected) {
+                        setOriginalMaterial(preselected);
+                    }
+                }
+            } else if (materialsResult.success && materialsResult.data && materialsResult.data.length > 0) {
+                // Set default material if creating and materials available
                 setFormData((prev) => ({ ...prev, material_id: materialsResult.data![0].id }));
             }
         }

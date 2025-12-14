@@ -15,9 +15,10 @@ interface IncidentsSummary {
 
 interface IncidentsSummaryCardProps {
     summary: IncidentsSummary;
+    isLoading?: boolean;
 }
 
-export default function IncidentsSummaryCard({ summary }: IncidentsSummaryCardProps) {
+export default function IncidentsSummaryCard({ summary, isLoading = false }: IncidentsSummaryCardProps) {
     const { t } = useTranslation();
 
     const statusItems = [
@@ -39,49 +40,69 @@ export default function IncidentsSummaryCard({ summary }: IncidentsSummaryCardPr
                 <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
                     {t('dashboard.incidents.summary')}
                 </h3>
-                <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {summary.total}
-                </span>
+                {isLoading ? (
+                    <div className="h-8 w-12 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                ) : (
+                    <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                        {summary.total}
+                    </span>
+                )}
             </div>
             <div className="p-6">
-                {/* Progress bar */}
-                <div className="flex h-3 w-full overflow-hidden rounded-full">
-                    {statusItems.map((item, index) => (
-                        <div
-                            key={index}
-                            className={`${item.color} transition-all`}
-                            style={{ width: `${(item.value / summary.total) * 100}%` }}
-                        />
-                    ))}
-                </div>
-
-                {/* Status legend */}
-                <div className="mt-4 flex justify-between">
-                    {statusItems.map((item, index) => (
-                        <div key={index} className="text-center">
-                            <div className="flex items-center justify-center gap-1.5">
-                                <span className={`h-2.5 w-2.5 rounded-full ${item.color}`} />
-                                <span className="text-sm text-gray-600 dark:text-gray-400">{item.label}</span>
-                            </div>
-                            <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">
-                                {item.value}
-                            </p>
+                {isLoading ? (
+                    <>
+                        <div className="h-3 w-full animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                        <div className="mt-4 flex justify-between">
+                            {Array.from({ length: 3 }).map((_, index) => (
+                                <div key={index} className="text-center">
+                                    <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700 mx-auto" />
+                                    <div className="mt-2 h-6 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700 mx-auto" />
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    </>
+                ) : (
+                    <>
+                        {/* Progress bar */}
+                        <div className="flex h-3 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+                            {summary.total > 0 && statusItems.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className={`${item.color} transition-all`}
+                                    style={{ width: `${(item.value / summary.total) * 100}%` }}
+                                />
+                            ))}
+                        </div>
 
-                {/* Severity breakdown */}
-                <div className="mt-6 border-t border-gray-100 pt-4 dark:border-gray-800">
-                    <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('dashboard.incidents.bySeverity')}</h4>
-                    <div className="mt-3 grid grid-cols-4 gap-2">
-                        {severityItems.map((item, index) => (
-                            <div key={index} className="text-center">
-                                <p className={`text-xl font-bold ${item.color}`}>{item.value}</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">{item.label}</p>
+                        {/* Status legend */}
+                        <div className="mt-4 flex justify-between">
+                            {statusItems.map((item, index) => (
+                                <div key={index} className="text-center">
+                                    <div className="flex items-center justify-center gap-1.5">
+                                        <span className={`h-2.5 w-2.5 rounded-full ${item.color}`} />
+                                        <span className="text-sm text-gray-600 dark:text-gray-400">{item.label}</span>
+                                    </div>
+                                    <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">
+                                        {item.value}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Severity breakdown */}
+                        <div className="mt-6 border-t border-gray-100 pt-4 dark:border-gray-800">
+                            <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('dashboard.incidents.bySeverity')}</h4>
+                            <div className="mt-3 grid grid-cols-4 gap-2">
+                                {severityItems.map((item, index) => (
+                                    <div key={index} className="text-center">
+                                        <p className={`text-xl font-bold ${item.color}`}>{item.value}</p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">{item.label}</p>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                </div>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

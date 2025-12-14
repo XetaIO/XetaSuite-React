@@ -44,6 +44,7 @@
         "details": "Détails",
         "history": "Historique",
         "notFound": "Non trouvé",
+        "units": "unités",
         "editedBy": "Modifié par",
         "export": {
             "button": "Exporter ({{count}})",
@@ -111,11 +112,15 @@
         "pageTitle": "Tableau de bord | XetaSuite",
         "pageDescription": "Tableau de bord XetaSuite - Gestion des maintenances, incidents et stocks",
         "welcome": "Bienvenue, {{name}}",
+        "headquartersView": "Vue Siège",
+        "aggregatedStats": "Statistiques agrégées de tous les sites",
         "stats": {
             "maintenancesThisMonth": "Maintenances ce mois",
+            "maintenancesTrend": "Tendance des maintenances",
+            "cleaningsThisMonth": "Nettoyages ce mois",
+            "cleaningsTrend": "Tendance des nettoyages",
             "openIncidents": "Incidents ouverts",
-            "itemsInStock": "Articles en stock",
-            "activeSites": "Sites actifs"
+            "itemsInStock": "Articles en stock"
         },
         "charts": {
             "maintenanceEvolution": "Évolution des maintenances",
@@ -127,10 +132,13 @@
         },
         "activity": {
             "title": "Activité récente",
+            "noActivity": "Aucune activité récente",
             "status": {
                 "pending": "En attente",
                 "completed": "Terminé",
-                "inProgress": "En cours"
+                "inProgress": "En cours",
+                "entry": "Entrée",
+                "exit": "Sortie"
             }
         },
         "incidents": {
@@ -148,6 +156,7 @@
         },
         "maintenances": {
             "upcoming": "Maintenances à venir",
+            "noUpcoming": "Aucune maintenance à venir",
             "schedule": "Planifier",
             "priority": {
                 "low": "Basse",
@@ -161,7 +170,8 @@
         },
         "lowStock": {
             "title": "Stock faible",
-            "itemsCount": "{{count}} articles"
+            "itemsCount": "{{count}} articles",
+            "noItems": "Aucun article en stock faible"
         }
     },
     "suppliers": {
@@ -885,6 +895,57 @@
             "stockEntry": "Entrée de stock",
             "stockExit": "Sortie de stock",
             "noActions": "Aucune action disponible"
+        }
+    },
+    "cleanings": {
+        "title": "Nettoyages",
+        "subtitle": "Gérer les nettoyages des matériels",
+        "description": "Gestion des nettoyages",
+        "create": "Nouveau nettoyage",
+        "edit": "Modifier le nettoyage",
+        "delete": "Supprimer le nettoyage",
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce nettoyage ? Cette action est irréversible.",
+        "search": "Rechercher par matériel ou description...",
+        "material": "Matériel",
+        "type": "Type",
+        "description": "Description",
+        "date": "Date",
+        "createdBy": "Créé par",
+        "noMaterialsAvailable": "Aucun matériel disponible",
+        "filters": {
+            "allTypes": "Tous les types"
+        },
+        "types": {
+            "daily": "Quotidien",
+            "weekly": "Hebdomadaire",
+            "bimonthly": "Bimensuel",
+            "monthly": "Mensuel",
+            "quarterly": "Trimestriel",
+            "biannual": "Semestriel",
+            "annual": "Annuel",
+            "casual": "Occasionnel"
+        },
+        "form": {
+            "selectMaterial": "Sélectionner un matériel",
+            "searchMaterial": "Rechercher un matériel...",
+            "selectType": "Sélectionner un type",
+            "descriptionPlaceholder": "Décrivez le nettoyage effectué...",
+            "materialCannotBeChanged": "Le matériel ne peut pas être modifié après création",
+            "currentMaterial": "Matériel actuel"
+        },
+        "empty": {
+            "title": "Aucun nettoyage",
+            "noData": "Aucun nettoyage n'a encore été enregistré.",
+            "withFilters": "Aucun nettoyage ne correspond aux filtres sélectionnés."
+        },
+        "messages": {
+            "created": "Le nettoyage a été créé avec succès",
+            "updated": "Le nettoyage a été mis à jour avec succès",
+            "deleted": "Le nettoyage a été supprimé avec succès"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger le nettoyage",
+            "notFound": "Nettoyage non trouvé"
         }
     }
 }

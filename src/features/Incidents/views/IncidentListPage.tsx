@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, type FC } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
@@ -39,6 +39,8 @@ const IncidentListPage: FC = () => {
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [qrScanHandled, setQrScanHandled] = useState(false);
 
     // Filters
     const [currentPage, setCurrentPage] = useState(1);
@@ -56,6 +58,9 @@ const IncidentListPage: FC = () => {
     // Selected incident for edit/delete
     const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    // Pre-selected material from QR scan
+    const [preselectedMaterialId, setPreselectedMaterialId] = useState<number | null>(null);
 
     // Permissions
     const canCreate = hasPermission('incident.create');
@@ -86,6 +91,30 @@ const IncidentListPage: FC = () => {
 
         loadFilterOptions();
     }, []);
+
+    // Handle QR code scan redirect: ?material=X&action=create
+    useEffect(() => {
+        if (qrScanHandled || isLoading) return;
+
+        const materialParam = searchParams.get('material');
+        const actionParam = searchParams.get('action');
+
+        if (materialParam && actionParam === 'create' && canCreate) {
+            // Mark as handled to prevent re-execution
+            setQrScanHandled(true);
+
+            // Clear URL params
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete('material');
+            newParams.delete('action');
+            setSearchParams(newParams, { replace: true });
+
+            // Set preselected material and open modal
+            setPreselectedMaterialId(parseInt(materialParam, 10));
+            setSelectedIncident(null);
+            incidentModal.openModal();
+        }
+    }, [qrScanHandled, isLoading, searchParams, setSearchParams, canCreate, incidentModal]);
 
     // Debounce search input
     useEffect(() => {
@@ -580,6 +609,7 @@ const IncidentListPage: FC = () => {
                 onClose={incidentModal.closeModal}
                 incident={selectedIncident}
                 onSuccess={handleModalSuccess}
+                preselectedMaterialId={preselectedMaterialId}
             />
 
             {/* Delete Confirmation Modal */}

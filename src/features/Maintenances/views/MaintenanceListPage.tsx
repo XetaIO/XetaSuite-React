@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, type FC } from 'react';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
@@ -47,6 +47,8 @@ const MaintenanceListPage: FC = () => {
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [qrScanHandled, setQrScanHandled] = useState(false);
 
     // Filters
     const [currentPage, setCurrentPage] = useState(1);
@@ -66,6 +68,9 @@ const MaintenanceListPage: FC = () => {
     // Selected maintenance for edit/delete
     const [selectedMaintenance, setSelectedMaintenance] = useState<Maintenance | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    // Pre-selected material from QR scan
+    const [preselectedMaterialId, setPreselectedMaterialId] = useState<number | null>(null);
 
     // Permissions
     const canView = hasPermission('maintenance.view');
@@ -101,6 +106,30 @@ const MaintenanceListPage: FC = () => {
 
         loadFilterOptions();
     }, []);
+
+    // Handle QR code scan redirect: ?material=X&action=create
+    useEffect(() => {
+        if (qrScanHandled || isLoading) return;
+
+        const materialParam = searchParams.get('material');
+        const actionParam = searchParams.get('action');
+
+        if (materialParam && actionParam === 'create' && canCreate) {
+            // Mark as handled to prevent re-execution
+            setQrScanHandled(true);
+
+            // Clear URL params
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete('material');
+            newParams.delete('action');
+            setSearchParams(newParams, { replace: true });
+
+            // Set preselected material and open modal
+            setPreselectedMaterialId(parseInt(materialParam, 10));
+            setSelectedMaintenance(null);
+            maintenanceModal.openModal();
+        }
+    }, [qrScanHandled, isLoading, searchParams, setSearchParams, canCreate, maintenanceModal]);
 
     // Debounce search input
     useEffect(() => {
@@ -180,13 +209,15 @@ const MaintenanceListPage: FC = () => {
         );
     };
 
-    const handleOpenCreate = () => {
+    const handleCreate = () => {
         setSelectedMaintenance(null);
+        setPreselectedMaterialId(null);
         maintenanceModal.openModal();
     };
 
-    const handleOpenEdit = (maintenance: Maintenance) => {
+    const handleEdit = (maintenance: Maintenance) => {
         setSelectedMaintenance(maintenance);
+        setPreselectedMaterialId(null);
         maintenanceModal.openModal();
     };
 
@@ -214,6 +245,11 @@ const MaintenanceListPage: FC = () => {
             showError(result.error || t('errors.generic'));
         }
         setIsDeleting(false);
+    };
+
+    const handleModalClose = () => {
+        maintenanceModal.closeModal();
+        setPreselectedMaterialId(null);
     };
 
     const handleSuccess = () => {
@@ -290,7 +326,7 @@ const MaintenanceListPage: FC = () => {
                                 variant="primary"
                                 size="sm"
                                 startIcon={<FaPlus className="h-4 w-4" />}
-                                onClick={handleOpenCreate}
+                                onClick={handleCreate}
                             >
                                 {t('maintenances.create')}
                             </Button>
@@ -397,6 +433,13 @@ const MaintenanceListPage: FC = () => {
                     </div>
                 </div>
 
+                {/* Error message */}
+                {error && (
+                    <div className="mx-6 mt-4 rounded-lg bg-error-50 p-4 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">
+                        {error}
+                    </div>
+                )}
+
                 {/* Table */}
                 <div className="overflow-x-auto">
                     <Table>
@@ -455,12 +498,6 @@ const MaintenanceListPage: FC = () => {
                                         </div>
                                     </TableCell>
                                 </TableRow>
-                            ) : error ? (
-                                <TableRow>
-                                    <TableCell colSpan={8}>
-                                        <div className="py-8 text-center text-error-500">{error}</div>
-                                    </TableCell>
-                                </TableRow>
                             ) : maintenances.length === 0 ? (
                                 <TableRow>
                                     <TableCell colSpan={8} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
@@ -469,12 +506,14 @@ const MaintenanceListPage: FC = () => {
                                             <p>
                                                 {t('maintenances.noMaintenancesFor')}
                                             </p>
-                                            <button
-                                                onClick={handleClearFilters}
-                                                className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                            >
-                                                {t('common.clearFilters')}
-                                            </button>
+                                            {hasActiveFilters && (
+                                                <button
+                                                    onClick={handleClearFilters}
+                                                    className="text-sm text-brand-500 hover:text-brand-600"
+                                                >
+                                                    {t('common.clearFilters')}
+                                                </button>
+                                            )}
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -538,7 +577,7 @@ const MaintenanceListPage: FC = () => {
                                                 <ActionsDropdown
                                                     actions={[
                                                         {
-                                                            ...createActions.edit(() => handleOpenEdit(maintenance), t),
+                                                            ...createActions.edit(() => handleEdit(maintenance), t),
                                                             hidden: !canUpdate,
                                                         },
                                                         {
@@ -570,9 +609,10 @@ const MaintenanceListPage: FC = () => {
             {/* Maintenance Modal */}
             <MaintenanceModal
                 isOpen={maintenanceModal.isOpen}
-                onClose={maintenanceModal.closeModal}
+                onClose={handleModalClose}
                 maintenance={selectedMaintenance}
                 onSuccess={handleSuccess}
+                preselectedMaterialId={preselectedMaterialId}
             />
 
             {/* Delete Confirmation Modal */}

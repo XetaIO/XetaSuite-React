@@ -17,9 +17,10 @@ const priorityColors = {
 
 interface UpcomingMaintenancesCardProps {
     maintenances: Maintenance[];
+    isLoading?: boolean;
 }
 
-export default function UpcomingMaintenancesCard({ maintenances }: UpcomingMaintenancesCardProps) {
+export default function UpcomingMaintenancesCard({ maintenances, isLoading = false }: UpcomingMaintenancesCardProps) {
     const { t } = useTranslation();
 
     const priorityLabels = {
@@ -45,32 +46,46 @@ export default function UpcomingMaintenancesCard({ maintenances }: UpcomingMaint
             </div>
             <div className="p-4">
                 <div className="space-y-3">
-                    {maintenances.map((maintenance) => (
-                        <div
-                            key={maintenance.id}
-                            className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50"
-                        >
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                    <h4 className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                                        {maintenance.title}
-                                    </h4>
-                                    <span className="shrink-0 rounded bg-gray-200 px-1.5 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300">
-                                        {typeLabels[maintenance.type]}
-                                    </span>
-                                </div>
-                                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                    📍 {maintenance.location}
-                                </p>
-                                <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-                                    📅 {maintenance.date}
-                                </p>
+                    {isLoading ? (
+                        Array.from({ length: 3 }).map((_, index) => (
+                            <div key={index} className="rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
+                                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                <div className="mt-2 h-3 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                <div className="mt-1 h-3 w-1/3 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                             </div>
-                            <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${priorityColors[maintenance.priority]}`}>
-                                {priorityLabels[maintenance.priority]}
-                            </span>
+                        ))
+                    ) : maintenances.length === 0 ? (
+                        <div className="p-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                            {t('dashboard.maintenances.noUpcoming')}
                         </div>
-                    ))}
+                    ) : (
+                        maintenances.map((maintenance) => (
+                            <div
+                                key={maintenance.id}
+                                className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50"
+                            >
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2">
+                                        <h4 className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                            {maintenance.title}
+                                        </h4>
+                                        <span className="shrink-0 rounded bg-gray-200 px-1.5 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                            {typeLabels[maintenance.type]}
+                                        </span>
+                                    </div>
+                                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                        📍 {maintenance.location}
+                                    </p>
+                                    <p className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                                        📅 {maintenance.date}
+                                    </p>
+                                </div>
+                                <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${priorityColors[maintenance.priority]}`}>
+                                    {priorityLabels[maintenance.priority]}
+                                </span>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
         </div>

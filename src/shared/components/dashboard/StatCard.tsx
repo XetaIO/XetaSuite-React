@@ -7,8 +7,10 @@ interface StatCardProps {
     trend?: {
         value: number;
         isPositive: boolean;
+        inverted?: boolean;
     };
     color?: "brand" | "success" | "warning" | "error" | "info";
+    isLoading?: boolean;
 }
 
 const colorClasses = {
@@ -19,18 +21,20 @@ const colorClasses = {
     info: "bg-blue-light-50 text-blue-light-600 dark:bg-blue-light-500/10 dark:text-blue-light-400",
 };
 
-export default function StatCard({ title, value, icon, trend, color = "brand" }: StatCardProps) {
+export default function StatCard({ title, value, icon, trend, color = "brand", isLoading = false }: StatCardProps) {
     return (
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3">
             <div className="flex items-center justify-between">
                 <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${colorClasses[color]}`}>
                     {icon}
                 </div>
-                {trend && (
+                {!isLoading && trend && (
                     <span
-                        className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${trend.isPositive
+                        className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${trend.inverted ? (trend.isPositive
+                            ? "bg-error-50 text-error-600 dark:bg-error-500/10 dark:text-error-400"
+                            : "bg-success-50 text-success-600 dark:bg-success-500/10 dark:text-success-400") : (trend.isPositive
                                 ? "bg-success-50 text-success-600 dark:bg-success-500/10 dark:text-success-400"
-                                : "bg-error-50 text-error-600 dark:bg-error-500/10 dark:text-error-400"
+                                : "bg-error-50 text-error-600 dark:bg-error-500/10 dark:text-error-400")
                             }`}
                     >
                         <svg
@@ -46,7 +50,11 @@ export default function StatCard({ title, value, icon, trend, color = "brand" }:
                 )}
             </div>
             <div className="mt-4">
-                <h4 className="text-2xl font-bold text-gray-900 dark:text-white">{value}</h4>
+                {isLoading ? (
+                    <div className="h-8 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                ) : (
+                    <h4 className="text-2xl font-bold text-gray-900 dark:text-white">{value}</h4>
+                )}
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{title}</p>
             </div>
         </div>

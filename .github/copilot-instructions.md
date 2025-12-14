@@ -506,7 +506,7 @@ Add to `src/types/index.ts` or create domain-specific files:
 export interface Item {
   id: number;
   name: string;
-  sku: string;
+  reference: string;
   quantity: number;
 }
 ```

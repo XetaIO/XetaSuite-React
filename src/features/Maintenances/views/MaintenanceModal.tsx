@@ -27,6 +27,7 @@ interface MaintenanceModalProps {
     onClose: () => void;
     maintenance: Maintenance | null;
     onSuccess: () => void;
+    preselectedMaterialId?: number | null;
 }
 
 const initialFormData: MaintenanceFormData = {
@@ -44,7 +45,13 @@ const initialFormData: MaintenanceFormData = {
     item_movements: [],
 };
 
-export const MaintenanceModal: FC<MaintenanceModalProps> = ({ isOpen, onClose, maintenance, onSuccess }) => {
+export const MaintenanceModal: FC<MaintenanceModalProps> = ({
+    isOpen,
+    onClose,
+    maintenance,
+    onSuccess,
+    preselectedMaterialId
+}) => {
     const { t } = useTranslation();
     const { getCurrencySymbol } = useSettings();
     const [formData, setFormData] = useState<MaintenanceFormData>(initialFormData);
@@ -293,6 +300,22 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({ isOpen, onClose, m
                         material_name: null,
                     })));
                 }
+            }
+        } else {
+            // Creating new cleaning
+            // Check for preselected material from QR scan
+            if (preselectedMaterialId) {
+                setFormData((prev) => ({ ...prev, material_id: preselectedMaterialId }));
+                // Find and set original material for display
+                if (materialsResult.success && materialsResult.data) {
+                    const preselected = materialsResult.data.find(m => m.id === preselectedMaterialId);
+                    if (preselected) {
+                        setOriginalMaterial(preselected);
+                    }
+                }
+            } else if (materialsResult.success && materialsResult.data && materialsResult.data.length > 0) {
+                // Set default material if creating and materials available
+                setFormData((prev) => ({ ...prev, material_id: materialsResult.data![0].id }));
             }
         }
 

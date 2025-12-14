@@ -119,6 +119,13 @@ export const API_ENDPOINTS = {
         STATUS_OPTIONS: '/api/v1/maintenances/status-options',
         REALIZATION_OPTIONS: '/api/v1/maintenances/realization-options',
     },
+    // Cleanings
+    CLEANINGS: {
+        BASE: '/api/v1/cleanings',
+        DETAIL: (id: number) => `/api/v1/cleanings/${id}`,
+        AVAILABLE_MATERIALS: '/api/v1/cleanings/available-materials',
+        TYPE_OPTIONS: '/api/v1/cleanings/type-options',
+    },
     // Settings
     SETTINGS: {
         BASE: '/api/v1/settings',
