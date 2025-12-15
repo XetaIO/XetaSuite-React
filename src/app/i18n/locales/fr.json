@@ -947,5 +947,51 @@
             "loadFailed": "Impossible de charger le nettoyage",
             "notFound": "Nettoyage non trouvé"
         }
+    },
+    "companies": {
+        "title": "Entreprises",
+        "description": "Gestion des entreprises de maintenance",
+        "listTitle": "Liste des entreprises",
+        "notFound": "Entreprise introuvable",
+        "notFoundMessage": "L'entreprise que vous recherchez n'existe pas ou a été supprimée.",
+        "create": "Nouvelle entreprise",
+        "edit": "Modifier l'entreprise",
+        "name": "Nom",
+        "nameLabel": "Nom *",
+        "maintenances": "Maintenances",
+        "manageCompaniesAndTheirInformation": "Gérez vos entreprises de maintenance et leurs informations",
+        "noCompanies": "Aucune entreprise trouvée",
+        "noCompaniesFor": "Aucune entreprise trouvée pour \"{{search}}\"",
+        "deleteTitle": "Supprimer l'entreprise",
+        "form": {
+            "namePlaceholder": "Nom de l'entreprise",
+            "descriptionPlaceholder": "Description de l'entreprise (optionnel)",
+            "descriptionLabel": "Description"
+        },
+        "messages": {
+            "created": "L'entreprise \"{{name}}\" a été créée avec succès",
+            "updated": "L'entreprise \"{{name}}\" a été mise à jour avec succès",
+            "deleted": "L'entreprise \"{{name}}\" a été supprimée avec succès"
+        },
+        "detail": {
+            "backToList": "Retour à la liste",
+            "totalMaintenances": "Maintenances totales",
+            "maintenancesListTitle": "Liste des maintenances",
+            "maintenancesListDescription": "Maintenances liées à l'entreprise {{name}}",
+            "searchMaintenances": "Rechercher des maintenances...",
+            "noMaintenances": "Aucune maintenance liée à cette entreprise",
+            "noMaintenancesFor": "Aucune maintenance trouvée pour \"{{search}}\"",
+            "material": "Matériel",
+            "site": "Site",
+            "type": "Type",
+            "status": "Statut",
+            "startedAt": "Date de début",
+            "charts": {
+                "bySite": "Maintenances par site",
+                "byType": "Maintenances par type",
+                "byStatus": "Maintenances par statut",
+                "byMonth": "Évolution mensuelle"
+            }
+        }
     }
 }

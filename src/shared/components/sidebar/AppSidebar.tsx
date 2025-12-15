@@ -67,7 +67,7 @@ const navItems: NavItem[] = [
             {
                 icon: <FaBuildingUser />,
                 nameKey: "sidebar.manageCompanies",
-                path: "/compagnies",
+                path: "/companies",
                 permission: "company.viewAny",
                 requiresHQ: true,
             }

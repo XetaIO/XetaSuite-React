@@ -44,6 +44,10 @@ const MaintenanceDetailPage = lazy(() => import("@/features/Maintenances/views/M
 // Lazy load Cleanings feature
 const CleaningListPage = lazy(() => import("@/features/Cleanings/views/CleaningListPage"));
 
+// Lazy load Companies feature
+const CompanyListPage = lazy(() => import("@/features/Companies/views/CompanyListPage"));
+const CompanyDetailPage = lazy(() => import("@/features/Companies/views/CompanyDetailPage"));
+
 /**
  * Guest-only routes (login, register, forgot password)
  */
@@ -178,6 +182,20 @@ export const protectedRoutes: RouteConfig[] = [
         element: CleaningListPage,
         requireAuth: true,
         permission: "cleaning.viewAny"
+    },
+    {
+        path: "/companies",
+        element: CompanyListPage,
+        requireAuth: true,
+        permission: "company.viewAny",
+        requiresHQ: true,
+    },
+    {
+        path: "/companies/:id",
+        element: CompanyDetailPage,
+        requireAuth: true,
+        permission: "company.view",
+        requiresHQ: true,
     },
     // Catch-all for unknown routes within authenticated layout
     {

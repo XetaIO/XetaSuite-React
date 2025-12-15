@@ -126,6 +126,13 @@ export const API_ENDPOINTS = {
         AVAILABLE_MATERIALS: '/api/v1/cleanings/available-materials',
         TYPE_OPTIONS: '/api/v1/cleanings/type-options',
     },
+    // Companies
+    COMPANIES: {
+        BASE: '/api/v1/companies',
+        DETAIL: (id: number) => `/api/v1/companies/${id}`,
+        MAINTENANCES: (id: number) => `/api/v1/companies/${id}/maintenances`,
+        STATS: (id: number) => `/api/v1/companies/${id}/stats`,
+    },
     // Settings
     SETTINGS: {
         BASE: '/api/v1/settings',

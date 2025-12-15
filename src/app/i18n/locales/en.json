@@ -955,5 +955,51 @@
             "loadFailed": "Failed to load cleaning",
             "notFound": "Cleaning not found"
         }
+    },
+    "companies": {
+        "title": "Companies",
+        "description": "Maintenance companies management",
+        "listTitle": "Companies list",
+        "notFound": "Company not found",
+        "notFoundMessage": "The company you are looking for does not exist or has been deleted.",
+        "create": "New company",
+        "edit": "Edit company",
+        "name": "Name",
+        "nameLabel": "Name *",
+        "maintenances": "Maintenances",
+        "manageCompaniesAndTheirInformation": "Manage your maintenance companies and their information",
+        "noCompanies": "No companies found",
+        "noCompaniesFor": "No companies found for \"{{search}}\"",
+        "deleteTitle": "Delete company",
+        "form": {
+            "namePlaceholder": "Company name",
+            "descriptionPlaceholder": "Company description (optional)",
+            "descriptionLabel": "Description"
+        },
+        "messages": {
+            "created": "Company \"{{name}}\" has been created successfully",
+            "updated": "Company \"{{name}}\" has been updated successfully",
+            "deleted": "Company \"{{name}}\" has been deleted successfully"
+        },
+        "detail": {
+            "backToList": "Back to list",
+            "totalMaintenances": "Total maintenances",
+            "maintenancesListTitle": "Maintenances list",
+            "maintenancesListDescription": "Maintenances linked to company {{name}}",
+            "searchMaintenances": "Search maintenances...",
+            "noMaintenances": "No maintenances linked to this company",
+            "noMaintenancesFor": "No maintenances found for \"{{search}}\"",
+            "material": "Material",
+            "site": "Site",
+            "type": "Type",
+            "status": "Status",
+            "startedAt": "Start date",
+            "charts": {
+                "bySite": "Maintenances by site",
+                "byType": "Maintenances by type",
+                "byStatus": "Maintenances by status",
+                "byMonth": "Monthly evolution"
+            }
+        }
     }
 }
