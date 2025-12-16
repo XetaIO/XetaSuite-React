@@ -8,6 +8,7 @@ import {
     FaArrowRightToBracket,
     FaArrowRightFromBracket,
     FaEye,
+    FaRotateLeft,
 } from "react-icons/fa6";
 
 export interface ActionItem {
@@ -152,5 +153,12 @@ export const createActions = {
         icon: <FaArrowRightFromBracket className="h-4 w-4" />,
         onClick,
         variant: "danger",
+    }),
+    restore: (onClick: () => void, t: (key: string) => string): ActionItem => ({
+        key: "restore",
+        label: t("common.restore"),
+        icon: <FaRotateLeft className="h-4 w-4" />,
+        onClick,
+        variant: "success",
     }),
 };

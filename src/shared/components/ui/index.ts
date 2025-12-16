@@ -25,6 +25,8 @@ export { ActionsDropdown, createActions } from "./dropdown/ActionsDropdown";
 export type { ActionItem } from "./dropdown/ActionsDropdown";
 export { SearchableDropdown } from "./dropdown/SearchableDropdown";
 export type { DropdownOption, PinnedItem, SearchableDropdownProps } from "./dropdown/SearchableDropdown";
+export { MultiSelectDropdown } from "./dropdown/MultiSelectDropdown";
+export type { MultiSelectOption, MultiSelectDropdownProps } from "./dropdown/MultiSelectDropdown";
 
 // Avatar
 export { default as Avatar } from "./avatar/Avatar";

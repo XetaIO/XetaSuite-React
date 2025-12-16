@@ -69,7 +69,6 @@ const navItems: NavItem[] = [
                 nameKey: "sidebar.manageCompanies",
                 path: "/companies",
                 permission: "company.viewAny",
-                requiresHQ: true,
             }
         ],
     },
@@ -100,7 +99,6 @@ const navItems: NavItem[] = [
                 nameKey: "sidebar.manageSuppliers",
                 path: "/suppliers",
                 permission: "supplier.viewAny",
-                requiresHQ: true,
             }
         ],
     },
@@ -159,6 +157,7 @@ const othersItems: NavItem[] = [
                 nameKey: "sidebar.manageUsers",
                 path: "/users",
                 permission: "user.viewAny",
+                requiresHQ: true,
             }
         ],
     },
@@ -171,12 +170,14 @@ const othersItems: NavItem[] = [
                 nameKey: "sidebar.manageRoles",
                 path: "/roles",
                 permission: "role.viewAny",
+                requiresHQ: true,
             },
             {
                 icon: <FaUserShield />,
                 nameKey: "sidebar.managePermissions",
                 path: "/permissions",
                 permission: "permission.viewAny",
+                requiresHQ: true,
             }
         ],
     },

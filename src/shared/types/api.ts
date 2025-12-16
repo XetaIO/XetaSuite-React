@@ -13,3 +13,8 @@ export interface ValidationErrors {
 export interface SingleResponse<T> {
     data: T;
 }
+
+// Manager result type for service layer
+export type ManagerResult<T> =
+    | { success: true; data: T }
+    | { success: false; error: string; data?: undefined };

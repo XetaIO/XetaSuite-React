@@ -133,6 +133,19 @@ export const API_ENDPOINTS = {
         MAINTENANCES: (id: number) => `/api/v1/companies/${id}/maintenances`,
         STATS: (id: number) => `/api/v1/companies/${id}/stats`,
     },
+    // Users
+    USERS: {
+        BASE: '/api/v1/users',
+        DETAIL: (id: number) => `/api/v1/users/${id}`,
+        RESTORE: (id: number) => `/api/v1/users/${id}/restore`,
+        AVAILABLE_SITES: '/api/v1/users/available-sites',
+        AVAILABLE_ROLES: '/api/v1/users/available-roles',
+        AVAILABLE_PERMISSIONS: '/api/v1/users/available-permissions',
+        ROLES_PER_SITE: (id: number) => `/api/v1/users/${id}/roles-per-site`,
+        CLEANINGS: (id: number) => `/api/v1/users/${id}/cleanings`,
+        MAINTENANCES: (id: number) => `/api/v1/users/${id}/maintenances`,
+        INCIDENTS: (id: number) => `/api/v1/users/${id}/incidents`,
+    },
     // Settings
     SETTINGS: {
         BASE: '/api/v1/settings',

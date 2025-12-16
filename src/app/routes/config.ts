@@ -48,6 +48,10 @@ const CleaningListPage = lazy(() => import("@/features/Cleanings/views/CleaningL
 const CompanyListPage = lazy(() => import("@/features/Companies/views/CompanyListPage"));
 const CompanyDetailPage = lazy(() => import("@/features/Companies/views/CompanyDetailPage"));
 
+// Lazy load Users feature
+const UserListPage = lazy(() => import("@/features/Users/views/UserListPage"));
+const UserDetailPage = lazy(() => import("@/features/Users/views/UserDetailPage"));
+
 /**
  * Guest-only routes (login, register, forgot password)
  */
@@ -88,14 +92,12 @@ export const protectedRoutes: RouteConfig[] = [
         element: SupplierListPage,
         requireAuth: true,
         permission: "supplier.viewAny",
-        requiresHQ: true,
     },
     {
         path: "/suppliers/:id",
         element: SupplierDetailPage,
         requireAuth: true,
         permission: "supplier.view",
-        requiresHQ: true,
     },
     {
         path: "/sites",
@@ -188,13 +190,25 @@ export const protectedRoutes: RouteConfig[] = [
         element: CompanyListPage,
         requireAuth: true,
         permission: "company.viewAny",
-        requiresHQ: true,
     },
     {
         path: "/companies/:id",
         element: CompanyDetailPage,
         requireAuth: true,
         permission: "company.view",
+    },
+    {
+        path: "/users",
+        element: UserListPage,
+        requireAuth: true,
+        permission: "user.viewAny",
+        requiresHQ: true,
+    },
+    {
+        path: "/users/:id",
+        element: UserDetailPage,
+        requireAuth: true,
+        permission: "user.view",
         requiresHQ: true,
     },
     // Catch-all for unknown routes within authenticated layout
