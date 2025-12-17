@@ -78,6 +78,7 @@ const MaintenanceListPage: FC = () => {
     const canUpdate = !isOnHeadquarters && hasPermission('maintenance.update');
     const canDelete = !isOnHeadquarters && hasPermission('maintenance.delete');
     const canViewSite = hasPermission('site.view');
+    const canViewMaterials = hasPermission('material.view');
 
     // Modals
     const maintenanceModal = useModal();
@@ -449,9 +450,6 @@ const MaintenanceListPage: FC = () => {
                     <Table>
                         <TableHeader>
                             <TableRow className="border-b border-gray-200 dark:border-gray-800">
-                                <TableCell isHeader className="w-16 px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    ID
-                                </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t('common.description')}
                                 </TableCell>
@@ -460,6 +458,9 @@ const MaintenanceListPage: FC = () => {
                                         {t('common.site')}
                                     </TableCell>
                                 )}
+                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t('maintenances.fields.material')}
+                                </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
                                         onClick={() => handleSort('type')}
@@ -482,9 +483,6 @@ const MaintenanceListPage: FC = () => {
                                     {t('maintenances.fields.realization')}
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t('maintenances.fields.material')}
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
                                         onClick={() => handleSort('started_at')}
                                         className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
@@ -504,9 +502,6 @@ const MaintenanceListPage: FC = () => {
                             {isLoading ? (
                                 [...Array(8)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
@@ -563,19 +558,18 @@ const MaintenanceListPage: FC = () => {
                                         className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
                                         <TableCell className="px-6 py-4">
-                                            <span className="font-mono text-sm text-gray-500">
-                                                #{maintenance.id}
-                                            </span>
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
                                             {canView ? (
                                                 <Link
                                                     to={`/maintenances/${maintenance.id}`}
                                                     className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400">
-                                                    <span className="line-clamp-2">{maintenance.description}</span>
+                                                    <span className="line-clamp-2">
+                                                        #{maintenance.id} - {maintenance.description}
+                                                    </span>
                                                 </Link>
                                             ) : (
-                                                <span className="line-clamp-2">{maintenance.description}</span>
+                                                <span className="line-clamp-2">
+                                                    #{maintenance.id} - {maintenance.description}
+                                                </span>
                                             )}
                                         </TableCell>
                                         {isOnHeadquarters && (
@@ -592,6 +586,24 @@ const MaintenanceListPage: FC = () => {
                                                 )}
                                             </TableCell>
                                         )}
+                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                            {maintenance.material ? (
+                                                <>
+                                                    {canViewMaterials ? (
+                                                        <Link
+                                                            to={`/materials/${maintenance.material.id}`}
+                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                        >
+                                                            {maintenance.material.name}
+                                                        </Link>
+                                                    ) : (
+                                                        maintenance.material.name
+                                                    )}
+                                                </>
+                                            ) : (
+                                                maintenance.material_name || '—'
+                                            )}
+                                        </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
                                             <Badge color={getTypeBadgeColor(maintenance.type)} size="md">
                                                 {maintenance.type_label}
@@ -606,15 +618,6 @@ const MaintenanceListPage: FC = () => {
                                             <Badge color={getRealizationBadgeColor(maintenance.realization)} size="md">
                                                 {maintenance.realization_label}
                                             </Badge>
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {maintenance.material_name ? (
-                                                <span className="text-gray-800 dark:text-white/90">
-                                                    {maintenance.material_name}
-                                                </span>
-                                            ) : (
-                                                <span>-</span>
-                                            )}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {maintenance.started_at ? (

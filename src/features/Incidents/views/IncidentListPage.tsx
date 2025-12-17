@@ -68,6 +68,8 @@ const IncidentListPage: FC = () => {
     const canUpdate = !isOnHeadquarters && hasPermission('incident.update');
     const canDelete = !isOnHeadquarters && hasPermission('incident.delete');
     const canViewSite = hasPermission('site.view');
+    const canViewMaterials = hasPermission('material.view');
+    const canViewReporters = hasPermission('user.view');
 
     // Modals
     const incidentModal = useModal();
@@ -584,12 +586,27 @@ const IncidentListPage: FC = () => {
                                                         {incident.site.name}
                                                     </Link>
                                                 ) : (
-                                                    <span>{incident.site?.name ?? '-'}</span>
+                                                    incident.site?.name || '—'
                                                 )}
                                             </TableCell>
                                         )}
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {incident.material?.name || incident.material_name || '-'}
+                                            {incident.material ? (
+                                                <>
+                                                    {canViewMaterials ? (
+                                                        <Link
+                                                            to={`/materials/${incident.material.id}`}
+                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                        >
+                                                            {incident.material.name}
+                                                        </Link>
+                                                    ) : (
+                                                        incident.material.name || '—'
+                                                    )}
+                                                </>
+                                            ) : (
+                                                incident.material_name || '—'
+                                            )}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
                                             <Badge color={getSeverityBadgeColor(incident.severity)} size="md">
@@ -602,7 +619,22 @@ const IncidentListPage: FC = () => {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {incident.reporter?.full_name || incident.reported_by_name || '-'}
+                                            {incident.reporter ? (
+                                                <>
+                                                    {canViewReporters ? (
+                                                        <Link
+                                                            to={`/users/${incident.reporter.id}`}
+                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                        >
+                                                            {incident.reporter.full_name}
+                                                        </Link>
+                                                    ) : (
+                                                        <> {incident.reporter.full_name} </>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <> {incident.reported_by_name || '-'} </>
+                                            )}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(incident.created_at)}

@@ -7,6 +7,9 @@ export interface Cleaning {
     description: string;
     type: CleaningType;
     type_label: string;
+    // Site info
+    site_id: number;
+    site?: CleaningSite;
     // Material info
     material_id: number;
     material_name: string;
@@ -21,8 +24,6 @@ export interface Cleaning {
 }
 
 export interface CleaningDetail extends Cleaning {
-    site_id: number;
-    site?: CleaningSite;
     edited_by_id: number | null;
     editor?: CleaningEditor;
 }

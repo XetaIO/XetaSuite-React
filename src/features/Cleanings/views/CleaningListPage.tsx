@@ -61,10 +61,13 @@ const CleaningListPage: FC = () => {
     const [preselectedMaterialId, setPreselectedMaterialId] = useState<number | null>(null);
 
     // Permissions
+    const canView = hasPermission('cleaning.view');
     const canCreate = !isOnHeadquarters && hasPermission('cleaning.create');
     const canUpdate = !isOnHeadquarters && hasPermission('cleaning.update');
     const canDelete = !isOnHeadquarters && hasPermission('cleaning.delete');
     const canViewMaterials = hasPermission('material.view');
+    const canViewSites = hasPermission('site.view');
+    const canViewCreators = hasPermission('user.view');
 
     // Modals
     const cleaningModal = useModal();
@@ -379,8 +382,16 @@ const CleaningListPage: FC = () => {
                         <TableHeader>
                             <TableRow className="border-b border-gray-200 dark:border-gray-800">
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t('cleanings.id')}
+                                </TableCell>
+                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t('cleanings.material')}
                                 </TableCell>
+                                {isOnHeadquarters && (
+                                    <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        {t('cleanings.site')}
+                                    </TableCell>
+                                )}
                                 <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
                                         onClick={() => handleSort('type')}
@@ -414,16 +425,41 @@ const CleaningListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                <TableRow>
-                                    <TableCell colSpan={hasAnyAction ? 6 : 5}>
-                                        <div className="flex items-center justify-center py-8">
-                                            <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-500 border-t-transparent" />
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                [...Array(8)].map((_, index) => (
+                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </TableCell>
+                                        )}
+                                        <TableCell className="px-6 py-4">
+                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        {hasAnyAction && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </TableCell>
+                                        )}
+                                    </TableRow>
+                                ))
                             ) : cleanings.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={hasAnyAction ? 6 : 5} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                                    <TableCell colSpan={hasAnyAction ? 7 : (isOnHeadquarters ? 7 : 6)} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                                         <div className="flex flex-col items-center justify-center">
                                             <FaBroom className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
                                             <p>
@@ -448,13 +484,47 @@ const CleaningListPage: FC = () => {
                                         key={cleaning.id}
                                         className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
+                                        <TableCell className="px-6 py-4 text-center">
+                                            {canView ? (
+                                                <Link
+                                                    to={canView ? `/cleanings/${cleaning.id}` : '#'}
+                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                >
+                                                    #{cleaning.id}
+                                                </Link>
+                                            ) : (
+                                                <>
+                                                    #{cleaning.id}
+                                                </>
+                                            )}
+                                        </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <Link
-                                                to={`/materials/${cleaning.material_id}`}
-                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                            >
-                                                {cleaning.material?.name || cleaning.material_name}
-                                            </Link>
+                                            {canViewMaterials ? (
+                                                <Link
+                                                    to={`/materials/${cleaning.material_id}`}
+                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                >
+                                                    {cleaning.material?.name || cleaning.material_name}
+                                                </Link>
+                                            ) : (
+                                                <>
+                                                    {cleaning.material?.name || cleaning.material_name}
+                                                </>
+                                            )}
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-center">
+                                            {canViewSites ? (
+                                                <Link
+                                                    to={`/sites/${cleaning.site_id}`}
+                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                >
+                                                    {cleaning.site?.name || '-'}
+                                                </Link>
+                                            ) : (
+                                                <>
+                                                    {cleaning.site?.name || '-'}
+                                                </>
+                                            )}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
                                             {getTypeBadge(cleaning.type)}
@@ -470,9 +540,18 @@ const CleaningListPage: FC = () => {
                                             </span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <span className="text-sm text-gray-600 dark:text-gray-300">
-                                                {cleaning.creator?.full_name || cleaning.created_by_name || '-'}
-                                            </span>
+                                            {canViewCreators ? (
+                                                <Link
+                                                    to={`/users/${cleaning.created_by_id}`}
+                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                >
+                                                    {cleaning.creator?.full_name || cleaning.created_by_name || '-'}
+                                                </Link>
+                                            ) : (
+                                                <span className="text-sm text-gray-500 dark:text-gray-400">
+                                                    {cleaning.creator?.full_name || cleaning.created_by_name || '-'}
+                                                </span>
+                                            )}
                                         </TableCell>
                                         {hasAnyAction && (
                                             <TableCell className="px-6 py-4 text-right">

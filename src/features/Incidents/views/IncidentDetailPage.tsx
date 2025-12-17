@@ -10,10 +10,10 @@ import {
     FaCalendarCheck,
     FaUser,
     FaCircleInfo,
-    FaLocationDot,
-    FaCubes,
     FaScrewdriverWrench,
     FaBuilding,
+    FaWrench,
+    FaSignsPost,
 } from 'react-icons/fa6';
 import { IncidentManager } from '../services/IncidentManager';
 import { IncidentModal } from './IncidentModal';
@@ -72,6 +72,9 @@ export function IncidentDetailPage() {
     // Permissions
     const canUpdate = !isOnHeadquarters && hasPermission('incident.update');
     const canDelete = !isOnHeadquarters && hasPermission('incident.delete');
+    const canViewReporters = hasPermission('user.view');
+    const canViewMaintenances = hasPermission('maintenance.view');
+    const canViewMaterials = hasPermission('material.view');
 
     // Load incident details
     const loadIncident = useCallback(async () => {
@@ -245,28 +248,44 @@ export function IncidentDetailPage() {
                         {incident.material && (
                             <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
                                 <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                    <FaCubes className="h-5 w-5 text-brand-500" />
+                                    <FaWrench className="h-5 w-5 text-brand-500" />
                                     {t('incidents.material')}
                                 </h2>
-                                <Link
-                                    to={`/materials/${incident.material.id}`}
-                                    className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
-                                >
-                                    <div className="flex items-center justify-between">
+                                {canViewMaterials ? (
+                                    <Link
+                                        to={`/materials/${incident.material.id}`}
+                                        className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="font-medium text-gray-900 dark:text-white">
+                                                    {incident.material.name}
+                                                </p>
+                                                {incident.material.zone && (
+                                                    <p className="mt-1 flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                                                        <FaSignsPost className="h-3 w-3" />
+                                                        {incident.material.zone.name}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400" />
+                                        </div>
+                                    </Link>
+                                ) : (
+                                    <div className="flex items-center justify-between rounded-lg border  border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 p-4">
                                         <div>
                                             <p className="font-medium text-gray-900 dark:text-white">
                                                 {incident.material.name}
                                             </p>
                                             {incident.material.zone && (
                                                 <p className="mt-1 flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                                                    <FaLocationDot className="h-3 w-3" />
+                                                    <FaSignsPost className="h-3 w-3" />
                                                     {incident.material.zone.name}
                                                 </p>
                                             )}
                                         </div>
-                                        <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400" />
                                     </div>
-                                </Link>
+                                )}
                             </div>
                         )}
 
@@ -277,11 +296,35 @@ export function IncidentDetailPage() {
                                     <FaScrewdriverWrench className="h-5 w-5 text-brand-500" />
                                     {t('incidents.linkedToMaintenance')}
                                 </h2>
-                                <Link
-                                    to={`/maintenances/${incident.maintenance.id}`}
-                                    className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
-                                >
-                                    <div className="flex items-center justify-between">
+                                {canViewMaintenances ? (
+                                    <Link
+                                        to={`/maintenances/${incident.maintenance.id}`}
+                                        className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="font-medium text-gray-900 dark:text-white">
+                                                    {t('incidents.maintenance')} #{incident.maintenance.id}
+                                                </p>
+                                                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                                                    {incident.maintenance.description}
+                                                </p>
+                                                {incident.maintenance.status && (
+                                                    <div className="mt-2">
+                                                        <Badge
+                                                            color={maintenanceStatusColors[incident.maintenance.status] || 'dark'}
+                                                            size="sm"
+                                                        >
+                                                            {incident.maintenance.status}
+                                                        </Badge>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400 shrink-0 ml-4" />
+                                        </div>
+                                    </Link>
+                                ) : (
+                                    <div className="flex items-center justify-between rounded-lg border  border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 p-4">
                                         <div>
                                             <p className="font-medium text-gray-900 dark:text-white">
                                                 {t('incidents.maintenance')} #{incident.maintenance.id}
@@ -300,9 +343,8 @@ export function IncidentDetailPage() {
                                                 </div>
                                             )}
                                         </div>
-                                        <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400 shrink-0 ml-4" />
                                     </div>
-                                </Link>
+                                )}
                             </div>
                         )}
                     </div>
@@ -344,7 +386,22 @@ export function IncidentDetailPage() {
                                             {t('incidents.reportedBy')}
                                         </p>
                                         <p className="font-medium text-gray-900 dark:text-white">
-                                            {incident.reporter?.full_name || incident.reported_by_name || '-'}
+                                            {incident.reporter ? (
+                                                <>
+                                                    {canViewReporters ? (
+                                                        <Link
+                                                            to={`/users/${incident.reporter.id}`}
+                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                        >
+                                                            {incident.reporter.full_name}
+                                                        </Link>
+                                                    ) : (
+                                                        <> {incident.reporter.full_name} </>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <> {incident.reported_by_name || '—'} </>
+                                            )}
                                         </p>
                                     </div>
                                 </div>
@@ -357,7 +414,7 @@ export function IncidentDetailPage() {
                                             {t('incidents.startedAt')}
                                         </p>
                                         <p className="font-medium text-gray-900 dark:text-white">
-                                            {incident.started_at ? formatDate(incident.started_at) : '-'}
+                                            {incident.started_at ? formatDate(incident.started_at) : '—'}
                                         </p>
                                     </div>
                                 </div>
@@ -371,7 +428,7 @@ export function IncidentDetailPage() {
                                                 {t('incidents.resolvedAt')}
                                             </p>
                                             <p className="font-medium text-gray-900 dark:text-white">
-                                                {incident.resolved_at ? formatDate(incident.resolved_at) : '-'}
+                                                {incident.resolved_at ? formatDate(incident.resolved_at) : '—'}
                                             </p>
                                         </div>
                                     </div>

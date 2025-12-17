@@ -68,6 +68,8 @@ const UserDetailPage: FC = () => {
     const canViewMaintenances = hasPermission("maintenance.view");
     const canViewIncidents = hasPermission("incident.view");
     const canViewCleanings = hasPermission("cleaning.view");
+    const canViewMaterials = hasPermission("material.view");
+    const canViewSites = hasPermission("site.view");
 
     // Modal
     const editModal = useModal();
@@ -370,7 +372,15 @@ const UserDetailPage: FC = () => {
                                             </div>
                                             <div>
                                                 <p className="font-medium text-gray-900 dark:text-white">
-                                                    {siteRole.site.name}
+                                                    {canViewSites ? (
+                                                        <Link
+                                                            to={`/sites/${siteRole.site.id}`}
+                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400">
+                                                            {siteRole.site.name}
+                                                        </Link>
+                                                    ) : (
+                                                        siteRole.site.name
+                                                    )}
                                                 </p>
                                                 {siteRole.site.is_headquarters && (
                                                     <Badge color="brand" size="sm">HQ</Badge>
@@ -413,16 +423,16 @@ const UserDetailPage: FC = () => {
                                         <TableHeader>
                                             <TableRow className="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50">
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                    {t("cleanings.id")}
+                                                </TableCell>
+                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t("cleanings.material")}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("cleanings.zone")}
+                                                    {t("cleanings.type")}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t("common.createdAt")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("cleanings.type")}
                                                 </TableCell>
                                             </TableRow>
                                         </TableHeader>
@@ -435,17 +445,23 @@ const UserDetailPage: FC = () => {
                                                                 to={`/cleanings/${cleaning.id}`}
                                                                 className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
                                                             >
+                                                                #{cleaning.id}
+                                                            </Link>
+                                                        ) : (
+                                                            `#${cleaning.id}`
+                                                        )}
+                                                    </TableCell>
+                                                    <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                                                        {canViewMaterials ? (
+                                                            <Link
+                                                                to={`/materials/${cleaning.material?.id}`}
+                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                            >
                                                                 {cleaning.material?.name || "—"}
                                                             </Link>
                                                         ) : (
                                                             cleaning.material?.name || "—"
                                                         )}
-                                                    </TableCell>
-                                                    <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                                                        {cleaning.zone?.name || "—"}
-                                                    </TableCell>
-                                                    <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                                        {formatDateTime(cleaning.created_at)}
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4">
                                                         <Badge
@@ -454,6 +470,9 @@ const UserDetailPage: FC = () => {
                                                         >
                                                             {t(`cleanings.types.${cleaning.type}`)}
                                                         </Badge>
+                                                    </TableCell>
+                                                    <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                                        {formatDateTime(cleaning.created_at)}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -493,10 +512,10 @@ const UserDetailPage: FC = () => {
                                                     {t("maintenances.fields.material")}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("common.createdAt")}
+                                                    {t("maintenances.fields.status")}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("maintenances.fields.status")}
+                                                    {t("common.createdAt")}
                                                 </TableCell>
                                             </TableRow>
                                         </TableHeader>
@@ -518,10 +537,16 @@ const UserDetailPage: FC = () => {
                                                         )}
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                                                        {maintenance.material?.name || "—"}
-                                                    </TableCell>
-                                                    <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                                        {formatDateTime(maintenance.created_at)}
+                                                        {canViewMaterials ? (
+                                                            <Link
+                                                                to={`/materials/${maintenance.material?.id}`}
+                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                            >
+                                                                {maintenance.material?.name || "—"}
+                                                            </Link>
+                                                        ) : (
+                                                            maintenance.material?.name || "—"
+                                                        )}
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4">
                                                         <Badge
@@ -530,6 +555,9 @@ const UserDetailPage: FC = () => {
                                                         >
                                                             {t(`maintenances.status.${maintenance.status}`)}
                                                         </Badge>
+                                                    </TableCell>
+                                                    <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                                        {formatDateTime(maintenance.created_at)}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
@@ -569,13 +597,13 @@ const UserDetailPage: FC = () => {
                                                     {t("incidents.material")}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("common.createdAt")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t("incidents.status")}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t("incidents.severity")}
+                                                </TableCell>
+                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                    {t("common.createdAt")}
                                                 </TableCell>
                                             </TableRow>
                                         </TableHeader>
@@ -597,10 +625,16 @@ const UserDetailPage: FC = () => {
                                                         )}
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                                                        {incident.material?.name || "—"}
-                                                    </TableCell>
-                                                    <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                                        {formatDateTime(incident.created_at)}
+                                                        {canViewMaterials ? (
+                                                            <Link
+                                                                to={`/materials/${incident.material?.id}`}
+                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                            >
+                                                                {incident.material?.name || "—"}
+                                                            </Link>
+                                                        ) : (
+                                                            incident.material?.name || "—"
+                                                        )}
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4">
                                                         <Badge
@@ -617,6 +651,9 @@ const UserDetailPage: FC = () => {
                                                         >
                                                             {t(`incidents.severities.${incident.severity}`)}
                                                         </Badge>
+                                                    </TableCell>
+                                                    <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                                        {formatDateTime(incident.created_at)}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}

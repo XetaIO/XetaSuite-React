@@ -1,16 +1,21 @@
 # XetaSuite-React - Copilot Instructions
 
+> **Last updated**: December 2025
+
 ## Project Overview
 
 XetaSuite-React is the **React SPA frontend** for XetaSuite multi-tenant ERP application. Communicates with Laravel backend via **Sanctum stateful API authentication** (cookies, not tokens).
 
 ## Tech Stack
-- **React** 19.2 with TypeScript 5.9
-- **Vite** 7.2 (build tool & dev server)
-- **Tailwind CSS** 4.1 with `@tailwindcss/vite` plugin
-- **React Router** 7.9 for routing
-- **Axios** for API requests
-- **react-i18next** for internationalization
+- **React** 19.2+ with TypeScript 5.9
+- **Vite** 7.2+ (build tool & dev server)
+- **Tailwind CSS** 4.1+ with `@tailwindcss/vite` plugin
+- **React Router** 7.9+ for routing
+- **Axios** 1.13+ for API requests
+- **i18next** 25.x + **react-i18next** 16.x for internationalization
+- **FullCalendar** 6.x for calendar features
+- **ApexCharts** 4.x for data visualization
+- **React Toastify** 11.x for notifications
 - **TailAdmin** design system (custom theme)
 
 ## Sanctum SPA Authentication (Critical)
@@ -517,15 +522,32 @@ export interface Item {
 # Start development server (runs on http://localhost:5173)
 npm run dev
 
-# Build for production
+# Build for production (includes TypeScript check)
 npm run build
 
 # Preview production build
 npm run preview
 
-# Run linter
+# Run linter (ESLint 9.x)
 npm run lint
 ```
+
+## Key Dependencies Reference
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `react` | ^19.2.0 | UI library |
+| `react-router` | ^7.9.6 | Client-side routing |
+| `axios` | ^1.13.2 | HTTP client |
+| `i18next` | ^25.6.3 | Internationalization |
+| `tailwindcss` | ^4.1.17 | CSS framework |
+| `vite` | ^7.2.4 | Build tool |
+| `typescript` | ~5.9.3 | Type checking |
+| `@fullcalendar/react` | ^6.1.15 | Calendar component |
+| `apexcharts` | ^4.1.0 | Charts |
+| `react-toastify` | ^11.0.5 | Toast notifications |
+| `react-dnd` | ^16.0.1 | Drag and drop |
+| `clsx` + `tailwind-merge` | latest | Class utilities |
 
 ## Environment Variables
 
