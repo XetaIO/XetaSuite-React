@@ -13,6 +13,7 @@ import {
     FaLocationDot,
     FaCubes,
     FaScrewdriverWrench,
+    FaBuilding,
 } from 'react-icons/fa6';
 import { IncidentManager } from '../services/IncidentManager';
 import { IncidentModal } from './IncidentModal';
@@ -53,7 +54,7 @@ export function IncidentDetailPage() {
     const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
 
     // Incident state
     const [incident, setIncident] = useState<IncidentDetail | null>(null);
@@ -69,8 +70,8 @@ export function IncidentDetailPage() {
     const deleteModal = useModal();
 
     // Permissions
-    const canUpdate = hasPermission('incident.update');
-    const canDelete = hasPermission('incident.delete');
+    const canUpdate = !isOnHeadquarters && hasPermission('incident.update');
+    const canDelete = !isOnHeadquarters && hasPermission('incident.delete');
 
     // Load incident details
     const loadIncident = useCallback(async () => {
@@ -314,6 +315,27 @@ export function IncidentDetailPage() {
                                 {t('common.details')}
                             </h2>
                             <div className="space-y-4">
+                                {/* Site */}
+                                <div className="flex items-start gap-3">
+                                    <FaBuilding className="mt-0.5 h-4 w-4 text-gray-400" />
+                                    <div>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                            {t('common.site')}
+                                        </p>
+                                        <p className="font-medium text-gray-900 dark:text-white">
+                                            {hasPermission('site.view') ? (
+                                                <Link
+                                                    to={`/sites/${incident?.site?.id}`}
+                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                >
+                                                    {incident?.site?.name}
+                                                </Link>
+                                            ) : (
+                                                <span>{incident?.site?.name}</span>
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
                                 {/* Reporter */}
                                 <div className="flex items-start gap-3">
                                     <FaUser className="mt-0.5 h-4 w-4 text-gray-400" />

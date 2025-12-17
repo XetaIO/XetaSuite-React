@@ -114,4 +114,13 @@ export const AuthManager = {
     hasAnyPermission: (user: User | null, permissions: string[]): boolean => {
         return permissions.some(permission => user?.permissions?.includes(permission) ?? false);
     },
+
+    /**
+     * Check if user is on headquarters site
+     */
+    isOnHeadquarters: (user: User | null): boolean => {
+        return user?.sites?.some(
+            (site) => site.id === user.current_site_id && site.is_headquarters
+        ) ?? false;
+    }
 };

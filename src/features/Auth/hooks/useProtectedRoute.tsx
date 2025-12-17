@@ -50,16 +50,11 @@ export function ProtectedRoute({
     redirectTo = '/'
 }: ProtectedRouteProps) {
     const { t } = useTranslation();
-    const { user, isAuthenticated, isLoading, hasPermission, hasAnyPermission, hasRole, hasAnyRole } = useAuth();
+    const { isAuthenticated, isLoading, hasPermission, hasAnyPermission, hasRole, hasAnyRole, isOnHeadquarters } = useAuth();
     const hasShownToast = useRef(false);
 
     const allPermissions = permission ? [permission, ...permissions] : permissions;
     const allRoles = role ? [role, ...roles] : roles;
-
-    // Check if user is on headquarters site
-    const isOnHeadquarters = user?.sites?.some(
-        (site) => site.id === user.current_site_id && site.is_headquarters
-    ) ?? false;
 
     // Check if user has access
     const checkAccess = (): boolean => {

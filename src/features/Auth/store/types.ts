@@ -21,6 +21,7 @@ export interface AuthActions {
     hasPermission: (permission: string) => boolean;
     hasAnyRole: (roles: string[]) => boolean;
     hasAnyPermission: (permissions: string[]) => boolean;
+    isOnHeadquarters: boolean;
 }
 
 export type AuthContextType = AuthState & AuthActions;

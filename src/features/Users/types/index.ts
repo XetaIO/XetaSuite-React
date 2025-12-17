@@ -121,10 +121,10 @@ export interface UserCleaning {
 
 export interface UserMaintenance {
     id: number;
-    title: string;
+    description: string;
+    reason: string;
     type: string;
     status: string;
-    scheduled_at?: string | null;
     material?: {
         id: number;
         name: string;
@@ -138,7 +138,7 @@ export interface UserMaintenance {
 
 export interface UserIncident {
     id: number;
-    title: string;
+    description: string;
     severity: string;
     status: string;
     material?: {

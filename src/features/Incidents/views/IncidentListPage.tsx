@@ -34,7 +34,7 @@ type SortDirection = 'asc' | 'desc';
 const IncidentListPage: FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const [incidents, setIncidents] = useState<Incident[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -63,10 +63,11 @@ const IncidentListPage: FC = () => {
     const [preselectedMaterialId, setPreselectedMaterialId] = useState<number | null>(null);
 
     // Permissions
-    const canCreate = hasPermission('incident.create');
     const canView = hasPermission('incident.view');
-    const canUpdate = hasPermission('incident.update');
-    const canDelete = hasPermission('incident.delete');
+    const canCreate = !isOnHeadquarters && hasPermission('incident.create');
+    const canUpdate = !isOnHeadquarters && hasPermission('incident.update');
+    const canDelete = !isOnHeadquarters && hasPermission('incident.delete');
+    const canViewSite = hasPermission('site.view');
 
     // Modals
     const incidentModal = useModal();
@@ -411,6 +412,11 @@ const IncidentListPage: FC = () => {
                                 >
                                     {t('common.description')}
                                 </TableCell>
+                                {isOnHeadquarters && (
+                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        {t('common.site')}
+                                    </TableCell>
+                                )}
                                 <TableCell
                                     isHeader
                                     className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400"
@@ -471,19 +477,24 @@ const IncidentListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(6)].map((_, index) => (
+                                [...Array(8)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
+                                        <TableCell className="px-6 py-4">
                                             <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
@@ -502,7 +513,7 @@ const IncidentListPage: FC = () => {
                                 <TableRow>
                                     <TableCell
                                         className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
-                                        colSpan={hasAnyAction ? 7 : 6}
+                                        colSpan={hasAnyAction ? 7 : (isOnHeadquarters ? 7 : 6)}
                                     >
                                         {debouncedSearch || statusFilter || severityFilter ? (
                                             <div className="flex flex-col items-center justify-center">
@@ -524,8 +535,7 @@ const IncidentListPage: FC = () => {
                                 incidents.map((incident) => (
                                     <TableRow
                                         key={incident.id}
-                                        className={`border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 ${canView ? 'cursor-pointer' : ''}`}
-                                        onClick={canView ? () => navigate(`/incidents/${incident.id}`) : undefined}
+                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-start gap-2">
@@ -536,9 +546,7 @@ const IncidentListPage: FC = () => {
                                                             to={`/incidents/${incident.id}`}
                                                             className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
                                                         >
-                                                            <p className="font-medium text-gray-900 dark:text-white line-clamp-2">
-                                                                {incident.description}
-                                                            </p>
+                                                            {incident.description}
                                                             {incident.maintenance && (
                                                                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                                     {t('incidents.linkedToMaintenance')}:{' '}
@@ -566,6 +574,20 @@ const IncidentListPage: FC = () => {
                                                 </div>
                                             </div>
                                         </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                {incident.site && canViewSite ? (
+                                                    <Link
+                                                        to={`/sites/${incident.site.id}`}
+                                                        className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                    >
+                                                        {incident.site.name}
+                                                    </Link>
+                                                ) : (
+                                                    <span>{incident.site?.name ?? '-'}</span>
+                                                )}
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {incident.material?.name || incident.material_name || '-'}
                                         </TableCell>

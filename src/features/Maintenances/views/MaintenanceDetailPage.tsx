@@ -75,7 +75,7 @@ export function MaintenanceDetailPage() {
     const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const { getCurrency } = useSettings();
 
     // Maintenance state
@@ -105,8 +105,8 @@ export function MaintenanceDetailPage() {
     const deleteModal = useModal();
 
     // Permissions
-    const canUpdate = hasPermission('maintenance.update');
-    const canDelete = hasPermission('maintenance.delete');
+    const canUpdate = !isOnHeadquarters && hasPermission('maintenance.update');
+    const canDelete = !isOnHeadquarters && hasPermission('maintenance.delete');
 
     // Load maintenance details
     const loadMaintenance = useCallback(async () => {
@@ -361,6 +361,27 @@ export function MaintenanceDetailPage() {
                         {t('maintenances.detail.info')}
                     </h3>
                     <div className="space-y-4">
+                        {/* Site info */}
+                        {maintenance.site && (
+                            <div className="flex items-start gap-3">
+                                <FaBuilding className="mt-0.5 h-4 w-4 text-gray-400" />
+                                <div>
+                                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        {t('maintenances.fields.site')}
+                                    </p>
+                                    {hasPermission('site.view') ? (
+                                        <Link
+                                            to={`/sites/${maintenance.site.id}`}
+                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                        >
+                                            {maintenance.site.name}
+                                        </Link>
+                                    ) : (
+                                        <span>{maintenance.site.name}</span>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                         {/* Type */}
                         <div className="flex items-start gap-3">
                             <FaClipboardList className="mt-0.5 h-4 w-4 text-gray-400" />

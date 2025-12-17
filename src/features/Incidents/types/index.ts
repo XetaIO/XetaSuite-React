@@ -10,6 +10,9 @@ export interface Incident {
     status_label: string;
     severity: IncidentSeverity;
     severity_label: string;
+    // Site info
+    site_id: number;
+    site?: IncidentSite;
     // Material info
     material_id: number | null;
     material_name: string | null;
@@ -30,8 +33,6 @@ export interface Incident {
 }
 
 export interface IncidentDetail extends Incident {
-    site_id: number;
-    site?: IncidentSite;
     edited_by_id: number | null;
     editor?: IncidentEditor;
 }

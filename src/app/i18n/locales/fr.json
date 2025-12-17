@@ -47,6 +47,7 @@
         "notFound": "Non trouvé",
         "units": "unités",
         "editedBy": "Modifié par",
+        "site": "Site",
         "export": {
             "button": "Exporter ({{count}})",
             "exporting": "Export en cours...",
@@ -236,7 +237,7 @@
         "listTitle": "Liste des articles",
         "notFound": "Article introuvable",
         "notFoundMessage": "L'article que vous recherchez n'existe pas ou a été supprimé.",
-        "backToList": "Retour à la liste",
+        "backToList": "Retour à la liste des articles",
         "create": "Nouvel article",
         "edit": "Modifier l'article",
         "manageItemsAndStock": "Gérez vos articles et niveaux de stock",
@@ -798,7 +799,7 @@
         },
         "detail": {
             "info": "Informations",
-            "backToList": "Retour à la liste",
+            "backToList": "Retour à la liste des maintenances",
             "descriptionAndReason": "Description et Raison",
             "operators": "Opérateurs",
             "companies": "Entreprises",
@@ -914,6 +915,7 @@
         "title": "Nettoyages",
         "subtitle": "Gérer les nettoyages des matériels",
         "description": "Gestion des nettoyages",
+        "cleaning": "Nettoyage",
         "create": "Nouveau nettoyage",
         "edit": "Modifier le nettoyage",
         "delete": "Supprimer le nettoyage",
@@ -922,9 +924,13 @@
         "material": "Matériel",
         "zone": "Zone",
         "type": "Type",
-        "description": "Description",
         "date": "Date",
         "createdBy": "Créé par",
+        "forMaterial": "Pour le matériel",
+        "detail": {
+            "info": "Informations sur le nettoyage",
+            "backToList": "Retour à la liste des nettoyages"
+        },
         "noMaterialsAvailable": "Aucun matériel disponible",
         "filters": {
             "allTypes": "Tous les types"
@@ -988,7 +994,7 @@
             "deleted": "L'entreprise \"{{name}}\" a été supprimée avec succès"
         },
         "detail": {
-            "backToList": "Retour à la liste",
+            "backToList": "Retour à la liste des entreprises",
             "totalMaintenances": "Maintenances totales",
             "maintenancesListTitle": "Liste des maintenances",
             "maintenancesListDescription": "Maintenances liées à l'entreprise {{name}}",
@@ -1061,7 +1067,7 @@
         "restore": "Restaurer",
         "restoring": "Restauration...",
         "detail": {
-            "backToList": "Retour à la liste",
+            "backToList": "Retour à la liste des utilisateurs",
             "contractEnds": "Fin de contrat",
             "sitesTab": "Sites",
             "cleaningsTab": "Nettoyages",

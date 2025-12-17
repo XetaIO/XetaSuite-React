@@ -42,7 +42,7 @@ type SortDirection = 'asc' | 'desc';
 
 const MaintenanceListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -74,9 +74,10 @@ const MaintenanceListPage: FC = () => {
 
     // Permissions
     const canView = hasPermission('maintenance.view');
-    const canCreate = hasPermission('maintenance.create');
-    const canUpdate = hasPermission('maintenance.update');
-    const canDelete = hasPermission('maintenance.delete');
+    const canCreate = !isOnHeadquarters && hasPermission('maintenance.create');
+    const canUpdate = !isOnHeadquarters && hasPermission('maintenance.update');
+    const canDelete = !isOnHeadquarters && hasPermission('maintenance.delete');
+    const canViewSite = hasPermission('site.view');
 
     // Modals
     const maintenanceModal = useModal();
@@ -260,6 +261,9 @@ const MaintenanceListPage: FC = () => {
             type: typeFilter || undefined,
         });
     };
+
+    // Check if any action is available
+    const hasAnyAction = canUpdate || canDelete;
 
     const getStatusBadgeColor = (status: MaintenanceStatus): 'brand' | 'warning' | 'success' | 'dark' => {
         switch (status) {
@@ -451,6 +455,11 @@ const MaintenanceListPage: FC = () => {
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t('common.description')}
                                 </TableCell>
+                                {isOnHeadquarters && (
+                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        {t('common.site')}
+                                    </TableCell>
+                                )}
                                 <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
                                         onClick={() => handleSort('type')}
@@ -484,23 +493,53 @@ const MaintenanceListPage: FC = () => {
                                         {renderSortIcon('started_at')}
                                     </button>
                                 </TableCell>
-                                <TableCell isHeader className="w-20 px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t('common.actions')}
-                                </TableCell>
+                                {hasAnyAction && (
+                                    <TableCell isHeader className="w-20 px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        {t('common.actions')}
+                                    </TableCell>
+                                )}
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                <TableRow>
-                                    <TableCell colSpan={8}>
-                                        <div className="flex items-center justify-center py-8">
-                                            <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-500 border-t-transparent" />
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                [...Array(8)].map((_, index) => (
+                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </TableCell>
+                                        )}
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-center">
+                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-center">
+                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
+                                        {hasAnyAction && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </TableCell>
+                                        )}
+                                    </TableRow>
+                                ))
                             ) : maintenances.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={8} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                                    <TableCell colSpan={hasAnyAction ? 8 : (isOnHeadquarters ? 8 : 7)} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                                         <div className="flex flex-col items-center justify-center">
                                             <FaScrewdriverWrench className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
                                             <p>
@@ -539,6 +578,20 @@ const MaintenanceListPage: FC = () => {
                                                 <span className="line-clamp-2">{maintenance.description}</span>
                                             )}
                                         </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                {maintenance.site && canViewSite ? (
+                                                    <Link
+                                                        to={`/sites/${maintenance.site.id}`}
+                                                        className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                    >
+                                                        {maintenance.site.name}
+                                                    </Link>
+                                                ) : (
+                                                    <span>{maintenance.site?.name ?? '-'}</span>
+                                                )}
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4 text-center">
                                             <Badge color={getTypeBadgeColor(maintenance.type)} size="md">
                                                 {maintenance.type_label}
@@ -572,22 +625,24 @@ const MaintenanceListPage: FC = () => {
                                                 <span>-</span>
                                             )}
                                         </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="flex items-center justify-end">
-                                                <ActionsDropdown
-                                                    actions={[
-                                                        {
-                                                            ...createActions.edit(() => handleEdit(maintenance), t),
-                                                            hidden: !canUpdate,
-                                                        },
-                                                        {
-                                                            ...createActions.delete(() => handleOpenDelete(maintenance), t),
-                                                            hidden: !canDelete,
-                                                        },
-                                                    ]}
-                                                />
-                                            </div>
-                                        </TableCell>
+                                        {hasAnyAction && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="flex items-center justify-end">
+                                                    <ActionsDropdown
+                                                        actions={[
+                                                            {
+                                                                ...createActions.edit(() => handleEdit(maintenance), t),
+                                                                hidden: !canUpdate,
+                                                            },
+                                                            {
+                                                                ...createActions.delete(() => handleOpenDelete(maintenance), t),
+                                                                hidden: !canDelete,
+                                                            },
+                                                        ]}
+                                                    />
+                                                </div>
+                                            </TableCell>
+                                        )}
                                     </TableRow>
                                 ))
                             )}

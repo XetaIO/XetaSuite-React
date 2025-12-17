@@ -9,10 +9,10 @@ import {
     FaMobile,
     FaPenToSquare,
     FaBuilding,
-    FaClipboardList,
     FaTriangleExclamation,
     FaBroom,
     FaShield,
+    FaScrewdriverWrench,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination } from "@/shared/components/common";
 import { Button, Table, TableHeader, TableBody, TableRow, TableCell, Badge } from "@/shared/components/ui";
@@ -65,6 +65,9 @@ const UserDetailPage: FC = () => {
 
     // Permissions
     const canUpdate = hasPermission("user.update");
+    const canViewMaintenances = hasPermission("maintenance.view");
+    const canViewIncidents = hasPermission("incident.view");
+    const canViewCleanings = hasPermission("cleaning.view");
 
     // Modal
     const editModal = useModal();
@@ -191,7 +194,7 @@ const UserDetailPage: FC = () => {
     const tabs = [
         { key: "sites" as TabType, label: t("users.detail.sitesTab"), icon: <FaBuilding className="h-4 w-4" /> },
         { key: "cleanings" as TabType, label: t("users.detail.cleaningsTab"), icon: <FaBroom className="h-4 w-4" />, count: user.cleaning_count },
-        { key: "maintenances" as TabType, label: t("users.detail.maintenancesTab"), icon: <FaClipboardList className="h-4 w-4" />, count: user.maintenance_count },
+        { key: "maintenances" as TabType, label: t("users.detail.maintenancesTab"), icon: <FaScrewdriverWrench className="h-4 w-4" />, count: user.maintenance_count },
         { key: "incidents" as TabType, label: t("users.detail.incidentsTab"), icon: <FaTriangleExclamation className="h-4 w-4" />, count: user.incident_count },
     ];
 
@@ -427,7 +430,16 @@ const UserDetailPage: FC = () => {
                                             {cleanings.map((cleaning) => (
                                                 <TableRow key={cleaning.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
                                                     <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                                        {cleaning.material?.name || "—"}
+                                                        {canViewCleanings ? (
+                                                            <Link
+                                                                to={`/cleanings/${cleaning.id}`}
+                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                            >
+                                                                {cleaning.material?.name || "—"}
+                                                            </Link>
+                                                        ) : (
+                                                            cleaning.material?.name || "—"
+                                                        )}
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
                                                         {cleaning.zone?.name || "—"}
@@ -465,7 +477,7 @@ const UserDetailPage: FC = () => {
                             </div>
                         ) : maintenances.length === 0 ? (
                             <div className="p-8 text-center">
-                                <FaClipboardList className="mx-auto mb-3 h-10 w-10 text-gray-400" />
+                                <FaScrewdriverWrench className="mx-auto mb-3 h-10 w-10 text-gray-400" />
                                 <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noMaintenances")}</p>
                             </div>
                         ) : (
@@ -492,7 +504,18 @@ const UserDetailPage: FC = () => {
                                             {maintenances.map((maintenance) => (
                                                 <TableRow key={maintenance.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
                                                     <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                                        {maintenance.title}
+                                                        {canViewMaintenances ? (
+                                                            <Link
+                                                                to={`/maintenances/${maintenance.id}`}
+                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                            >
+                                                                #{maintenance.id} - {maintenance.reason}
+                                                            </Link>
+                                                        ) : (
+                                                            <>
+                                                                #{maintenance.id} - {maintenance.reason}
+                                                            </>
+                                                        )}
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
                                                         {maintenance.material?.name || "—"}
@@ -560,7 +583,18 @@ const UserDetailPage: FC = () => {
                                             {incidents.map((incident) => (
                                                 <TableRow key={incident.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
                                                     <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                                        {incident.title}
+                                                        {canViewIncidents ? (
+                                                            <Link
+                                                                to={`/incidents/${incident.id}`}
+                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                            >
+                                                                #{incident.id} - {incident.description}
+                                                            </Link>
+                                                        ) : (
+                                                            <>
+                                                                #{incident.id} - {incident.description}
+                                                            </>
+                                                        )}
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
                                                         {incident.material?.name || "—"}

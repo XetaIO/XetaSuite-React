@@ -47,6 +47,7 @@
         "notFound": "Not found",
         "units": "units",
         "editedBy": "Edited by",
+        "site": "Site",
         "export": {
             "button": "Export ({{count}})",
             "exporting": "Exporting...",
@@ -806,7 +807,7 @@
         },
         "detail": {
             "info": "Information",
-            "backToList": "Back to list",
+            "backToList": "Back to maintenances list",
             "descriptionAndReason": "Description and Reason",
             "operators": "Operators",
             "companies": "Companies",
@@ -922,6 +923,7 @@
         "title": "Cleanings",
         "subtitle": "Manage material cleanings",
         "description": "Cleaning management",
+        "cleaning": "Cleaning",
         "create": "New cleaning",
         "edit": "Edit cleaning",
         "delete": "Delete cleaning",
@@ -930,9 +932,13 @@
         "material": "Material",
         "zone": "Zone",
         "type": "Type",
-        "description": "Description",
         "date": "Date",
         "createdBy": "Created by",
+        "forMaterial": "For material",
+        "detail": {
+            "info": "Cleaning information",
+            "backToList": "Back to cleanings list"
+        },
         "noMaterialsAvailable": "No materials available",
         "filters": {
             "allTypes": "All types"
@@ -996,7 +1002,7 @@
             "deleted": "Company \"{{name}}\" has been deleted successfully"
         },
         "detail": {
-            "backToList": "Back to list",
+            "backToList": "Back to companies list",
             "totalMaintenances": "Total maintenances",
             "maintenancesListTitle": "Maintenances list",
             "maintenancesListDescription": "Maintenances linked to company {{name}}",
@@ -1069,7 +1075,7 @@
         "restore": "Restore",
         "restoring": "Restoring...",
         "detail": {
-            "backToList": "Back to list",
+            "backToList": "Back to users list",
             "contractEnds": "Contract ends",
             "sitesTab": "Sites",
             "cleaningsTab": "Cleanings",

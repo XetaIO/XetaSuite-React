@@ -18,6 +18,9 @@ export interface Maintenance {
     material_id: number | null;
     material_name: string | null;
     material?: MaintenanceMaterial;
+    // Site info (optional)
+    site_id: number | null;
+    site?: MaintenanceSite;
     // Dates
     started_at: string | null;
     resolved_at: string | null;
@@ -32,17 +35,16 @@ export interface Maintenance {
 }
 
 export interface MaintenanceDetail extends Maintenance {
-    site_id: number;
-    site?: MaintenanceSite;
     // Related entities
     incidents?: MaintenanceIncident[];
     operators?: MaintenanceOperator[];
     companies?: MaintenanceCompany[];
     itemMovements?: MaintenanceItemMovement[];
-    // Creator and editor
+    // Creator
     created_by_id: number | null;
     created_by_name: string | null;
     creator?: MaintenanceCreator;
+    // Editor
     edited_by_id: number | null;
     editor?: MaintenanceEditor;
 }

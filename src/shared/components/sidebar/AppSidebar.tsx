@@ -191,15 +191,8 @@ const othersItems: NavItem[] = [
 export const AppSidebar: React.FC = () => {
     const { t } = useTranslation();
     const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
-    const { user, hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const location = useLocation();
-
-    // Check if current site is headquarters
-    const isOnHeadquarters = useMemo(() => {
-        if (!user?.current_site_id || !user?.sites) return false;
-        const currentSite = user.sites.find(site => site.id === user.current_site_id);
-        return currentSite?.is_headquarters ?? false;
-    }, [user?.current_site_id, user?.sites]);
 
     // Filter navigation items based on permissions and HQ context
     const filterNavItems = useCallback((items: NavItem[]): NavItem[] => {

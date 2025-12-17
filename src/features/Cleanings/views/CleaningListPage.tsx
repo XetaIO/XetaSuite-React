@@ -35,7 +35,7 @@ type SortDirection = 'asc' | 'desc';
 const CleaningListPage: FC = () => {
     const { t } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const [cleanings, setCleanings] = useState<Cleaning[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -61,9 +61,10 @@ const CleaningListPage: FC = () => {
     const [preselectedMaterialId, setPreselectedMaterialId] = useState<number | null>(null);
 
     // Permissions
-    const canCreate = hasPermission('cleaning.create');
-    const canUpdate = hasPermission('cleaning.update');
-    const canDelete = hasPermission('cleaning.delete');
+    const canCreate = !isOnHeadquarters && hasPermission('cleaning.create');
+    const canUpdate = !isOnHeadquarters && hasPermission('cleaning.update');
+    const canDelete = !isOnHeadquarters && hasPermission('cleaning.delete');
+    const canViewMaterials = hasPermission('material.view');
 
     // Modals
     const cleaningModal = useModal();
@@ -390,7 +391,7 @@ const CleaningListPage: FC = () => {
                                     </button>
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t('cleanings.description')}
+                                    {t('common.description')}
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button

@@ -96,6 +96,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return AuthManager.hasAnyPermission(user, permissions);
     }, [user]);
 
+    const isOnHeadquarters = AuthManager.isOnHeadquarters(user);
+
     const value: AuthContextType = {
         user,
         isLoading,
@@ -110,6 +112,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         hasPermission,
         hasAnyRole,
         hasAnyPermission,
+        isOnHeadquarters,
     };
 
     return (

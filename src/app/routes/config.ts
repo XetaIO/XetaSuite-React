@@ -43,6 +43,7 @@ const MaintenanceDetailPage = lazy(() => import("@/features/Maintenances/views/M
 
 // Lazy load Cleanings feature
 const CleaningListPage = lazy(() => import("@/features/Cleanings/views/CleaningListPage"));
+const CleaningDetailPage = lazy(() => import("@/features/Cleanings/views/CleaningDetailPage"));
 
 // Lazy load Companies feature
 const CompanyListPage = lazy(() => import("@/features/Companies/views/CompanyListPage"));
@@ -184,6 +185,12 @@ export const protectedRoutes: RouteConfig[] = [
         element: CleaningListPage,
         requireAuth: true,
         permission: "cleaning.viewAny"
+    },
+    {
+        path: "/cleanings/:id",
+        element: CleaningDetailPage,
+        requireAuth: true,
+        permission: "cleaning.view"
     },
     {
         path: "/companies",
