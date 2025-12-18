@@ -12,6 +12,10 @@ export interface ItemMovementItem {
     reference: string | null;
     current_stock?: number;
     current_price?: number;
+    site?: {
+        id: number;
+        name: string;
+    };
 }
 
 /**

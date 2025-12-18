@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, type FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPlus, FaPenToSquare, FaTrash, FaMagnifyingGlass, FaArrowUp, FaArrowDown } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, LinkedName } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
@@ -40,6 +40,7 @@ const CompanyListPage: FC = () => {
     const canCreate = hasPermission("company.create");
     const canUpdate = hasPermission("company.update");
     const canDelete = hasPermission("company.delete");
+    const canViewCreator = hasPermission("user.view");
 
     // Modals
     const companyModal = useModal();
@@ -229,6 +230,13 @@ const CompanyListPage: FC = () => {
                     </div>
                 </div>
 
+                {/* Error message */}
+                {error && (
+                    <div className="mx-6 mt-4 rounded-lg bg-error-50 p-4 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">
+                        {error}
+                    </div>
+                )}
+
                 {/* Table */}
                 <div className="overflow-x-auto">
                     <Table>
@@ -300,12 +308,6 @@ const CompanyListPage: FC = () => {
                                         )}
                                     </TableRow>
                                 ))
-                            ) : error ? (
-                                <TableRow>
-                                    <TableCell className="px-6 py-12 text-center" colSpan={canUpdate || canDelete ? 6 : 5}>
-                                        <div className="text-error-500 dark:text-error-400">{error}</div>
-                                    </TableCell>
-                                </TableRow>
                             ) : companies.length === 0 ? (
                                 <TableRow>
                                     <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={canUpdate || canDelete ? 6 : 5}>
@@ -331,18 +333,11 @@ const CompanyListPage: FC = () => {
                                         className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
                                         <TableCell className="px-6 py-4">
-                                            {canView ? (
-                                                <Link
-                                                    to={`/companies/${company.id}`}
-                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400">
-                                                    {company.name}
-                                                </Link>
-                                            ) : (
-                                                <span className="font-medium text-gray-900 dark:text-white">
-                                                    {company.name}
-                                                </span>
-                                            )}
-
+                                            <LinkedName
+                                                canView={canView}
+                                                id={company.id}
+                                                name={company.name}
+                                                basePath="companies" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {company.description ? (
@@ -357,7 +352,11 @@ const CompanyListPage: FC = () => {
                                             </span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {company.creator?.full_name || <span className="text-gray-400 dark:text-gray-500">—</span>}
+                                            <LinkedName
+                                                canView={canViewCreator}
+                                                id={company.creator?.id}
+                                                name={company.creator?.full_name}
+                                                basePath="users" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(company.created_at)}

@@ -19,7 +19,7 @@ import { IncidentManager } from '../services/IncidentManager';
 import { IncidentModal } from './IncidentModal';
 import type { IncidentDetail } from '../types';
 import { PageMeta, PageBreadcrumb, DeleteConfirmModal } from '@/shared/components/common';
-import { Button, Badge, Alert } from '@/shared/components/ui';
+import { Button, Badge, Alert, LinkedName } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
 import { useAuth } from '@/features/Auth/hooks';
 import { formatDate } from '@/shared/utils';
@@ -72,9 +72,10 @@ export function IncidentDetailPage() {
     // Permissions
     const canUpdate = !isOnHeadquarters && hasPermission('incident.update');
     const canDelete = !isOnHeadquarters && hasPermission('incident.delete');
-    const canViewReporters = hasPermission('user.view');
-    const canViewMaintenances = hasPermission('maintenance.view');
-    const canViewMaterials = hasPermission('material.view');
+    const canViewReporterAndEditor = hasPermission('user.view');
+    const canViewMaintenance = hasPermission('maintenance.view');
+    const canViewMaterial = hasPermission('material.view');
+    const canViewSite = isOnHeadquarters && hasPermission('site.view');
 
     // Load incident details
     const loadIncident = useCallback(async () => {
@@ -251,7 +252,7 @@ export function IncidentDetailPage() {
                                     <FaWrench className="h-5 w-5 text-brand-500" />
                                     {t('incidents.material')}
                                 </h2>
-                                {canViewMaterials ? (
+                                {canViewMaterial ? (
                                     <Link
                                         to={`/materials/${incident.material.id}`}
                                         className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
@@ -296,7 +297,7 @@ export function IncidentDetailPage() {
                                     <FaScrewdriverWrench className="h-5 w-5 text-brand-500" />
                                     {t('incidents.linkedToMaintenance')}
                                 </h2>
-                                {canViewMaintenances ? (
+                                {canViewMaintenance ? (
                                     <Link
                                         to={`/maintenances/${incident.maintenance.id}`}
                                         className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
@@ -365,16 +366,11 @@ export function IncidentDetailPage() {
                                             {t('common.site')}
                                         </p>
                                         <p className="font-medium text-gray-900 dark:text-white">
-                                            {hasPermission('site.view') ? (
-                                                <Link
-                                                    to={`/sites/${incident?.site?.id}`}
-                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                >
-                                                    {incident?.site?.name}
-                                                </Link>
-                                            ) : (
-                                                <span>{incident?.site?.name}</span>
-                                            )}
+                                            <LinkedName
+                                                canView={canViewSite}
+                                                id={incident.site?.id}
+                                                name={incident.site?.name}
+                                                basePath="sites" />
                                         </p>
                                     </div>
                                 </div>
@@ -385,24 +381,11 @@ export function IncidentDetailPage() {
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
                                             {t('incidents.reportedBy')}
                                         </p>
-                                        <p className="font-medium text-gray-900 dark:text-white">
-                                            {incident.reporter ? (
-                                                <>
-                                                    {canViewReporters ? (
-                                                        <Link
-                                                            to={`/users/${incident.reporter.id}`}
-                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                        >
-                                                            {incident.reporter.full_name}
-                                                        </Link>
-                                                    ) : (
-                                                        <> {incident.reporter.full_name} </>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                <> {incident.reported_by_name || '—'} </>
-                                            )}
-                                        </p>
+                                        <LinkedName
+                                            canView={canViewReporterAndEditor}
+                                            id={incident.reporter?.id}
+                                            name={incident.reporter?.full_name || incident.reported_by_name}
+                                            basePath="users" />
                                     </div>
                                 </div>
 
@@ -470,9 +453,11 @@ export function IncidentDetailPage() {
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
                                             {t('common.editedBy')}
                                         </p>
-                                        <p className="font-medium text-gray-900 dark:text-white">
-                                            {incident.editor.full_name}
-                                        </p>
+                                        <LinkedName
+                                            canView={canViewReporterAndEditor}
+                                            id={incident.editor.id}
+                                            name={incident.editor.full_name}
+                                            basePath="users" />
                                     </div>
                                 )}
                             </div>

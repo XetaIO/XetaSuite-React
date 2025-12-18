@@ -33,3 +33,6 @@ export { default as Avatar } from "./avatar/Avatar";
 
 // Badge
 export { default as Badge } from "./badge/Badge";
+
+// Linked Name
+export { LinkedName } from "./name/LinkedName";

@@ -17,7 +17,7 @@ import { CleaningManager } from '../services/CleaningManager';
 import { CleaningModal } from './CleaningModal';
 import type { CleaningDetail } from '../types';
 import { PageMeta, PageBreadcrumb, DeleteConfirmModal } from '@/shared/components/common';
-import { Button, Badge, Alert } from '@/shared/components/ui';
+import { Button, Badge, Alert, LinkedName } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
 import { useAuth } from '@/features/Auth/hooks';
 import { formatDate, showSuccess, showError } from '@/shared/utils';
@@ -47,7 +47,7 @@ export function CleaningDetailPage() {
     const canDelete = !isOnHeadquarters && hasPermission('cleaning.delete');
     const canViewSites = hasPermission('site.view');
     const canViewMaterials = hasPermission('material.view');
-    const canViewCreators = hasPermission('user.view');
+    const canViewCreatorAndEditor = hasPermission('user.view');
 
     // Load cleaning details
     const loadCleaning = useCallback(async () => {
@@ -280,18 +280,11 @@ export function CleaningDetailPage() {
                                             <p className="text-sm text-gray-500 dark:text-gray-400">
                                                 {t('common.site')}
                                             </p>
-                                            <p className="font-medium text-gray-900 dark:text-white">
-                                                {hasPermission('site.view') ? (
-                                                    <Link
-                                                        to={`/sites/${cleaning.site.id}`}
-                                                        className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                    >
-                                                        {cleaning.site.name}
-                                                    </Link>
-                                                ) : (
-                                                    <span>{cleaning.site.name}</span>
-                                                )}
-                                            </p>
+                                            <LinkedName
+                                                canView={canViewSites}
+                                                id={cleaning.site.id}
+                                                name={cleaning.site.name}
+                                                basePath="sites" />
                                         </div>
                                     </div>
                                 )}
@@ -317,22 +310,11 @@ export function CleaningDetailPage() {
                                             {t('cleanings.createdBy')}
                                         </p>
                                         <p className="font-medium text-gray-900 dark:text-white">
-                                            {cleaning.creator ? (
-                                                <>
-                                                    {canViewCreators ? (
-                                                        <Link
-                                                            to={`/users/${cleaning.creator.id}`}
-                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                        >
-                                                            {cleaning.creator.full_name}
-                                                        </Link>
-                                                    ) : (
-                                                        <> {cleaning.creator.full_name} </>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                <> {cleaning.created_by_name || '—'} </>
-                                            )}
+                                            <LinkedName
+                                                canView={canViewCreatorAndEditor}
+                                                id={cleaning?.creator?.id}
+                                                name={cleaning?.creator?.full_name || cleaning.created_by_name}
+                                                basePath="users" />
                                         </p>
                                     </div>
                                 </div>
@@ -386,9 +368,11 @@ export function CleaningDetailPage() {
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
                                             {t('common.editedBy')}
                                         </p>
-                                        <p className="font-medium text-gray-900 dark:text-white">
-                                            {cleaning.editor.full_name}
-                                        </p>
+                                        <LinkedName
+                                            canView={canViewCreatorAndEditor}
+                                            id={cleaning?.editor?.id}
+                                            name={cleaning?.editor?.full_name}
+                                            basePath="users" />
                                     </div>
                                 )}
                             </div>

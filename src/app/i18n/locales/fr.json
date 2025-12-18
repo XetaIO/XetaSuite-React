@@ -23,6 +23,7 @@
         "createdAt": "Créé le",
         "createdBy": "Créé par",
         "updatedAt": "Modifié le",
+        "resolvedAt": "Résolu le",
         "creator": "Créateur",
         "clearSearch": "Effacer la recherche",
         "clearFilters": "Effacer les filtres",
@@ -387,6 +388,7 @@
             "allTypes": "Tous les types"
         },
         "fields": {
+            "site": "Site",
             "movementDate": "Date",
             "type": "Type",
             "item": "Article",
@@ -1008,6 +1010,7 @@
             "noMaintenances": "Aucune maintenance liée à cette entreprise",
             "noMaintenancesFor": "Aucune maintenance trouvée pour \"{{search}}\"",
             "material": "Matériel",
+            "maintenance": "Maintenance",
             "site": "Site",
             "type": "Type",
             "status": "Statut",

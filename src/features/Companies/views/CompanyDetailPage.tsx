@@ -14,7 +14,7 @@ import {
     FaPenToSquare
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, Button } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, Button, LinkedName } from "@/shared/components/ui";
 import type { BadgeColor } from "@/shared/components/ui/badge/Badge";
 import { NotFoundContent } from "@/shared/components/errors";
 import { CompanyManager } from "../services";
@@ -25,7 +25,7 @@ import { formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth/hooks";
 import { useModal, useTheme } from "@/shared/hooks";
 
-type SortField = "type" | "status" | "started_at" | "created_at";
+type SortField = "type" | "status" | "started_at" | "resolved_at";
 type SortDirection = "asc" | "desc";
 
 const CompanyDetailPage: FC = () => {
@@ -62,6 +62,10 @@ const CompanyDetailPage: FC = () => {
 
     // Permissions
     const canUpdate = hasPermission('company.update');
+    const canViewCreator = hasPermission('user.view');
+    const canViewMaterial = hasPermission('material.view');
+    const canViewMaintenance = hasPermission('maintenance.view');
+    const canViewSite = hasPermission('site.view');
 
     // Chart colors
     const chartColors = ['#465fff', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
@@ -394,7 +398,11 @@ const CompanyDetailPage: FC = () => {
                             <FaUser className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-900 dark:text-white">{company.creator?.full_name || "—"}</p>
+                            <LinkedName
+                                canView={canViewCreator}
+                                id={company.creator?.id}
+                                name={company.creator?.full_name}
+                                basePath="users" />
                             <p className="text-sm text-gray-500 dark:text-gray-400">{t("common.creator")}</p>
                         </div>
                     </div>
@@ -528,6 +536,9 @@ const CompanyDetailPage: FC = () => {
                         <TableHeader>
                             <TableRow className="border-b border-gray-200 dark:border-gray-800">
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t("companies.detail.maintenance")}
+                                </TableCell>
+                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t("companies.detail.material")}
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -562,11 +573,11 @@ const CompanyDetailPage: FC = () => {
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
-                                        onClick={() => handleSort("created_at")}
+                                        onClick={() => handleSort("resolved_at")}
                                         className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
                                     >
-                                        {t("common.createdAt")}
-                                        {renderSortIcon("created_at")}
+                                        {t("common.resolvedAt")}
+                                        {renderSortIcon("resolved_at")}
                                     </button>
                                 </TableCell>
                             </TableRow>
@@ -575,6 +586,9 @@ const CompanyDetailPage: FC = () => {
                             {isLoadingMaintenances ? (
                                 [...Array(5)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
@@ -597,7 +611,7 @@ const CompanyDetailPage: FC = () => {
                                 ))
                             ) : maintenances.length === 0 ? (
                                 <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={6}>
+                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={7}>
                                         {debouncedSearch ? (
                                             <div>
                                                 <p>{t("companies.detail.noMaintenancesFor", { search: debouncedSearch })}</p>
@@ -619,23 +633,35 @@ const CompanyDetailPage: FC = () => {
                                         key={maintenance.id}
                                         className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
+                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                            <LinkedName
+                                                canView={canViewMaintenance}
+                                                id={maintenance.id}
+                                                name={`#${maintenance.id} - ${maintenance.description}`}
+                                                basePath="maintenances"
+                                                className="line-clamp-2" />
+                                            {maintenance.reason && (
+                                                <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
+                                                    {maintenance.reason}
+                                                </p>
+                                            )}
+                                        </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <div>
-                                                <Link
-                                                    to={`/maintenances/${maintenance.id}`}
-                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                >
-                                                    {maintenance.material?.name || maintenance.material_name || '—'}
-                                                </Link>
-                                                {maintenance.reason && (
-                                                    <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
-                                                        {maintenance.reason}
-                                                    </p>
-                                                )}
+                                                <LinkedName
+                                                    canView={canViewMaterial}
+                                                    id={maintenance.material?.id}
+                                                    name={maintenance.material?.name || maintenance.material_name}
+                                                    basePath="materials" />
                                             </div>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {maintenance.site?.name || '—'}
+                                            <LinkedName
+                                                canView={canViewSite}
+                                                id={maintenance.site?.id}
+                                                name={maintenance.site?.name}
+                                                basePath="sites"
+                                                className="line-clamp-2" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <Badge color="light" size="sm">
@@ -651,7 +677,7 @@ const CompanyDetailPage: FC = () => {
                                             {maintenance.started_at ? formatDate(maintenance.started_at) : '—'}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {formatDate(maintenance.created_at)}
+                                            {maintenance.resolved_at ? formatDate(maintenance.resolved_at) : '—'}
                                         </TableCell>
                                     </TableRow>
                                 ))

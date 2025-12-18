@@ -18,6 +18,7 @@ import {
     Badge,
     ActionsDropdown,
     createActions,
+    LinkedName,
 } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
@@ -67,9 +68,9 @@ const IncidentListPage: FC = () => {
     const canCreate = !isOnHeadquarters && hasPermission('incident.create');
     const canUpdate = !isOnHeadquarters && hasPermission('incident.update');
     const canDelete = !isOnHeadquarters && hasPermission('incident.delete');
-    const canViewSite = hasPermission('site.view');
-    const canViewMaterials = hasPermission('material.view');
-    const canViewReporters = hasPermission('user.view');
+    const canViewSite = isOnHeadquarters && hasPermission('site.view');
+    const canViewMaterial = hasPermission('material.view');
+    const canViewReporter = hasPermission('user.view');
 
     // Modals
     const incidentModal = useModal();
@@ -578,35 +579,19 @@ const IncidentListPage: FC = () => {
                                         </TableCell>
                                         {isOnHeadquarters && (
                                             <TableCell className="px-6 py-4">
-                                                {incident.site && canViewSite ? (
-                                                    <Link
-                                                        to={`/sites/${incident.site.id}`}
-                                                        className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                    >
-                                                        {incident.site.name}
-                                                    </Link>
-                                                ) : (
-                                                    incident.site?.name || '—'
-                                                )}
+                                                <LinkedName
+                                                    canView={canViewSite}
+                                                    id={incident.site_id}
+                                                    name={incident.site?.name}
+                                                    basePath="sites" />
                                             </TableCell>
                                         )}
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {incident.material ? (
-                                                <>
-                                                    {canViewMaterials ? (
-                                                        <Link
-                                                            to={`/materials/${incident.material.id}`}
-                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                        >
-                                                            {incident.material.name}
-                                                        </Link>
-                                                    ) : (
-                                                        incident.material.name || '—'
-                                                    )}
-                                                </>
-                                            ) : (
-                                                incident.material_name || '—'
-                                            )}
+                                            <LinkedName
+                                                canView={canViewMaterial}
+                                                id={incident.material?.id}
+                                                name={incident.material?.name || incident.material_name}
+                                                basePath="materials" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
                                             <Badge color={getSeverityBadgeColor(incident.severity)} size="md">
@@ -619,22 +604,11 @@ const IncidentListPage: FC = () => {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {incident.reporter ? (
-                                                <>
-                                                    {canViewReporters ? (
-                                                        <Link
-                                                            to={`/users/${incident.reporter.id}`}
-                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                        >
-                                                            {incident.reporter.full_name}
-                                                        </Link>
-                                                    ) : (
-                                                        <> {incident.reporter.full_name} </>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                <> {incident.reported_by_name || '-'} </>
-                                            )}
+                                            <LinkedName
+                                                canView={canViewReporter}
+                                                id={incident.reporter?.id}
+                                                name={incident.reporter?.full_name || incident.reported_by_name}
+                                                basePath="users" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(incident.created_at)}

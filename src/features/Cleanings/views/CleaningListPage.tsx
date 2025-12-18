@@ -18,6 +18,7 @@ import {
     Badge,
     ActionsDropdown,
     createActions,
+    LinkedName,
 } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
@@ -65,9 +66,9 @@ const CleaningListPage: FC = () => {
     const canCreate = !isOnHeadquarters && hasPermission('cleaning.create');
     const canUpdate = !isOnHeadquarters && hasPermission('cleaning.update');
     const canDelete = !isOnHeadquarters && hasPermission('cleaning.delete');
-    const canViewMaterials = hasPermission('material.view');
-    const canViewSites = hasPermission('site.view');
-    const canViewCreators = hasPermission('user.view');
+    const canViewMaterial = hasPermission('material.view');
+    const canViewSite = isOnHeadquarters && hasPermission('site.view');
+    const canViewCreator = hasPermission('user.view');
 
     // Modals
     const cleaningModal = useModal();
@@ -485,47 +486,28 @@ const CleaningListPage: FC = () => {
                                         className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
                                         <TableCell className="px-6 py-4 text-center">
-                                            {canView ? (
-                                                <Link
-                                                    to={canView ? `/cleanings/${cleaning.id}` : '#'}
-                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                >
-                                                    #{cleaning.id}
-                                                </Link>
-                                            ) : (
-                                                <>
-                                                    #{cleaning.id}
-                                                </>
-                                            )}
+                                            <LinkedName
+                                                canView={canView}
+                                                id={cleaning.id}
+                                                name={`#${cleaning.id}`}
+                                                basePath="cleanings" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            {canViewMaterials ? (
-                                                <Link
-                                                    to={`/materials/${cleaning.material_id}`}
-                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                >
-                                                    {cleaning.material?.name || cleaning.material_name}
-                                                </Link>
-                                            ) : (
-                                                <>
-                                                    {cleaning.material?.name || cleaning.material_name}
-                                                </>
-                                            )}
+                                            <LinkedName
+                                                canView={canViewMaterial}
+                                                id={cleaning.material_id}
+                                                name={cleaning.material?.name || cleaning.material_name}
+                                                basePath="materials" />
                                         </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            {canViewSites ? (
-                                                <Link
-                                                    to={`/sites/${cleaning.site_id}`}
-                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                >
-                                                    {cleaning.site?.name || '-'}
-                                                </Link>
-                                            ) : (
-                                                <>
-                                                    {cleaning.site?.name || '-'}
-                                                </>
-                                            )}
-                                        </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4 text-center">
+                                                <LinkedName
+                                                    canView={canViewSite}
+                                                    id={cleaning.site_id}
+                                                    name={cleaning.site?.name}
+                                                    basePath="sites" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4 text-center">
                                             {getTypeBadge(cleaning.type)}
                                         </TableCell>
@@ -540,18 +522,11 @@ const CleaningListPage: FC = () => {
                                             </span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            {canViewCreators ? (
-                                                <Link
-                                                    to={`/users/${cleaning.created_by_id}`}
-                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                >
-                                                    {cleaning.creator?.full_name || cleaning.created_by_name || '-'}
-                                                </Link>
-                                            ) : (
-                                                <span className="text-sm text-gray-500 dark:text-gray-400">
-                                                    {cleaning.creator?.full_name || cleaning.created_by_name || '-'}
-                                                </span>
-                                            )}
+                                            <LinkedName
+                                                canView={canViewCreator}
+                                                id={cleaning.created_by_id}
+                                                name={cleaning.creator?.full_name || cleaning.created_by_name}
+                                                basePath="users" />
                                         </TableCell>
                                         {hasAnyAction && (
                                             <TableCell className="px-6 py-4 text-right">

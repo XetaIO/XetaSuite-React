@@ -12,7 +12,7 @@ export interface Cleaning {
     site?: CleaningSite;
     // Material info
     material_id: number;
-    material_name: string;
+    material_name: string | null;
     material?: CleaningMaterial;
     // Creator info
     created_by_id: number | null;

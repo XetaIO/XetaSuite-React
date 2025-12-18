@@ -9,7 +9,7 @@ import {
     FaArrowRightFromBracket,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -23,7 +23,7 @@ type SortDirection = "asc" | "desc";
 
 const ItemMovementListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const [movements, setMovements] = useState<ItemMovement[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +43,7 @@ const ItemMovementListPage: FC = () => {
 
     // Permissions
     const canUpdate = hasPermission("item.update");
+    const canView = hasPermission("item.view");
 
     // Modals
     const editModal = useModal();
@@ -290,6 +291,11 @@ const ItemMovementListPage: FC = () => {
                     <Table>
                         <TableHeader>
                             <TableRow className="border-b border-gray-200 dark:border-gray-800">
+                                {isOnHeadquarters && (
+                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        {t("itemMovements.fields.site")}
+                                    </TableCell>
+                                )}
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
                                         onClick={() => handleSort("movement_date")}
@@ -343,8 +349,13 @@ const ItemMovementListPage: FC = () => {
                         <TableBody>
                             {isLoading ? (
                                 // Skeleton loading
-                                [...Array(6)].map((_, index) => (
+                                [...Array(8)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
@@ -398,6 +409,15 @@ const ItemMovementListPage: FC = () => {
                                         key={movement.id}
                                         className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                <LinkedName
+                                                    canView={canView}
+                                                    id={movement?.item?.site?.id}
+                                                    name={movement?.item?.site?.name}
+                                                    basePath="item-movements" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4">
                                             <span className="font-medium text-gray-900 dark:text-white">
                                                 {ItemMovementManager.formatDate(movement.movement_date)}

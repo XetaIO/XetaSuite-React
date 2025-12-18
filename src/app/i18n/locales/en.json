@@ -23,6 +23,7 @@
         "createdAt": "Created at",
         "createdBy": "Created by",
         "updatedAt": "Updated at",
+        "resolvedAt": "Resolved at",
         "creator": "Creator",
         "clearSearch": "Clear search",
         "clearFilters": "Clear filters",
@@ -389,6 +390,7 @@
             "exits": "Exits only"
         },
         "fields": {
+            "site": "Site",
             "item": "Item",
             "movementDate": "Date",
             "date": "Date",
@@ -1016,6 +1018,7 @@
             "noMaintenances": "No maintenances linked to this company",
             "noMaintenancesFor": "No maintenances found for \"{{search}}\"",
             "material": "Material",
+            "maintenance": "Maintenance",
             "site": "Site",
             "type": "Type",
             "status": "Status",
