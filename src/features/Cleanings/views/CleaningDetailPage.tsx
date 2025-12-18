@@ -45,9 +45,9 @@ export function CleaningDetailPage() {
     // Permissions
     const canUpdate = !isOnHeadquarters && hasPermission('cleaning.update');
     const canDelete = !isOnHeadquarters && hasPermission('cleaning.delete');
-    const canViewSites = hasPermission('site.view');
+    const canViewSites = isOnHeadquarters && hasPermission('site.view');
     const canViewMaterials = hasPermission('material.view');
-    const canViewCreatorAndEditor = hasPermission('user.view');
+    const canViewCreatorAndEditor = isOnHeadquarters && hasPermission('user.view');
 
     // Load cleaning details
     const loadCleaning = useCallback(async () => {

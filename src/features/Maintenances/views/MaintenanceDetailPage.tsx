@@ -24,7 +24,7 @@ import type {
     MaintenanceItemMovement,
 } from '../types';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
-import { Button, Badge, Table, TableHeader, TableBody, TableRow, TableCell, Alert } from '@/shared/components/ui';
+import { Button, Badge, Table, TableHeader, TableBody, TableRow, TableCell, Alert, LinkedName } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
 import { useAuth } from '@/features/Auth/hooks';
 import { useSettings } from '@/features/Settings';
@@ -107,6 +107,10 @@ export function MaintenanceDetailPage() {
     // Permissions
     const canUpdate = !isOnHeadquarters && hasPermission('maintenance.update');
     const canDelete = !isOnHeadquarters && hasPermission('maintenance.delete');
+    const canViewSite = isOnHeadquarters && hasPermission('site.view');
+    const canViewCreatorAndOperator = hasPermission('user.view');
+    const canViewCompany = hasPermission('company.view');
+    const canViewMaterial = hasPermission('material.view');
 
     // Load maintenance details
     const loadMaintenance = useCallback(async () => {
@@ -268,7 +272,7 @@ export function MaintenanceDetailPage() {
                                     {t('maintenances.forMaterial')}:{' '}
                                     <Link
                                         to={`/materials/${maintenance.material.id}`}
-                                        className="text-brand-600 hover:text-brand-700 dark:text-brand-400"
+                                        className="font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400"
                                     >
                                         {maintenance.material.name}
                                     </Link>
@@ -369,16 +373,11 @@ export function MaintenanceDetailPage() {
                                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t('maintenances.fields.site')}
                                     </p>
-                                    {hasPermission('site.view') ? (
-                                        <Link
-                                            to={`/sites/${maintenance.site.id}`}
-                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                        >
-                                            {maintenance.site.name}
-                                        </Link>
-                                    ) : (
-                                        <span>{maintenance.site.name}</span>
-                                    )}
+                                    <LinkedName
+                                        canView={canViewSite}
+                                        id={maintenance.site?.id}
+                                        name={maintenance.site?.name}
+                                        basePath="sites" />
                                 </div>
                             </div>
                         )}
@@ -448,9 +447,11 @@ export function MaintenanceDetailPage() {
                                     {t('common.createdBy')}
                                 </p>
                                 <p className="text-gray-900 dark:text-white">
-                                    {maintenance.creator?.full_name || maintenance.created_by_name || (
-                                        <span className="text-gray-400">—</span>
-                                    )}
+                                    <LinkedName
+                                        canView={canViewCreatorAndOperator}
+                                        id={maintenance.creator?.id}
+                                        name={maintenance.creator?.full_name}
+                                        basePath="users" />
                                 </p>
                             </div>
                         </div>
@@ -524,9 +525,11 @@ export function MaintenanceDetailPage() {
                                             {operator.full_name.charAt(0).toUpperCase()}
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                                {operator.full_name}
-                                            </p>
+                                            <LinkedName
+                                                canView={canViewCreatorAndOperator}
+                                                id={operator.id}
+                                                name={operator.full_name}
+                                                basePath="users" />
                                             {operator.email && (
                                                 <p className="text-xs text-gray-500 dark:text-gray-400">
                                                     {operator.email}
@@ -555,9 +558,11 @@ export function MaintenanceDetailPage() {
                                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
                                             <FaBuilding className="h-4 w-4 text-warning-600 dark:text-warning-400" />
                                         </div>
-                                        <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                            {company.name}
-                                        </p>
+                                        <LinkedName
+                                            canView={canViewCompany}
+                                            id={company.id}
+                                            name={company.name}
+                                            basePath="companies" />
                                     </div>
                                 ))}
                             </div>

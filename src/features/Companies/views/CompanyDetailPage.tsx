@@ -32,7 +32,7 @@ const CompanyDetailPage: FC = () => {
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const companyId = Number(id);
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const { theme } = useTheme();
 
     // Company state
@@ -61,11 +61,11 @@ const CompanyDetailPage: FC = () => {
     const editModal = useModal();
 
     // Permissions
-    const canUpdate = hasPermission('company.update');
-    const canViewCreator = hasPermission('user.view');
+    const canUpdate = isOnHeadquarters && hasPermission('company.update');
+    const canViewCreator = isOnHeadquarters && hasPermission('user.view');
     const canViewMaterial = hasPermission('material.view');
     const canViewMaintenance = hasPermission('maintenance.view');
-    const canViewSite = hasPermission('site.view');
+    const canViewSite = isOnHeadquarters && hasPermission('site.view');
 
     // Chart colors
     const chartColors = ['#465fff', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];

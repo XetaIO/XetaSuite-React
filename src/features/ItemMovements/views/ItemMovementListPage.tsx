@@ -43,7 +43,10 @@ const ItemMovementListPage: FC = () => {
 
     // Permissions
     const canUpdate = hasPermission("item.update");
-    const canView = hasPermission("item.view");
+    const canViewItem = hasPermission("item.view");
+    const canViewSite = hasPermission("site.view");
+    const canViewCreator = isOnHeadquarters && hasPermission("user.view");
+    const canViewSupplier = hasPermission("supplier.view");
 
     // Modals
     const editModal = useModal();
@@ -412,10 +415,10 @@ const ItemMovementListPage: FC = () => {
                                         {isOnHeadquarters && (
                                             <TableCell className="px-6 py-4">
                                                 <LinkedName
-                                                    canView={canView}
+                                                    canView={canViewSite}
                                                     id={movement?.item?.site?.id}
                                                     name={movement?.item?.site?.name}
-                                                    basePath="item-movements" />
+                                                    basePath="sites" />
                                             </TableCell>
                                         )}
                                         <TableCell className="px-6 py-4">
@@ -427,7 +430,7 @@ const ItemMovementListPage: FC = () => {
                                             {getTypeBadge(movement.type)}
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            {movement.item ? (
+                                            {movement.item && canViewItem ? (
                                                 <Link
                                                     to={`/items/${movement.item_id}`}
                                                     className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
@@ -452,15 +455,30 @@ const ItemMovementListPage: FC = () => {
                                             {formatCurrency(movement.total_price)}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {movement.supplier?.name || "—"}
-                                            {movement.supplier_invoice_number && (
-                                                <span className="ml-1.5 text-xs">
-                                                    ({movement.supplier_invoice_number})
+                                            {movement.supplier && canViewSupplier ? (
+                                                <Link
+                                                    to={`/suppliers/${movement.supplier_id}`}
+                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                >
+                                                    {movement.supplier.name}
+                                                    {movement.supplier_invoice_number && (
+                                                        <span className="ml-1.5 text-xs text-gray-500 dark:text-gray-400">
+                                                            ({movement.supplier_invoice_number})
+                                                        </span>
+                                                    )}
+                                                </Link>
+                                            ) : (
+                                                <span className="text-gray-400">
+                                                    {movement.supplier_name || "—"}
                                                 </span>
                                             )}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {movement.created_by_name}
+                                            <LinkedName
+                                                canView={canViewCreator}
+                                                id={movement.creator?.id}
+                                                name={movement.creator?.full_name || movement.created_by_name}
+                                                basePath="users" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center justify-end">

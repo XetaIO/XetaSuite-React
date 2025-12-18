@@ -72,7 +72,7 @@ export function IncidentDetailPage() {
     // Permissions
     const canUpdate = !isOnHeadquarters && hasPermission('incident.update');
     const canDelete = !isOnHeadquarters && hasPermission('incident.delete');
-    const canViewReporterAndEditor = hasPermission('user.view');
+    const canViewReporterAndEditor = isOnHeadquarters && hasPermission('user.view');
     const canViewMaintenance = hasPermission('maintenance.view');
     const canViewMaterial = hasPermission('material.view');
     const canViewSite = isOnHeadquarters && hasPermission('site.view');

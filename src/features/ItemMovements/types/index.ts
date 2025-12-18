@@ -28,6 +28,7 @@ export interface ItemMovement {
     quantity: number;
     unit_price: number;
     total_price: number;
+
     supplier_id: number | null;
     supplier_name: string | null;
     supplier_invoice_number: string | null;
@@ -36,16 +37,18 @@ export interface ItemMovement {
         name: string;
     };
     invoice_date: string | null;
+
     movable_type: string | null;
     movable_id: number | null;
-    movable?: {
-        id: number;
-        name?: string;
-        full_name?: string;
-    };
+
     item?: ItemMovementItem;
-    created_by_id: number;
-    created_by_name: string;
+
+    created_by_id: number | null;
+    created_by_name: string | null;
+    creator?: {
+        id: number;
+        full_name: string;
+    };
     notes: string | null;
     movement_date: string;
     created_at: string;

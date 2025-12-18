@@ -20,7 +20,7 @@ import {
     FaArrowRightArrowLeft,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, DeleteConfirmModal, Pagination } from "@/shared/components/common";
-import { Badge, Table, TableHeader, TableBody, TableRow, TableCell, ActionsDropdown, createActions } from "@/shared/components/ui";
+import { Badge, Table, TableHeader, TableBody, TableRow, TableCell, ActionsDropdown, createActions, LinkedName } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatDateTime, formatDate, formatCurrency } from "@/shared/utils";
@@ -32,14 +32,15 @@ import { ItemModal } from "./ItemModal";
 import { ItemQrCodeModal } from "./ItemQrCodeModal";
 import { ItemStatsChart } from "./ItemStatsChart";
 import { ItemPriceHistoryChart } from "./ItemPriceHistoryChart";
-import type { ItemDetail, ItemMovement, ItemMonthlyStats, ItemMaterial, ItemPriceHistory } from "../types";
+import type { ItemDetail, ItemMonthlyStats, ItemMaterial, ItemPriceHistory } from "../types";
+import type { ItemMovement } from "@/features/ItemMovements/types";
 import type { PaginationMeta } from "@/shared/types";
 
 const ItemDetailPage: FC = () => {
     const { id } = useParams<{ id: string }>();
     const [searchParams, setSearchParams] = useSearchParams();
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const { getCurrency } = useSettings();
     const [qrScanHandled, setQrScanHandled] = useState(false);
 
@@ -60,10 +61,12 @@ const ItemDetailPage: FC = () => {
     const [materialsPage, setMaterialsPage] = useState(1);
 
     // Permissions
-    const canUpdate = hasPermission("item.update");
-    const canDelete = hasPermission("item.delete");
-    const canGenerateQrCode = hasPermission('item.generateQrCode');
+    const canUpdate = !isOnHeadquarters && hasPermission("item.update");
+    const canDelete = !isOnHeadquarters && hasPermission("item.delete");
+    const canGenerateQrCode = !isOnHeadquarters && hasPermission('item.generateQrCode');
     const canCreateMovement = hasPermission("item-movement.create");
+    const canViewSupplier = hasPermission("supplier.view");
+    const canViewCreatorAndRecipient = isOnHeadquarters && hasPermission("user.view");
 
     // Modals
     const itemModal = useModal();
@@ -351,13 +354,12 @@ const ItemDetailPage: FC = () => {
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t("items.fields.supplier")}
                                 </p>
-                                <p className="text-gray-900 dark:text-white">
-                                    {item.supplier ? (
-                                        item.supplier.name
-                                    ) : (
-                                        <span className="text-gray-400">—</span>
-                                    )}
-                                </p>
+                                <LinkedName
+                                    canView={canViewSupplier}
+                                    id={item.supplier?.id}
+                                    name={item.supplier?.name}
+                                    basePath="suppliers" />
+
                                 {item.supplier_reference && (
                                     <p className="mt-1 text-xs text-gray-500">
                                         {t("items.fields.supplierReference")}: {item.supplier_reference}
@@ -385,7 +387,11 @@ const ItemDetailPage: FC = () => {
                                     {t("common.createdBy")}
                                 </p>
                                 <p className="text-gray-900 dark:text-white">
-                                    {item.creator?.full_name || <span className="text-gray-400">—</span>}
+                                    <LinkedName
+                                        canView={canViewCreatorAndRecipient}
+                                        id={item.creator?.id}
+                                        name={item.creator?.full_name}
+                                        basePath="users" />
                                 </p>
                             </div>
                         </div>
@@ -486,7 +492,16 @@ const ItemDetailPage: FC = () => {
                                             {recipient.full_name.charAt(0).toUpperCase()}
                                         </div>
                                         <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                            {recipient.full_name}
+                                            <LinkedName
+                                                canView={canViewCreatorAndRecipient}
+                                                id={recipient.id}
+                                                name={recipient.full_name}
+                                                basePath="users" />
+                                            {recipient.email && (
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                    {recipient.email}
+                                                </p>
+                                            )}
                                         </p>
                                     </div>
                                 ))}
@@ -659,7 +674,11 @@ const ItemDetailPage: FC = () => {
                                                 : "—"}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {movement.created_by_name}
+                                            <LinkedName
+                                                canView={canViewCreatorAndRecipient}
+                                                id={movement.creator?.id}
+                                                name={movement.creator?.full_name}
+                                                basePath="users" />
                                         </TableCell>
                                     </TableRow>
                                 ))

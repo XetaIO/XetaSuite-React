@@ -18,7 +18,7 @@ type SortDirection = "asc" | "desc";
 
 const CompanyListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const [companies, setCompanies] = useState<Company[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -37,10 +37,10 @@ const CompanyListPage: FC = () => {
 
     // Permissions
     const canView = hasPermission("company.view");
-    const canCreate = hasPermission("company.create");
-    const canUpdate = hasPermission("company.update");
-    const canDelete = hasPermission("company.delete");
-    const canViewCreator = hasPermission("user.view");
+    const canCreate = isOnHeadquarters && hasPermission("company.create");
+    const canUpdate = isOnHeadquarters && hasPermission("company.update");
+    const canDelete = isOnHeadquarters && hasPermission("company.delete");
+    const canViewCreator = isOnHeadquarters && hasPermission("user.view");
 
     // Modals
     const companyModal = useModal();

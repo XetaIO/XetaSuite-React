@@ -68,7 +68,7 @@ const CleaningListPage: FC = () => {
     const canDelete = !isOnHeadquarters && hasPermission('cleaning.delete');
     const canViewMaterial = hasPermission('material.view');
     const canViewSite = isOnHeadquarters && hasPermission('site.view');
-    const canViewCreator = hasPermission('user.view');
+    const canViewCreator = isOnHeadquarters && hasPermission('user.view');
 
     // Modals
     const cleaningModal = useModal();
@@ -485,7 +485,7 @@ const CleaningListPage: FC = () => {
                                         key={cleaning.id}
                                         className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
-                                        <TableCell className="px-6 py-4 text-center">
+                                        <TableCell className="px-6 py-4">
                                             <LinkedName
                                                 canView={canView}
                                                 id={cleaning.id}

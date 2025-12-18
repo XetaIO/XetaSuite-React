@@ -18,6 +18,7 @@ import {
     Badge,
     ActionsDropdown,
     createActions,
+    LinkedName,
 } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
@@ -77,8 +78,8 @@ const MaintenanceListPage: FC = () => {
     const canCreate = !isOnHeadquarters && hasPermission('maintenance.create');
     const canUpdate = !isOnHeadquarters && hasPermission('maintenance.update');
     const canDelete = !isOnHeadquarters && hasPermission('maintenance.delete');
-    const canViewSite = hasPermission('site.view');
-    const canViewMaterials = hasPermission('material.view');
+    const canViewSite = isOnHeadquarters && hasPermission('site.view');
+    const canViewMaterial = hasPermission('material.view');
 
     // Modals
     const maintenanceModal = useModal();
@@ -587,22 +588,11 @@ const MaintenanceListPage: FC = () => {
                                             </TableCell>
                                         )}
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {maintenance.material ? (
-                                                <>
-                                                    {canViewMaterials ? (
-                                                        <Link
-                                                            to={`/materials/${maintenance.material.id}`}
-                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                        >
-                                                            {maintenance.material.name}
-                                                        </Link>
-                                                    ) : (
-                                                        maintenance.material.name
-                                                    )}
-                                                </>
-                                            ) : (
-                                                maintenance.material_name || '—'
-                                            )}
+                                            <LinkedName
+                                                canView={canViewMaterial}
+                                                id={maintenance.material?.id}
+                                                name={maintenance.material?.name}
+                                                basePath="materials" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
                                             <Badge color={getTypeBadgeColor(maintenance.type)} size="md">

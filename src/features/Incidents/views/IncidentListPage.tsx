@@ -70,7 +70,7 @@ const IncidentListPage: FC = () => {
     const canDelete = !isOnHeadquarters && hasPermission('incident.delete');
     const canViewSite = isOnHeadquarters && hasPermission('site.view');
     const canViewMaterial = hasPermission('material.view');
-    const canViewReporter = hasPermission('user.view');
+    const canViewReporter = isOnHeadquarters && hasPermission('user.view');
 
     // Modals
     const incidentModal = useModal();

@@ -252,6 +252,7 @@
             "info": "Information"
         },
         "fields": {
+            "site": "Site",
             "name": "Name",
             "reference": "Reference",
             "description": "Description",

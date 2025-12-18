@@ -9,7 +9,7 @@ import {
     FaCubes,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ActionsDropdown, createActions } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ActionsDropdown, createActions, LinkedName } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -27,7 +27,7 @@ type SortDirection = "asc" | "desc";
 
 const ItemListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const { getCurrency } = useSettings();
     const [items, setItems] = useState<Item[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
@@ -52,6 +52,8 @@ const ItemListPage: FC = () => {
     const canDelete = hasPermission("item.delete");
     const canView = hasPermission("item.view");
     const canGenerateQrCode = hasPermission("item.generateQrCode");
+    const canViewSite = hasPermission("site.view");
+    const canViewSupplier = hasPermission("supplier.view");
 
     // Modals
     const itemModal = useModal();
@@ -324,6 +326,11 @@ const ItemListPage: FC = () => {
                                         {renderSortIcon("name")}
                                     </button>
                                 </TableCell>
+                                {isOnHeadquarters && (
+                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        {t("items.fields.site")}
+                                    </TableCell>
+                                )}
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
                                         onClick={() => handleSort("reference")}
@@ -367,7 +374,7 @@ const ItemListPage: FC = () => {
                         <TableBody>
                             {isLoading ? (
                                 // Skeleton loading
-                                [...Array(6)].map((_, index) => (
+                                [...Array(8)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center gap-2">
@@ -375,6 +382,11 @@ const ItemListPage: FC = () => {
                                                 <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </div>
                                         </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
@@ -401,7 +413,7 @@ const ItemListPage: FC = () => {
                                 <TableRow>
                                     <TableCell
                                         className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
-                                        colSpan={7}
+                                        colSpan={8}
                                     >
                                         {debouncedSearch || stockStatusFilter ? (
                                             <div className="flex flex-col items-center justify-center">
@@ -447,6 +459,15 @@ const ItemListPage: FC = () => {
                                                 </p>
                                             )}
                                         </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                <LinkedName
+                                                    canView={canViewSite}
+                                                    id={item.site?.id}
+                                                    name={item.site?.name}
+                                                    basePath="sites" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             <span className="font-mono text-sm">
                                                 {item.reference || "—"}
@@ -466,7 +487,11 @@ const ItemListPage: FC = () => {
                                             {formatCurrency(item.current_price, getCurrency())}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {item.supplier?.name || "—"}
+                                            <LinkedName
+                                                canView={canViewSupplier}
+                                                id={item.supplier?.id}
+                                                name={item.supplier?.name}
+                                                basePath="suppliers" />
                                         </TableCell>
                                         {hasAnyAction && (
                                             <TableCell className="px-6 py-4">
