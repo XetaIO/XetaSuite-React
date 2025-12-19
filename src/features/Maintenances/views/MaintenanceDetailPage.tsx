@@ -9,12 +9,13 @@ import {
     FaCalendar,
     FaCalendarCheck,
     FaUsers,
-    FaBuilding,
     FaTriangleExclamation,
     FaCubes,
     FaWrench,
     FaCircleInfo,
     FaClipboardList,
+    FaBuildingUser,
+    FaBuildingFlag,
 } from 'react-icons/fa6';
 import { MaintenanceManager } from '../services/MaintenanceManager';
 import { MaintenanceModal } from './MaintenanceModal';
@@ -108,9 +109,10 @@ export function MaintenanceDetailPage() {
     const canUpdate = !isOnHeadquarters && hasPermission('maintenance.update');
     const canDelete = !isOnHeadquarters && hasPermission('maintenance.delete');
     const canViewSite = isOnHeadquarters && hasPermission('site.view');
-    const canViewCreatorAndOperator = hasPermission('user.view');
+    const canViewCreatorAndOperator = isOnHeadquarters && hasPermission('user.view');
     const canViewCompany = hasPermission('company.view');
-    const canViewMaterial = hasPermission('material.view');
+    const canViewIncident = hasPermission('incident.view');
+    const canViewItem = hasPermission('item.view');
 
     // Load maintenance details
     const loadMaintenance = useCallback(async () => {
@@ -333,7 +335,7 @@ export function MaintenanceDetailPage() {
 
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
-                            <FaBuilding className="h-5 w-5 text-warning-600 dark:text-warning-400" />
+                            <FaBuildingUser className="h-5 w-5 text-warning-600 dark:text-warning-400" />
                         </div>
                         <div>
                             <p className="text-2xl font-semibold text-gray-900 dark:text-white">
@@ -366,9 +368,9 @@ export function MaintenanceDetailPage() {
                     </h3>
                     <div className="space-y-4">
                         {/* Site info */}
-                        {maintenance.site && (
+                        {maintenance.site && isOnHeadquarters && (
                             <div className="flex items-start gap-3">
-                                <FaBuilding className="mt-0.5 h-4 w-4 text-gray-400" />
+                                <FaBuildingFlag className="mt-0.5 h-4 w-4 text-gray-400" />
                                 <div>
                                     <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t('maintenances.fields.site')}
@@ -546,7 +548,7 @@ export function MaintenanceDetailPage() {
                     {maintenance.companies && maintenance.companies.length > 0 && (
                         <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
                             <h3 className="mb-4 flex items-center gap-2 text-lg font-medium text-gray-900 dark:text-white">
-                                <FaBuilding className="h-4 w-4" />
+                                <FaBuildingUser className="h-4 w-4" />
                                 {t('maintenances.detail.companies')} ({maintenance.companies.length})
                             </h3>
                             <div className="space-y-2">
@@ -556,7 +558,7 @@ export function MaintenanceDetailPage() {
                                         className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50"
                                     >
                                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
-                                            <FaBuilding className="h-4 w-4 text-warning-600 dark:text-warning-400" />
+                                            <FaBuildingUser className="h-4 w-4 text-warning-600 dark:text-warning-400" />
                                         </div>
                                         <LinkedName
                                             canView={canViewCompany}
@@ -611,12 +613,11 @@ export function MaintenanceDetailPage() {
                                             className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                         >
                                             <TableCell className="px-6 py-4">
-                                                <Link
-                                                    to={`/incidents/${incident.id}`}
-                                                    className="font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400"
-                                                >
-                                                    {incident.description}
-                                                </Link>
+                                                <LinkedName
+                                                    canView={canViewIncident}
+                                                    id={incident.id}
+                                                    name={incident.description}
+                                                    basePath="incidents" />
                                             </TableCell>
                                             <TableCell className="px-6 py-4 text-center">
                                                 <Badge color={incidentStatusColors[incident.status] || 'dark'} size="md">
@@ -706,16 +707,11 @@ export function MaintenanceDetailPage() {
                                             className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                         >
                                             <TableCell className="px-6 py-4">
-                                                {movement.item_id ? (
-                                                    <Link
-                                                        to={`/items/${movement.item_id}`}
-                                                        className="font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400"
-                                                    >
-                                                        {movement.item_name || `#${movement.item_id}`}
-                                                    </Link>
-                                                ) : (
-                                                    <span className="text-gray-400">{movement.item_name || '—'}</span>
-                                                )}
+                                                <LinkedName
+                                                    canView={canViewItem}
+                                                    id={movement.item_id}
+                                                    name={movement.item_name}
+                                                    basePath="items" />
                                             </TableCell>
                                             <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                                 {movement.item_reference || '—'}

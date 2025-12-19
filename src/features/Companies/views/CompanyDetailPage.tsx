@@ -541,9 +541,11 @@ const CompanyDetailPage: FC = () => {
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t("companies.detail.material")}
                                 </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("companies.detail.site")}
-                                </TableCell>
+                                {isOnHeadquarters && (
+                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        {t("companies.detail.site")}
+                                    </TableCell>
+                                )}
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     <button
                                         onClick={() => handleSort("type")}
@@ -592,9 +594,11 @@ const CompanyDetailPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4">
                                             <div className="h-5 w-20 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
@@ -611,7 +615,7 @@ const CompanyDetailPage: FC = () => {
                                 ))
                             ) : maintenances.length === 0 ? (
                                 <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={7}>
+                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={isOnHeadquarters ? 7 : 6}>
                                         {debouncedSearch ? (
                                             <div>
                                                 <p>{t("companies.detail.noMaintenancesFor", { search: debouncedSearch })}</p>
@@ -655,14 +659,16 @@ const CompanyDetailPage: FC = () => {
                                                     basePath="materials" />
                                             </div>
                                         </TableCell>
-                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            <LinkedName
-                                                canView={canViewSite}
-                                                id={maintenance.site?.id}
-                                                name={maintenance.site?.name}
-                                                basePath="sites"
-                                                className="line-clamp-2" />
-                                        </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                                <LinkedName
+                                                    canView={canViewSite}
+                                                    id={maintenance.site?.id}
+                                                    name={maintenance.site?.name}
+                                                    basePath="sites"
+                                                    className="line-clamp-2" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4">
                                             <Badge color="light" size="sm">
                                                 {maintenance.type_label}

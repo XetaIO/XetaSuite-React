@@ -44,7 +44,7 @@ const ItemMovementListPage: FC = () => {
     // Permissions
     const canUpdate = hasPermission("item.update");
     const canViewItem = hasPermission("item.view");
-    const canViewSite = hasPermission("site.view");
+    const canViewSite = isOnHeadquarters && hasPermission("site.view");
     const canViewCreator = isOnHeadquarters && hasPermission("user.view");
     const canViewSupplier = hasPermission("supplier.view");
 

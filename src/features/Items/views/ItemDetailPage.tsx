@@ -7,7 +7,7 @@ import {
     FaArrowDown,
     FaMoneyBill,
     FaChartLine,
-    FaBuilding,
+    FaTruckRampBox,
     FaCalendar,
     FaUser,
     FaTag,
@@ -349,7 +349,7 @@ const ItemDetailPage: FC = () => {
                     </h3>
                     <div className="space-y-4">
                         <div className="flex items-start gap-3">
-                            <FaBuilding className="mt-0.5 h-4 w-4 text-gray-400" />
+                            <FaTruckRampBox className="mt-0.5 h-4 w-4 text-gray-400" />
                             <div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t("items.fields.supplier")}

@@ -47,12 +47,13 @@ const ItemListPage: FC = () => {
     const [isDeleting, setIsDeleting] = useState(false);
 
     // Permissions
-    const canCreate = hasPermission("item.create");
-    const canUpdate = hasPermission("item.update");
-    const canDelete = hasPermission("item.delete");
     const canView = hasPermission("item.view");
-    const canGenerateQrCode = hasPermission("item.generateQrCode");
-    const canViewSite = hasPermission("site.view");
+    const canCreate = !isOnHeadquarters && hasPermission("item.create");
+    const canUpdate = !isOnHeadquarters && hasPermission("item.update");
+    const canDelete = !isOnHeadquarters && hasPermission("item.delete");
+    const canGenerateQrCode = !isOnHeadquarters && hasPermission("item.generateQrCode");
+    const canCreateMovement = hasPermission("item-movement.create");
+    const canViewSite = isOnHeadquarters && hasPermission("site.view");
     const canViewSupplier = hasPermission("supplier.view");
 
     // Modals
@@ -184,15 +185,15 @@ const ItemListPage: FC = () => {
     };
 
     const getItemActions = (item: Item) => [
-        createActions.stockEntry(() => handleMovement(item, "entry"), t),
-        createActions.stockExit(() => handleMovement(item, "exit"), t),
+        { ...createActions.stockEntry(() => handleMovement(item, "entry"), t), hidden: !canCreateMovement },
+        { ...createActions.stockExit(() => handleMovement(item, "exit"), t), hidden: !canCreateMovement },
         { ...createActions.qrCode(() => handleQrCode(item), t), hidden: !canGenerateQrCode },
         { ...createActions.edit(() => handleEdit(item), t), hidden: !canUpdate },
         { ...createActions.delete(() => handleDeleteClick(item), t), hidden: !canDelete },
     ];
 
     // Check if any action is available
-    const hasAnyAction = canUpdate || canDelete || canGenerateQrCode;
+    const hasAnyAction = canUpdate || canDelete || canGenerateQrCode || canCreateMovement;
 
     const getStockStatusOptions = (): { value: StockStatus | ""; label: string }[] => [
         { value: "", label: t("items.filters.allStatuses") },
