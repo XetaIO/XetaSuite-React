@@ -1,5 +1,5 @@
 import { handleApiError } from "@/shared/api";
-import type { PaginatedResponse, SingleResponse } from "@/shared/types";
+import type { PaginatedResponse, SingleResponse, ManagerResult } from "@/shared/types";
 import type {
     Item,
     ItemDetail,
@@ -16,12 +16,6 @@ import type {
 } from "../types";
 import type { ItemMovementFilters } from "@/features/ItemMovements/types";
 import { ItemRepository } from "./ItemRepository";
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * Item Manager - Mediates between View Layer and data source

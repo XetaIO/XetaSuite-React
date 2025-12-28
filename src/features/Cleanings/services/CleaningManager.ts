@@ -1,5 +1,5 @@
 import { handleApiError } from '@/shared/api';
-import type { PaginatedResponse, SingleResponse } from '@/shared/types';
+import type { PaginatedResponse, SingleResponse, ManagerResult } from '@/shared/types';
 import { CleaningRepository } from './CleaningRepository';
 import type {
     Cleaning,
@@ -9,12 +9,6 @@ import type {
     AvailableMaterial,
     TypeOption,
 } from '../types';
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * Cleaning Manager - Business logic and error handling layer

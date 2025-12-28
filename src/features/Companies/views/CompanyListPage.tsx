@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, type FC } from "react";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaPenToSquare, FaTrash, FaMagnifyingGlass, FaArrowUp, FaArrowDown } from "react-icons/fa6";
+import { FaPlus, FaMagnifyingGlass, FaArrowUp, FaArrowDown } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, LinkedName } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, LinkedName, ActionsDropdown, createActions } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
@@ -11,7 +11,6 @@ import { CompanyManager } from "../services";
 import { CompanyModal } from "./CompanyModal";
 import type { Company, CompanyFilters } from "../types";
 import type { PaginationMeta } from "@/shared/types";
-import { Link } from "react-router";
 
 type SortField = "name" | "maintenances_count" | "created_at";
 type SortDirection = "asc" | "desc";
@@ -41,6 +40,13 @@ const CompanyListPage: FC = () => {
     const canUpdate = isOnHeadquarters && hasPermission("company.update");
     const canDelete = isOnHeadquarters && hasPermission("company.delete");
     const canViewCreator = isOnHeadquarters && hasPermission("user.view");
+
+    const hasAnyActions = canUpdate || canDelete;
+
+    const getCompanyActions = (company: Company) => [
+        { ...createActions.edit(() => handleEdit(company), t), hidden: !canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(company), t), hidden: !canDelete },
+    ];
 
     // Modals
     const companyModal = useModal();
@@ -361,27 +367,10 @@ const CompanyListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(company.created_at)}
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {hasAnyActions && (
                                             <TableCell className="px-6 py-4">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    {canUpdate && (
-                                                        <button
-                                                            onClick={() => handleEdit(company)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-brand-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-brand-400"
-                                                            title={t("common.edit")}
-                                                        >
-                                                            <FaPenToSquare className="h-4 w-4" />
-                                                        </button>
-                                                    )}
-                                                    {canDelete && (
-                                                        <button
-                                                            onClick={() => handleDeleteClick(company)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-error-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-error-400"
-                                                            title={t("common.delete")}
-                                                        >
-                                                            <FaTrash className="h-4 w-4" />
-                                                        </button>
-                                                    )}
+                                                <div className="flex items-center justify-end">
+                                                    <ActionsDropdown actions={getCompanyActions(company)} />
                                                 </div>
                                             </TableCell>
                                         )}

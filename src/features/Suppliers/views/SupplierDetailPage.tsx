@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaArrowUp, FaArrowDown, FaMagnifyingGlass, FaCubes, FaCalendar, FaUser, FaPenToSquare } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, Button } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, Button, LinkedName } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { SupplierManager } from "../services";
 import type { Supplier } from "../types";
@@ -22,7 +22,7 @@ const SupplierDetailPage: FC = () => {
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const supplierId = Number(id);
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const { getCurrency } = useSettings();
 
     // Supplier state
@@ -47,7 +47,10 @@ const SupplierDetailPage: FC = () => {
     const editModal = useModal();
 
     // Permissions
-    const canUpdate = hasPermission('supplier.update');
+    const canUpdate = isOnHeadquarters && hasPermission('supplier.update');
+    const canViewCreator = isOnHeadquarters && hasPermission('user.view');
+    const canViewSite = isOnHeadquarters && hasPermission('site.view');
+    const canViewItem = isOnHeadquarters && hasPermission('item.view');
 
     // Fetch supplier details
     useEffect(() => {
@@ -235,7 +238,11 @@ const SupplierDetailPage: FC = () => {
                             <FaUser className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-900 dark:text-white">{supplier.creator?.full_name || "—"}</p>
+                            <LinkedName
+                                canView={canViewCreator}
+                                id={supplier.creator?.id}
+                                name={supplier.creator?.full_name}
+                                basePath="users" />
                             <p className="text-sm text-gray-500 dark:text-gray-400">{t("common.creator")}</p>
                         </div>
                     </div>
@@ -397,7 +404,12 @@ const SupplierDetailPage: FC = () => {
                                     >
                                         <TableCell className="px-6 py-4">
                                             <div>
-                                                <span className="font-medium text-gray-900 dark:text-white">{item.name}</span>
+                                                <LinkedName
+                                                    canView={canViewItem}
+                                                    id={item.id}
+                                                    name={item.name}
+                                                    basePath="items"
+                                                />
                                                 {item.description && (
                                                     <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400 line-clamp-1">{item.description}</p>
                                                 )}
@@ -421,7 +433,11 @@ const SupplierDetailPage: FC = () => {
                                             {formatCurrency(item.current_price, getCurrency())}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {item.site?.name || <span className="text-gray-400 dark:text-gray-500">—</span>}
+                                            <LinkedName
+                                                canView={canViewSite}
+                                                id={item.site?.id}
+                                                name={item.site?.name}
+                                                basePath="sites" />
                                         </TableCell>
                                     </TableRow>
                                 ))

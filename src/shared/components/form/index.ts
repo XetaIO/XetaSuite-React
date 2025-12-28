@@ -18,5 +18,8 @@ export { default as MultiSelect } from "./MultiSelect";
 // DatePicker
 export { default as DatePicker } from "./DatePicker";
 
+// Switch
+export { default as Switch } from "./switch/Switch";
+
 // Form
 export { default as Form } from "./Form";

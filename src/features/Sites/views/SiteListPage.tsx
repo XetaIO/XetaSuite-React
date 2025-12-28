@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaPenToSquare, FaTrash, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaFileExport } from "react-icons/fa6";
+import { FaPlus, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaFileExport } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, createActions, ActionsDropdown } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
 import { Checkbox } from "@/shared/components/form";
 import { useModal } from "@/shared/hooks";
@@ -45,6 +45,8 @@ const SiteListPage: FC = () => {
     const canUpdate = hasPermission("site.update");
     const canDelete = hasPermission("site.delete");
     const canExport = hasPermission("site.export");
+
+    const hasAnyActions = canUpdate || canDelete;
 
     // Modals
     const siteModal = useModal();
@@ -203,6 +205,11 @@ const SiteListPage: FC = () => {
         }
     };
 
+    const getSiteActions = (site: Site) => [
+        { ...createActions.edit(() => handleEdit(site), t), hidden: !canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(site), t), hidden: !canDelete },
+    ];
+
     return (
         <>
             <PageMeta title={`${t("sites.title")} | XetaSuite`} description={t("sites.description")} />
@@ -342,7 +349,7 @@ const SiteListPage: FC = () => {
                                         {renderSortIcon("created_at")}
                                     </button>
                                 </TableCell>
-                                {(canUpdate || canDelete) && (
+                                {hasAnyActions && (
                                     <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t("common.actions")}
                                     </TableCell>
@@ -351,7 +358,7 @@ const SiteListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(6)].map((_, index) => (
+                                [...Array(8)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
                                         {canExport && (
                                             <TableCell className="px-6 py-4">
@@ -373,7 +380,7 @@ const SiteListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {hasAnyActions && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -415,7 +422,14 @@ const SiteListPage: FC = () => {
                                                 to={`/sites/${site.id}`}
                                                 className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
                                             >
-                                                {site.name}
+                                                <span className="mr-2">
+                                                    {site.name}
+                                                </span>
+                                                {site.is_headquarters && (
+                                                    <Badge color="brand" size="sm">
+                                                        {t("sites.detail.headquarters")}
+                                                    </Badge>
+                                                )}
                                             </Link>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
@@ -436,27 +450,10 @@ const SiteListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(site.created_at)}
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {hasAnyActions && (
                                             <TableCell className="px-6 py-4">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    {canUpdate && (
-                                                        <button
-                                                            onClick={() => handleEdit(site)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-brand-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-brand-400"
-                                                            title={t("common.edit")}
-                                                        >
-                                                            <FaPenToSquare className="h-4 w-4" />
-                                                        </button>
-                                                    )}
-                                                    {canDelete && (
-                                                        <button
-                                                            onClick={() => handleDeleteClick(site)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-error-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-error-400"
-                                                            title={t("common.delete")}
-                                                        >
-                                                            <FaTrash className="h-4 w-4" />
-                                                        </button>
-                                                    )}
+                                                <div className="flex items-center justify-end">
+                                                    <ActionsDropdown actions={getSiteActions(site)} />
                                                 </div>
                                             </TableCell>
                                         )}

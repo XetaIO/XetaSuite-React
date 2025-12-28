@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, type FC } from 'react';
-import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
@@ -11,7 +10,7 @@ import {
     FaEnvelope,
 } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions } from '@/shared/components/ui';
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
@@ -27,7 +26,7 @@ type SortDirection = 'asc' | 'desc';
 
 const MaterialListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const [materials, setMaterials] = useState<Material[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -45,10 +44,13 @@ const MaterialListPage: FC = () => {
     const [isDeleting, setIsDeleting] = useState(false);
 
     // Permissions
-    const canCreate = hasPermission('material.create');
-    const canUpdate = hasPermission('material.update');
-    const canDelete = hasPermission('material.delete');
-    const canGenerateQrCode = hasPermission('material.generateQrCode');
+    const canView = hasPermission('material.view');
+    const canCreate = !isOnHeadquarters && hasPermission('material.create');
+    const canUpdate = !isOnHeadquarters && hasPermission('material.update');
+    const canDelete = !isOnHeadquarters && hasPermission('material.delete');
+    const canGenerateQrCode = !isOnHeadquarters && hasPermission('material.generateQrCode');
+    const canViewZone = hasPermission('zone.view');
+    const canViewSite = hasPermission('site.view');
 
     // Modals
     const materialModal = useModal();
@@ -274,6 +276,11 @@ const MaterialListPage: FC = () => {
                                 >
                                     {t('materials.zone')}
                                 </TableCell>
+                                {isOnHeadquarters && (
+                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400" >
+                                        {t('materials.site')}
+                                    </TableCell>
+                                )}
                                 <TableCell
                                     isHeader
                                     className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400"
@@ -316,7 +323,7 @@ const MaterialListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(6)].map((_, index) => (
+                                [...Array(8)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
@@ -324,6 +331,11 @@ const MaterialListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4">
+                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4 text-center">
                                             <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
@@ -344,7 +356,7 @@ const MaterialListPage: FC = () => {
                                 <TableRow>
                                     <TableCell
                                         className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
-                                        colSpan={6}
+                                        colSpan={hasAnyAction ? 7 : isOnHeadquarters ? 7 : 6}
                                     >
                                         {debouncedSearch ? (
                                             <div className="flex flex-col items-center justify-center">
@@ -371,12 +383,11 @@ const MaterialListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center gap-2">
                                                 <FaWrench className="h-4 w-4 text-gray-400" />
-                                                <Link
-                                                    to={`/materials/${material.id}`}
-                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                >
-                                                    {material.name}
-                                                </Link>
+                                                <LinkedName
+                                                    canView={canView}
+                                                    id={material.id}
+                                                    name={material.name}
+                                                    basePath="materials" />
                                             </div>
                                             {material.description && (
                                                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
@@ -385,8 +396,21 @@ const MaterialListPage: FC = () => {
                                             )}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {material.zone?.name || '-'}
+                                            <LinkedName
+                                                canView={canViewZone}
+                                                id={material.zone?.id}
+                                                name={material.zone?.name}
+                                                basePath="zones" />
                                         </TableCell>
+                                        {isOnHeadquarters && (
+                                            <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                                <LinkedName
+                                                    canView={canViewSite}
+                                                    id={material.site?.id}
+                                                    name={material.site?.name}
+                                                    basePath="sites" />
+                                            </TableCell>
+                                        )}
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center justify-center gap-2">
                                                 {material.cleaning_alert ? (

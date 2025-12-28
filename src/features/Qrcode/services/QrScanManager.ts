@@ -1,12 +1,7 @@
 import { handleApiError } from "@/shared/api";
 import type { QrScanData } from "@/features/Qrcode/types";
+import type { ManagerResult } from "@/shared/types";
 import { QrScanRepository } from "./QrScanRepository";
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 export const QrScanManager = {
     /**

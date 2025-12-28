@@ -83,14 +83,14 @@ export function SiteSwitcher({ compact = false, dropdownDirection = 'down', full
                 aria-expanded={isOpen}
                 aria-haspopup="listbox"
             >
-                <FaBuildingFlag className="h-4 w-4 flex-shrink-0" />
+                <FaBuildingFlag className="h-4 w-4 shrink-0" />
                 {!compact && (
                     <>
-                        <span className={`text-sm font-medium truncate ${fullWidth ? 'flex-1 text-left' : 'hidden sm:inline max-w-[120px]'}`}>
+                        <span className={`text-sm font-medium truncate ${fullWidth ? 'flex-1 text-left' : 'hidden sm:inline max-w-30'}`}>
                             {currentSite?.name || t('header.selectSite')}
                         </span>
                         <svg
-                            className={`h-4 w-4 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                            className={`h-4 w-4 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -130,11 +130,11 @@ export function SiteSwitcher({ compact = false, dropdownDirection = 'down', full
                                 role="option"
                                 aria-selected={site.id === user?.current_site_id}
                             >
-                                <FaBuildingFlag className="h-4 w-4 flex-shrink-0" />
+                                <FaBuildingFlag className="h-4 w-4 shrink-0" />
                                 <span className="font-medium truncate">{site.name}</span>
                                 {site.id === user?.current_site_id && (
                                     <svg
-                                        className="ml-auto h-4 w-4 flex-shrink-0"
+                                        className="ml-auto h-4 w-4 shrink-0"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"

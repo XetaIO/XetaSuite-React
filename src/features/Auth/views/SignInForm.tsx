@@ -124,6 +124,15 @@ export default function SignInForm() {
                     {isLoading ? t('auth.signingIn') : t('auth.loginButton')}
                 </Button>
             </form>
+
+            <div className="mt-4 text-center">
+                <Link
+                    to="/setup-password-resend"
+                    className="text-sm font-medium text-brand-600 hover:text-brand-500"
+                >
+                    {t('auth.passwordNotSetup')}
+                </Link>
+            </div>
         </div>
     );
 }

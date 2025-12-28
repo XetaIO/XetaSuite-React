@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, type FC } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
@@ -34,7 +34,6 @@ type SortDirection = 'asc' | 'desc';
 
 const IncidentListPage: FC = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
     const { hasPermission, isOnHeadquarters } = useAuth();
     const [incidents, setIncidents] = useState<Incident[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);

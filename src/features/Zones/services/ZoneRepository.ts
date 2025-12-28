@@ -1,7 +1,7 @@
 import { httpClient } from '@/shared/api';
 import { buildUrl, API_ENDPOINTS } from '@/shared/api';
 import type { PaginatedResponse, SingleResponse } from '@/shared/types';
-import type { Zone, ZoneFormData, ZoneFilters, ParentZoneOption } from '../types';
+import type { Zone, ZoneFormData, ZoneFilters, ParentZoneOption, ZoneTreeResponse } from '../types';
 
 /**
  * Zone Repository - Responsible for interacting with the data source
@@ -92,6 +92,18 @@ export const ZoneRepository = {
             exclude_zone_id: excludeZoneId,
         });
         const response = await httpClient.get<{ data: ParentZoneOption[] }>(url);
+        return response.data;
+    },
+
+    /**
+     * Get hierarchical tree of zones for a site
+     * On HQ: can pass site_id to view another site's zones
+     */
+    getTree: async (siteId?: number): Promise<ZoneTreeResponse> => {
+        const url = buildUrl(API_ENDPOINTS.ZONES.TREE, {
+            site_id: siteId,
+        });
+        const response = await httpClient.get<ZoneTreeResponse>(url);
         return response.data;
     },
 };

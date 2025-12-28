@@ -1,5 +1,5 @@
 import { handleApiError } from '@/shared/api';
-import type { PaginatedResponse, SingleResponse } from '@/shared/types';
+import type { PaginatedResponse, SingleResponse, ManagerResult } from '@/shared/types';
 import { MaintenanceRepository } from './MaintenanceRepository';
 import type {
     Maintenance,
@@ -17,12 +17,6 @@ import type {
     IncidentsPaginatedResponse,
     ItemMovementsPaginatedResponse,
 } from '../types';
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * Maintenance Manager - Business logic and error handling layer

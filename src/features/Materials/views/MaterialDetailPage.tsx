@@ -20,10 +20,10 @@ import { MaterialManager } from '../services/MaterialManager';
 import { MaterialModal } from './MaterialModal';
 import { MaterialQrCodeModal } from './MaterialQrCodeModal';
 import type { MaterialDetail } from '../types';
-import { MaterialStatsCharts } from '../components/MaterialStatsCharts';
+import { MaterialStatsCharts, MaterialRelatedTabs } from '../components';
 import PageBreadcrumb from '@/shared/components/common/PageBreadcrumb';
 import PageMeta from '@/shared/components/common/PageMeta';
-import { Button, Badge } from '@/shared/components/ui';
+import { Button, Badge, LinkedName } from '@/shared/components/ui';
 import { useModal } from '@/shared/hooks';
 import { useAuth } from '@/features/Auth/hooks';
 import { formatDate } from '@/shared/utils';
@@ -38,7 +38,7 @@ const frequencyLabels: Record<string, string> = {
 export function MaterialDetailPage() {
     const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
 
     // Material state
     const [material, setMaterial] = useState<MaterialDetail | null>(null);
@@ -50,8 +50,10 @@ export function MaterialDetailPage() {
     const qrCodeModal = useModal();
 
     // Permissions
-    const canUpdate = hasPermission('material.update');
-    const canGenerateQrCode = hasPermission('material.generateQrCode');
+    const canUpdate = !isOnHeadquarters && hasPermission('material.update');
+    const canGenerateQrCode = !isOnHeadquarters && hasPermission('material.generateQrCode');
+    const canViewCreatorAndRecipients = isOnHeadquarters && hasPermission('user.view');
+    const canViewZone = hasPermission('zone.view');
 
     // Load material details
     const loadMaterial = async () => {
@@ -225,18 +227,11 @@ export function MaterialDetailPage() {
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t('materials.zone')}
                                 </p>
-                                <p className="text-gray-900 dark:text-white">
-                                    {material.zone ? (
-                                        <Link
-                                            to={`/zones/${material.zone.id}`}
-                                            className="text-brand-600 hover:text-brand-700 dark:text-brand-400"
-                                        >
-                                            {material.zone.name}
-                                        </Link>
-                                    ) : (
-                                        <span className="text-gray-400">—</span>
-                                    )}
-                                </p>
+                                <LinkedName
+                                    canView={canViewZone}
+                                    id={material.zone?.id}
+                                    name={material.zone?.name}
+                                    basePath="zones" />
                             </div>
                         </div>
 
@@ -246,11 +241,11 @@ export function MaterialDetailPage() {
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t('materials.createdBy')}
                                 </p>
-                                <p className="text-gray-900 dark:text-white">
-                                    {material.creator?.full_name || material.created_by_name || (
-                                        <span className="text-gray-400">—</span>
-                                    )}
-                                </p>
+                                <LinkedName
+                                    canView={canViewCreatorAndRecipients}
+                                    id={material.creator?.id}
+                                    name={material.creator?.full_name}
+                                    basePath="users" />
                             </div>
                         </div>
 
@@ -328,9 +323,11 @@ export function MaterialDetailPage() {
                                                     {recipient.full_name.charAt(0).toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                                        {recipient.full_name}
-                                                    </p>
+                                                    <LinkedName
+                                                        canView={canViewCreatorAndRecipients}
+                                                        id={recipient.id}
+                                                        name={recipient.full_name}
+                                                        basePath="users" />
                                                     <p className="text-xs text-gray-500 dark:text-gray-400">
                                                         {recipient.email}
                                                     </p>
@@ -352,6 +349,9 @@ export function MaterialDetailPage() {
 
             {/* Statistics Charts */}
             <MaterialStatsCharts materialId={material.id} />
+
+            {/* Related Tabs (Incidents, Maintenances, Cleanings, Items) */}
+            <MaterialRelatedTabs material={material} />
 
             {/* Edit Modal */}
             <MaterialModal

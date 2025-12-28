@@ -1,5 +1,5 @@
 import { handleApiError } from "@/shared/api";
-import type { PaginatedResponse } from '@/shared/types';
+import type { PaginatedResponse, ManagerResult } from '@/shared/types';
 import { ItemMovementRepository } from './ItemMovementRepository';
 import type {
     ItemMovement,
@@ -8,12 +8,6 @@ import type {
 } from '../types';
 import type { AvailableSupplier } from '@/features/Items/types';
 import { ItemRepository } from "@/features/Items/services";
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * ItemMovement Manager - Implements business logic and error handling

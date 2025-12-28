@@ -3,12 +3,15 @@ export interface Material {
     id: number;
     name: string;
     description?: string | null;
-    zone_id: number;
     site_id: number;
+    site?: MaterialSite;
+    // Site
+    zone_id: number;
     zone?: MaterialZone;
-    creator?: MaterialCreator;
+    // Creator
     created_by_id: number | null;
     created_by_name: string | null;
+    creator?: MaterialCreator;
     // Counts
     qrcode_flash_count: number;
     incident_count: number;
@@ -32,6 +35,11 @@ export interface MaterialDetail extends Material {
 }
 
 export interface MaterialZone {
+    id: number;
+    name: string;
+}
+
+export interface MaterialSite {
     id: number;
     name: string;
 }
@@ -85,4 +93,75 @@ export interface MaterialMonthlyStats {
     maintenances: number[];
     cleanings: number[];
     item_movements: number[];
+}
+
+// Related entities for material detail tabs
+export interface MaterialIncident {
+    id: number;
+    description: string;
+    status: string;
+    status_label: string;
+    severity: string;
+    severity_label: string;
+    material_id: number;
+    reporter?: {
+        id: number;
+        full_name: string;
+    } | null;
+    maintenance?: {
+        id: number;
+        description: string;
+    } | null;
+    started_at?: string | null;
+    resolved_at?: string | null;
+    created_at: string;
+}
+
+export interface MaterialMaintenance {
+    id: number;
+    description: string;
+    reason: string;
+    type: string;
+    type_label: string;
+    status: string;
+    status_label: string;
+    realization: string;
+    realization_label: string;
+    material_id: number;
+    creator?: {
+        id: number;
+        full_name: string;
+    } | null;
+    created_at: string;
+}
+
+export interface MaterialCleaning {
+    id: number;
+    description?: string | null;
+    type: string;
+    type_label: string;
+    material_id: number;
+    creator?: {
+        id: number;
+        full_name: string;
+    } | null;
+    created_at: string;
+}
+
+export interface MaterialItem {
+    id: number;
+    name: string;
+    reference?: string | null;
+    description?: string | null;
+    current_price: number;
+    current_stock: number;
+    stock_status: string;
+    stock_status_color: string;
+    supplier_id?: number | null;
+    supplier_name?: string | null;
+    supplier?: {
+        id: number;
+        name: string;
+    } | null;
+    created_at: string;
 }

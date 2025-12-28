@@ -39,6 +39,7 @@
         "optional": "optional",
         "qrCode": "QR Code",
         "retry": "Retry",
+        "refresh": "Refresh",
         "increase": "Increase",
         "decrease": "Decrease",
         "view": "View",
@@ -104,6 +105,7 @@
         "manageSuppliers": "Manage Suppliers",
         "manageMaterials": "Manage Materials",
         "manageZones": "Manage Zones",
+        "zoneTree": "Zone Tree",
         "manageSites": "Manage Sites",
         "manageUsers": "Manage Users",
         "rolesPermissions": "Roles & Permissions",
@@ -252,6 +254,7 @@
             "info": "Information"
         },
         "fields": {
+            "notes": "Notes",
             "site": "Site",
             "name": "Name",
             "reference": "Reference",
@@ -542,6 +545,21 @@
             "created": "Zone \"{{name}}\" has been created successfully",
             "updated": "Zone \"{{name}}\" has been updated successfully",
             "deleted": "Zone \"{{name}}\" has been deleted successfully"
+        },
+        "tree": {
+            "title": "Zone Tree",
+            "description": "Hierarchical visualization of zones",
+            "pageTitle": "Zone Architecture",
+            "pageDescription": "Visualize the hierarchical organization of zones",
+            "totalZones": "zones",
+            "expandAll": "Expand all",
+            "collapseAll": "Collapse all",
+            "currentSite": "Current site",
+            "selectSite": "Select a site",
+            "noZones": "No zones found for this site",
+            "goToManagement": "Go to zone management",
+            "subzones": "subzones",
+            "allowsMaterials": "Allows materials"
         }
     },
     "materials": {
@@ -557,6 +575,7 @@
         "noMaterialsFor": "No materials found for \"{{search}}\"",
         "deleteTitle": "Delete material",
         "zone": "Zone",
+        "site": "Site",
         "createdBy": "Created by",
         "cleaningAlert": "Cleaning alert",
         "cleaningAlertSettings": "Cleaning alert settings",
@@ -616,6 +635,20 @@
             "created": "Material \"{{name}}\" has been created successfully",
             "updated": "Material \"{{name}}\" has been updated successfully",
             "deleted": "Material \"{{name}}\" has been deleted successfully"
+        },
+        "tabs": {
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Cleanings",
+            "items": "Items",
+            "searchIncidents": "Search incidents...",
+            "searchMaintenances": "Search maintenances...",
+            "searchCleanings": "Search cleanings...",
+            "searchItems": "Search items...",
+            "noIncidents": "No incidents for this material",
+            "noMaintenances": "No maintenances for this material",
+            "noCleanings": "No cleanings for this material",
+            "noItems": "No items associated with this material"
         },
         "qrCode": {
             "title": "QR Code",
@@ -730,9 +763,29 @@
         "passwordMinLengthHint": "Must be at least 8 characters",
         "passwordsDoNotMatch": "Passwords do not match",
         "passwordResetSuccess": "Password reset successfully. Please sign in.",
+        "passwordNotSetup": "Password not set up yet ?",
         "invalidLink": "Invalid link",
         "invalidLinkDesc": "This password reset link is invalid or has expired. Please request a new one.",
-        "resetting": "Resetting..."
+        "resetting": "Resetting...",
+        "setupPassword": {
+            "title": "Create my password",
+            "desc": "Welcome {{name}}! Please create your password to access your account.",
+            "passwordPlaceholder": "Choose a password",
+            "create": "Create my password",
+            "creating": "Creating...",
+            "success": "Your password has been created successfully. You can now sign in.",
+            "verifying": "Verifying link...",
+            "invalidLink": "This password setup link is invalid.",
+            "linkExpired": "This link has expired. Please contact your administrator to request a new one.",
+            "alreadySetup": "You have already set up your password. Please sign in.",
+            "linkError": "Invalid link"
+        },
+        "resendSetupPassword": {
+            "title": "Resend password setup link",
+            "desc": "You must set up your password before you can sign in for the first time.",
+            "sendLink": "Resend link",
+            "successDesc": "If an account exists with that email address and has not yet set up a password, you will receive an email with the setup link."
+        }
     },
     "errors": {
         "generic": "An error occurred",
@@ -1032,10 +1085,241 @@
             }
         }
     },
+    "roles": {
+        "title": "Roles",
+        "description": "Role and permission management",
+        "listTitle": "Roles list",
+        "manageRolesAndPermissions": "Manage roles and their associated permissions",
+        "create": "New role",
+        "createRole": "Create role",
+        "editRole": "Edit role",
+        "name": "Role name",
+        "namePlaceholder": "Enter role name",
+        "guard": "Guard",
+        "permissions": "Permissions",
+        "permissionsCount": "{{count}} permission(s)",
+        "selectPermissions": "Select permissions",
+        "searchPermissions": "Search permissions...",
+        "selectedPermissions": "{{count}} permission(s) selected",
+        "noPermissionsSelected": "No permissions selected",
+        "users": "Users",
+        "usersCount": "{{count}} user(s)",
+        "permissionsTab": "Permissions",
+        "usersTab": "Users",
+        "noRoles": "No roles found",
+        "noRolesFor": "No roles found for \"{{search}}\"",
+        "noPermissions": "No permissions assigned to this role",
+        "noUsers": "No users have this role",
+        "notFound": "Role not found",
+        "notFoundMessage": "The role you are looking for does not exist or has been deleted.",
+        "backToList": "Back to roles list",
+        "searchPlaceholder": "Search roles...",
+        "deleteTitle": "Delete role",
+        "deleteMessage": "Are you sure you want to delete the role \"{{name}}\"? This action cannot be undone.",
+        "cannotDeleteWithUsers": "Cannot delete this role because it is assigned to users.",
+        "confirmDelete": "Delete role",
+        "confirmDeleteMessage": "Are you sure you want to delete the role \"{{name}}\"? This action cannot be undone.",
+        "selectedPermissionsCount": "{{count}} permission(s) selected",
+        "guardName": "Guard",
+        "detail": {
+            "backToList": "Back to roles list",
+            "roleInfo": "Role information",
+            "createdAt": "Created at",
+            "updatedAt": "Updated at"
+        },
+        "messages": {
+            "created": "Role \"{{name}}\" has been created successfully",
+            "updated": "Role \"{{name}}\" has been updated successfully",
+            "deleted": "Role \"{{name}}\" has been deleted successfully"
+        },
+        "validation": {
+            "nameRequired": "Role name is required"
+        },
+        "permissionDescriptions": {
+            "activity": {
+                "delete": "Delete activities",
+                "search": "Search activities",
+                "view": "View activity details",
+                "viewAny": "View activities list"
+            },
+            "calendar-event": {
+                "create": "Create calendar events",
+                "delete": "Delete calendar events",
+                "search": "Search calendar events",
+                "update": "Edit calendar events",
+                "view": "View event details",
+                "viewAny": "View events list"
+            },
+            "calendar": {
+                "create": "Create calendars",
+                "delete": "Delete calendars",
+                "update": "Edit calendars",
+                "view": "View calendar details",
+                "viewAny": "View calendars list"
+            },
+            "cleaning": {
+                "create": "Create cleanings",
+                "delete": "Delete cleanings",
+                "export": "Export cleanings",
+                "generatePlan": "Generate cleaning plan",
+                "search": "Search cleanings",
+                "update": "Edit cleanings",
+                "view": "View cleaning details",
+                "viewAny": "View cleanings list"
+            },
+            "company": {
+                "create": "Create companies",
+                "delete": "Delete companies",
+                "export": "Export companies",
+                "search": "Search companies",
+                "update": "Edit companies",
+                "view": "View company details",
+                "viewAny": "View companies list"
+            },
+            "role": {
+                "create": "Create roles",
+                "delete": "Delete roles",
+                "search": "Search roles",
+                "update": "Edit roles",
+                "view": "View role details",
+                "viewAny": "View roles list"
+            },
+            "permission": {
+                "create": "Create permissions",
+                "delete": "Delete permissions",
+                "search": "Search permissions",
+                "update": "Edit permissions",
+                "view": "View permission details",
+                "viewAny": "View permissions list"
+            },
+            "user": {
+                "assignDirectPermission": "Assign direct permissions",
+                "assignSite": "Assign user to site",
+                "create": "Create users",
+                "delete": "Delete users",
+                "restore": "Restore users",
+                "search": "Search users",
+                "update": "Edit users",
+                "view": "View user details",
+                "viewAny": "View users list"
+            },
+            "material": {
+                "create": "Create materials",
+                "delete": "Delete materials",
+                "export": "Export materials",
+                "generateQrCode": "Generate material QR codes",
+                "scanQrCode": "Scan material QR codes",
+                "search": "Search materials",
+                "update": "Edit materials",
+                "view": "View material details",
+                "viewAny": "View materials list"
+            },
+            "setting": {
+                "create": "Create settings",
+                "delete": "Delete settings",
+                "update": "Edit settings",
+                "view": "View setting details",
+                "viewAny": "View settings list"
+            },
+            "zone": {
+                "create": "Create zones",
+                "delete": "Delete zones",
+                "export": "Export zones",
+                "search": "Search zones",
+                "update": "Edit zones",
+                "view": "View zone details",
+                "viewAny": "View zones list"
+            },
+            "site": {
+                "create": "Create sites",
+                "delete": "Delete sites",
+                "export": "Export sites",
+                "search": "Search sites",
+                "update": "Edit sites",
+                "view": "View site details",
+                "viewAny": "View sites list"
+            },
+            "maintenance": {
+                "create": "Create maintenances",
+                "delete": "Delete maintenances",
+                "export": "Export maintenances",
+                "search": "Search maintenances",
+                "update": "Edit maintenances",
+                "view": "View maintenance details",
+                "viewAny": "View maintenances list"
+            },
+            "incident": {
+                "create": "Create incidents",
+                "delete": "Delete incidents",
+                "export": "Export incidents",
+                "search": "Search incidents",
+                "update": "Edit incidents",
+                "view": "View incident details",
+                "viewAny": "View incidents list"
+            },
+            "item": {
+                "create": "Create items",
+                "delete": "Delete items",
+                "export": "Export items",
+                "generateQrCode": "Generate item QR codes",
+                "scanQrCode": "Scan item QR codes",
+                "search": "Search items",
+                "update": "Edit items",
+                "view": "View item details",
+                "viewAny": "View items list",
+                "viewOthersSites": "View items from other sites"
+            },
+            "item-movement": {
+                "create": "Create movements",
+                "delete": "Delete movements",
+                "export": "Export movements",
+                "search": "Search movements",
+                "update": "Edit movements",
+                "view": "View movement details",
+                "viewAny": "View movements list"
+            },
+            "bypass": {
+                "login": "Bypass authentication"
+            }
+        }
+    },
+    "permissions": {
+        "title": "Permissions",
+        "description": "Permission management for the application",
+        "listTitle": "Permissions list",
+        "managePermissions": "Manage permissions and their associated roles",
+        "create": "New permission",
+        "createPermission": "Create permission",
+        "editPermission": "Edit permission",
+        "name": "Permission name",
+        "namePlaceholder": "e.g. resource.action",
+        "nameHint": "Use the format resource.action (e.g. user.create, item.view)",
+        "roles": "Roles",
+        "rolesCount": "{{count}} role(s)",
+        "noPermissions": "No permissions found",
+        "noPermissionsFor": "No permissions found for \"{{search}}\"",
+        "noRoles": "No roles have this permission",
+        "notFound": "Permission not found",
+        "notFoundMessage": "The permission you are looking for does not exist or has been deleted.",
+        "backToList": "Back to permissions list",
+        "searchPlaceholder": "Search permissions...",
+        "confirmDelete": "Delete permission",
+        "confirmDeleteMessage": "Are you sure you want to delete the permission \"{{name}}\"? This action cannot be undone.",
+        "rolesWithPermission": "Roles with this permission",
+        "validation": {
+            "nameRequired": "Permission name is required"
+        },
+        "messages": {
+            "created": "Permission \"{{name}}\" has been created successfully",
+            "updated": "Permission \"{{name}}\" has been updated successfully",
+            "deleted": "Permission \"{{name}}\" has been deleted successfully"
+        }
+    },
     "users": {
         "title": "Users",
         "description": "User and access management",
         "listTitle": "Users list",
+        "searchPlaceholder": "Search by name or email...",
         "create": "New user",
         "edit": "Edit user",
         "notFound": "User not found",
@@ -1104,5 +1388,37 @@
             "deleted": "User \"{{name}}\" has been deleted successfully",
             "restored": "User \"{{name}}\" has been restored successfully"
         }
+    },
+    "settings": {
+        "title": "Settings",
+        "applicationSettings": "Application Settings",
+        "applicationSettingsDescription": "Configure global application settings.",
+        "noSettings": "No settings available",
+        "headquartersOnly": "Settings can only be modified from headquarters.",
+        "keys": {
+            "currency": "Currency",
+            "currency_symbol": "Currency Symbol",
+            "login_enabled": "Login Enabled"
+        },
+        "descriptions": {
+            "currency": "The currency code used for prices (e.g., EUR, USD).",
+            "currency_symbol": "The symbol displayed for prices (e.g., €, $).",
+            "login_enabled": "When disabled, users cannot log in to the application."
+        },
+        "messages": {
+            "updated": "Setting \"{{name}}\" has been updated successfully"
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "empty": "No notifications",
+        "emptyDescription": "You have no notifications at the moment",
+        "new": "NEW",
+        "viewAll": "View all notifications",
+        "markAllAsRead": "Mark all as read",
+        "deleteAll": "Delete all",
+        "delete": "Delete notification",
+        "noMore": "No more notifications",
+        "loadMore": "Load more"
     }
 }

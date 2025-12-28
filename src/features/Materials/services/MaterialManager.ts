@@ -1,5 +1,5 @@
 import { handleApiError } from '@/shared/api';
-import type { PaginatedResponse, SingleResponse } from '@/shared/types';
+import type { PaginatedResponse, SingleResponse, ManagerResult } from '@/shared/types';
 import type {
     Material,
     MaterialDetail,
@@ -8,14 +8,12 @@ import type {
     AvailableZone,
     AvailableRecipient,
     MaterialMonthlyStats,
+    MaterialIncident,
+    MaterialMaintenance,
+    MaterialCleaning,
+    MaterialItem,
 } from '../types';
 import { MaterialRepository } from './MaterialRepository';
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * Material Manager - Mediates between View Layer and data source
@@ -124,6 +122,54 @@ export const MaterialManager = {
     getQrCode: async (id: number, size: number = 200): Promise<ManagerResult<{ svg: string; url: string; size: number }>> => {
         try {
             const data = await MaterialRepository.getQrCode(id, size);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+
+    /**
+     * Get paginated incidents for a material
+     */
+    getIncidents: async (id: number, page = 1, perPage = 10, search?: string): Promise<ManagerResult<PaginatedResponse<MaterialIncident>>> => {
+        try {
+            const data = await MaterialRepository.getIncidents(id, page, perPage, search);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+
+    /**
+     * Get paginated maintenances for a material
+     */
+    getMaintenances: async (id: number, page = 1, perPage = 10, search?: string): Promise<ManagerResult<PaginatedResponse<MaterialMaintenance>>> => {
+        try {
+            const data = await MaterialRepository.getMaintenances(id, page, perPage, search);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+
+    /**
+     * Get paginated cleanings for a material
+     */
+    getCleanings: async (id: number, page = 1, perPage = 10, search?: string): Promise<ManagerResult<PaginatedResponse<MaterialCleaning>>> => {
+        try {
+            const data = await MaterialRepository.getCleanings(id, page, perPage, search);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+
+    /**
+     * Get paginated items for a material
+     */
+    getItems: async (id: number, page = 1, perPage = 10, search?: string): Promise<ManagerResult<PaginatedResponse<MaterialItem>>> => {
+        try {
+            const data = await MaterialRepository.getItems(id, page, perPage, search);
             return { success: true, data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };

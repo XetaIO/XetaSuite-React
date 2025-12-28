@@ -23,7 +23,7 @@ export interface SiteUser {
     first_name: string;
     last_name: string;
     full_name: string;
-    avatar: string;
+    email: string;
 }
 
 export interface SiteFormData {

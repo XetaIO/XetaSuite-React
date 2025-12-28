@@ -13,7 +13,6 @@ export interface User {
     locale: 'fr' | 'en';
     office_phone?: string | null;
     cell_phone?: string | null;
-    end_employment_contract?: string | null;
     current_site_id?: number | null;
     incident_count: number;
     maintenance_count: number;
@@ -65,7 +64,6 @@ export interface UserFormData {
     locale?: 'fr' | 'en';
     office_phone?: string;
     cell_phone?: string;
-    end_employment_contract?: string;
     sites?: SiteAssignment[];
 }
 

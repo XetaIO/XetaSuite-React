@@ -17,12 +17,12 @@ const App: FC = () => {
         <HelmetProvider>
             <ThemeProvider>
                 <BrowserRouter>
-                    <SettingsProvider>
-                        <AuthProvider>
+                    <AuthProvider>
+                        <SettingsProvider>
                             <AppRoutes />
                             <ThemedToastContainer />
-                        </AuthProvider>
-                    </SettingsProvider>
+                        </SettingsProvider>
+                    </AuthProvider>
                 </BrowserRouter>
             </ThemeProvider>
         </HelmetProvider>

@@ -14,7 +14,7 @@ import {
     FaMagnifyingGlass,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination } from "@/shared/components/common";
-import { Button, Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/components/ui";
+import { Button, Table, TableHeader, TableBody, TableRow, TableCell, LinkedName } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { useModal } from "@/shared/hooks";
 import type { PaginationMeta } from "@/shared/types";
@@ -44,6 +44,7 @@ const SiteDetailPage: FC = () => {
 
     // Permissions
     const canUpdate = hasPermission("site.update");
+    const canViewManagerAndMember = hasPermission("user.view");
 
     // Modal
     const editModal = useModal();
@@ -86,11 +87,6 @@ const SiteDetailPage: FC = () => {
 
     const handleMembersPageChange = (page: number) => {
         setMembersPage(page);
-    };
-
-    const handleMembersSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMembersSearch(e.target.value);
-        setMembersPage(1); // Reset to first page on search
     };
 
     const handleEditSuccess = async () => {
@@ -301,7 +297,18 @@ const SiteDetailPage: FC = () => {
                                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
                                         {manager.full_name.charAt(0).toUpperCase()}
                                     </div>
-                                    <span className="text-gray-900 dark:text-white">{manager.full_name}</span>
+                                    <div>
+                                        <LinkedName
+                                            canView={canViewManagerAndMember}
+                                            id={manager.id}
+                                            name={manager.full_name}
+                                            basePath="users" />
+                                        {manager.email && (
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                {manager.email}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -333,20 +340,22 @@ const SiteDetailPage: FC = () => {
                             type="text"
                             placeholder={t("common.search")}
                             value={membersSearch}
-                            onChange={handleMembersSearchChange}
-                            className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                            onChange={(e) => setMembersSearch(e.target.value)}
+                            className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                         />
                         {membersSearch && (
                             <button
-                                onClick={() => {
-                                    setMembersSearch("");
-                                    setMembersPage(1);
-                                }}
+                                onClick={() => setMembersSearch('')}
                                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                title={t("common.clearSearch")}
+                                title={t('common.clearSearch')}
                             >
                                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
                                 </svg>
                             </button>
                         )}
@@ -433,9 +442,11 @@ const SiteDetailPage: FC = () => {
                                                         {member.full_name.charAt(0).toUpperCase()}
                                                     </div>
                                                 )}
-                                                <span className="font-medium text-gray-900 dark:text-white">
-                                                    {member.full_name}
-                                                </span>
+                                                <LinkedName
+                                                    canView={canViewManagerAndMember}
+                                                    id={member.id}
+                                                    name={member.full_name}
+                                                    basePath="users" />
                                             </div>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">

@@ -425,74 +425,74 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                                         {t("items.alerts.enableCritical")}
                                     </Label>
                                     {formData.number_critical_enabled && (
-                                        <div className="mt-2 space-y-4">
-                                            <div>
-                                                <Input
-                                                    type="number"
-                                                    min="0"
-                                                    value={formData.number_critical_minimum}
-                                                    onChange={(e) =>
-                                                        handleChange("number_critical_minimum", parseInt(e.target.value) || 0)
-                                                    }
-                                                    error={!!errors.number_critical_minimum}
-                                                    hint={errors.number_critical_minimum}
-                                                    disabled={isLoading}
-                                                    className="max-w-[150px]"
-                                                />
-                                                <p className="mt-1 text-xs text-gray-500">
-                                                    {t("items.alerts.criticalThresholdHelp")}
-                                                </p>
-                                            </div>
-
-                                            {/* Recipients for critical alerts */}
-                                            <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
-                                                <Label className="mb-1">{t("items.sections.recipients")}</Label>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                                                    {t("items.recipientsHelp")}
-                                                </p>
-
-                                                <div className="space-y-2">
-                                                    <Input
-                                                        type="text"
-                                                        placeholder={t("common.search")}
-                                                        value={recipientSearch}
-                                                        onChange={(e) => handleRecipientSearch(e.target.value)}
-                                                        disabled={isLoading}
-                                                    />
-                                                    <div className="grid grid-cols-1 gap-1 max-h-32 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2">
-                                                        {isLoadingDropdowns || isLoadingRecipients ? (
-                                                            <div className="text-sm text-gray-500 p-1">{t("common.loading")}</div>
-                                                        ) : recipients.length === 0 ? (
-                                                            <div className="text-sm text-gray-500 p-1">
-                                                                {recipientSearch ? t("common.noResults") : t("items.noRecipientsAvailable")}
-                                                            </div>
-                                                        ) : (
-                                                            recipients.map((recipient) => (
-                                                                <label
-                                                                    key={recipient.id}
-                                                                    className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1 rounded"
-                                                                >
-                                                                    <Checkbox
-                                                                        checked={formData.recipient_ids.includes(recipient.id)}
-                                                                        onChange={() => handleRecipientToggle(recipient.id)}
-                                                                        disabled={isLoading}
-                                                                    />
-                                                                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                                                                        {recipient.full_name}
-                                                                        <span className="text-xs text-gray-500 ml-1">
-                                                                            ({recipient.email})
-                                                                        </span>
-                                                                    </span>
-                                                                </label>
-                                                            ))
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div className="mt-2">
+                                            <Input
+                                                type="number"
+                                                min="0"
+                                                value={formData.number_critical_minimum}
+                                                onChange={(e) =>
+                                                    handleChange("number_critical_minimum", parseInt(e.target.value) || 0)
+                                                }
+                                                error={!!errors.number_critical_minimum}
+                                                hint={errors.number_critical_minimum}
+                                                disabled={isLoading}
+                                                className="max-w-[150px]"
+                                            />
+                                            <p className="mt-1 text-xs text-gray-500">
+                                                {t("items.alerts.criticalThresholdHelp")}
+                                            </p>
                                         </div>
                                     )}
                                 </div>
                             </div>
+
+                            {/* Recipients for alerts - shown when either warning or critical is enabled */}
+                            {(formData.number_warning_enabled || formData.number_critical_enabled) && (
+                                <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                                    <Label className="mb-1">{t("items.sections.recipients")}</Label>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                                        {t("items.recipientsHelp")}
+                                    </p>
+
+                                    <div className="space-y-2">
+                                        <Input
+                                            type="text"
+                                            placeholder={t("common.search")}
+                                            value={recipientSearch}
+                                            onChange={(e) => handleRecipientSearch(e.target.value)}
+                                            disabled={isLoading}
+                                        />
+                                        <div className="grid grid-cols-1 gap-1 max-h-32 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2">
+                                            {isLoadingDropdowns || isLoadingRecipients ? (
+                                                <div className="text-sm text-gray-500 p-1">{t("common.loading")}</div>
+                                            ) : recipients.length === 0 ? (
+                                                <div className="text-sm text-gray-500 p-1">
+                                                    {recipientSearch ? t("common.noResults") : t("items.noRecipientsAvailable")}
+                                                </div>
+                                            ) : (
+                                                recipients.map((recipient) => (
+                                                    <label
+                                                        key={recipient.id}
+                                                        className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1 rounded"
+                                                    >
+                                                        <Checkbox
+                                                            checked={formData.recipient_ids.includes(recipient.id)}
+                                                            onChange={() => handleRecipientToggle(recipient.id)}
+                                                            disabled={isLoading}
+                                                        />
+                                                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                                                            {recipient.full_name}
+                                                            <span className="text-xs text-gray-500 ml-1">
+                                                                ({recipient.email})
+                                                            </span>
+                                                        </span>
+                                                    </label>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

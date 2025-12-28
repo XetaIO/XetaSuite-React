@@ -57,3 +57,28 @@ export interface ParentZoneOption {
     id: number;
     name: string;
 }
+
+// Zone tree types for hierarchical view
+export interface ZoneTreeMaterial {
+    id: number;
+    name: string;
+    description?: string | null;
+}
+
+export interface ZoneTreeNode {
+    id: number;
+    name: string;
+    allow_material: boolean;
+    children_count: number;
+    material_count: number;
+    children: ZoneTreeNode[];
+    materials: ZoneTreeMaterial[];
+}
+
+export interface ZoneTreeResponse {
+    data: ZoneTreeNode[];
+    meta: {
+        site_id: number;
+        total_zones: number;
+    };
+}

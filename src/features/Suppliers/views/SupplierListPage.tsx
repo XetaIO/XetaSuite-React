@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback, type FC } from "react";
-import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaPenToSquare, FaTrash, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaFileExport } from "react-icons/fa6";
+import { FaPlus, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaFileExport } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, LinkedName, createActions, ActionsDropdown } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
 import { Checkbox } from "@/shared/components/form";
 import { useModal } from "@/shared/hooks";
@@ -19,7 +18,7 @@ type SortDirection = "asc" | "desc";
 
 const SupplierListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const [suppliers, setSuppliers] = useState<Supplier[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -41,10 +40,14 @@ const SupplierListPage: FC = () => {
     const [isExporting, setIsExporting] = useState(false);
 
     // Permissions
-    const canCreate = hasPermission("supplier.create");
-    const canUpdate = hasPermission("supplier.update");
-    const canDelete = hasPermission("supplier.delete");
-    const canExport = hasPermission("supplier.export");
+    const canView = hasPermission("supplier.view");
+    const canCreate = isOnHeadquarters && hasPermission("supplier.create");
+    const canUpdate = isOnHeadquarters && hasPermission("supplier.update");
+    const canDelete = isOnHeadquarters && hasPermission("supplier.delete");
+    const canExport = isOnHeadquarters && hasPermission("supplier.export");
+    const canViewCreator = isOnHeadquarters && hasPermission("user.view");
+
+    const hasAnyActions = canUpdate || canDelete;
 
     // Modals
     const supplierModal = useModal();
@@ -202,6 +205,11 @@ const SupplierListPage: FC = () => {
             setIsExporting(false);
         }
     };
+
+    const getSupplierActions = (supplier: Supplier) => [
+        { ...createActions.edit(() => handleEdit(supplier), t), hidden: !canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(supplier), t), hidden: !canDelete },
+    ];
 
     return (
         <>
@@ -411,12 +419,11 @@ const SupplierListPage: FC = () => {
                                             </TableCell>
                                         )}
                                         <TableCell className="px-6 py-4">
-                                            <Link
-                                                to={`/suppliers/${supplier.id}`}
-                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                            >
-                                                {supplier.name}
-                                            </Link>
+                                            <LinkedName
+                                                canView={canView}
+                                                id={supplier.id}
+                                                name={supplier.name}
+                                                basePath="suppliers" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {supplier.description ? (
@@ -431,32 +438,19 @@ const SupplierListPage: FC = () => {
                                             </span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {supplier.creator?.full_name || <span className="text-gray-400 dark:text-gray-500">—</span>}
+                                            <LinkedName
+                                                canView={canViewCreator}
+                                                id={supplier.creator?.id}
+                                                name={supplier.creator?.full_name}
+                                                basePath="users" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(supplier.created_at)}
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {hasAnyActions && (
                                             <TableCell className="px-6 py-4">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    {canUpdate && (
-                                                        <button
-                                                            onClick={() => handleEdit(supplier)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-brand-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-brand-400"
-                                                            title={t("common.edit")}
-                                                        >
-                                                            <FaPenToSquare className="h-4 w-4" />
-                                                        </button>
-                                                    )}
-                                                    {canDelete && (
-                                                        <button
-                                                            onClick={() => handleDeleteClick(supplier)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-error-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-error-400"
-                                                            title={t("common.delete")}
-                                                        >
-                                                            <FaTrash className="h-4 w-4" />
-                                                        </button>
-                                                    )}
+                                                <div className="flex items-center justify-end">
+                                                    <ActionsDropdown actions={getSupplierActions(supplier)} />
                                                 </div>
                                             </TableCell>
                                         )}

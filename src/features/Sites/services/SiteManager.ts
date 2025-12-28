@@ -1,13 +1,7 @@
 import { handleApiError } from "@/shared/api";
-import type { PaginatedResponse, SingleResponse } from "@/shared/types";
+import type { PaginatedResponse, SingleResponse, ManagerResult } from "@/shared/types";
 import type { Site, SiteFormData, SiteFilters, UserOption, SiteMember } from "../types";
 import { SiteRepository } from "./SiteRepository";
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * Site Manager - Mediates between View Layer and data source

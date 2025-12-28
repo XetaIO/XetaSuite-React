@@ -1,13 +1,7 @@
 import { handleApiError } from "@/shared/api";
-import type { PaginatedResponse, SingleResponse } from "@/shared/types";
-import type { Zone, ZoneFormData, ZoneFilters, ParentZoneOption, ZoneChild, ZoneMaterial } from "../types";
+import type { PaginatedResponse, SingleResponse, ManagerResult } from "@/shared/types";
+import type { Zone, ZoneFormData, ZoneFilters, ParentZoneOption, ZoneChild, ZoneMaterial, ZoneTreeResponse } from "../types";
 import { ZoneRepository } from "./ZoneRepository";
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * Zone Manager - Mediates between View Layer and data source
@@ -104,6 +98,18 @@ export const ZoneManager = {
     getAvailableParents: async (excludeZoneId?: number): Promise<ManagerResult<{ data: ParentZoneOption[] }>> => {
         try {
             const data = await ZoneRepository.getAvailableParents(excludeZoneId);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+
+    /**
+     * Get hierarchical tree of zones for a site
+     */
+    getTree: async (siteId?: number): Promise<ManagerResult<ZoneTreeResponse>> => {
+        try {
+            const data = await ZoneRepository.getTree(siteId);
             return { success: true, data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };

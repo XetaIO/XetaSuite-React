@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 import type { AppSettings } from '../types';
 import { DEFAULT_SETTINGS } from '../types';
 import { SettingsManager } from '../services';
+import { useAuth } from '@/features/Auth/hooks';
 
 interface SettingsContextValue {
     settings: AppSettings;
@@ -11,6 +12,7 @@ interface SettingsContextValue {
     getCurrency: () => string;
     getCurrencySymbol: () => string;
     formatPrice: (amount: number) => string;
+    isLoginEnabled: () => boolean;
 }
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
@@ -20,32 +22,42 @@ interface SettingsProviderProps {
 }
 
 export function SettingsProvider({ children }: SettingsProviderProps) {
+    const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
     const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const loadSettings = useCallback(async () => {
+        // Don't fetch settings if user is not authenticated
+        if (!isAuthenticated) {
+            setSettings(DEFAULT_SETTINGS);
+            setIsLoading(false);
+            setError(null);
+            return;
+        }
+
         setIsLoading(true);
         setError(null);
 
-        const result = await SettingsManager.getAll();
-
-        if (result.success && result.data) {
-            setSettings(result.data);
-        } else {
-            setError(result.error || 'Failed to load settings');
-            // Still set defaults if provided
-            if (result.data) {
-                setSettings(result.data);
-            }
+        try {
+            const data = await SettingsManager.getPublic();
+            setSettings(data);
+        } catch {
+            setError('Failed to load settings');
+            setSettings(DEFAULT_SETTINGS);
         }
 
         setIsLoading(false);
-    }, []);
+    }, [isAuthenticated]);
 
     useEffect(() => {
+        // Wait for auth check to complete before loading settings
+        if (isAuthLoading) {
+            return;
+        }
+
         loadSettings();
-    }, [loadSettings]);
+    }, [loadSettings, isAuthLoading]);
 
     const getCurrency = useCallback(() => {
         return settings.currency || DEFAULT_SETTINGS.currency;
@@ -65,6 +77,10 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
         return `${formattedAmount} ${symbol}`;
     }, [getCurrencySymbol]);
 
+    const isLoginEnabled = useCallback(() => {
+        return settings.login_enabled ?? DEFAULT_SETTINGS.login_enabled;
+    }, [settings.login_enabled]);
+
     const value: SettingsContextValue = {
         settings,
         isLoading,
@@ -73,6 +89,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
         getCurrency,
         getCurrencySymbol,
         formatPrice,
+        isLoginEnabled,
     };
 
     return (

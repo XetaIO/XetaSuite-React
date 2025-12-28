@@ -15,6 +15,7 @@ export interface SingleResponse<T> {
 }
 
 // Manager result type for service layer
+// Supports void operations (delete) where data is not needed
 export type ManagerResult<T> =
-    | { success: true; data: T }
+    | (T extends void ? { success: true; data?: undefined } : { success: true; data: T })
     | { success: false; error: string; data?: undefined };

@@ -1,13 +1,7 @@
 import { handleApiError } from "@/shared/api";
-import type { PaginatedResponse, SingleResponse } from "@/shared/types";
+import type { PaginatedResponse, SingleResponse, ManagerResult } from "@/shared/types";
 import type { Company, CompanyFormData, CompanyFilters, CompanyMaintenance, MaintenanceFilters, CompanyStats } from "../types";
 import { CompanyRepository } from "./CompanyRepository";
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * Company Manager - Mediates between View Layer and data source

@@ -25,6 +25,7 @@ export interface ItemMovement {
     id: number;
     item_id: number;
     type: MovementType;
+
     quantity: number;
     unit_price: number;
     total_price: number;

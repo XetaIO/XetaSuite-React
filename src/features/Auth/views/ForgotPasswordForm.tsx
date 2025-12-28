@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { FaAngleLeft } from "react-icons/fa6";
 import { useAuth } from '../hooks';
+import { useRecaptcha } from '@/shared/hooks';
 import Label from "@/shared/components/form/Label";
 import Input from "@/shared/components/form/input/InputField";
 import Button from "@/shared/components/ui/button/Button";
@@ -11,6 +12,7 @@ import Alert from '@/shared/components/ui/alert/Alert';
 export default function ForgotPasswordForm() {
     const { t } = useTranslation();
     const { forgotPassword } = useAuth();
+    const { executeRecaptcha } = useRecaptcha();
 
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
@@ -24,7 +26,8 @@ export default function ForgotPasswordForm() {
         setIsLoading(true);
 
         try {
-            await forgotPassword({ email });
+            const recaptchaToken = await executeRecaptcha('forgot_password');
+            await forgotPassword({ email, recaptcha_token: recaptchaToken });
             setSuccess(true);
         } catch (err) {
             setError(err instanceof Error ? err.message : t('errors.generic'));

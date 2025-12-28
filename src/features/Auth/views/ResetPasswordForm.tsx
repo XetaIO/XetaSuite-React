@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { FaAngleLeft, FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useAuth } from '../hooks';
 import Label from "@/shared/components/form/Label";
 import Input from "@/shared/components/form/input/InputField";
@@ -77,6 +77,14 @@ export default function ResetPasswordForm() {
 
     return (
         <div>
+            <Link
+                to="/auth/login"
+                className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 mb-6"
+            >
+                <FaAngleLeft className="size-5" />
+                {t('auth.backToSignIn')}
+            </Link>
+
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
                 {t('auth.resetPasswordTitle')}
             </h2>

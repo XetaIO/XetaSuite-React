@@ -36,7 +36,6 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
         locale: "fr",
         office_phone: "",
         cell_phone: "",
-        end_employment_contract: "",
     });
     const [siteAssignments, setSiteAssignments] = useState<SiteAssignmentUI[]>([]);
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -76,7 +75,6 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
                 locale: user.locale,
                 office_phone: user.office_phone || "",
                 cell_phone: user.cell_phone || "",
-                end_employment_contract: user.end_employment_contract ? user.end_employment_contract.split("T")[0] : "",
             });
 
             // Build site assignments from user data
@@ -111,7 +109,6 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
                 locale: "fr",
                 office_phone: "",
                 cell_phone: "",
-                end_employment_contract: "",
             });
             setSiteAssignments([]);
         }
@@ -233,7 +230,6 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
             password: formData.password || undefined,
             office_phone: formData.office_phone || undefined,
             cell_phone: formData.cell_phone || undefined,
-            end_employment_contract: formData.end_employment_contract || undefined,
         };
 
         if (canAssignSite) {
@@ -458,16 +454,6 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
                                 type="tel"
                                 placeholder={t("users.cellPhonePlaceholder")}
                                 value={formData.cell_phone}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="sm:col-span-2">
-                            <Label htmlFor="end_employment_contract">{t("users.endEmploymentContract")}</Label>
-                            <Input
-                                id="end_employment_contract"
-                                name="end_employment_contract"
-                                type="date"
-                                value={formData.end_employment_contract}
                                 onChange={handleChange}
                             />
                         </div>

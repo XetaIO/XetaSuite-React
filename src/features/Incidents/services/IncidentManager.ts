@@ -1,5 +1,5 @@
 import { handleApiError } from '@/shared/api';
-import type { PaginatedResponse, SingleResponse } from '@/shared/types';
+import type { PaginatedResponse, SingleResponse, ManagerResult } from '@/shared/types';
 import { IncidentRepository } from './IncidentRepository';
 import type {
     Incident,
@@ -11,12 +11,6 @@ import type {
     SeverityOption,
     StatusOption,
 } from '../types';
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * Incident Manager - Business logic and error handling layer

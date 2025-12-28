@@ -24,11 +24,14 @@ export interface ActionItem {
 interface ActionsDropdownProps {
     actions: ActionItem[];
     align?: "left" | "right";
+    /** Optional different alignment for lg breakpoint and above */
+    alignLg?: "left" | "right";
 }
 
 export const ActionsDropdown: FC<ActionsDropdownProps> = ({
     actions,
     align = "right",
+    alignLg,
 }) => {
     const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
@@ -85,8 +88,11 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({
 
             {isOpen && (
                 <div
-                    className={`absolute z-50 mt-1 min-w-[180px] rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800 ${align === "right" ? "right-0" : "left-0"
-                        }`}
+                    className={`absolute z-50 mt-1 min-w-45 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800 ${
+                        alignLg
+                            ? `${align === "right" ? "right-0 lg:right-auto" : "left-0 lg:left-auto"} ${alignLg === "right" ? "lg:right-0" : "lg:left-0"}`
+                            : align === "right" ? "right-0" : "left-0"
+                    }`}
                 >
                     {visibleActions.map((action) => (
                         <button

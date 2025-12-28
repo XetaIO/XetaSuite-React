@@ -5,6 +5,8 @@ import type { RouteConfig } from "./types";
 const SignInPage = lazy(() => import("@/features/Auth/views/SignInPage"));
 const ForgotPasswordPage = lazy(() => import("@/features/Auth/views/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("@/features/Auth/views/ResetPasswordPage"));
+const SetupPasswordPage = lazy(() => import("@/features/Auth/views/SetupPasswordPage"));
+const ResendSetupPasswordPage = lazy(() => import("@/features/Auth/views/ResendSetupPasswordPage"));
 
 // Lazy load main pages
 const HomePage = lazy(() => import("@/features/Dashboard/Home"));
@@ -21,6 +23,7 @@ const SiteDetailPage = lazy(() => import("@/features/Sites/views/SiteDetailPage"
 // Lazy load Zones feature
 const ZoneListPage = lazy(() => import("@/features/Zones/views/ZoneListPage"));
 const ZoneDetailPage = lazy(() => import("@/features/Zones/views/ZoneDetailPage"));
+const ZoneTreePage = lazy(() => import("@/features/Zones/views/ZoneTreePage"));
 
 // Lazy load Materials feature
 const MaterialListPage = lazy(() => import("@/features/Materials/views/MaterialListPage"));
@@ -53,6 +56,17 @@ const CompanyDetailPage = lazy(() => import("@/features/Companies/views/CompanyD
 const UserListPage = lazy(() => import("@/features/Users/views/UserListPage"));
 const UserDetailPage = lazy(() => import("@/features/Users/views/UserDetailPage"));
 
+// Lazy load Roles feature
+const RoleListPage = lazy(() => import("@/features/Roles/views/RoleListPage"));
+const RoleDetailPage = lazy(() => import("@/features/Roles/views/RoleDetailPage"));
+
+// Lazy load Permissions feature
+const PermissionListPage = lazy(() => import("@/features/Permissions/views/PermissionListPage"));
+const PermissionDetailPage = lazy(() => import("@/features/Permissions/views/PermissionDetailPage"));
+
+// Lazy load Settings feature
+const SettingsListPage = lazy(() => import("@/features/Settings/views/SettingsListPage"));
+
 /**
  * Guest-only routes (login, register, forgot password)
  */
@@ -70,6 +84,16 @@ export const guestRoutes: RouteConfig[] = [
     {
         path: "/reset-password",
         element: ResetPasswordPage,
+        requireGuest: true,
+    },
+    {
+        path: "/setup-password/:id/:hash",
+        element: SetupPasswordPage,
+        requireGuest: true,
+    },
+    {
+        path: "/setup-password-resend",
+        element: ResendSetupPasswordPage,
         requireGuest: true,
     },
 ];
@@ -117,6 +141,12 @@ export const protectedRoutes: RouteConfig[] = [
     {
         path: "/zones",
         element: ZoneListPage,
+        requireAuth: true,
+        permission: "zone.viewAny"
+    },
+    {
+        path: "/zones/tree",
+        element: ZoneTreePage,
         requireAuth: true,
         permission: "zone.viewAny"
     },
@@ -216,6 +246,41 @@ export const protectedRoutes: RouteConfig[] = [
         element: UserDetailPage,
         requireAuth: true,
         permission: "user.view",
+        requiresHQ: true,
+    },
+    {
+        path: "/roles",
+        element: RoleListPage,
+        requireAuth: true,
+        permission: "role.viewAny",
+        requiresHQ: true,
+    },
+    {
+        path: "/roles/:id",
+        element: RoleDetailPage,
+        requireAuth: true,
+        permission: "role.view",
+        requiresHQ: true,
+    },
+    {
+        path: "/permissions",
+        element: PermissionListPage,
+        requireAuth: true,
+        permission: "permission.viewAny",
+        requiresHQ: true,
+    },
+    {
+        path: "/permissions/:id",
+        element: PermissionDetailPage,
+        requireAuth: true,
+        permission: "permission.view",
+        requiresHQ: true,
+    },
+    {
+        path: "/settings",
+        element: SettingsListPage,
+        requireAuth: true,
+        permission: "setting.viewAny",
         requiresHQ: true,
     },
     // Catch-all for unknown routes within authenticated layout

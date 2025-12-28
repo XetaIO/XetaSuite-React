@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaPenToSquare, FaTrash, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaLayerGroup, FaWrench } from "react-icons/fa6";
+import { FaPlus, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaLayerGroup, FaWrench } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
 import { useModal } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
@@ -18,7 +18,7 @@ type SortDirection = "asc" | "desc";
 
 const ZoneListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
     const [zones, setZones] = useState<Zone[]>([]);
     const [meta, setMeta] = useState<PaginationMeta | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -36,9 +36,13 @@ const ZoneListPage: FC = () => {
     const [isDeleting, setIsDeleting] = useState(false);
 
     // Permissions
-    const canCreate = hasPermission("zone.create");
-    const canUpdate = hasPermission("zone.update");
-    const canDelete = hasPermission("zone.delete");
+    const canView = hasPermission("zone.view");
+    const canCreate = !isOnHeadquarters && hasPermission("zone.create");
+    const canUpdate = !isOnHeadquarters && hasPermission("zone.update");
+    const canDelete = !isOnHeadquarters && hasPermission("zone.delete");
+
+    // Check if any action is available
+    const hasAnyAction = canUpdate || canDelete;
 
     // Modals
     const zoneModal = useModal();
@@ -154,6 +158,11 @@ const ZoneListPage: FC = () => {
         fetchZones(filters);
     };
 
+    const getZoneActions = (zone: Zone) => [
+        { ...createActions.edit(() => handleEdit(zone), t), hidden: !canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(zone), t), hidden: !canDelete },
+    ];
+
     return (
         <>
             <PageMeta title={`${t("zones.title")} | XetaSuite`} description={t("zones.description")} />
@@ -268,7 +277,7 @@ const ZoneListPage: FC = () => {
                                         {renderSortIcon("created_at")}
                                     </button>
                                 </TableCell>
-                                {(canUpdate || canDelete) && (
+                                {hasAnyAction && (
                                     <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t("common.actions")}
                                     </TableCell>
@@ -297,7 +306,7 @@ const ZoneListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -330,12 +339,16 @@ const ZoneListPage: FC = () => {
                                     >
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center gap-2">
-                                                <Link
-                                                    to={`/zones/${zone.id}`}
-                                                    className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                >
-                                                    {zone.name}
-                                                </Link>
+                                                {canView ? (
+                                                    <Link
+                                                        to={`/zones/${zone.id}`}
+                                                        className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                    >
+                                                        {zone.name}
+                                                    </Link>
+                                                ) : (
+                                                    zone.name
+                                                )}
                                                 {zone.allow_material && (
                                                     <Badge
                                                         extraClass="py-1.5"
@@ -368,27 +381,10 @@ const ZoneListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(zone.created_at)}
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {hasAnyAction && (
                                             <TableCell className="px-6 py-4">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    {canUpdate && (
-                                                        <button
-                                                            onClick={() => handleEdit(zone)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-brand-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-brand-400"
-                                                            title={t("common.edit")}
-                                                        >
-                                                            <FaPenToSquare className="h-4 w-4" />
-                                                        </button>
-                                                    )}
-                                                    {canDelete && (
-                                                        <button
-                                                            onClick={() => handleDeleteClick(zone)}
-                                                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-error-600 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-error-400"
-                                                            title={t("common.delete")}
-                                                        >
-                                                            <FaTrash className="h-4 w-4" />
-                                                        </button>
-                                                    )}
+                                                <div className="flex items-center justify-end">
+                                                    <ActionsDropdown actions={getZoneActions(zone)} />
                                                 </div>
                                             </TableCell>
                                         )}

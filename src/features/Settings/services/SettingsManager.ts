@@ -1,32 +1,67 @@
-import type { AppSettings } from '../types';
+import type { AppSettings, Setting, UpdateSettingPayload } from '../types';
 import { DEFAULT_SETTINGS } from '../types';
 import { SettingsRepository } from './SettingsRepository';
 import { handleApiError } from '@/shared/api/httpClient';
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
+import type { ManagerResult } from '@/shared/types';
 
 /**
  * Manager for Settings with error handling
  */
 export const SettingsManager = {
     /**
-     * Fetch all global settings with error handling
+     * Fetch all global settings (public - key-value format)
+     * Falls back to defaults on error to ensure app can still function
      */
-    getAll: async (): Promise<ManagerResult<AppSettings>> => {
+    getPublic: async (): Promise<AppSettings> => {
+        try {
+            return await SettingsRepository.getPublic();
+        } catch (error) {
+            console.error('Failed to load settings, using defaults:', error);
+            return DEFAULT_SETTINGS;
+        }
+    },
+
+    /**
+     * Fetch all settings for management
+     */
+    getAll: async (): Promise<ManagerResult<Setting[]>> => {
         try {
             const data = await SettingsRepository.getAll();
             return { success: true, data };
         } catch (error) {
-            console.error('Failed to load settings, using defaults:', error);
-            // Return defaults on error so app can still function
             return {
                 success: false,
                 error: handleApiError(error),
-                data: DEFAULT_SETTINGS
+            };
+        }
+    },
+
+    /**
+     * Fetch a single setting by ID
+     */
+    getById: async (id: number): Promise<ManagerResult<Setting>> => {
+        try {
+            const data = await SettingsRepository.getById(id);
+            return { success: true, data };
+        } catch (error) {
+            return {
+                success: false,
+                error: handleApiError(error),
+            };
+        }
+    },
+
+    /**
+     * Update a setting
+     */
+    update: async (id: number, payload: UpdateSettingPayload): Promise<ManagerResult<Setting>> => {
+        try {
+            const data = await SettingsRepository.update(id, payload);
+            return { success: true, data };
+        } catch (error) {
+            return {
+                success: false,
+                error: handleApiError(error),
             };
         }
     },

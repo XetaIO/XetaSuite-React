@@ -34,8 +34,10 @@ export const API_ENDPOINTS = {
         USER: '/api/v1/auth/user',
         LOGIN: '/api/v1/auth/login',
         LOGOUT: '/api/v1/auth/logout',
-        FORGOT_PASSWORD: '/forgot-password',
-        RESET_PASSWORD: '/reset-password',
+        FORGOT_PASSWORD: '/api/v1/auth/forgot-password',
+        RESET_PASSWORD: '/api/v1/auth/reset-password',
+        SETUP_PASSWORD: (id: number, hash: string) => `/api/v1/auth/setup-password/${id}/${hash}`,
+        RESEND_SETUP_PASSWORD: '/api/v1/auth/setup-password-resend',
     },
     // User
     USER: {
@@ -62,6 +64,7 @@ export const API_ENDPOINTS = {
         CHILDREN: (id: number) => `/api/v1/zones/${id}/children`,
         MATERIALS: (id: number) => `/api/v1/zones/${id}/materials`,
         AVAILABLE_PARENTS: '/api/v1/zones/available-parents',
+        TREE: '/api/v1/zones/tree',
     },
     // Materials
     MATERIALS: {
@@ -69,6 +72,10 @@ export const API_ENDPOINTS = {
         DETAIL: (id: number) => `/api/v1/materials/${id}`,
         STATS: (id: number) => `/api/v1/materials/${id}/stats`,
         QR_CODE: (id: number) => `/api/v1/materials/${id}/qr-code`,
+        INCIDENTS: (id: number) => `/api/v1/materials/${id}/incidents`,
+        MAINTENANCES: (id: number) => `/api/v1/materials/${id}/maintenances`,
+        CLEANINGS: (id: number) => `/api/v1/materials/${id}/cleanings`,
+        ITEMS: (id: number) => `/api/v1/materials/${id}/items`,
         AVAILABLE_ZONES: '/api/v1/materials/available-zones',
         AVAILABLE_RECIPIENTS: '/api/v1/materials/available-recipients',
     },
@@ -146,8 +153,34 @@ export const API_ENDPOINTS = {
         MAINTENANCES: (id: number) => `/api/v1/users/${id}/maintenances`,
         INCIDENTS: (id: number) => `/api/v1/users/${id}/incidents`,
     },
+    // Roles
+    ROLES: {
+        BASE: '/api/v1/roles',
+        DETAIL: (id: number) => `/api/v1/roles/${id}`,
+        AVAILABLE_PERMISSIONS: '/api/v1/roles/available-permissions',
+        USERS: (id: number) => `/api/v1/roles/${id}/users`,
+    },
+    // Permissions
+    PERMISSIONS: {
+        BASE: '/api/v1/permissions',
+        DETAIL: (id: number) => `/api/v1/permissions/${id}`,
+        AVAILABLE_ROLES: '/api/v1/permissions/available-roles',
+        ROLES: (id: number) => `/api/v1/permissions/${id}/roles`,
+    },
     // Settings
     SETTINGS: {
         BASE: '/api/v1/settings',
+        MANAGE: '/api/v1/settings/manage',
+        DETAIL: (id: number) => `/api/v1/settings/${id}`,
+    },
+    // Notifications
+    NOTIFICATIONS: {
+        BASE: '/api/v1/notifications',
+        UNREAD: '/api/v1/notifications/unread',
+        UNREAD_COUNT: '/api/v1/notifications/unread-count',
+        MARK_AS_READ: (id: string) => `/api/v1/notifications/${id}/read`,
+        MARK_ALL_AS_READ: '/api/v1/notifications/read-all',
+        DELETE: (id: string) => `/api/v1/notifications/${id}`,
+        DELETE_ALL: '/api/v1/notifications',
     },
 } as const;

@@ -277,6 +277,8 @@ const ItemDetailPage: FC = () => {
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                         <ActionsDropdown
+                            align="left"
+                            alignLg="right"
                             actions={[
                                 { ...createActions.stockEntry(() => handleMovement("entry"), t), hidden: !canCreateMovement },
                                 { ...createActions.stockExit(() => handleMovement("exit"), t), hidden: !canCreateMovement },
@@ -592,7 +594,7 @@ const ItemDetailPage: FC = () => {
                         <TableHeader>
                             <TableRow className="border-b border-gray-200 dark:border-gray-800">
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("items.movements.fields.date")}
+                                    {t("items.movements.fields.notes")}
                                 </TableCell>
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t("items.movements.fields.type")}
@@ -606,12 +608,18 @@ const ItemDetailPage: FC = () => {
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t("items.movements.fields.createdBy")}
                                 </TableCell>
+                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t("items.movements.fields.date")}
+                                </TableCell>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {isLoadingMovements ? (
                                 [...Array(5)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                        <TableCell className="px-6 py-4">
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
@@ -631,15 +639,15 @@ const ItemDetailPage: FC = () => {
                                 ))
                             ) : movements.length === 0 ? (
                                 <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={5}>
+                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={6}>
                                         {t("items.movements.noMovements")}
                                     </TableCell>
                                 </TableRow>
                             ) : (
                                 movements.map((movement) => (
                                     <TableRow key={movement.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
-                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {formatDateTime(movement.movement_date)}
+                                        <TableCell className="px-6 py-4 text-gray-900 dark:text-white">
+                                            {movement.notes || "—"}
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <Badge
@@ -679,6 +687,9 @@ const ItemDetailPage: FC = () => {
                                                 id={movement.creator?.id}
                                                 name={movement.creator?.full_name}
                                                 basePath="users" />
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                            {formatDateTime(movement.movement_date)}
                                         </TableCell>
                                     </TableRow>
                                 ))

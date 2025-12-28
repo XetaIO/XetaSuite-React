@@ -8,14 +8,14 @@ import {
     FaPhone,
     FaMobile,
     FaPenToSquare,
-    FaBuilding,
     FaTriangleExclamation,
     FaBroom,
     FaShield,
     FaScrewdriverWrench,
+    FaBuildingFlag,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination } from "@/shared/components/common";
-import { Button, Table, TableHeader, TableBody, TableRow, TableCell, Badge } from "@/shared/components/ui";
+import { Button, Table, TableHeader, TableBody, TableRow, TableCell, Badge, LinkedName } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { useModal } from "@/shared/hooks";
 import type { PaginationMeta } from "@/shared/types";
@@ -65,11 +65,11 @@ const UserDetailPage: FC = () => {
 
     // Permissions
     const canUpdate = hasPermission("user.update");
-    const canViewMaintenances = hasPermission("maintenance.view");
-    const canViewIncidents = hasPermission("incident.view");
-    const canViewCleanings = hasPermission("cleaning.view");
-    const canViewMaterials = hasPermission("material.view");
-    const canViewSites = hasPermission("site.view");
+    const canViewMaintenance = hasPermission("maintenance.view");
+    const canViewIncident = hasPermission("incident.view");
+    const canViewCleaning = hasPermission("cleaning.view");
+    const canViewMaterial = hasPermission("material.view");
+    const canViewSite = hasPermission("site.view");
 
     // Modal
     const editModal = useModal();
@@ -194,7 +194,7 @@ const UserDetailPage: FC = () => {
     }
 
     const tabs = [
-        { key: "sites" as TabType, label: t("users.detail.sitesTab"), icon: <FaBuilding className="h-4 w-4" /> },
+        { key: "sites" as TabType, label: t("users.detail.sitesTab"), icon: <FaBuildingFlag className="h-4 w-4" /> },
         { key: "cleanings" as TabType, label: t("users.detail.cleaningsTab"), icon: <FaBroom className="h-4 w-4" />, count: user.cleaning_count },
         { key: "maintenances" as TabType, label: t("users.detail.maintenancesTab"), icon: <FaScrewdriverWrench className="h-4 w-4" />, count: user.maintenance_count },
         { key: "incidents" as TabType, label: t("users.detail.incidentsTab"), icon: <FaTriangleExclamation className="h-4 w-4" />, count: user.incident_count },
@@ -230,11 +230,6 @@ const UserDetailPage: FC = () => {
                         <div>
                             <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{user.full_name}</h1>
                             <p className="text-gray-500 dark:text-gray-400">@{user.username}</p>
-                            {user.end_employment_contract && (
-                                <p className="mt-1 text-sm text-warning-600 dark:text-warning-400">
-                                    {t("users.detail.contractEnds")}: {formatDate(user.end_employment_contract)}
-                                </p>
-                            )}
                         </div>
                     </div>
                     {canUpdate && (
@@ -320,353 +315,325 @@ const UserDetailPage: FC = () => {
             </div>
 
             {/* Tabs */}
-            <div className="mb-6">
-                <div className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.key}
-                            onClick={() => setActiveTab(tab.key)}
-                            className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${activeTab === tab.key
-                                ? "border-brand-500 text-brand-600 dark:text-brand-400"
-                                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-gray-200"
-                                }`}
-                        >
-                            {tab.icon}
-                            <span>{tab.label}</span>
-                            {typeof tab.count === "number" && (
-                                <Badge color="light" size="sm">{tab.count}</Badge>
-                            )}
-                        </button>
-                    ))}
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                {/* Tab Headers */}
+                <div className="flex border-b border-gray-200 dark:border-gray-800">
+                    {tabs.map((tab) => {
+                        const isActive = activeTab === tab.key;
+                        return (
+                            <button
+                                key={tab.key}
+                                onClick={() => setActiveTab(tab.key)}
+                                className={`flex items-center gap-2 border-b-2 px-6 py-4 text-sm font-medium transition-colors ${isActive
+                                    ? "border-brand-500 text-brand-600 dark:text-brand-400"
+                                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                                    }`}
+                            >
+                                {tab.icon}
+                                <span>{tab.label}</span>
+                                {typeof tab.count === "number" && (
+                                    <Badge variant="light" color={isActive ? "brand" : "light"}>
+                                        {tab.count}
+                                    </Badge>
+                                )}
+                            </button>
+                        );
+                    })}
                 </div>
-            </div>
 
-            {/* Tab Content */}
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Sites Tab */}
-                {activeTab === "sites" && (
-                    <div className="p-6">
-                        <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                            {t("users.detail.sitesWithRoles")}
-                        </h3>
+                {/* Tab Content */}
+                <div className="p-6">
+                    {/* Sites Tab */}
+                    {activeTab === "sites" && (
+                        <div>
+                            <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
+                                {t("users.detail.sitesWithRoles")}
+                            </h3>
 
-                        {isRolesLoading ? (
-                            <div className="flex h-32 items-center justify-center">
-                                <div className="h-6 w-6 animate-spin rounded-full border-3 border-brand-500 border-t-transparent" />
-                            </div>
-                        ) : rolesPerSite.length === 0 ? (
-                            <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800/50">
-                                <FaBuilding className="mx-auto mb-3 h-10 w-10 text-gray-400" />
-                                <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noSites")}</p>
-                            </div>
-                        ) : (
-                            <div className="space-y-4">
-                                {rolesPerSite.map((siteRole) => (
-                                    <div
-                                        key={siteRole.site.id}
-                                        className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 dark:border-gray-700 sm:flex-row sm:items-center sm:justify-between"
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
-                                                <FaBuilding className="h-5 w-5 text-brand-600 dark:text-brand-400" />
-                                            </div>
-                                            <div>
-                                                <p className="font-medium text-gray-900 dark:text-white">
-                                                    {canViewSites ? (
-                                                        <Link
-                                                            to={`/sites/${siteRole.site.id}`}
-                                                            className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400">
-                                                            {siteRole.site.name}
-                                                        </Link>
-                                                    ) : (
-                                                        siteRole.site.name
+                            {isRolesLoading ? (
+                                <div className="flex h-32 items-center justify-center">
+                                    <div className="h-6 w-6 animate-spin rounded-full border-3 border-brand-500 border-t-transparent" />
+                                </div>
+                            ) : rolesPerSite.length === 0 ? (
+                                <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800/50">
+                                    <FaBuildingFlag className="mx-auto mb-3 h-10 w-10 text-gray-400" />
+                                    <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noSites")}</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    {rolesPerSite.map((siteRole) => (
+                                        <div
+                                            key={siteRole.site.id}
+                                            className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 dark:border-gray-700 sm:flex-row sm:items-center sm:justify-between"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
+                                                    <FaBuildingFlag className="h-5 w-5 text-brand-600 dark:text-brand-400" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-medium text-gray-900 dark:text-white">
+                                                        {canViewSite ? (
+                                                            <Link
+                                                                to={`/sites/${siteRole.site.id}`}
+                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400">
+                                                                {siteRole.site.name}
+                                                            </Link>
+                                                        ) : (
+                                                            siteRole.site.name
+                                                        )}
+                                                    </p>
+                                                    {siteRole.site.is_headquarters && (
+                                                        <Badge color="brand" size="sm">HQ</Badge>
                                                     )}
-                                                </p>
-                                                {siteRole.site.is_headquarters && (
-                                                    <Badge color="brand" size="sm">HQ</Badge>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <FaShield className="h-4 w-4 text-gray-400" />
+                                                {siteRole.roles.length > 0 ? (
+                                                    siteRole.roles.map((role) => (
+                                                        <Badge key={role} color="success" size="sm">{role}</Badge>
+                                                    ))
+                                                ) : (
+                                                    <span className="text-sm text-gray-400">{t("users.detail.noRoles")}</span>
                                                 )}
                                             </div>
                                         </div>
-                                        <div className="flex flex-wrap items-center gap-2">
-                                            <FaShield className="h-4 w-4 text-gray-400" />
-                                            {siteRole.roles.length > 0 ? (
-                                                siteRole.roles.map((role) => (
-                                                    <Badge key={role} color="success" size="sm">{role}</Badge>
-                                                ))
-                                            ) : (
-                                                <span className="text-sm text-gray-400">{t("users.detail.noRoles")}</span>
-                                            )}
-                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Cleanings Tab */}
+                    {activeTab === "cleanings" && (
+                        <div>
+                            {isCleaningsLoading ? (
+                                <div className="flex h-32 items-center justify-center">
+                                    <div className="h-6 w-6 animate-spin rounded-full border-3 border-brand-500 border-t-transparent" />
+                                </div>
+                            ) : cleanings.length === 0 ? (
+                                <div className="p-8 text-center">
+                                    <FaBroom className="mx-auto mb-3 h-10 w-10 text-gray-400" />
+                                    <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noCleanings")}</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="overflow-x-auto">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("cleanings.id")}
+                                                    </TableCell>
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("cleanings.material")}
+                                                    </TableCell>
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("cleanings.type")}
+                                                    </TableCell>
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("common.createdAt")}
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {cleanings.map((cleaning) => (
+                                                    <TableRow key={cleaning.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                        <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                                                            <LinkedName
+                                                                canView={canViewCleaning}
+                                                                id={cleaning.id}
+                                                                name={`#${cleaning.id}`}
+                                                                basePath="cleanings" />
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                                                            <LinkedName
+                                                                canView={canViewMaterial}
+                                                                id={cleaning.material?.id}
+                                                                name={cleaning.material?.name}
+                                                                basePath="materials" />
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4">
+                                                            <Badge
+                                                                color="brand"
+                                                                size="sm"
+                                                            >
+                                                                {t(`cleanings.types.${cleaning.type}`)}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                                            {formatDateTime(cleaning.created_at)}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
                                     </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
+                                    {cleaningsMeta && (
+                                        <Pagination meta={cleaningsMeta} onPageChange={setCleaningsPage} />
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    )}
 
-                {/* Cleanings Tab */}
-                {activeTab === "cleanings" && (
-                    <div>
-                        {isCleaningsLoading ? (
-                            <div className="flex h-32 items-center justify-center">
-                                <div className="h-6 w-6 animate-spin rounded-full border-3 border-brand-500 border-t-transparent" />
-                            </div>
-                        ) : cleanings.length === 0 ? (
-                            <div className="p-8 text-center">
-                                <FaBroom className="mx-auto mb-3 h-10 w-10 text-gray-400" />
-                                <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noCleanings")}</p>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow className="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50">
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("cleanings.id")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("cleanings.material")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("cleanings.type")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("common.createdAt")}
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {cleanings.map((cleaning) => (
-                                                <TableRow key={cleaning.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
-                                                    <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                                        {canViewCleanings ? (
-                                                            <Link
-                                                                to={`/cleanings/${cleaning.id}`}
-                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                            >
-                                                                #{cleaning.id}
-                                                            </Link>
-                                                        ) : (
-                                                            `#${cleaning.id}`
-                                                        )}
+                    {/* Maintenances Tab */}
+                    {activeTab === "maintenances" && (
+                        <div>
+                            {isMaintenancesLoading ? (
+                                <div className="flex h-32 items-center justify-center">
+                                    <div className="h-6 w-6 animate-spin rounded-full border-3 border-brand-500 border-t-transparent" />
+                                </div>
+                            ) : maintenances.length === 0 ? (
+                                <div className="p-8 text-center">
+                                    <FaScrewdriverWrench className="mx-auto mb-3 h-10 w-10 text-gray-400" />
+                                    <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noMaintenances")}</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="overflow-x-auto">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("maintenances.title")}
                                                     </TableCell>
-                                                    <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                                        {canViewMaterials ? (
-                                                            <Link
-                                                                to={`/materials/${cleaning.material?.id}`}
-                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                            >
-                                                                {cleaning.material?.name || "—"}
-                                                            </Link>
-                                                        ) : (
-                                                            cleaning.material?.name || "—"
-                                                        )}
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("maintenances.fields.material")}
                                                     </TableCell>
-                                                    <TableCell className="px-6 py-4">
-                                                        <Badge
-                                                            color="brand"
-                                                            size="sm"
-                                                        >
-                                                            {t(`cleanings.types.${cleaning.type}`)}
-                                                        </Badge>
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("maintenances.fields.status")}
                                                     </TableCell>
-                                                    <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                                        {formatDateTime(cleaning.created_at)}
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("common.createdAt")}
                                                     </TableCell>
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                                {cleaningsMeta && (
-                                    <Pagination meta={cleaningsMeta} onPageChange={setCleaningsPage} />
-                                )}
-                            </>
-                        )}
-                    </div>
-                )}
+                                            </TableHeader>
+                                            <TableBody>
+                                                {maintenances.map((maintenance) => (
+                                                    <TableRow key={maintenance.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                        <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                                                            <LinkedName
+                                                                canView={canViewMaintenance}
+                                                                id={maintenance.id}
+                                                                name={`#${maintenance.id} - ${maintenance.reason}`}
+                                                                basePath="maintenances" />
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
+                                                            <LinkedName
+                                                                canView={canViewMaterial}
+                                                                id={maintenance.material?.id}
+                                                                name={maintenance.material?.name}
+                                                                basePath="materials" />
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4">
+                                                            <Badge
+                                                                color={maintenance.status === "completed" ? "success" : maintenance.status === "in_progress" ? "warning" : "light"}
+                                                                size="sm"
+                                                            >
+                                                                {t(`maintenances.status.${maintenance.status}`)}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                                            {formatDateTime(maintenance.created_at)}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                    {maintenancesMeta && (
+                                        <Pagination meta={maintenancesMeta} onPageChange={setMaintenancesPage} />
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    )}
 
-                {/* Maintenances Tab */}
-                {activeTab === "maintenances" && (
-                    <div>
-                        {isMaintenancesLoading ? (
-                            <div className="flex h-32 items-center justify-center">
-                                <div className="h-6 w-6 animate-spin rounded-full border-3 border-brand-500 border-t-transparent" />
-                            </div>
-                        ) : maintenances.length === 0 ? (
-                            <div className="p-8 text-center">
-                                <FaScrewdriverWrench className="mx-auto mb-3 h-10 w-10 text-gray-400" />
-                                <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noMaintenances")}</p>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow className="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50">
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("maintenances.title")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("maintenances.fields.material")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("maintenances.fields.status")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("common.createdAt")}
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {maintenances.map((maintenance) => (
-                                                <TableRow key={maintenance.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
-                                                    <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                                        {canViewMaintenances ? (
-                                                            <Link
-                                                                to={`/maintenances/${maintenance.id}`}
-                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                            >
-                                                                #{maintenance.id} - {maintenance.reason}
-                                                            </Link>
-                                                        ) : (
-                                                            <>
-                                                                #{maintenance.id} - {maintenance.reason}
-                                                            </>
-                                                        )}
+                    {/* Incidents Tab */}
+                    {activeTab === "incidents" && (
+                        <div>
+                            {isIncidentsLoading ? (
+                                <div className="flex h-32 items-center justify-center">
+                                    <div className="h-6 w-6 animate-spin rounded-full border-3 border-brand-500 border-t-transparent" />
+                                </div>
+                            ) : incidents.length === 0 ? (
+                                <div className="p-8 text-center">
+                                    <FaTriangleExclamation className="mx-auto mb-3 h-10 w-10 text-gray-400" />
+                                    <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noIncidents")}</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="overflow-x-auto">
+                                        <Table>
+                                            <TableHeader>
+                                                <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                                    <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("incidents.title")}
                                                     </TableCell>
-                                                    <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                                                        {canViewMaterials ? (
-                                                            <Link
-                                                                to={`/materials/${maintenance.material?.id}`}
-                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                            >
-                                                                {maintenance.material?.name || "—"}
-                                                            </Link>
-                                                        ) : (
-                                                            maintenance.material?.name || "—"
-                                                        )}
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("incidents.material")}
                                                     </TableCell>
-                                                    <TableCell className="px-6 py-4">
-                                                        <Badge
-                                                            color={maintenance.status === "completed" ? "success" : maintenance.status === "in_progress" ? "warning" : "light"}
-                                                            size="sm"
-                                                        >
-                                                            {t(`maintenances.status.${maintenance.status}`)}
-                                                        </Badge>
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("incidents.status")}
                                                     </TableCell>
-                                                    <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                                        {formatDateTime(maintenance.created_at)}
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("incidents.severity")}
+                                                    </TableCell>
+                                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                                                        {t("common.createdAt")}
                                                     </TableCell>
                                                 </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                                {maintenancesMeta && (
-                                    <Pagination meta={maintenancesMeta} onPageChange={setMaintenancesPage} />
-                                )}
-                            </>
-                        )}
-                    </div>
-                )}
-
-                {/* Incidents Tab */}
-                {activeTab === "incidents" && (
-                    <div>
-                        {isIncidentsLoading ? (
-                            <div className="flex h-32 items-center justify-center">
-                                <div className="h-6 w-6 animate-spin rounded-full border-3 border-brand-500 border-t-transparent" />
-                            </div>
-                        ) : incidents.length === 0 ? (
-                            <div className="p-8 text-center">
-                                <FaTriangleExclamation className="mx-auto mb-3 h-10 w-10 text-gray-400" />
-                                <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noIncidents")}</p>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow className="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50">
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("incidents.title")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("incidents.material")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("incidents.status")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("incidents.severity")}
-                                                </TableCell>
-                                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t("common.createdAt")}
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {incidents.map((incident) => (
-                                                <TableRow key={incident.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
-                                                    <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                                        {canViewIncidents ? (
-                                                            <Link
-                                                                to={`/incidents/${incident.id}`}
-                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                            </TableHeader>
+                                            <TableBody>
+                                                {incidents.map((incident) => (
+                                                    <TableRow key={incident.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                        <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                                                            <LinkedName
+                                                                canView={canViewIncident}
+                                                                id={incident.id}
+                                                                name={`#${incident.id} - ${incident.description}`}
+                                                                basePath="incidents" />
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
+                                                            <LinkedName
+                                                                canView={canViewMaterial}
+                                                                id={incident.material?.id}
+                                                                name={incident.material?.name}
+                                                                basePath="materials" />
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4">
+                                                            <Badge
+                                                                color={incident.status === "resolved" ? "success" : incident.status === "in_progress" ? "warning" : "light"}
+                                                                size="sm"
                                                             >
-                                                                #{incident.id} - {incident.description}
-                                                            </Link>
-                                                        ) : (
-                                                            <>
-                                                                #{incident.id} - {incident.description}
-                                                            </>
-                                                        )}
-                                                    </TableCell>
-                                                    <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                                                        {canViewMaterials ? (
-                                                            <Link
-                                                                to={`/materials/${incident.material?.id}`}
-                                                                className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
+                                                                {t(`incidents.statuses.${incident.status}`)}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4">
+                                                            <Badge
+                                                                color={incident.severity === "critical" || incident.severity === "high" ? "error" : incident.severity === "medium" ? "warning" : "light"}
+                                                                size="sm"
                                                             >
-                                                                {incident.material?.name || "—"}
-                                                            </Link>
-                                                        ) : (
-                                                            incident.material?.name || "—"
-                                                        )}
-                                                    </TableCell>
-                                                    <TableCell className="px-6 py-4">
-                                                        <Badge
-                                                            color={incident.status === "resolved" ? "success" : incident.status === "in_progress" ? "warning" : "light"}
-                                                            size="sm"
-                                                        >
-                                                            {t(`incidents.statuses.${incident.status}`)}
-                                                        </Badge>
-                                                    </TableCell>
-                                                    <TableCell className="px-6 py-4">
-                                                        <Badge
-                                                            color={incident.severity === "critical" || incident.severity === "high" ? "error" : incident.severity === "medium" ? "warning" : "light"}
-                                                            size="sm"
-                                                        >
-                                                            {t(`incidents.severities.${incident.severity}`)}
-                                                        </Badge>
-                                                    </TableCell>
-                                                    <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                                        {formatDateTime(incident.created_at)}
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                                {incidentsMeta && (
-                                    <Pagination meta={incidentsMeta} onPageChange={setIncidentsPage} />
-                                )}
-                            </>
-                        )}
-                    </div>
-                )}
+                                                                {t(`incidents.severities.${incident.severity}`)}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                                                            {formatDateTime(incident.created_at)}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                    {incidentsMeta && (
+                                        <Pagination meta={incidentsMeta} onPageChange={setIncidentsPage} />
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Edit Modal */}

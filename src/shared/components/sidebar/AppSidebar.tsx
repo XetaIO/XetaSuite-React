@@ -15,12 +15,13 @@ import {
     FaScrewdriverWrench,
     FaShieldHalved,
     FaSignsPost,
+    FaSitemap,
     FaTriangleExclamation,
     FaTruckRampBox,
     FaUsersGear,
-    FaUserShield,
     FaUserTie,
     FaWrench,
+    FaKey,
 } from "react-icons/fa6";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -129,6 +130,12 @@ const navItems: NavItem[] = [
                 nameKey: "sidebar.manageZones",
                 path: "/zones",
                 permission: "zone.viewAny",
+            },
+            {
+                icon: <FaSitemap />,
+                nameKey: "sidebar.zoneTree",
+                path: "/zones/tree",
+                permission: "zone.viewAny",
             }
         ],
     },
@@ -173,7 +180,7 @@ const othersItems: NavItem[] = [
                 requiresHQ: true,
             },
             {
-                icon: <FaUserShield />,
+                icon: <FaKey />,
                 nameKey: "sidebar.managePermissions",
                 path: "/permissions",
                 permission: "permission.viewAny",
@@ -185,6 +192,7 @@ const othersItems: NavItem[] = [
         icon: <FaGear />,
         nameKey: "sidebar.settings",
         path: "/settings",
+        requiresHQ: true,
     },
 ];
 
@@ -242,8 +250,20 @@ export const AppSidebar: React.FC = () => {
             if (path === "/") {
                 return location.pathname === "/";
             }
-            // For other paths, check if the current path starts with the menu path
-            return location.pathname === path || location.pathname.startsWith(`${path}/`);
+            // Exact match first
+            if (location.pathname === path) {
+                return true;
+            }
+            // For paths with children, only match if the current path starts with path/
+            // but NOT if there's a more specific match (e.g., /zones/tree should not match /zones)
+            if (location.pathname.startsWith(`${path}/`)) {
+                // Check if this is an ID-based route (e.g., /zones/123) vs a named route (e.g., /zones/tree)
+                const remainder = location.pathname.slice(path.length + 1);
+                // If remainder starts with a number, it's likely an ID route, so parent should be active
+                // If remainder is a named route, let that specific route handle it
+                return /^\d+/.test(remainder);
+            }
+            return false;
         },
         [location.pathname]
     );
@@ -416,10 +436,10 @@ export const AppSidebar: React.FC = () => {
         <aside
             className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
         ${isExpanded || isMobileOpen
-                    ? "w-[290px]"
+                    ? "w-72.5"
                     : isHovered
-                        ? "w-[290px]"
-                        : "w-[90px]"
+                        ? "w-72.5"
+                        : "w-22.5"
                 }
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`}

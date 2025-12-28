@@ -39,6 +39,7 @@
         "optional": "optionnel",
         "qrCode": "QR Code",
         "retry": "Réessayer",
+        "refresh": "Actualiser",
         "increase": "Augmenter",
         "decrease": "Diminuer",
         "view": "Voir",
@@ -104,6 +105,7 @@
         "manageSuppliers": "Gérer les fournisseurs",
         "manageMaterials": "Gérer les matériels",
         "manageZones": "Gérer les zones",
+        "zoneTree": "Arborescence des zones",
         "manageSites": "Gérer les sites",
         "manageUsers": "Gérer les utilisateurs",
         "rolesPermissions": "Rôles et permissions",
@@ -534,6 +536,21 @@
             "created": "La zone \"{{name}}\" a été créée avec succès",
             "updated": "La zone \"{{name}}\" a été mise à jour avec succès",
             "deleted": "La zone \"{{name}}\" a été supprimée avec succès"
+        },
+        "tree": {
+            "title": "Arborescence des zones",
+            "description": "Visualisation hiérarchique des zones",
+            "pageTitle": "Architecture des zones",
+            "pageDescription": "Visualisez l'organisation hiérarchique des zones",
+            "totalZones": "zones",
+            "expandAll": "Tout déplier",
+            "collapseAll": "Tout replier",
+            "currentSite": "Site actuel",
+            "selectSite": "Sélectionner un site",
+            "noZones": "Aucune zone trouvée pour ce site",
+            "goToManagement": "Aller à la gestion des zones",
+            "subzones": "sous-zones",
+            "allowsMaterials": "Matériels autorisés"
         }
     },
     "materials": {
@@ -549,6 +566,7 @@
         "noMaterialsFor": "Aucun matériel trouvé pour \"{{search}}\"",
         "deleteTitle": "Supprimer le matériel",
         "zone": "Zone",
+        "site": "Site",
         "createdBy": "Créé par",
         "cleaningAlert": "Alerte de nettoyage",
         "cleaningAlertSettings": "Paramètres d'alerte de nettoyage",
@@ -608,6 +626,20 @@
             "created": "Le matériel \"{{name}}\" a été créé avec succès",
             "updated": "Le matériel \"{{name}}\" a été mis à jour avec succès",
             "deleted": "Le matériel \"{{name}}\" a été supprimé avec succès"
+        },
+        "tabs": {
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Nettoyages",
+            "items": "Articles",
+            "searchIncidents": "Rechercher des incidents...",
+            "searchMaintenances": "Rechercher des maintenances...",
+            "searchCleanings": "Rechercher des nettoyages...",
+            "searchItems": "Rechercher des articles...",
+            "noIncidents": "Aucun incident pour ce matériel",
+            "noMaintenances": "Aucune maintenance pour ce matériel",
+            "noCleanings": "Aucun nettoyage pour ce matériel",
+            "noItems": "Aucun article associé à ce matériel"
         },
         "qrCode": {
             "title": "QR Code",
@@ -722,9 +754,29 @@
         "passwordMinLengthHint": "Doit contenir au moins 8 caractères",
         "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
         "passwordResetSuccess": "Mot de passe réinitialisé avec succès. Veuillez vous connecter.",
+        "passwordNotSetup": "Mot de passe pas encore configuré ?",
         "invalidLink": "Lien invalide",
         "invalidLinkDesc": "Ce lien de réinitialisation est invalide ou a expiré. Veuillez en demander un nouveau.",
-        "resetting": "Réinitialisation en cours..."
+        "resetting": "Réinitialisation en cours...",
+        "setupPassword": {
+            "title": "Créer mon mot de passe",
+            "desc": "Bienvenue {{name}} ! Veuillez créer votre mot de passe pour accéder à votre compte.",
+            "passwordPlaceholder": "Choisissez un mot de passe",
+            "create": "Créer mon mot de passe",
+            "creating": "Création en cours...",
+            "success": "Votre mot de passe a été créé avec succès. Vous pouvez maintenant vous connecter.",
+            "verifying": "Vérification du lien...",
+            "invalidLink": "Ce lien de création de mot de passe est invalide.",
+            "linkExpired": "Ce lien a expiré. Veuillez contacter votre administrateur pour en demander un nouveau.",
+            "alreadySetup": "Vous avez déjà configuré votre mot de passe. Veuillez vous connecter.",
+            "linkError": "Lien invalide"
+        },
+        "resendSetupPassword": {
+            "title": "Renvoyer le lien de configuration de votre mot de passe",
+            "desc": "Vous devez impérativement configurer votre mot de passe avant de pouvoir vous connecter pour la première fois à votre compte.",
+            "sendLink": "Renvoyer le lien",
+            "successDesc": "Si un compte existe avec cette adresse email et n'a pas encore de mot de passe configuré, vous recevrez un email avec le lien de configuration."
+        }
     },
     "errors": {
         "generic": "Une erreur est survenue",
@@ -1024,10 +1076,241 @@
             }
         }
     },
+    "roles": {
+        "title": "Rôles",
+        "description": "Gestion des rôles et de leurs permissions",
+        "listTitle": "Liste des rôles",
+        "manageRolesAndPermissions": "Gérez les rôles et leurs permissions associées",
+        "create": "Nouveau rôle",
+        "createRole": "Créer un rôle",
+        "editRole": "Modifier le rôle",
+        "name": "Nom du rôle",
+        "namePlaceholder": "Entrez le nom du rôle",
+        "guard": "Guard",
+        "permissions": "Permissions",
+        "permissionsCount": "{{count}} permission(s)",
+        "selectPermissions": "Sélectionner les permissions",
+        "searchPermissions": "Rechercher des permissions...",
+        "selectedPermissions": "{{count}} permission(s) sélectionnée(s)",
+        "noPermissionsSelected": "Aucune permission sélectionnée",
+        "users": "Utilisateurs",
+        "usersCount": "{{count}} utilisateur(s)",
+        "permissionsTab": "Permissions",
+        "usersTab": "Utilisateurs",
+        "noRoles": "Aucun rôle trouvé",
+        "noRolesFor": "Aucun rôle trouvé pour \"{{search}}\"",
+        "noPermissions": "Aucune permission assignée à ce rôle",
+        "noUsers": "Aucun utilisateur n'a ce rôle",
+        "notFound": "Rôle introuvable",
+        "notFoundMessage": "Le rôle que vous recherchez n'existe pas ou a été supprimé.",
+        "backToList": "Retour à la liste des rôles",
+        "searchPlaceholder": "Rechercher un rôle...",
+        "deleteTitle": "Supprimer le rôle",
+        "deleteMessage": "Êtes-vous sûr de vouloir supprimer le rôle \"{{name}}\" ? Cette action est irréversible.",
+        "cannotDeleteWithUsers": "Impossible de supprimer ce rôle car il est assigné à des utilisateurs.",
+        "confirmDelete": "Supprimer le rôle",
+        "confirmDeleteMessage": "Êtes-vous sûr de vouloir supprimer le rôle \"{{name}}\" ? Cette action est irréversible.",
+        "selectedPermissionsCount": "{{count}} permission(s) sélectionnée(s)",
+        "guardName": "Guard",
+        "detail": {
+            "backToList": "Retour à la liste des rôles",
+            "roleInfo": "Informations du rôle",
+            "createdAt": "Créé le",
+            "updatedAt": "Modifié le"
+        },
+        "messages": {
+            "created": "Le rôle \"{{name}}\" a été créé avec succès",
+            "updated": "Le rôle \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "Le rôle \"{{name}}\" a été supprimé avec succès"
+        },
+        "validation": {
+            "nameRequired": "Le nom du rôle est requis"
+        },
+        "permissionDescriptions": {
+            "activity": {
+                "delete": "Supprimer des activités",
+                "search": "Rechercher des activités",
+                "view": "Voir les détails d'une activité",
+                "viewAny": "Voir la liste des activités"
+            },
+            "calendar-event": {
+                "create": "Créer des événements calendrier",
+                "delete": "Supprimer des événements calendrier",
+                "search": "Rechercher des événements calendrier",
+                "update": "Modifier des événements calendrier",
+                "view": "Voir les détails d'un événement",
+                "viewAny": "Voir la liste des événements"
+            },
+            "calendar": {
+                "create": "Créer des calendriers",
+                "delete": "Supprimer des calendriers",
+                "update": "Modifier des calendriers",
+                "view": "Voir les détails d'un calendrier",
+                "viewAny": "Voir la liste des calendriers"
+            },
+            "cleaning": {
+                "create": "Créer des nettoyages",
+                "delete": "Supprimer des nettoyages",
+                "export": "Exporter les nettoyages",
+                "generatePlan": "Générer un plan de nettoyage",
+                "search": "Rechercher des nettoyages",
+                "update": "Modifier des nettoyages",
+                "view": "Voir les détails d'un nettoyage",
+                "viewAny": "Voir la liste des nettoyages"
+            },
+            "company": {
+                "create": "Créer des entreprises",
+                "delete": "Supprimer des entreprises",
+                "export": "Exporter les entreprises",
+                "search": "Rechercher des entreprises",
+                "update": "Modifier des entreprises",
+                "view": "Voir les détails d'une entreprise",
+                "viewAny": "Voir la liste des entreprises"
+            },
+            "role": {
+                "create": "Créer des rôles",
+                "delete": "Supprimer des rôles",
+                "search": "Rechercher des rôles",
+                "update": "Modifier des rôles",
+                "view": "Voir les détails d'un rôle",
+                "viewAny": "Voir la liste des rôles"
+            },
+            "permission": {
+                "create": "Créer des permissions",
+                "delete": "Supprimer des permissions",
+                "search": "Rechercher des permissions",
+                "update": "Modifier des permissions",
+                "view": "Voir les détails d'une permission",
+                "viewAny": "Voir la liste des permissions"
+            },
+            "user": {
+                "assignDirectPermission": "Assigner des permissions directes",
+                "assignSite": "Assigner un utilisateur à un site",
+                "create": "Créer des utilisateurs",
+                "delete": "Supprimer des utilisateurs",
+                "restore": "Restaurer des utilisateurs",
+                "search": "Rechercher des utilisateurs",
+                "update": "Modifier des utilisateurs",
+                "view": "Voir les détails d'un utilisateur",
+                "viewAny": "Voir la liste des utilisateurs"
+            },
+            "material": {
+                "create": "Créer des matériels",
+                "delete": "Supprimer des matériels",
+                "export": "Exporter les matériels",
+                "generateQrCode": "Générer des QR codes matériel",
+                "scanQrCode": "Scanner des QR codes matériel",
+                "search": "Rechercher des matériels",
+                "update": "Modifier des matériels",
+                "view": "Voir les détails d'un matériel",
+                "viewAny": "Voir la liste des matériels"
+            },
+            "setting": {
+                "create": "Créer des paramètres",
+                "delete": "Supprimer des paramètres",
+                "update": "Modifier des paramètres",
+                "view": "Voir les détails d'un paramètre",
+                "viewAny": "Voir la liste des paramètres"
+            },
+            "zone": {
+                "create": "Créer des zones",
+                "delete": "Supprimer des zones",
+                "export": "Exporter les zones",
+                "search": "Rechercher des zones",
+                "update": "Modifier des zones",
+                "view": "Voir les détails d'une zone",
+                "viewAny": "Voir la liste des zones"
+            },
+            "site": {
+                "create": "Créer des sites",
+                "delete": "Supprimer des sites",
+                "export": "Exporter les sites",
+                "search": "Rechercher des sites",
+                "update": "Modifier des sites",
+                "view": "Voir les détails d'un site",
+                "viewAny": "Voir la liste des sites"
+            },
+            "maintenance": {
+                "create": "Créer des maintenances",
+                "delete": "Supprimer des maintenances",
+                "export": "Exporter les maintenances",
+                "search": "Rechercher des maintenances",
+                "update": "Modifier des maintenances",
+                "view": "Voir les détails d'une maintenance",
+                "viewAny": "Voir la liste des maintenances"
+            },
+            "incident": {
+                "create": "Créer des incidents",
+                "delete": "Supprimer des incidents",
+                "export": "Exporter les incidents",
+                "search": "Rechercher des incidents",
+                "update": "Modifier des incidents",
+                "view": "Voir les détails d'un incident",
+                "viewAny": "Voir la liste des incidents"
+            },
+            "item": {
+                "create": "Créer des articles",
+                "delete": "Supprimer des articles",
+                "export": "Exporter les articles",
+                "generateQrCode": "Générer des QR codes article",
+                "scanQrCode": "Scanner des QR codes article",
+                "search": "Rechercher des articles",
+                "update": "Modifier des articles",
+                "view": "Voir les détails d'un article",
+                "viewAny": "Voir la liste des articles",
+                "viewOthersSites": "Voir les articles d'autres sites"
+            },
+            "item-movement": {
+                "create": "Créer des mouvements",
+                "delete": "Supprimer des mouvements",
+                "export": "Exporter les mouvements",
+                "search": "Rechercher des mouvements",
+                "update": "Modifier des mouvements",
+                "view": "Voir les détails d'un mouvement",
+                "viewAny": "Voir la liste des mouvements"
+            },
+            "bypass": {
+                "login": "Contourner l'authentification"
+            }
+        }
+    },
+    "permissions": {
+        "title": "Permissions",
+        "description": "Gestion des permissions de l'application",
+        "listTitle": "Liste des permissions",
+        "managePermissions": "Gérer les permissions et leurs rôles associés",
+        "create": "Nouvelle permission",
+        "createPermission": "Créer une permission",
+        "editPermission": "Modifier la permission",
+        "name": "Nom de la permission",
+        "namePlaceholder": "ex. ressource.action",
+        "nameHint": "Utilisez le format ressource.action (ex. user.create, item.view)",
+        "roles": "Rôles",
+        "rolesCount": "{{count}} rôle(s)",
+        "noPermissions": "Aucune permission trouvée",
+        "noPermissionsFor": "Aucune permission trouvée pour \"{{search}}\"",
+        "noRoles": "Aucun rôle n'a cette permission",
+        "notFound": "Permission introuvable",
+        "notFoundMessage": "La permission que vous recherchez n'existe pas ou a été supprimée.",
+        "backToList": "Retour à la liste des permissions",
+        "searchPlaceholder": "Rechercher des permissions...",
+        "confirmDelete": "Supprimer la permission",
+        "confirmDeleteMessage": "Êtes-vous sûr de vouloir supprimer la permission \"{{name}}\" ? Cette action est irréversible.",
+        "rolesWithPermission": "Rôles avec cette permission",
+        "validation": {
+            "nameRequired": "Le nom de la permission est requis"
+        },
+        "messages": {
+            "created": "La permission \"{{name}}\" a été créée avec succès",
+            "updated": "La permission \"{{name}}\" a été mise à jour avec succès",
+            "deleted": "La permission \"{{name}}\" a été supprimée avec succès"
+        }
+    },
     "users": {
         "title": "Utilisateurs",
         "description": "Gestion des utilisateurs et de leurs accès",
         "listTitle": "Liste des utilisateurs",
+        "searchPlaceholder": "Rechercher par nom ou email...",
         "create": "Nouvel utilisateur",
         "edit": "Modifier l'utilisateur",
         "notFound": "Utilisateur introuvable",
@@ -1096,5 +1379,37 @@
             "deleted": "L'utilisateur \"{{name}}\" a été supprimé avec succès",
             "restored": "L'utilisateur \"{{name}}\" a été restauré avec succès"
         }
+    },
+    "settings": {
+        "title": "Paramètres",
+        "applicationSettings": "Paramètres de l'application",
+        "applicationSettingsDescription": "Configurez les paramètres globaux de l'application.",
+        "noSettings": "Aucun paramètre disponible",
+        "headquartersOnly": "Les paramètres ne peuvent être modifiés que depuis le siège.",
+        "keys": {
+            "currency": "Devise",
+            "currency_symbol": "Symbole de devise",
+            "login_enabled": "Connexion activée"
+        },
+        "descriptions": {
+            "currency": "Le code de devise utilisé pour les prix (ex: EUR, USD).",
+            "currency_symbol": "Le symbole affiché pour les prix (ex: €, $).",
+            "login_enabled": "Lorsque désactivé, les utilisateurs ne peuvent pas se connecter à l'application."
+        },
+        "messages": {
+            "updated": "Le paramètre \"{{name}}\" a été mis à jour avec succès"
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "empty": "Aucune notification",
+        "emptyDescription": "Vous n'avez aucune notification pour le moment",
+        "new": "NEW",
+        "viewAll": "Voir toutes les notifications",
+        "markAllAsRead": "Tout marquer comme lu",
+        "deleteAll": "Tout supprimer",
+        "delete": "Supprimer la notification",
+        "noMore": "Plus de notifications",
+        "loadMore": "Charger plus"
     }
 }

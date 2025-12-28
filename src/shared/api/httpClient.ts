@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { AxiosInstance, AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import { showError } from '@/shared/utils/toast';
+import { API_ENDPOINTS } from './urlBuilder';
 
 /**
  * HTTP Client - Base API configuration for the application
@@ -29,13 +30,39 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 }
 
 /**
- * Response interceptor to handle global error notifications
+ * Check if the request URL is an auth endpoint
+ * (to avoid redirect loops during login/logout)
+ */
+const isAuthEndpoint = (url: string | undefined): boolean => {
+    if (!url) return false;
+    return Object.values(API_ENDPOINTS.AUTH).some(endpoint =>
+        typeof endpoint === 'string' && url.includes(endpoint)
+    );
+};
+
+/**
+ * Check if we're already on an auth page (to avoid redirect loops)
+ */
+const isOnAuthPage = (): boolean => {
+    return window.location.pathname.startsWith('/auth');
+};
+
+/**
+ * Response interceptor to handle global error notifications and auth redirects
  */
 httpClient.interceptors.response.use(
     (response) => response,
     (error: AxiosError) => {
         const config = error.config as CustomAxiosRequestConfig | undefined;
         const shouldShowToast = config?.meta?.showErrorToast !== false;
+
+        // Handle 401 Unauthorized - redirect to login page
+        // Skip redirect if already on auth page or calling auth endpoints
+        if (error.response?.status === 401 && !isAuthEndpoint(config?.url) && !isOnAuthPage()) {
+            // Clear any stale state and redirect to login
+            window.location.href = '/auth/login';
+            return Promise.reject(error);
+        }
 
         // Only show toast for server errors (5xx) automatically
         if (shouldShowToast && error.response?.status && error.response.status >= 500) {

@@ -1,6 +1,6 @@
 import { handleApiError } from '@/shared/api';
 import type { User } from '@/shared/types';
-import type { LoginCredentials, ForgotPasswordData, ResetPasswordData } from '../types';
+import type { LoginCredentials, ForgotPasswordData, ResetPasswordData, ResendSetupPasswordData } from '../types';
 import { AuthRepository } from './AuthRepository';
 
 /**
@@ -59,6 +59,17 @@ export const AuthManager = {
     resetPassword: async (data: ResetPasswordData): Promise<void> => {
         try {
             await AuthRepository.resetPassword(data);
+        } catch (error) {
+            throw new Error(handleApiError(error));
+        }
+    },
+
+    /**
+     * Resend password setup email
+     */
+    resendSetupPassword: async (data: ResendSetupPasswordData): Promise<void> => {
+        try {
+            await AuthRepository.resendSetupPassword(data);
         } catch (error) {
             throw new Error(handleApiError(error));
         }

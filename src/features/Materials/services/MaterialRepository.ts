@@ -9,6 +9,10 @@ import type {
     AvailableZone,
     AvailableRecipient,
     MaterialMonthlyStats,
+    MaterialIncident,
+    MaterialMaintenance,
+    MaterialCleaning,
+    MaterialItem,
 } from '../types';
 
 /**
@@ -115,5 +119,41 @@ export const MaterialRepository = {
             url: response.data.data.url,
             size: response.data.data.size,
         };
+    },
+
+    /**
+     * Get paginated incidents for a material
+     */
+    getIncidents: async (id: number, page = 1, perPage = 10, search?: string): Promise<PaginatedResponse<MaterialIncident>> => {
+        const url = buildUrl(API_ENDPOINTS.MATERIALS.INCIDENTS(id), { page, per_page: perPage, search });
+        const response = await httpClient.get<PaginatedResponse<MaterialIncident>>(url);
+        return response.data;
+    },
+
+    /**
+     * Get paginated maintenances for a material
+     */
+    getMaintenances: async (id: number, page = 1, perPage = 10, search?: string): Promise<PaginatedResponse<MaterialMaintenance>> => {
+        const url = buildUrl(API_ENDPOINTS.MATERIALS.MAINTENANCES(id), { page, per_page: perPage, search });
+        const response = await httpClient.get<PaginatedResponse<MaterialMaintenance>>(url);
+        return response.data;
+    },
+
+    /**
+     * Get paginated cleanings for a material
+     */
+    getCleanings: async (id: number, page = 1, perPage = 10, search?: string): Promise<PaginatedResponse<MaterialCleaning>> => {
+        const url = buildUrl(API_ENDPOINTS.MATERIALS.CLEANINGS(id), { page, per_page: perPage, search });
+        const response = await httpClient.get<PaginatedResponse<MaterialCleaning>>(url);
+        return response.data;
+    },
+
+    /**
+     * Get paginated items for a material
+     */
+    getItems: async (id: number, page = 1, perPage = 10, search?: string): Promise<PaginatedResponse<MaterialItem>> => {
+        const url = buildUrl(API_ENDPOINTS.MATERIALS.ITEMS(id), { page, per_page: perPage, search });
+        const response = await httpClient.get<PaginatedResponse<MaterialItem>>(url);
+        return response.data;
     },
 };

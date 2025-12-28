@@ -61,7 +61,7 @@ const UserListPage: FC = () => {
     const canView = hasPermission("user.view");
 
     // Check if any action is available
-    const hasAnyAction = canUpdate || canDelete || canView;
+    const hasAnyAction = canUpdate || canDelete;
 
     // Debounce search input
     useEffect(() => {
@@ -360,24 +360,42 @@ const UserListPage: FC = () => {
                                 users.map((user) => (
                                     <TableRow key={user.id} className={`border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${user.deleted_at ? 'opacity-60' : ''}`}>
                                         <TableCell className="px-6 py-4">
-                                            <Link
-                                                to={`/users/${user.id}`}
-                                                className="flex items-center gap-3 hover:text-brand-600 dark:hover:text-brand-400"
-                                            >
-                                                <img
-                                                    src={user.avatar}
-                                                    alt={user.full_name}
-                                                    className="h-10 w-10 rounded-full object-cover"
-                                                />
-                                                <div>
-                                                    <div className="font-medium text-gray-900 dark:text-white">
-                                                        {user.full_name}
+                                            {canView ? (
+                                                <Link
+                                                    to={`/users/${user.id}`}
+                                                    className="flex items-center gap-3 hover:text-brand-600 dark:hover:text-brand-400"
+                                                >
+                                                    <img
+                                                        src={user.avatar}
+                                                        alt={user.full_name}
+                                                        className="h-10 w-10 rounded-full object-cover"
+                                                    />
+                                                    <div>
+                                                        <div className="font-medium text-gray-900 dark:text-white">
+                                                            {user.full_name}
+                                                        </div>
+                                                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                            @{user.username}
+                                                        </div>
                                                     </div>
-                                                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                                                        @{user.username}
+                                                </Link>
+                                            ) : (
+                                                <>
+                                                    <img
+                                                        src={user.avatar}
+                                                        alt={user.full_name}
+                                                        className="h-10 w-10 rounded-full object-cover"
+                                                    />
+                                                    <div>
+                                                        <div className="font-medium text-gray-900 dark:text-white">
+                                                            {user.full_name}
+                                                        </div>
+                                                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                            @{user.username}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </Link>
+                                                </>
+                                            )}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">
                                             {user.email}

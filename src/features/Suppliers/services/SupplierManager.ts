@@ -1,13 +1,7 @@
 import { handleApiError } from "@/shared/api";
-import type { PaginatedResponse, SingleResponse } from "@/shared/types";
+import type { PaginatedResponse, SingleResponse, ManagerResult } from "@/shared/types";
 import type { Supplier, SupplierFormData, SupplierFilters, Item, ItemFilters } from "../types";
 import { SupplierRepository } from "./SupplierRepository";
-
-interface ManagerResult<T> {
-    success: boolean;
-    data?: T;
-    error?: string;
-}
 
 /**
  * Supplier Manager - Mediates between View Layer and data source
