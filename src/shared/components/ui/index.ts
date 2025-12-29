@@ -16,7 +16,10 @@ export {
     TableBody,
     TableRow,
     TableCell,
+    SortableTableHeader,
+    StaticTableHeader,
 } from "./table";
+export type { SortableTableHeaderProps, StaticTableHeaderProps, SortDirection, TextAlign } from "./table";
 
 // Dropdown
 export { Dropdown } from "./dropdown/Dropdown";

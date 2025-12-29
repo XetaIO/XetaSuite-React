@@ -9,6 +9,6 @@ export { useRecaptcha } from "./useRecaptcha";
 export { useListPage } from "./useListPage";
 export type { UseListPageOptions, UseListPageReturn } from "./useListPage";
 export { useEntityPermissions } from "./useEntityPermissions";
-export type { UseEntityPermissionsOptions, EntityPermissions } from "./useEntityPermissions";
+export type { UseEntityPermissionsOptions, EntityPermissions, EntityPermissionsAuth } from "./useEntityPermissions";
 export { useFormModal } from "./useFormModal";
 export type { UseFormModalOptions, UseFormModalReturn, ValidateFn } from "./useFormModal";

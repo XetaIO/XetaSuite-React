@@ -2,21 +2,19 @@ import { useState, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
-    FaMagnifyingGlass,
     FaArrowRightToBracket,
     FaArrowRightFromBracket,
     FaArrowRightArrowLeft,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName, SortableTableHeader, StaticTableHeader } from "@/shared/components/ui";
+import { SearchInput } from "@/shared/components/form";
 import { useModal, useListPage } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
 import { ItemMovementManager } from "../services";
 import { ItemMovementModal } from "./ItemMovementModal";
 import type { ItemMovement, ItemMovementFilters, MovementType } from "../types";
-
-type SortField = "movement_date" | "quantity" | "total_price" | "type" | "created_at";
 
 const ItemMovementListPage: FC = () => {
     const { t } = useTranslation();
@@ -33,7 +31,6 @@ const ItemMovementListPage: FC = () => {
         error,
         searchQuery,
         setSearchQuery,
-        debouncedSearch,
         handleSort,
         renderSortIcon,
         handlePageChange,
@@ -161,32 +158,12 @@ const ItemMovementListPage: FC = () => {
                 <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         {/* Search */}
-                        <div className="relative max-w-md flex-1">
-                            <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder={t("itemMovements.searchPlaceholder")}
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                            />
-                            {searchQuery && (
-                                <button
-                                    onClick={() => setSearchQuery("")}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                    title={t("common.clearSearch")}
-                                >
-                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M6 18L18 6M6 6l12 12"
-                                        />
-                                    </svg>
-                                </button>
-                            )}
-                        </div>
+                        <SearchInput
+                            value={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder={t("itemMovements.searchPlaceholder")}
+                            className="max-w-md flex-1"
+                        />
 
                         <div className="flex items-center gap-4">
                             {/* Clear Filters */}
@@ -220,7 +197,7 @@ const ItemMovementListPage: FC = () => {
 
                 {/* Error message */}
                 {error && (
-                    <div className="mx-6 mt-4 rounded-lg bg-error-50 p-4 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">
+                    <div className="alert-error">
                         {error}
                     </div>
                 )}
@@ -229,60 +206,38 @@ const ItemMovementListPage: FC = () => {
                 <div className="overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-b border-gray-200 dark:border-gray-800">
+                            <TableRow className="table-header-row-border">
                                 {isOnHeadquarters && (
-                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                        {t("itemMovements.fields.site")}
-                                    </TableCell>
+                                    <StaticTableHeader label={t("itemMovements.fields.site")} />
                                 )}
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("movement_date")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("itemMovements.fields.movementDate")}
-                                        {renderSortIcon("movement_date")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("type")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("itemMovements.fields.type")}
-                                        {renderSortIcon("type")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("itemMovements.fields.item")}
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("quantity")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("itemMovements.fields.quantity")}
-                                        {renderSortIcon("quantity")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("total_price")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("itemMovements.fields.totalPrice")}
-                                        {renderSortIcon("total_price")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("itemMovements.fields.supplier")}
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("itemMovements.fields.createdBy")}
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("common.actions")}
-                                </TableCell>
+                                <SortableTableHeader
+                                    field="movement_date"
+                                    label={t("itemMovements.fields.movementDate")}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                />
+                                <SortableTableHeader
+                                    field="type"
+                                    label={t("itemMovements.fields.type")}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                />
+                                <StaticTableHeader label={t("itemMovements.fields.item")} />
+                                <SortableTableHeader
+                                    field="quantity"
+                                    label={t("itemMovements.fields.quantity")}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                />
+                                <SortableTableHeader
+                                    field="total_price"
+                                    label={t("itemMovements.fields.totalPrice")}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                />
+                                <StaticTableHeader label={t("itemMovements.fields.supplier")} />
+                                <StaticTableHeader label={t("itemMovements.fields.createdBy")} />
+                                <StaticTableHeader label={t("common.actions")} align="right" />
                             </TableRow>
                         </TableHeader>
                         <TableBody>

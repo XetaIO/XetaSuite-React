@@ -1,5 +1,12 @@
 import { useMemo } from "react";
-import { useAuth } from "@/features/Auth";
+
+/**
+ * Auth context values needed by useEntityPermissions
+ */
+export interface EntityPermissionsAuth {
+    hasPermission: (permission: string) => boolean;
+    isOnHeadquarters: boolean;
+}
 
 /**
  * Options for useEntityPermissions hook
@@ -36,25 +43,24 @@ export interface EntityPermissions {
  * Reduces boilerplate permission checks in components
  *
  * @param entity - The entity name (e.g., "item", "supplier", "material")
+ * @param auth - Auth context values (hasPermission, isOnHeadquarters)
  * @param options - Configuration options for location-based permissions
  *
  * @example
  * // For items (regular site only)
- * const { canCreate, canUpdate, canDelete } = useEntityPermissions("item");
+ * const { hasPermission, isOnHeadquarters } = useAuth();
+ * const { canCreate, canUpdate, canDelete } = useEntityPermissions("item", { hasPermission, isOnHeadquarters });
  *
  * @example
  * // For suppliers (HQ only)
- * const { canCreate, canUpdate } = useEntityPermissions("supplier", { hqOnly: true });
- *
- * @example
- * // For users (no location restriction)
- * const { canCreate } = useEntityPermissions("user", { noLocationCheck: true });
+ * const { canCreate, canUpdate } = useEntityPermissions("supplier", { hasPermission, isOnHeadquarters }, { hqOnly: true });
  */
 export function useEntityPermissions(
     entity: string,
+    auth: EntityPermissionsAuth,
     options: UseEntityPermissionsOptions = {}
 ): EntityPermissions {
-    const { hasPermission, isOnHeadquarters } = useAuth();
+    const { hasPermission, isOnHeadquarters } = auth;
     const { hqOnly = false, noLocationCheck = false } = options;
 
     return useMemo(() => {

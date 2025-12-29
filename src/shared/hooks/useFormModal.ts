@@ -92,7 +92,7 @@ export interface UseFormModalReturn<TFormData> {
  * });
  * ```
  */
-export function useFormModal<TEntity extends { id?: number; name?: string }, TFormData extends Record<string, unknown>>({
+export function useFormModal<TEntity extends { id?: number; name?: string }, TFormData extends object>({
     initialFormData,
     entity,
     isOpen,
@@ -102,7 +102,7 @@ export function useFormModal<TEntity extends { id?: number; name?: string }, TFo
     createFn,
     updateFn,
     getEntityId = (e) => e.id ?? 0,
-    getEntityName = (data) => (data.name as string) || "",
+    getEntityName = (data) => ((data as Record<string, unknown>).name as string) || "",
     entityToFormData,
     validate,
     onFormInit,
@@ -123,7 +123,7 @@ export function useFormModal<TEntity extends { id?: number; name?: string }, TFo
             } else if (entity) {
                 // Default: copy matching properties from entity
                 const newFormData = { ...initialFormData };
-                for (const key of Object.keys(initialFormData)) {
+                for (const key of Object.keys(initialFormData as object)) {
                     if (key in entity) {
                         (newFormData as Record<string, unknown>)[key] = (entity as Record<string, unknown>)[key] ?? initialFormData[key as keyof TFormData];
                     }

@@ -308,7 +308,189 @@
   @apply border-brand-500 bg-brand-500;
 }
 
-/* third-party libraries CSS */
+
+
+
+/* ==========================================================================
+   XetaSuite Custom Components
+   ========================================================================== */
+
+@layer components {
+  /* --------------------------------------------------------------------------
+     Alert Components
+     -------------------------------------------------------------------------- */
+  .alert-error {
+    @apply mx-6 mt-4 rounded-lg bg-error-50 p-4 text-sm text-error-600
+           dark:bg-error-500/10 dark:text-error-400;
+  }
+
+  .alert-success {
+    @apply mx-6 mt-4 rounded-lg bg-success-50 p-4 text-sm text-success-600
+           dark:bg-success-500/10 dark:text-success-400;
+  }
+
+  .alert-warning {
+    @apply mx-6 mt-4 rounded-lg bg-warning-50 p-4 text-sm text-warning-600
+           dark:bg-warning-500/10 dark:text-warning-400;
+  }
+
+  /* --------------------------------------------------------------------------
+     Card Components
+     -------------------------------------------------------------------------- */
+  .card-base {
+    @apply rounded-2xl border border-gray-200 bg-white
+           dark:border-gray-800 dark:bg-white/3;
+  }
+
+  .card-header {
+    @apply flex flex-col gap-4 border-b border-gray-200 px-6 py-4
+           dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .card-header-title {
+    @apply text-base font-medium text-gray-800 dark:text-white/90;
+  }
+
+  .card-header-subtitle {
+    @apply mt-1 text-sm text-gray-500 dark:text-gray-400;
+  }
+
+  .card-body {
+    @apply px-6 py-4;
+  }
+
+  .card-body-border {
+    @apply border-b border-gray-200 px-6 py-4 dark:border-gray-800;
+  }
+
+  /* --------------------------------------------------------------------------
+     Table Components
+     -------------------------------------------------------------------------- */
+  .table-header-cell {
+    @apply px-6 py-3 text-sm font-medium text-gray-500 dark:text-gray-400;
+  }
+
+  .table-header-cell-left {
+    @apply px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400;
+  }
+
+  .table-header-cell-center {
+    @apply px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400;
+  }
+
+  .table-header-cell-right {
+    @apply px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400;
+  }
+
+  .table-body-cell {
+    @apply px-6 py-4;
+  }
+
+  .table-sortable-button {
+    @apply inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200;
+  }
+
+  .table-row-border {
+    @apply border-b border-gray-100 dark:border-gray-800;
+  }
+
+  .table-row-hover {
+    @apply border-b border-gray-100 hover:bg-gray-50
+           dark:border-gray-800 dark:hover:bg-white/2;
+  }
+
+  .table-header-row-border {
+    @apply border-b border-gray-200 dark:border-gray-800;
+  }
+
+  /* --------------------------------------------------------------------------
+     Input Components
+     -------------------------------------------------------------------------- */
+  .input-base {
+    @apply w-full rounded-lg border border-gray-300 bg-transparent text-sm text-gray-800
+           placeholder:text-gray-400 focus:border-brand-300 focus:outline-none
+           focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900
+           dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800;
+  }
+
+  .input-padding {
+    @apply py-2.5 px-4;
+  }
+
+  .input-with-left-icon {
+    @apply pl-10 pr-4 py-2.5;
+  }
+
+  .input-with-right-icon {
+    @apply pl-4 pr-10 py-2.5;
+  }
+
+  .input-with-both-icons {
+    @apply pl-10 pr-10 py-2.5;
+  }
+
+  /* --------------------------------------------------------------------------
+     Search Components
+     -------------------------------------------------------------------------- */
+  .search-icon {
+    @apply absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400;
+  }
+
+  .search-clear-button {
+    @apply absolute right-3 top-1/2 -translate-y-1/2 text-gray-400
+           hover:text-gray-600 dark:hover:text-gray-300;
+  }
+
+  /* --------------------------------------------------------------------------
+     Skeleton Loading Components
+     -------------------------------------------------------------------------- */
+  .skeleton-base {
+    @apply animate-pulse rounded bg-gray-200 dark:bg-gray-700;
+  }
+
+  .skeleton-text {
+    @apply h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700;
+  }
+
+  .skeleton-badge {
+    @apply h-5 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700;
+  }
+
+  .skeleton-avatar {
+    @apply h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700;
+  }
+
+  /* --------------------------------------------------------------------------
+     Empty State Components
+     -------------------------------------------------------------------------- */
+  .empty-state-container {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  .empty-state-icon {
+    @apply mb-4 h-12 w-12 text-gray-300 dark:text-gray-600;
+  }
+
+  .empty-state-clear-button {
+    @apply mt-2 text-sm text-brand-500 hover:text-brand-600;
+  }
+
+  /* --------------------------------------------------------------------------
+     Link Components
+     -------------------------------------------------------------------------- */
+  .link-primary {
+    @apply font-medium text-brand-600 hover:text-brand-700
+           dark:text-brand-400 dark:hover:text-brand-300;
+  }
+
+  .link-subtle {
+    @apply text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200;
+  }
+}
+
+/* ==========================================================================
+   XetaSuite Third-party libraries CSS
+   ========================================================================== */
 
 /* React Toastify - Position below header */
 :root {

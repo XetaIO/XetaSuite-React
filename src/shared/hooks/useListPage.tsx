@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa6";
 import type { PaginationMeta, ManagerResult, PaginatedResponse } from "@/shared/types";
+import { UI_CONSTANTS } from "@/shared/constants";
 
 /**
  * Configuration options for useListPage hook
@@ -13,9 +14,9 @@ export interface UseListPageOptions<TFilters> {
     defaultSortField?: string;
     /** Default sort direction */
     defaultSortDirection?: "asc" | "desc";
-    /** Debounce delay in milliseconds */
+    /** Debounce delay in milliseconds (default: UI_CONSTANTS.DEBOUNCE_MS) */
     debounceMs?: number;
-    /** Default items per page */
+    /** Default items per page (default: UI_CONSTANTS.DEFAULT_PER_PAGE) */
     perPage?: number;
     /** Additional filters to include in API calls (for custom page-specific filters) */
     additionalFilters?: Partial<TFilters>;
@@ -57,11 +58,11 @@ export interface UseListPageReturn<T, TFilters> {
  * Generic hook for list pages with pagination, search, and sorting
  * Reduces boilerplate code in all ListPage components
  */
-export function useListPage<T, TFilters extends Record<string, unknown>>({
+export function useListPage<T, TFilters>({
     fetchFn,
     defaultSortField,
     defaultSortDirection = "asc",
-    debounceMs = 300,
+    debounceMs = UI_CONSTANTS.DEBOUNCE_MS,
     additionalFilters = {},
 }: UseListPageOptions<TFilters>): UseListPageReturn<T, TFilters> {
     const { t } = useTranslation();
@@ -151,49 +152,49 @@ export function useListPage<T, TFilters extends Record<string, unknown>>({
     const renderSortIcon = useCallback((field: string): ReactNode => {
         if (sortBy !== field) {
             return (
-                <span className= "ml-1 text-gray-300 dark:text-gray-600" >
-                <FaArrowUp className="h-3 w-3" />
-                    </span>
+                <span className="ml-1 text-gray-300 dark:text-gray-600">
+                    <FaArrowUp className="h-3 w-3" />
+                </span>
             );
-}
-return sortDirection === "asc" ? (
-    <FaArrowUp className= "ml-1 h-3 w-3 text-brand-500" />
+        }
+        return sortDirection === "asc" ? (
+            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
         ) : (
-    <FaArrowDown className= "ml-1 h-3 w-3 text-brand-500" />
+            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
         );
     }, [sortBy, sortDirection]);
 
-// Refresh data
-const refresh = useCallback(() => {
-    fetchData();
-}, [fetchData]);
+    // Refresh data
+    const refresh = useCallback(() => {
+        fetchData();
+    }, [fetchData]);
 
-return {
-    // Data
-    items,
-    meta,
-    isLoading,
-    setIsLoading,
-    error,
+    return {
+        // Data
+        items,
+        meta,
+        isLoading,
+        setIsLoading,
+        error,
 
-    // Pagination
-    currentPage,
-    setCurrentPage,
-    handlePageChange,
+        // Pagination
+        currentPage,
+        setCurrentPage,
+        handlePageChange,
 
-    // Search
-    searchQuery,
-    setSearchQuery,
-    debouncedSearch,
+        // Search
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
 
-    // Sorting
-    sortBy,
-    sortDirection,
-    handleSort,
-    renderSortIcon,
+        // Sorting
+        sortBy,
+        sortDirection,
+        handleSort,
+        renderSortIcon,
 
-    // Actions
-    refresh,
-    buildFilters,
-};
+        // Actions
+        refresh,
+        buildFilters,
+    };
 }

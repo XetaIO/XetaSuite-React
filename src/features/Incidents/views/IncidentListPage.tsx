@@ -3,7 +3,6 @@ import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
-    FaMagnifyingGlass,
     FaTriangleExclamation,
 } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
@@ -17,16 +16,17 @@ import {
     ActionsDropdown,
     createActions,
     LinkedName,
+    SortableTableHeader,
+    StaticTableHeader,
 } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
+import { SearchInput } from '@/shared/components/form';
 import { useModal, useListPage, useEntityPermissions } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
 import { IncidentManager } from '../services';
 import { IncidentModal } from './IncidentModal';
 import type { Incident, IncidentFilters, IncidentSeverity, IncidentStatus, StatusOption, SeverityOption } from '../types';
-
-type SortField = 'created_at' | 'started_at' | 'severity' | 'status';
 
 const IncidentListPage: FC = () => {
     const { t } = useTranslation();
@@ -73,7 +73,7 @@ const IncidentListPage: FC = () => {
     const [preselectedMaterialId, setPreselectedMaterialId] = useState<number | null>(null);
 
     // Permissions
-    const permissions = useEntityPermissions("incident");
+    const permissions = useEntityPermissions("incident", { hasPermission, isOnHeadquarters });
     const canViewSite = isOnHeadquarters && hasPermission('site.view');
     const canViewMaterial = hasPermission('material.view');
     const canViewReporter = isOnHeadquarters && hasPermission('user.view');
@@ -237,32 +237,11 @@ const IncidentListPage: FC = () => {
                 <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         {/* Search */}
-                        <div className="relative max-w-md flex-1">
-                            <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder={t('common.searchPlaceholder')}
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                            />
-                            {searchQuery && (
-                                <button
-                                    onClick={() => setSearchQuery('')}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                    title={t('common.clearSearch')}
-                                >
-                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M6 18L18 6M6 6l12 12"
-                                        />
-                                    </svg>
-                                </button>
-                            )}
-                        </div>
+                        <SearchInput
+                            value={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder={t('common.searchPlaceholder')}
+                        />
 
                         <div className="flex items-center gap-4">
                             {/* Clear Filters */}
@@ -316,7 +295,7 @@ const IncidentListPage: FC = () => {
 
                 {/* Error message */}
                 {error && (
-                    <div className="mx-6 mt-4 rounded-lg bg-error-50 p-4 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">
+                    <div className="alert-error">
                         {error}
                     </div>
                 )}
@@ -325,73 +304,35 @@ const IncidentListPage: FC = () => {
                 <div className="overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-b border-gray-200 dark:border-gray-800">
-                                <TableCell
-                                    isHeader
-                                    className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400"
-                                >
-                                    {t('common.description')}
-                                </TableCell>
+                            <TableRow className="table-header-row-border">
+                                <StaticTableHeader label={t('common.description')} />
                                 {isOnHeadquarters && (
-                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                        {t('common.site')}
-                                    </TableCell>
+                                    <StaticTableHeader label={t('common.site')} />
                                 )}
-                                <TableCell
-                                    isHeader
-                                    className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400"
-                                >
-                                    {t('incidents.material')}
-                                </TableCell>
-                                <TableCell
-                                    isHeader
-                                    className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400"
-                                >
-                                    <button
-                                        onClick={() => handleSort('severity')}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t('incidents.severity')}
-                                        {renderSortIcon('severity')}
-                                    </button>
-                                </TableCell>
-                                <TableCell
-                                    isHeader
-                                    className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400"
-                                >
-                                    <button
-                                        onClick={() => handleSort('status')}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t('incidents.status')}
-                                        {renderSortIcon('status')}
-                                    </button>
-                                </TableCell>
-                                <TableCell
-                                    isHeader
-                                    className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400"
-                                >
-                                    {t('incidents.reportedBy')}
-                                </TableCell>
-                                <TableCell
-                                    isHeader
-                                    className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400"
-                                >
-                                    <button
-                                        onClick={() => handleSort('created_at')}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t('common.createdAt')}
-                                        {renderSortIcon('created_at')}
-                                    </button>
-                                </TableCell>
+                                <StaticTableHeader label={t('incidents.material')} />
+                                <SortableTableHeader
+                                    field="severity"
+                                    label={t('incidents.severity')}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                    align="center"
+                                />
+                                <SortableTableHeader
+                                    field="status"
+                                    label={t('incidents.status')}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                    align="center"
+                                />
+                                <StaticTableHeader label={t('incidents.reportedBy')} />
+                                <SortableTableHeader
+                                    field="created_at"
+                                    label={t('common.createdAt')}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                />
                                 {permissions.hasAnyAction && (
-                                    <TableCell
-                                        isHeader
-                                        className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400"
-                                    >
-                                        {t('common.actions')}
-                                    </TableCell>
+                                    <StaticTableHeader label={t('common.actions')} align="right" />
                                 )}
                             </TableRow>
                         </TableHeader>

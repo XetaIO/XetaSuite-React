@@ -1,21 +1,21 @@
 import { useState, useEffect, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaMagnifyingGlass, FaFileExport, FaBuilding } from "react-icons/fa6";
+import { FaPlus, FaFileExport, FaBuilding } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, createActions, ActionsDropdown } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, createActions, ActionsDropdown, SortableTableHeader, StaticTableHeader } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
-import { Checkbox } from "@/shared/components/form";
+import { Checkbox, SearchInput } from "@/shared/components/form";
 import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
+import { useAuth } from "@/features/Auth";
 import { SiteManager } from "../services";
 import { SiteModal } from "./SiteModal";
 import type { Site, SiteFilters } from "../types";
 
-type SortField = "name" | "zone_count" | "created_at";
-
 const SiteListPage: FC = () => {
     const { t } = useTranslation();
+    const { hasPermission, isOnHeadquarters } = useAuth();
 
     // Use shared list hook
     const {
@@ -45,7 +45,7 @@ const SiteListPage: FC = () => {
     const [isExporting, setIsExporting] = useState(false);
 
     // Permissions - site is HQ-only
-    const permissions = useEntityPermissions("site", { hqOnly: true });
+    const permissions = useEntityPermissions("site", { hasPermission, isOnHeadquarters }, { hqOnly: true });
 
     // Modals
     const siteModal = useModal();
@@ -182,46 +182,28 @@ const SiteListPage: FC = () => {
                 </div>
 
                 {/* Search and Filters */}
-                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="relative max-w-md flex-1">
-                            <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder={t("common.searchPlaceholder")}
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                            />
-                            {searchQuery && (
-                                <button
-                                    onClick={() => setSearchQuery("")}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                    title={t("common.clearSearch")}
-                                >
-                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            )}
+                <div className="card-body-border">
+                    <SearchInput
+                        value={searchQuery}
+                        onChange={setSearchQuery}
+                        className="max-w-md"
+                    />
+                    {permissions.canExport && selectedIds.size > 0 && (
+                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                            <span>{t("sites.export.selected", { count: selectedIds.size })}</span>
+                            <button
+                                onClick={() => setSelectedIds(new Set())}
+                                className="text-brand-500 hover:text-brand-600"
+                            >
+                                {t("sites.export.clearSelection")}
+                            </button>
                         </div>
-                        {permissions.canExport && selectedIds.size > 0 && (
-                            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                                <span>{t("sites.export.selected", { count: selectedIds.size })}</span>
-                                <button
-                                    onClick={() => setSelectedIds(new Set())}
-                                    className="text-brand-500 hover:text-brand-600"
-                                >
-                                    {t("sites.export.clearSelection")}
-                                </button>
-                            </div>
-                        )}
-                    </div>
+                    )}
                 </div>
 
                 {/* Error message */}
                 {error && (
-                    <div className="mx-6 mt-4 rounded-lg bg-error-50 p-4 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">
+                    <div className="alert-error">
                         {error}
                     </div>
                 )}
@@ -230,7 +212,7 @@ const SiteListPage: FC = () => {
                 <div className="overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-b border-gray-200 dark:border-gray-800">
+                            <TableRow className="table-header-row-border">
                                 {permissions.canExport && (
                                     <TableCell isHeader className="w-12 px-6 py-3">
                                         <Checkbox
@@ -241,43 +223,29 @@ const SiteListPage: FC = () => {
                                         />
                                     </TableCell>
                                 )}
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("name")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("common.name")}
-                                        {renderSortIcon("name")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("sites.detail.managers")}
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("zone_count")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("sites.zones")}
-                                        {renderSortIcon("zone_count")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("common.collaborators")}
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("created_at")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("common.createdAt")}
-                                        {renderSortIcon("created_at")}
-                                    </button>
-                                </TableCell>
+                                <SortableTableHeader
+                                    field="name"
+                                    label={t("common.name")}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                />
+                                <StaticTableHeader label={t("sites.detail.managers")} />
+                                <SortableTableHeader
+                                    field="zone_count"
+                                    label={t("sites.zones")}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                    align="center"
+                                />
+                                <StaticTableHeader label={t("common.collaborators")} />
+                                <SortableTableHeader
+                                    field="created_at"
+                                    label={t("common.createdAt")}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                />
                                 {permissions.hasAnyAction && (
-                                    <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
-                                        {t("common.actions")}
-                                    </TableCell>
+                                    <StaticTableHeader label={t("common.actions")} align="right" />
                                 )}
                             </TableRow>
                         </TableHeader>

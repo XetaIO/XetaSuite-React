@@ -1,9 +1,9 @@
-import { useState, useEffect, type FC, type ChangeEvent } from "react";
+import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaXmark } from "react-icons/fa6";
 import { Modal, Button } from "@/shared/components/ui";
 import { Label, Input } from "@/shared/components/form";
-import { showSuccess, showError } from "@/shared/utils";
+import { useFormModal } from "@/shared/hooks";
 import { PermissionManager } from "../services";
 import type { PermissionDetail, PermissionFormData } from "../types";
 
@@ -14,6 +14,20 @@ interface PermissionModalProps {
     permission?: PermissionDetail;
 }
 
+const initialFormData: PermissionFormData = {
+    name: "",
+};
+
+const validatePermission = (data: PermissionFormData, t: (key: string) => string): Record<string, string> => {
+    const errors: Record<string, string> = {};
+
+    if (!data.name.trim()) {
+        errors.name = t("permissions.validation.nameRequired");
+    }
+
+    return errors;
+};
+
 export const PermissionModal: FC<PermissionModalProps> = ({
     isOpen,
     onClose,
@@ -21,66 +35,28 @@ export const PermissionModal: FC<PermissionModalProps> = ({
     permission,
 }) => {
     const { t } = useTranslation();
-    const isEditMode = !!permission;
 
-    // Form state
-    const [formData, setFormData] = useState<PermissionFormData>({
-        name: "",
+    const {
+        formData,
+        errors,
+        isLoading,
+        isEditing,
+        handleChange,
+        handleSubmit,
+    } = useFormModal<PermissionDetail, PermissionFormData>({
+        initialFormData,
+        entity: permission ?? null,
+        isOpen,
+        onClose,
+        onSuccess,
+        translationPrefix: "common", // Uses common.messages.created/updated
+        createFn: PermissionManager.create,
+        updateFn: PermissionManager.update,
+        validate: validatePermission,
+        entityToFormData: (entity) => ({
+            name: entity.name,
+        }),
     });
-    const [errors, setErrors] = useState<Record<string, string>>({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Reset form when modal opens/closes or permission changes
-    useEffect(() => {
-        if (isOpen) {
-            if (permission) {
-                setFormData({
-                    name: permission.name,
-                });
-            } else {
-                setFormData({
-                    name: "",
-                });
-            }
-            setErrors({});
-        }
-    }, [isOpen, permission]);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        // Validate
-        const newErrors: Record<string, string> = {};
-        if (!formData.name.trim()) {
-            newErrors.name = t("permissions.validation.nameRequired");
-        }
-
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            return;
-        }
-
-        setIsSubmitting(true);
-        setErrors({});
-
-        const result = isEditMode
-            ? await PermissionManager.update(permission!.id, formData)
-            : await PermissionManager.create(formData);
-
-        if (result.success) {
-            showSuccess(
-                isEditMode
-                    ? t("common.messages.updated", { name: formData.name })
-                    : t("common.messages.created", { name: formData.name })
-            );
-            onSuccess();
-            onClose();
-        } else {
-            showError(result.error || t("errors.generic"));
-        }
-
-        setIsSubmitting(false);
-    };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} className="max-w-md">
@@ -88,7 +64,7 @@ export const PermissionModal: FC<PermissionModalProps> = ({
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
                     <h2 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-                        {isEditMode ? t("permissions.editPermission") : t("permissions.createPermission")}
+                        {isEditing ? t("permissions.editPermission") : t("permissions.createPermission")}
                     </h2>
                     <button
                         type="button"
@@ -107,11 +83,10 @@ export const PermissionModal: FC<PermissionModalProps> = ({
                         <Label htmlFor="name">{t("permissions.name")} *</Label>
                         <Input
                             id="name"
+                            name="name"
                             type="text"
                             value={formData.name}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                setFormData((prev) => ({ ...prev, name: e.target.value }))
-                            }
+                            onChange={handleChange}
                             error={!!errors.name}
                             hint={errors.name}
                             placeholder={t("permissions.namePlaceholder")}
@@ -127,10 +102,10 @@ export const PermissionModal: FC<PermissionModalProps> = ({
                         <Button type="button" variant="outline" onClick={onClose}>
                             {t("common.cancel")}
                         </Button>
-                        <Button type="submit" variant="primary" disabled={isSubmitting}>
-                            {isSubmitting
+                        <Button type="submit" variant="primary" disabled={isLoading}>
+                            {isLoading
                                 ? t("common.loading")
-                                : isEditMode
+                                : isEditing
                                     ? t("common.update")
                                     : t("common.create")}
                         </Button>

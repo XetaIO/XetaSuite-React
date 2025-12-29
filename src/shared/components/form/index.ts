@@ -1,5 +1,9 @@
 // Form Components Barrel Export
 
+// Search Input
+export { SearchInput } from "./SearchInput";
+export type { SearchInputProps } from "./SearchInput";
+
 // Input
 export { default as Input } from "./input/InputField";
 export { default as Checkbox } from "./input/Checkbox";

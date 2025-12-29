@@ -1,8 +1,8 @@
-import { useState, useEffect, type FC, type ChangeEvent, type FormEvent } from "react";
+import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Button } from "@/shared/components/ui";
 import { Label, Input } from "@/shared/components/form";
-import { showSuccess, showError } from "@/shared/utils";
+import { useFormModal } from "@/shared/hooks";
 import { SupplierManager } from "../services";
 import type { Supplier, SupplierFormData } from "../types";
 
@@ -13,83 +13,52 @@ interface SupplierModalProps {
     onSuccess: () => void;
 }
 
+const initialFormData: SupplierFormData = {
+    name: "",
+    description: "",
+};
+
+const validateSupplier = (data: SupplierFormData, t: (key: string) => string): Record<string, string> => {
+    const errors: Record<string, string> = {};
+
+    if (!data.name.trim()) {
+        errors.name = t("validation.nameRequired");
+    } else if (data.name.length > 255) {
+        errors.name = t("validation.nameMaxLength");
+    }
+
+    if (data.description && data.description.length > 1000) {
+        errors.description = t("validation.descriptionMaxLength");
+    }
+
+    return errors;
+};
+
 export const SupplierModal: FC<SupplierModalProps> = ({ isOpen, onClose, supplier, onSuccess }) => {
     const { t } = useTranslation();
-    const [formData, setFormData] = useState<SupplierFormData>({
-        name: "",
-        description: "",
+
+    const {
+        formData,
+        errors,
+        isLoading,
+        isEditing,
+        handleChange,
+        handleSubmit,
+    } = useFormModal<Supplier, SupplierFormData>({
+        initialFormData,
+        entity: supplier,
+        isOpen,
+        onClose,
+        onSuccess,
+        translationPrefix: "suppliers",
+        createFn: SupplierManager.create,
+        updateFn: SupplierManager.update,
+        validate: validateSupplier,
+        entityToFormData: (entity) => ({
+            name: entity.name,
+            description: entity.description || "",
+        }),
     });
-    const [errors, setErrors] = useState<Record<string, string>>({});
-    const [isLoading, setIsLoading] = useState(false);
-
-    const isEditing = supplier !== null;
-
-    useEffect(() => {
-        if (supplier) {
-            setFormData({
-                name: supplier.name,
-                description: supplier.description || "",
-            });
-        } else {
-            setFormData({
-                name: "",
-                description: "",
-            });
-        }
-        setErrors({});
-    }, [supplier, isOpen]);
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-        if (errors[name]) {
-            setErrors((prev) => ({ ...prev, [name]: "" }));
-        }
-    };
-
-    const validate = (): boolean => {
-        const newErrors: Record<string, string> = {};
-
-        if (!formData.name.trim()) {
-            newErrors.name = t("validation.nameRequired");
-        } else if (formData.name.length > 255) {
-            newErrors.name = t("validation.nameMaxLength");
-        }
-
-        if (formData.description && formData.description.length > 1000) {
-            newErrors.description = t("validation.descriptionMaxLength");
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-
-        if (!validate()) return;
-
-        setIsLoading(true);
-        let result;
-        if (isEditing) {
-            result = await SupplierManager.update(supplier.id, formData);
-        } else {
-            result = await SupplierManager.create(formData);
-        }
-
-        if (result.success) {
-            const successMessage = isEditing
-                ? t("suppliers.messages.updated", { name: formData.name })
-                : t("suppliers.messages.created", { name: formData.name });
-            showSuccess(successMessage);
-            onSuccess();
-            onClose();
-        } else {
-            showError(result.error || t("errors.generic"));
-            setErrors({ general: result.error || t("errors.generic") });
-        }
-        setIsLoading(false);
-    };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} className="max-w-lg p-6 lg:p-8">

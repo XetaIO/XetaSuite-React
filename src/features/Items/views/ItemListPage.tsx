@@ -1,9 +1,10 @@
 import { useState, useCallback, useEffect, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaMagnifyingGlass, FaCubes } from "react-icons/fa6";
+import { FaPlus, FaCubes } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ActionsDropdown, createActions, LinkedName } from "@/shared/components/ui";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ActionsDropdown, createActions, LinkedName, SortableTableHeader, StaticTableHeader } from "@/shared/components/ui";
+import { SearchInput } from "@/shared/components/form";
 import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -46,7 +47,7 @@ const ItemListPage: FC = () => {
     });
 
     // Permissions using custom hook
-    const { canView, canCreate, canUpdate, canDelete, canGenerateQrCode } = useEntityPermissions("item");
+    const { canView, canCreate, canUpdate, canDelete, canGenerateQrCode } = useEntityPermissions("item", { hasPermission, isOnHeadquarters });
     const canCreateMovement = hasPermission("item-movement.create");
     const canViewSite = isOnHeadquarters && hasPermission("site.view");
     const canViewSupplier = hasPermission("supplier.view");
@@ -175,27 +176,12 @@ const ItemListPage: FC = () => {
                 <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         {/* Search */}
-                        <div className="relative max-w-md flex-1">
-                            <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder={t("items.searchPlaceholder")}
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-10 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                            />
-                            {searchQuery && (
-                                <button
-                                    onClick={() => setSearchQuery("")}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                    title={t("common.clearSearch")}
-                                >
-                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            )}
-                        </div>
+                        <SearchInput
+                            value={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder={t("items.searchPlaceholder")}
+                            className="max-w-md flex-1"
+                        />
 
                         <div className="flex items-center gap-4">
                             {/* Clear Filters */}
@@ -221,7 +207,7 @@ const ItemListPage: FC = () => {
 
                 {/* Error message */}
                 {error && (
-                    <div className="mx-6 mt-4 rounded-lg bg-error-50 p-4 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">
+                    <div className="alert-error">
                         {error}
                     </div>
                 )}
@@ -230,46 +216,18 @@ const ItemListPage: FC = () => {
                 <div className="overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-b border-gray-200 dark:border-gray-800">
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button onClick={() => handleSort("name")} className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200">
-                                        {t("items.fields.name")}
-                                        {renderSortIcon("name")}
-                                    </button>
-                                </TableCell>
+                            <TableRow className="table-header-row-border">
+                                <SortableTableHeader field="name" label={t("items.fields.name")} onSort={handleSort} renderSortIcon={renderSortIcon} />
                                 {isOnHeadquarters && (
-                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                        {t("items.fields.site")}
-                                    </TableCell>
+                                    <StaticTableHeader label={t("items.fields.site")} />
                                 )}
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button onClick={() => handleSort("reference")} className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200">
-                                        {t("items.fields.reference")}
-                                        {renderSortIcon("reference")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button onClick={() => handleSort("current_stock")} className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200">
-                                        {t("items.fields.stock")}
-                                        {renderSortIcon("current_stock")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("items.fields.status")}
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button onClick={() => handleSort("current_price")} className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200">
-                                        {t("items.fields.price")}
-                                        {renderSortIcon("current_price")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("items.fields.supplier")}
-                                </TableCell>
+                                <SortableTableHeader field="reference" label={t("items.fields.reference")} onSort={handleSort} renderSortIcon={renderSortIcon} />
+                                <SortableTableHeader field="current_stock" label={t("items.fields.stock")} onSort={handleSort} renderSortIcon={renderSortIcon} />
+                                <StaticTableHeader label={t("items.fields.status")} />
+                                <SortableTableHeader field="current_price" label={t("items.fields.price")} onSort={handleSort} renderSortIcon={renderSortIcon} />
+                                <StaticTableHeader label={t("items.fields.supplier")} />
                                 {hasAnyAction && (
-                                    <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
-                                        {t("common.actions")}
-                                    </TableCell>
+                                    <StaticTableHeader label={t("common.actions")} align="right" />
                                 )}
                             </TableRow>
                         </TableHeader>

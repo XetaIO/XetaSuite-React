@@ -69,3 +69,5 @@ const TableCell: React.FC<TableCellProps> = ({
 };
 
 export { Table, TableHeader, TableBody, TableRow, TableCell };
+export { SortableTableHeader, StaticTableHeader } from "./SortableTableHeader";
+export type { SortableTableHeaderProps, StaticTableHeaderProps, SortDirection, TextAlign } from "./SortableTableHeader";

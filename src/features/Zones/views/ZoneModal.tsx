@@ -1,8 +1,8 @@
-import { useState, useEffect, type FC, type ChangeEvent, type FormEvent } from "react";
+import { useState, useEffect, useCallback, type FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Button } from "@/shared/components/ui";
 import { Label, Input, Checkbox } from "@/shared/components/form";
-import { showSuccess, showError } from "@/shared/utils";
+import { useFormModal } from "@/shared/hooks";
 import { ZoneManager } from "../services";
 import type { Zone, ZoneFormData, ParentZoneOption } from "../types";
 
@@ -13,10 +13,24 @@ interface ZoneModalProps {
     onSuccess: () => void;
 }
 
-const initialFormData: Omit<ZoneFormData, 'site_id'> = {
+type ZoneFormDataWithoutSiteId = Omit<ZoneFormData, "site_id">;
+
+const initialFormData: ZoneFormDataWithoutSiteId = {
     name: "",
     parent_id: null,
     allow_material: false,
+};
+
+const validateZone = (data: ZoneFormDataWithoutSiteId, t: (key: string) => string): Record<string, string> => {
+    const errors: Record<string, string> = {};
+
+    if (!data.name.trim()) {
+        errors.name = t("validation.nameRequired");
+    } else if (data.name.length > 255) {
+        errors.name = t("validation.nameMaxLength");
+    }
+
+    return errors;
 };
 
 export const ZoneModal: FC<ZoneModalProps> = ({
@@ -26,107 +40,57 @@ export const ZoneModal: FC<ZoneModalProps> = ({
     onSuccess,
 }) => {
     const { t } = useTranslation();
-    const [formData, setFormData] = useState<Omit<ZoneFormData, 'site_id'>>(initialFormData);
-    const [errors, setErrors] = useState<Record<string, string>>({});
-    const [isLoading, setIsLoading] = useState(false);
 
     // Parent zones for selection
     const [parentZones, setParentZones] = useState<ParentZoneOption[]>([]);
     const [isLoadingParents, setIsLoadingParents] = useState(false);
 
-    const isEditing = zone !== null;
-
-    // Load parent zones when modal opens
-    useEffect(() => {
-        if (isOpen) {
-            loadParentZones(zone?.id);
-        }
-    }, [isOpen, zone?.id]);
-
-    // Initialize form data when zone changes
-    useEffect(() => {
-        if (zone) {
-            setFormData({
-                name: zone.name,
-                parent_id: zone.parent_id,
-                allow_material: zone.allow_material,
-            });
-        } else {
-            setFormData(initialFormData);
-        }
-        setErrors({});
-    }, [zone, isOpen]);
-
-    const loadParentZones = async (excludeZoneId?: number) => {
+    const loadParentZones = useCallback(async (excludeZoneId?: number) => {
         setIsLoadingParents(true);
         const result = await ZoneManager.getAvailableParents(excludeZoneId);
         if (result.success && result.data) {
             setParentZones(result.data.data);
         }
         setIsLoadingParents(false);
-    };
+    }, []);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
-
-        if (type === "checkbox") {
-            const checked = (e.target as HTMLInputElement).checked;
-            setFormData((prev) => ({ ...prev, [name]: checked }));
-        } else if (name === "parent_id") {
-            const parentId = value ? parseInt(value, 10) : null;
-            setFormData((prev) => ({ ...prev, parent_id: parentId }));
-        } else {
-            setFormData((prev) => ({ ...prev, [name]: value }));
+    // Load parent zones when modal opens
+    useEffect(() => {
+        if (isOpen) {
+            loadParentZones(zone?.id);
         }
+    }, [isOpen, zone?.id, loadParentZones]);
 
-        if (errors[name]) {
-            setErrors((prev) => ({ ...prev, [name]: "" }));
-        }
-    };
+    const {
+        formData,
+        errors,
+        isLoading,
+        isEditing,
+        handleChange,
+        handleCheckboxChange,
+        handleSubmit,
+        setFieldValue,
+    } = useFormModal<Zone, ZoneFormDataWithoutSiteId>({
+        initialFormData,
+        entity: zone,
+        isOpen,
+        onClose,
+        onSuccess,
+        translationPrefix: "zones",
+        createFn: ZoneManager.create,
+        updateFn: ZoneManager.update,
+        validate: validateZone,
+        entityToFormData: (entity) => ({
+            name: entity.name,
+            parent_id: entity.parent_id,
+            allow_material: entity.allow_material,
+        }),
+    });
 
-    const handleCheckboxChange = (checked: boolean) => {
-        setFormData((prev) => ({ ...prev, allow_material: checked }));
-    };
-
-    const validate = (): boolean => {
-        const newErrors: Record<string, string> = {};
-
-        if (!formData.name.trim()) {
-            newErrors.name = t("validation.nameRequired");
-        } else if (formData.name.length > 255) {
-            newErrors.name = t("validation.nameMaxLength");
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-
-        if (!validate()) return;
-
-        setIsLoading(true);
-
-        let result;
-        if (isEditing) {
-            result = await ZoneManager.update(zone.id, formData);
-        } else {
-            result = await ZoneManager.create(formData);
-        }
-
-        if (result.success) {
-            const successMessage = isEditing
-                ? t("zones.messages.updated", { name: formData.name })
-                : t("zones.messages.created", { name: formData.name });
-            showSuccess(successMessage);
-            onSuccess();
-            onClose();
-        } else {
-            showError(result.error || t("errors.generic"));
-            setErrors({ general: result.error || t("errors.generic") });
-        }
-        setIsLoading(false);
+    const handleParentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        const parentId = value ? parseInt(value, 10) : null;
+        setFieldValue("parent_id", parentId);
     };
 
     return (
@@ -165,8 +129,8 @@ export const ZoneModal: FC<ZoneModalProps> = ({
                             id="parent_id"
                             name="parent_id"
                             title={t("zones.parent")}
-                            value={formData.parent_id || ""}
-                            onChange={handleChange}
+                            value={formData.parent_id ?? ""}
+                            onChange={handleParentChange}
                             className="mt-1.5 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:bg-gray-900 dark:focus:border-brand-800"
                         >
                             <option value="">{t("zones.form.noParent")}</option>
@@ -190,7 +154,7 @@ export const ZoneModal: FC<ZoneModalProps> = ({
                         <Checkbox
                             id="allow_material"
                             checked={formData.allow_material}
-                            onChange={handleCheckboxChange}
+                            onChange={handleCheckboxChange("allow_material")}
                         />
                         <div>
                             <Label htmlFor="allow_material" className="cursor-pointer">
