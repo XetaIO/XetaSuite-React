@@ -1,118 +1,50 @@
-import { useState, useEffect, useCallback, type FC } from "react";
+import { useState, type FC } from "react";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaMagnifyingGlass, FaArrowUp, FaArrowDown } from "react-icons/fa6";
+import { FaPlus, FaMagnifyingGlass } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
 import { Table, TableHeader, TableBody, TableRow, TableCell, LinkedName, ActionsDropdown, createActions } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
-import { useModal } from "@/shared/hooks";
+import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
 import { CompanyManager } from "../services";
 import { CompanyModal } from "./CompanyModal";
 import type { Company, CompanyFilters } from "../types";
-import type { PaginationMeta } from "@/shared/types";
 
 type SortField = "name" | "maintenances_count" | "created_at";
-type SortDirection = "asc" | "desc";
 
 const CompanyListPage: FC = () => {
     const { t } = useTranslation();
     const { hasPermission, isOnHeadquarters } = useAuth();
-    const [companies, setCompanies] = useState<Company[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
-    const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+    // Use shared list hook
+    const {
+        items: companies,
+        meta,
+        isLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+    } = useListPage<Company, CompanyFilters>({
+        fetchFn: CompanyManager.getAll,
+    });
 
     // Selected company for edit/delete
     const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    // Permissions
-    const canView = hasPermission("company.view");
-    const canCreate = isOnHeadquarters && hasPermission("company.create");
-    const canUpdate = isOnHeadquarters && hasPermission("company.update");
-    const canDelete = isOnHeadquarters && hasPermission("company.delete");
+    // Permissions - HQ only for companies
+    const permissions = useEntityPermissions("company", { hqOnly: true });
     const canViewCreator = isOnHeadquarters && hasPermission("user.view");
-
-    const hasAnyActions = canUpdate || canDelete;
-
-    const getCompanyActions = (company: Company) => [
-        { ...createActions.edit(() => handleEdit(company), t), hidden: !canUpdate },
-        { ...createActions.delete(() => handleDeleteClick(company), t), hidden: !canDelete },
-    ];
 
     // Modals
     const companyModal = useModal();
     const deleteModal = useModal();
-
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const fetchCompanies = useCallback(async (filters: CompanyFilters) => {
-        setIsLoading(true);
-        setError(null);
-        const result = await CompanyManager.getAll(filters);
-        if (result.success && result.data) {
-            setCompanies(result.data.data);
-            setMeta(result.data.meta);
-        } else {
-            setError(result.error || t("errors.generic"));
-        }
-        setIsLoading(false);
-    }, [t]);
-
-    useEffect(() => {
-        const filters: CompanyFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchCompanies(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchCompanies]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-        } else {
-            setSortBy(field);
-            setSortDirection("asc");
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === "asc" ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
 
     const handleCreate = () => {
         setSelectedCompany(null);
@@ -138,13 +70,7 @@ const CompanyListPage: FC = () => {
             showSuccess(t("companies.messages.deleted", { name: selectedCompany.name }));
             deleteModal.closeModal();
             setSelectedCompany(null);
-            const filters: CompanyFilters = {
-                page: currentPage,
-                search: debouncedSearch || undefined,
-                sort_by: sortBy,
-                sort_direction: sortBy ? sortDirection : undefined,
-            };
-            fetchCompanies(filters);
+            refresh();
         } else {
             deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
@@ -153,20 +79,13 @@ const CompanyListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        const filters: CompanyFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchCompanies(filters);
+        refresh();
     };
 
-    const clearFilters = () => {
-        setSearchQuery("");
-    };
-
-    const hasActiveFilters = debouncedSearch.length > 0;
+    const getCompanyActions = (company: Company) => [
+        { ...createActions.edit(() => handleEdit(company), t), hidden: !permissions.canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(company), t), hidden: !permissions.canDelete },
+    ];
 
     return (
         <>
@@ -188,7 +107,7 @@ const CompanyListPage: FC = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        {canCreate && (
+                        {permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -225,9 +144,9 @@ const CompanyListPage: FC = () => {
                                 </button>
                             )}
                         </div>
-                        {hasActiveFilters && (
+                        {debouncedSearch.length > 0 && (
                             <button
-                                onClick={clearFilters}
+                                onClick={() => setSearchQuery("")}
                                 className="text-sm text-brand-500 hover:text-brand-600"
                             >
                                 {t("common.clearFilters")}
@@ -281,7 +200,7 @@ const CompanyListPage: FC = () => {
                                         {renderSortIcon("created_at")}
                                     </button>
                                 </TableCell>
-                                {(canUpdate || canDelete) && (
+                                {permissions.hasAnyAction && (
                                     <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t("common.actions")}
                                     </TableCell>
@@ -307,7 +226,7 @@ const CompanyListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -316,7 +235,7 @@ const CompanyListPage: FC = () => {
                                 ))
                             ) : companies.length === 0 ? (
                                 <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={canUpdate || canDelete ? 6 : 5}>
+                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={permissions.hasAnyAction ? 6 : 5}>
                                         {debouncedSearch ? (
                                             <div>
                                                 <p>{t("companies.noCompaniesFor", { search: debouncedSearch })}</p>
@@ -340,7 +259,7 @@ const CompanyListPage: FC = () => {
                                     >
                                         <TableCell className="px-6 py-4">
                                             <LinkedName
-                                                canView={canView}
+                                                canView={permissions.canView}
                                                 id={company.id}
                                                 name={company.name}
                                                 basePath="companies" />
@@ -367,7 +286,7 @@ const CompanyListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(company.created_at)}
                                         </TableCell>
-                                        {hasAnyActions && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="flex items-center justify-end">
                                                     <ActionsDropdown actions={getCompanyActions(company)} />

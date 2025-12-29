@@ -1,11 +1,9 @@
-import { useState, useEffect, useCallback, type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
     FaMagnifyingGlass,
-    FaArrowUp,
-    FaArrowDown,
     FaTriangleExclamation,
 } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
@@ -21,39 +19,51 @@ import {
     LinkedName,
 } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
-import { useModal } from '@/shared/hooks';
+import { useModal, useListPage, useEntityPermissions } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
 import { IncidentManager } from '../services';
 import { IncidentModal } from './IncidentModal';
 import type { Incident, IncidentFilters, IncidentSeverity, IncidentStatus, StatusOption, SeverityOption } from '../types';
-import type { PaginationMeta } from '@/shared/types';
 
 type SortField = 'created_at' | 'started_at' | 'severity' | 'status';
-type SortDirection = 'asc' | 'desc';
 
 const IncidentListPage: FC = () => {
     const { t } = useTranslation();
     const { hasPermission, isOnHeadquarters } = useAuth();
-    const [incidents, setIncidents] = useState<Incident[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [searchParams, setSearchParams] = useSearchParams();
     const [qrScanHandled, setQrScanHandled] = useState(false);
 
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [debouncedSearch, setDebouncedSearch] = useState('');
-    const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
-    const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+    // Custom filters specific to incidents
     const [statusFilter, setStatusFilter] = useState<IncidentStatus | ''>('');
     const [severityFilter, setSeverityFilter] = useState<IncidentSeverity | ''>('');
 
     // Filter options
     const [statusOptions, setStatusOptions] = useState<StatusOption[]>([]);
     const [severityOptions, setSeverityOptions] = useState<SeverityOption[]>([]);
+
+    // Use shared list hook with custom filters
+    const {
+        items: incidents,
+        meta,
+        isLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+        setCurrentPage,
+    } = useListPage<Incident, IncidentFilters>({
+        fetchFn: IncidentManager.getAll,
+        defaultSortDirection: 'desc',
+        additionalFilters: {
+            status: statusFilter || undefined,
+            severity: severityFilter || undefined,
+        },
+    });
 
     // Selected incident for edit/delete
     const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
@@ -63,10 +73,7 @@ const IncidentListPage: FC = () => {
     const [preselectedMaterialId, setPreselectedMaterialId] = useState<number | null>(null);
 
     // Permissions
-    const canView = hasPermission('incident.view');
-    const canCreate = !isOnHeadquarters && hasPermission('incident.create');
-    const canUpdate = !isOnHeadquarters && hasPermission('incident.update');
-    const canDelete = !isOnHeadquarters && hasPermission('incident.delete');
+    const permissions = useEntityPermissions("incident");
     const canViewSite = isOnHeadquarters && hasPermission('site.view');
     const canViewMaterial = hasPermission('material.view');
     const canViewReporter = isOnHeadquarters && hasPermission('user.view');
@@ -102,89 +109,19 @@ const IncidentListPage: FC = () => {
         const materialParam = searchParams.get('material');
         const actionParam = searchParams.get('action');
 
-        if (materialParam && actionParam === 'create' && canCreate) {
-            // Mark as handled to prevent re-execution
+        if (materialParam && actionParam === 'create' && permissions.canCreate) {
             setQrScanHandled(true);
 
-            // Clear URL params
             const newParams = new URLSearchParams(searchParams);
             newParams.delete('material');
             newParams.delete('action');
             setSearchParams(newParams, { replace: true });
 
-            // Set preselected material and open modal
             setPreselectedMaterialId(parseInt(materialParam, 10));
             setSelectedIncident(null);
             incidentModal.openModal();
         }
-    }, [qrScanHandled, isLoading, searchParams, setSearchParams, canCreate, incidentModal]);
-
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const fetchIncidents = useCallback(
-        async (filters: IncidentFilters) => {
-            setIsLoading(true);
-            setError(null);
-            const result = await IncidentManager.getAll(filters);
-            if (result.success && result.data) {
-                setIncidents(result.data.data);
-                setMeta(result.data.meta);
-            } else {
-                setError(result.error || t('errors.generic'));
-            }
-            setIsLoading(false);
-        },
-        [t]
-    );
-
-    useEffect(() => {
-        const filters: IncidentFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-            status: statusFilter || undefined,
-            severity: severityFilter || undefined,
-        };
-        fetchIncidents(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, statusFilter, severityFilter, fetchIncidents]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-        } else {
-            setSortBy(field);
-            setSortDirection('desc');
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === 'asc' ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
+    }, [qrScanHandled, isLoading, searchParams, setSearchParams, permissions.canCreate, incidentModal]);
 
     const handleCreate = () => {
         setSelectedIncident(null);
@@ -210,15 +147,7 @@ const IncidentListPage: FC = () => {
             showSuccess(t('incidents.messages.deleted'));
             deleteModal.closeModal();
             setSelectedIncident(null);
-            const filters: IncidentFilters = {
-                page: currentPage,
-                search: debouncedSearch || undefined,
-                sort_by: sortBy,
-                sort_direction: sortBy ? sortDirection : undefined,
-                status: statusFilter || undefined,
-                severity: severityFilter || undefined,
-            };
-            fetchIncidents(filters);
+            refresh();
         } else {
             deleteModal.closeModal();
             showError(result.error || t('errors.generic'));
@@ -227,24 +156,13 @@ const IncidentListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        const filters: IncidentFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-            status: statusFilter || undefined,
-            severity: severityFilter || undefined,
-        };
-        fetchIncidents(filters);
+        refresh();
     };
 
     const getIncidentActions = (incident: Incident) => [
-        { ...createActions.edit(() => handleEdit(incident), t), hidden: !canUpdate },
-        { ...createActions.delete(() => handleDeleteClick(incident), t), hidden: !canDelete },
+        { ...createActions.edit(() => handleEdit(incident), t), hidden: !permissions.canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(incident), t), hidden: !permissions.canDelete },
     ];
-
-    // Check if any action is available
-    const hasAnyAction = canUpdate || canDelete;
 
     const getSeverityBadgeColor = (severity: IncidentSeverity): 'error' | 'warning' | 'brand' | 'success' => {
         switch (severity) {
@@ -302,7 +220,7 @@ const IncidentListPage: FC = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        {canCreate && (
+                        {permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -467,7 +385,7 @@ const IncidentListPage: FC = () => {
                                         {renderSortIcon('created_at')}
                                     </button>
                                 </TableCell>
-                                {hasAnyAction && (
+                                {permissions.hasAnyAction && (
                                     <TableCell
                                         isHeader
                                         className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400"
@@ -504,7 +422,7 @@ const IncidentListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -515,7 +433,7 @@ const IncidentListPage: FC = () => {
                                 <TableRow>
                                     <TableCell
                                         className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
-                                        colSpan={hasAnyAction ? 7 : (isOnHeadquarters ? 7 : 6)}
+                                        colSpan={permissions.hasAnyAction ? 7 : (isOnHeadquarters ? 7 : 6)}
                                     >
                                         {debouncedSearch || statusFilter || severityFilter ? (
                                             <div className="flex flex-col items-center justify-center">
@@ -543,7 +461,7 @@ const IncidentListPage: FC = () => {
                                             <div className="flex items-start gap-2">
                                                 <FaTriangleExclamation className="mt-0.5 h-4 w-4 shrink-0 text-warning-500" />
                                                 <div>
-                                                    {canView ? (
+                                                    {permissions.canView ? (
                                                         <Link
                                                             to={`/incidents/${incident.id}`}
                                                             className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
@@ -612,7 +530,7 @@ const IncidentListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(incident.created_at)}
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
                                                 <div className="flex items-center justify-end">
                                                     <ActionsDropdown actions={getIncidentActions(incident)} />

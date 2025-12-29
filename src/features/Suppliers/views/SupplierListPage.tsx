@@ -1,35 +1,42 @@
-import { useState, useEffect, useCallback, type FC } from "react";
+import { useState, type FC } from "react";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaFileExport } from "react-icons/fa6";
+import { FaPlus, FaMagnifyingGlass, FaFileExport } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
 import { Table, TableHeader, TableBody, TableRow, TableCell, LinkedName, createActions, ActionsDropdown } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
 import { Checkbox } from "@/shared/components/form";
-import { useModal } from "@/shared/hooks";
+import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
 import { SupplierManager } from "../services";
 import { SupplierModal } from "./SupplierModal";
 import type { Supplier, SupplierFilters } from "../types";
-import type { PaginationMeta } from "@/shared/types";
 
 type SortField = "name" | "item_count" | "created_at";
-type SortDirection = "asc" | "desc";
 
 const SupplierListPage: FC = () => {
     const { t } = useTranslation();
     const { hasPermission, isOnHeadquarters } = useAuth();
-    const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
-    const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+    // Use shared list hook
+    const {
+        items: suppliers,
+        meta,
+        isLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        sortBy,
+        sortDirection,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+        buildFilters,
+    } = useListPage<Supplier, SupplierFilters>({
+        fetchFn: SupplierManager.getAll,
+    });
 
     // Selected supplier for edit/delete
     const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
@@ -39,86 +46,13 @@ const SupplierListPage: FC = () => {
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
     const [isExporting, setIsExporting] = useState(false);
 
-    // Permissions
-    const canView = hasPermission("supplier.view");
-    const canCreate = isOnHeadquarters && hasPermission("supplier.create");
-    const canUpdate = isOnHeadquarters && hasPermission("supplier.update");
-    const canDelete = isOnHeadquarters && hasPermission("supplier.delete");
-    const canExport = isOnHeadquarters && hasPermission("supplier.export");
+    // Permissions - HQ only for suppliers
+    const permissions = useEntityPermissions("supplier", { hqOnly: true });
     const canViewCreator = isOnHeadquarters && hasPermission("user.view");
-
-    const hasAnyActions = canUpdate || canDelete;
 
     // Modals
     const supplierModal = useModal();
     const deleteModal = useModal();
-
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const fetchSuppliers = useCallback(async (filters: SupplierFilters) => {
-        setIsLoading(true);
-        setError(null);
-        const result = await SupplierManager.getAll(filters);
-        if (result.success && result.data) {
-            setSuppliers(result.data.data);
-            setMeta(result.data.meta);
-        } else {
-            setError(result.error || t("errors.generic"));
-        }
-        setIsLoading(false);
-    }, [t]);
-
-    useEffect(() => {
-        const filters: SupplierFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchSuppliers(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchSuppliers]);
-
-    // Clear selection only when search changes
-    useEffect(() => {
-        setSelectedIds(new Set());
-    }, [debouncedSearch]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-        } else {
-            setSortBy(field);
-            setSortDirection("asc");
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === "asc" ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
 
     const handleCreate = () => {
         setSelectedSupplier(null);
@@ -144,13 +78,7 @@ const SupplierListPage: FC = () => {
             showSuccess(t("suppliers.messages.deleted", { name: selectedSupplier.name }));
             deleteModal.closeModal();
             setSelectedSupplier(null);
-            const filters: SupplierFilters = {
-                page: currentPage,
-                search: debouncedSearch || undefined,
-                sort_by: sortBy,
-                sort_direction: sortBy ? sortDirection : undefined,
-            };
-            fetchSuppliers(filters);
+            refresh();
         } else {
             deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
@@ -159,13 +87,7 @@ const SupplierListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        const filters: SupplierFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchSuppliers(filters);
+        refresh();
     };
 
     // Selection handlers
@@ -207,8 +129,8 @@ const SupplierListPage: FC = () => {
     };
 
     const getSupplierActions = (supplier: Supplier) => [
-        { ...createActions.edit(() => handleEdit(supplier), t), hidden: !canUpdate },
-        { ...createActions.delete(() => handleDeleteClick(supplier), t), hidden: !canDelete },
+        { ...createActions.edit(() => handleEdit(supplier), t), hidden: !permissions.canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(supplier), t), hidden: !permissions.canDelete },
     ];
 
     return (
@@ -231,7 +153,7 @@ const SupplierListPage: FC = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        {canExport && selectedIds.size > 0 && (
+                        {permissions.canExport && selectedIds.size > 0 && (
                             <Button
                                 variant="outline"
                                 size="sm"
@@ -244,7 +166,7 @@ const SupplierListPage: FC = () => {
                                     : t("suppliers.export.button", { count: selectedIds.size })}
                             </Button>
                         )}
-                        {canCreate && (
+                        {permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -281,7 +203,7 @@ const SupplierListPage: FC = () => {
                                 </button>
                             )}
                         </div>
-                        {canExport && selectedIds.size > 0 && (
+                        {permissions.canExport && selectedIds.size > 0 && (
                             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                 <span>{t("suppliers.export.selected", { count: selectedIds.size })}</span>
                                 <button
@@ -307,7 +229,7 @@ const SupplierListPage: FC = () => {
                     <Table>
                         <TableHeader>
                             <TableRow className="border-b border-gray-200 dark:border-gray-800">
-                                {canExport && (
+                                {permissions.canExport && (
                                     <TableCell isHeader className="w-12 px-6 py-3">
                                         <Checkbox
                                             checked={isAllCurrentPageSelected}
@@ -350,7 +272,7 @@ const SupplierListPage: FC = () => {
                                         {renderSortIcon("created_at")}
                                     </button>
                                 </TableCell>
-                                {(canUpdate || canDelete) && (
+                                {permissions.hasAnyAction && (
                                     <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t("common.actions")}
                                     </TableCell>
@@ -361,7 +283,7 @@ const SupplierListPage: FC = () => {
                             {isLoading ? (
                                 [...Array(6)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        {canExport && (
+                                        {permissions.canExport && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="h-4 w-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -381,7 +303,7 @@ const SupplierListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {(canUpdate || canDelete) && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -390,7 +312,7 @@ const SupplierListPage: FC = () => {
                                 ))
                             ) : suppliers.length === 0 ? (
                                 <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={canExport ? 7 : 6}>
+                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={permissions.canExport ? 7 : 6}>
                                         {debouncedSearch ? (
                                             <div>
                                                 <p>{t("suppliers.noSuppliersFor", { search: debouncedSearch })}</p>
@@ -413,14 +335,14 @@ const SupplierListPage: FC = () => {
                                         className={`border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 ${selectedIds.has(supplier.id) ? "bg-brand-50/50 dark:bg-brand-500/5" : ""
                                             }`}
                                     >
-                                        {canExport && (
+                                        {permissions.canExport && (
                                             <TableCell className="px-6 py-4">
                                                 <Checkbox checked={selectedIds.has(supplier.id)} onChange={() => handleSelectOne(supplier.id)} />
                                             </TableCell>
                                         )}
                                         <TableCell className="px-6 py-4">
                                             <LinkedName
-                                                canView={canView}
+                                                canView={permissions.canView}
                                                 id={supplier.id}
                                                 name={supplier.name}
                                                 basePath="suppliers" />
@@ -447,7 +369,7 @@ const SupplierListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(supplier.created_at)}
                                         </TableCell>
-                                        {hasAnyActions && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="flex items-center justify-end">
                                                     <ActionsDropdown actions={getSupplierActions(supplier)} />

@@ -1,36 +1,40 @@
-import { useState, useEffect, useCallback, type FC } from "react";
+import { useState, useEffect, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaFileExport } from "react-icons/fa6";
+import { FaPlus, FaMagnifyingGlass, FaFileExport, FaBuilding } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
 import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, createActions, ActionsDropdown } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
 import { Checkbox } from "@/shared/components/form";
-import { useModal } from "@/shared/hooks";
+import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
-import { useAuth } from "@/features/Auth";
 import { SiteManager } from "../services";
 import { SiteModal } from "./SiteModal";
 import type { Site, SiteFilters } from "../types";
-import type { PaginationMeta } from "@/shared/types";
 
 type SortField = "name" | "zone_count" | "created_at";
-type SortDirection = "asc" | "desc";
 
 const SiteListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
-    const [sites, setSites] = useState<Site[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
-    const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+    // Use shared list hook
+    const {
+        items: sites,
+        meta,
+        isLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+    } = useListPage<Site, SiteFilters>({
+        fetchFn: SiteManager.getAll,
+        defaultSortField: undefined,
+        defaultSortDirection: "asc",
+    });
 
     // Selected site for edit/delete
     const [selectedSite, setSelectedSite] = useState<Site | null>(null);
@@ -40,84 +44,17 @@ const SiteListPage: FC = () => {
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
     const [isExporting, setIsExporting] = useState(false);
 
-    // Permissions
-    const canCreate = hasPermission("site.create");
-    const canUpdate = hasPermission("site.update");
-    const canDelete = hasPermission("site.delete");
-    const canExport = hasPermission("site.export");
-
-    const hasAnyActions = canUpdate || canDelete;
+    // Permissions - site is HQ-only
+    const permissions = useEntityPermissions("site", { hqOnly: true });
 
     // Modals
     const siteModal = useModal();
     const deleteModal = useModal();
 
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const fetchSites = useCallback(async (filters: SiteFilters) => {
-        setIsLoading(true);
-        setError(null);
-        const result = await SiteManager.getAll(filters);
-        if (result.success && result.data) {
-            setSites(result.data.data);
-            setMeta(result.data.meta);
-        } else {
-            setError(result.error || t("errors.generic"));
-        }
-        setIsLoading(false);
-    }, [t]);
-
-    useEffect(() => {
-        const filters: SiteFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchSites(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchSites]);
-
     // Clear selection only when search changes
     useEffect(() => {
         setSelectedIds(new Set());
     }, [debouncedSearch]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-        } else {
-            setSortBy(field);
-            setSortDirection("asc");
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === "asc" ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
 
     const handleCreate = () => {
         setSelectedSite(null);
@@ -143,13 +80,7 @@ const SiteListPage: FC = () => {
             showSuccess(t("sites.messages.deleted", { name: selectedSite.name }));
             deleteModal.closeModal();
             setSelectedSite(null);
-            const filters: SiteFilters = {
-                page: currentPage,
-                search: debouncedSearch || undefined,
-                sort_by: sortBy,
-                sort_direction: sortBy ? sortDirection : undefined,
-            };
-            fetchSites(filters);
+            refresh();
         } else {
             deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
@@ -158,13 +89,7 @@ const SiteListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        const filters: SiteFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchSites(filters);
+        refresh();
     };
 
     // Selection handlers
@@ -206,8 +131,8 @@ const SiteListPage: FC = () => {
     };
 
     const getSiteActions = (site: Site) => [
-        { ...createActions.edit(() => handleEdit(site), t), hidden: !canUpdate },
-        { ...createActions.delete(() => handleDeleteClick(site), t), hidden: !canDelete },
+        { ...createActions.edit(() => handleEdit(site), t), hidden: !permissions.canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(site), t), hidden: !permissions.canDelete },
     ];
 
     return (
@@ -230,7 +155,7 @@ const SiteListPage: FC = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        {canExport && selectedIds.size > 0 && (
+                        {permissions.canExport && selectedIds.size > 0 && (
                             <Button
                                 variant="outline"
                                 size="sm"
@@ -243,7 +168,7 @@ const SiteListPage: FC = () => {
                                     : t("sites.export.button", { count: selectedIds.size })}
                             </Button>
                         )}
-                        {canCreate && (
+                        {permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -280,7 +205,7 @@ const SiteListPage: FC = () => {
                                 </button>
                             )}
                         </div>
-                        {canExport && selectedIds.size > 0 && (
+                        {permissions.canExport && selectedIds.size > 0 && (
                             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                 <span>{t("sites.export.selected", { count: selectedIds.size })}</span>
                                 <button
@@ -306,7 +231,7 @@ const SiteListPage: FC = () => {
                     <Table>
                         <TableHeader>
                             <TableRow className="border-b border-gray-200 dark:border-gray-800">
-                                {canExport && (
+                                {permissions.canExport && (
                                     <TableCell isHeader className="w-12 px-6 py-3">
                                         <Checkbox
                                             checked={isAllCurrentPageSelected}
@@ -349,7 +274,7 @@ const SiteListPage: FC = () => {
                                         {renderSortIcon("created_at")}
                                     </button>
                                 </TableCell>
-                                {hasAnyActions && (
+                                {permissions.hasAnyAction && (
                                     <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t("common.actions")}
                                     </TableCell>
@@ -360,7 +285,7 @@ const SiteListPage: FC = () => {
                             {isLoading ? (
                                 [...Array(8)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        {canExport && (
+                                        {permissions.canExport && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="h-4 w-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -380,7 +305,7 @@ const SiteListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {hasAnyActions && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -389,20 +314,23 @@ const SiteListPage: FC = () => {
                                 ))
                             ) : sites.length === 0 ? (
                                 <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={canExport ? 7 : 6}>
-                                        {debouncedSearch ? (
-                                            <div>
-                                                <p>{t("sites.noSitesFor", { search: debouncedSearch })}</p>
-                                                <button
-                                                    onClick={() => setSearchQuery("")}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t("common.clearSearch")}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            t("sites.noSites")
-                                        )}
+                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={permissions.canExport ? 7 : 6}>
+                                        <div className="flex flex-col items-center justify-center">
+                                            <FaBuilding className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
+                                            {debouncedSearch ? (
+                                                <div>
+                                                    <p>{t("sites.noSitesFor", { search: debouncedSearch })}</p>
+                                                    <button
+                                                        onClick={() => setSearchQuery("")}
+                                                        className="mt-2 text-sm text-brand-500 hover:text-brand-600"
+                                                    >
+                                                        {t("common.clearSearch")}
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <p>{t("sites.noSites")}</p>
+                                            )}
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -412,7 +340,7 @@ const SiteListPage: FC = () => {
                                         className={`border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 ${selectedIds.has(site.id) ? "bg-brand-50/50 dark:bg-brand-500/5" : ""
                                             }`}
                                     >
-                                        {canExport && (
+                                        {permissions.canExport && (
                                             <TableCell className="px-6 py-4">
                                                 <Checkbox checked={selectedIds.has(site.id)} onChange={() => handleSelectOne(site.id)} />
                                             </TableCell>
@@ -450,7 +378,7 @@ const SiteListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(site.created_at)}
                                         </TableCell>
-                                        {hasAnyActions && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="flex items-center justify-end">
                                                     <ActionsDropdown actions={getSiteActions(site)} />
@@ -465,7 +393,11 @@ const SiteListPage: FC = () => {
                 </div>
 
                 {/* Pagination */}
-                {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
+                {meta && meta.last_page > 1 && (
+                    <div className="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
+                        <Pagination meta={meta} onPageChange={handlePageChange} />
+                    </div>
+                )}
             </div>
 
             {/* Create/Edit Modal */}

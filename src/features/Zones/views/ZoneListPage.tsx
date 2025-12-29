@@ -1,114 +1,48 @@
-import { useState, useEffect, useCallback, type FC } from "react";
+import { useState, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaMagnifyingGlass, FaArrowUp, FaArrowDown, FaLayerGroup, FaWrench } from "react-icons/fa6";
+import { FaPlus, FaMagnifyingGlass, FaLayerGroup, FaWrench } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
 import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions } from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
-import { useModal } from "@/shared/hooks";
+import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
-import { useAuth } from "@/features/Auth";
 import { ZoneManager } from "../services";
 import { ZoneModal } from "./ZoneModal";
 import type { Zone, ZoneFilters } from "../types";
-import type { PaginationMeta } from "@/shared/types";
 
 type SortField = "name" | "children_count" | "material_count" | "created_at";
-type SortDirection = "asc" | "desc";
 
 const ZoneListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission, isOnHeadquarters } = useAuth();
-    const [zones, setZones] = useState<Zone[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
-    const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+    // Use shared list hook
+    const {
+        items: zones,
+        meta,
+        isLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+    } = useListPage<Zone, ZoneFilters>({
+        fetchFn: ZoneManager.getAll,
+    });
 
     // Selected zone for edit/delete
     const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    // Permissions
-    const canView = hasPermission("zone.view");
-    const canCreate = !isOnHeadquarters && hasPermission("zone.create");
-    const canUpdate = !isOnHeadquarters && hasPermission("zone.update");
-    const canDelete = !isOnHeadquarters && hasPermission("zone.delete");
-
-    // Check if any action is available
-    const hasAnyAction = canUpdate || canDelete;
+    // Permissions - zones are not HQ resources (managed on regular sites)
+    const permissions = useEntityPermissions("zone");
 
     // Modals
     const zoneModal = useModal();
     const deleteModal = useModal();
-
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const fetchZones = useCallback(async (filters: ZoneFilters) => {
-        setIsLoading(true);
-        setError(null);
-        const result = await ZoneManager.getAll(filters);
-        if (result.success && result.data) {
-            setZones(result.data.data);
-            setMeta(result.data.meta);
-        } else {
-            setError(result.error || t("errors.generic"));
-        }
-        setIsLoading(false);
-    }, [t]);
-
-    useEffect(() => {
-        const filters: ZoneFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchZones(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchZones]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-        } else {
-            setSortBy(field);
-            setSortDirection("asc");
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === "asc" ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
 
     const handleCreate = () => {
         setSelectedZone(null);
@@ -134,13 +68,7 @@ const ZoneListPage: FC = () => {
             showSuccess(t("zones.messages.deleted", { name: selectedZone.name }));
             deleteModal.closeModal();
             setSelectedZone(null);
-            const filters: ZoneFilters = {
-                page: currentPage,
-                search: debouncedSearch || undefined,
-                sort_by: sortBy,
-                sort_direction: sortBy ? sortDirection : undefined,
-            };
-            fetchZones(filters);
+            refresh();
         } else {
             deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
@@ -149,18 +77,12 @@ const ZoneListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        const filters: ZoneFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchZones(filters);
+        refresh();
     };
 
     const getZoneActions = (zone: Zone) => [
-        { ...createActions.edit(() => handleEdit(zone), t), hidden: !canUpdate },
-        { ...createActions.delete(() => handleDeleteClick(zone), t), hidden: !canDelete },
+        { ...createActions.edit(() => handleEdit(zone), t), hidden: !permissions.canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(zone), t), hidden: !permissions.canDelete },
     ];
 
     return (
@@ -183,7 +105,7 @@ const ZoneListPage: FC = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        {canCreate && (
+                        {permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -277,7 +199,7 @@ const ZoneListPage: FC = () => {
                                         {renderSortIcon("created_at")}
                                     </button>
                                 </TableCell>
-                                {hasAnyAction && (
+                                {permissions.hasAnyAction && (
                                     <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t("common.actions")}
                                     </TableCell>
@@ -306,7 +228,7 @@ const ZoneListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -339,7 +261,7 @@ const ZoneListPage: FC = () => {
                                     >
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center gap-2">
-                                                {canView ? (
+                                                {permissions.canView ? (
                                                     <Link
                                                         to={`/zones/${zone.id}`}
                                                         className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
@@ -381,7 +303,7 @@ const ZoneListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(zone.created_at)}
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="flex items-center justify-end">
                                                     <ActionsDropdown actions={getZoneActions(zone)} />

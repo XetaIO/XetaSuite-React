@@ -1,10 +1,8 @@
-import { useState, useEffect, useCallback, type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
     FaMagnifyingGlass,
-    FaArrowUp,
-    FaArrowDown,
     FaWrench,
     FaBell,
     FaEnvelope,
@@ -12,43 +10,43 @@ import {
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
 import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
-import { useModal } from '@/shared/hooks';
+import { useModal, useListPage, useEntityPermissions } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
 import { MaterialManager } from '../services';
 import { MaterialModal } from './MaterialModal';
 import { MaterialQrCodeModal } from './MaterialQrCodeModal';
 import type { Material, MaterialFilters } from '../types';
-import type { PaginationMeta } from '@/shared/types';
 
 type SortField = 'name' | 'created_at' | 'last_cleaning_at';
-type SortDirection = 'asc' | 'desc';
 
 const MaterialListPage: FC = () => {
     const { t } = useTranslation();
     const { hasPermission, isOnHeadquarters } = useAuth();
-    const [materials, setMaterials] = useState<Material[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [debouncedSearch, setDebouncedSearch] = useState('');
-    const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
-    const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+    // Use shared list hook
+    const {
+        items: materials,
+        meta,
+        isLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+    } = useListPage<Material, MaterialFilters>({
+        fetchFn: MaterialManager.getAll,
+    });
 
     // Selected material for edit/delete/qrcode
     const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    // Permissions
-    const canView = hasPermission('material.view');
-    const canCreate = !isOnHeadquarters && hasPermission('material.create');
-    const canUpdate = !isOnHeadquarters && hasPermission('material.update');
-    const canDelete = !isOnHeadquarters && hasPermission('material.delete');
-    const canGenerateQrCode = !isOnHeadquarters && hasPermission('material.generateQrCode');
+    // Permissions - not allowed on HQ (noLocationCheck: false is default, so they need to be on a regular site)
+    const permissions = useEntityPermissions("material");
     const canViewZone = hasPermission('zone.view');
     const canViewSite = hasPermission('site.view');
 
@@ -56,71 +54,6 @@ const MaterialListPage: FC = () => {
     const materialModal = useModal();
     const deleteModal = useModal();
     const qrCodeModal = useModal();
-
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const fetchMaterials = useCallback(
-        async (filters: MaterialFilters) => {
-            setIsLoading(true);
-            setError(null);
-            const result = await MaterialManager.getAll(filters);
-            if (result.success && result.data) {
-                setMaterials(result.data.data);
-                setMeta(result.data.meta);
-            } else {
-                setError(result.error || t('errors.generic'));
-            }
-            setIsLoading(false);
-        },
-        [t]
-    );
-
-    useEffect(() => {
-        const filters: MaterialFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchMaterials(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchMaterials]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-        } else {
-            setSortBy(field);
-            setSortDirection('asc');
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === 'asc' ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
 
     const handleCreate = () => {
         setSelectedMaterial(null);
@@ -146,13 +79,7 @@ const MaterialListPage: FC = () => {
             showSuccess(t('materials.messages.deleted', { name: selectedMaterial.name }));
             deleteModal.closeModal();
             setSelectedMaterial(null);
-            const filters: MaterialFilters = {
-                page: currentPage,
-                search: debouncedSearch || undefined,
-                sort_by: sortBy,
-                sort_direction: sortBy ? sortDirection : undefined,
-            };
-            fetchMaterials(filters);
+            refresh();
         } else {
             deleteModal.closeModal();
             showError(result.error || t('errors.generic'));
@@ -166,23 +93,14 @@ const MaterialListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        const filters: MaterialFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchMaterials(filters);
+        refresh();
     };
 
     const getMaterialActions = (material: Material) => [
-        { ...createActions.qrCode(() => handleQrCode(material), t), hidden: !canGenerateQrCode },
-        { ...createActions.edit(() => handleEdit(material), t), hidden: !canUpdate },
-        { ...createActions.delete(() => handleDeleteClick(material), t), hidden: !canDelete },
+        { ...createActions.qrCode(() => handleQrCode(material), t), hidden: !permissions.canGenerateQrCode },
+        { ...createActions.edit(() => handleEdit(material), t), hidden: !permissions.canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(material), t), hidden: !permissions.canDelete },
     ];
-
-    // Check if any action is available
-    const hasAnyAction = canUpdate || canDelete || canGenerateQrCode;
 
     return (
         <>
@@ -201,7 +119,7 @@ const MaterialListPage: FC = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        {canCreate && (
+                        {permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -311,7 +229,7 @@ const MaterialListPage: FC = () => {
                                         {renderSortIcon('created_at')}
                                     </button>
                                 </TableCell>
-                                {hasAnyAction && (
+                                {permissions.hasAnyAction && (
                                     <TableCell
                                         isHeader
                                         className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400"
@@ -345,7 +263,7 @@ const MaterialListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -356,7 +274,7 @@ const MaterialListPage: FC = () => {
                                 <TableRow>
                                     <TableCell
                                         className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
-                                        colSpan={hasAnyAction ? 7 : isOnHeadquarters ? 7 : 6}
+                                        colSpan={permissions.hasAnyAction ? 7 : isOnHeadquarters ? 7 : 6}
                                     >
                                         {debouncedSearch ? (
                                             <div className="flex flex-col items-center justify-center">
@@ -384,7 +302,7 @@ const MaterialListPage: FC = () => {
                                             <div className="flex items-center gap-2">
                                                 <FaWrench className="h-4 w-4 text-gray-400" />
                                                 <LinkedName
-                                                    canView={canView}
+                                                    canView={permissions.canView}
                                                     id={material.id}
                                                     name={material.name}
                                                     basePath="materials" />
@@ -441,7 +359,7 @@ const MaterialListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {formatDate(material.created_at)}
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="flex items-center justify-end">
                                                     <ActionsDropdown actions={getMaterialActions(material)} />

@@ -1,11 +1,9 @@
-import { useState, useEffect, useCallback, type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
     FaMagnifyingGlass,
-    FaArrowUp,
-    FaArrowDown,
     FaBroom,
 } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
@@ -21,38 +19,49 @@ import {
     LinkedName,
 } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
-import { useModal } from '@/shared/hooks';
+import { useModal, useListPage, useEntityPermissions } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
 import { CleaningManager } from '../services';
 import { CleaningModal } from './CleaningModal';
 import type { Cleaning, CleaningFilters, CleaningType, TypeOption } from '../types';
-import type { PaginationMeta } from '@/shared/types';
 import type { BadgeColor } from '@/shared/components/ui/badge/Badge';
 
 type SortField = 'created_at' | 'type' | 'material_name';
-type SortDirection = 'asc' | 'desc';
 
 const CleaningListPage: FC = () => {
     const { t } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
     const { hasPermission, isOnHeadquarters } = useAuth();
-    const [cleanings, setCleanings] = useState<Cleaning[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [qrScanHandled, setQrScanHandled] = useState(false);
 
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [debouncedSearch, setDebouncedSearch] = useState('');
-    const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
-    const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+    // Custom filters specific to cleanings
     const [typeFilter, setTypeFilter] = useState<CleaningType | ''>('');
 
     // Filter options
     const [typeOptions, setTypeOptions] = useState<TypeOption[]>([]);
+
+    // Use shared list hook with custom filters
+    const {
+        items: cleanings,
+        meta,
+        isLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+        setCurrentPage,
+    } = useListPage<Cleaning, CleaningFilters>({
+        fetchFn: CleaningManager.getAll,
+        defaultSortDirection: 'desc',
+        additionalFilters: {
+            type: typeFilter || undefined,
+        },
+    });
 
     // Selected cleaning for edit/delete
     const [selectedCleaning, setSelectedCleaning] = useState<Cleaning | null>(null);
@@ -62,10 +71,7 @@ const CleaningListPage: FC = () => {
     const [preselectedMaterialId, setPreselectedMaterialId] = useState<number | null>(null);
 
     // Permissions
-    const canView = hasPermission('cleaning.view');
-    const canCreate = !isOnHeadquarters && hasPermission('cleaning.create');
-    const canUpdate = !isOnHeadquarters && hasPermission('cleaning.update');
-    const canDelete = !isOnHeadquarters && hasPermission('cleaning.delete');
+    const permissions = useEntityPermissions("cleaning");
     const canViewMaterial = hasPermission('material.view');
     const canViewSite = isOnHeadquarters && hasPermission('site.view');
     const canViewCreator = isOnHeadquarters && hasPermission('user.view');
@@ -94,88 +100,19 @@ const CleaningListPage: FC = () => {
         const materialParam = searchParams.get('material');
         const actionParam = searchParams.get('action');
 
-        if (materialParam && actionParam === 'create' && canCreate) {
-            // Mark as handled to prevent re-execution
+        if (materialParam && actionParam === 'create' && permissions.canCreate) {
             setQrScanHandled(true);
 
-            // Clear URL params
             const newParams = new URLSearchParams(searchParams);
             newParams.delete('material');
             newParams.delete('action');
             setSearchParams(newParams, { replace: true });
 
-            // Set preselected material and open modal
             setPreselectedMaterialId(parseInt(materialParam, 10));
             setSelectedCleaning(null);
             cleaningModal.openModal();
         }
-    }, [qrScanHandled, isLoading, searchParams, setSearchParams, canCreate, cleaningModal]);
-
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const fetchCleanings = useCallback(
-        async (filters: CleaningFilters) => {
-            setIsLoading(true);
-            setError(null);
-            const result = await CleaningManager.getAll(filters);
-            if (result.success && result.data) {
-                setCleanings(result.data.data);
-                setMeta(result.data.meta);
-            } else {
-                setError(result.error || t('errors.generic'));
-            }
-            setIsLoading(false);
-        },
-        [t]
-    );
-
-    useEffect(() => {
-        const filters: CleaningFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-            type: typeFilter || undefined,
-        };
-        fetchCleanings(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, typeFilter, fetchCleanings]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-        } else {
-            setSortBy(field);
-            setSortDirection('desc');
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === 'asc' ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
+    }, [qrScanHandled, isLoading, searchParams, setSearchParams, permissions.canCreate, cleaningModal]);
 
     const handleCreate = () => {
         setSelectedCleaning(null);
@@ -203,7 +140,7 @@ const CleaningListPage: FC = () => {
             showSuccess(t('cleanings.messages.deleted'));
             deleteModal.closeModal();
             setSelectedCleaning(null);
-            refreshList();
+            refresh();
         } else {
             deleteModal.closeModal();
             showError(result.error || t('errors.generic'));
@@ -212,23 +149,12 @@ const CleaningListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        refreshList();
+        refresh();
     };
 
     const handleModalClose = () => {
         cleaningModal.closeModal();
         setPreselectedMaterialId(null);
-    };
-
-    const refreshList = () => {
-        const filters: CleaningFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-            type: typeFilter || undefined,
-        };
-        fetchCleanings(filters);
     };
 
     const getTypeOptions = (): { value: CleaningType | ''; label: string }[] => [
@@ -256,12 +182,9 @@ const CleaningListPage: FC = () => {
     };
 
     const getCleaningActions = (cleaning: Cleaning) => [
-        { ...createActions.edit(() => handleEdit(cleaning), t), hidden: !canUpdate },
-        { ...createActions.delete(() => handleDeleteClick(cleaning), t), hidden: !canDelete },
+        { ...createActions.edit(() => handleEdit(cleaning), t), hidden: !permissions.canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(cleaning), t), hidden: !permissions.canDelete },
     ];
-
-    // Check if any action is available
-    const hasAnyAction = canUpdate || canDelete;
 
     const handleClearFilters = () => {
         setSearchQuery('');
@@ -295,7 +218,7 @@ const CleaningListPage: FC = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        {canCreate && (
+                        {permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -417,7 +340,7 @@ const CleaningListPage: FC = () => {
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t('cleanings.createdBy')}
                                 </TableCell>
-                                {hasAnyAction && (
+                                {permissions.hasAnyAction && (
                                     <TableCell isHeader className="w-20 px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t('common.actions')}
                                     </TableCell>
@@ -451,7 +374,7 @@ const CleaningListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -460,7 +383,7 @@ const CleaningListPage: FC = () => {
                                 ))
                             ) : cleanings.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={hasAnyAction ? 7 : (isOnHeadquarters ? 7 : 6)} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                                    <TableCell colSpan={permissions.hasAnyAction ? 7 : (isOnHeadquarters ? 7 : 6)} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                                         <div className="flex flex-col items-center justify-center">
                                             <FaBroom className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
                                             <p>
@@ -487,7 +410,7 @@ const CleaningListPage: FC = () => {
                                     >
                                         <TableCell className="px-6 py-4">
                                             <LinkedName
-                                                canView={canView}
+                                                canView={permissions.canView}
                                                 id={cleaning.id}
                                                 name={`#${cleaning.id}`}
                                                 basePath="cleanings" />
@@ -528,7 +451,7 @@ const CleaningListPage: FC = () => {
                                                 name={cleaning.creator?.full_name || cleaning.created_by_name}
                                                 basePath="users" />
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4 text-right">
                                                 <ActionsDropdown actions={getCleaningActions(cleaning)} />
                                             </TableCell>

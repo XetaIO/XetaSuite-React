@@ -1,11 +1,9 @@
-import { useState, useEffect, useCallback, type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
     FaMagnifyingGlass,
-    FaArrowUp,
-    FaArrowDown,
     FaScrewdriverWrench,
 } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
@@ -21,7 +19,7 @@ import {
     LinkedName,
 } from '@/shared/components/ui';
 import { Button } from '@/shared/components/ui';
-import { useModal } from '@/shared/hooks';
+import { useModal, useListPage, useEntityPermissions } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
 import { MaintenanceManager } from '../services';
@@ -36,27 +34,16 @@ import type {
     TypeOption,
     RealizationOption,
 } from '../types';
-import type { PaginationMeta } from '@/shared/types';
 
 type SortField = 'created_at' | 'started_at' | 'status' | 'type';
-type SortDirection = 'asc' | 'desc';
 
 const MaintenanceListPage: FC = () => {
     const { t } = useTranslation();
     const { hasPermission, isOnHeadquarters } = useAuth();
-    const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [searchParams, setSearchParams] = useSearchParams();
     const [qrScanHandled, setQrScanHandled] = useState(false);
 
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [debouncedSearch, setDebouncedSearch] = useState('');
-    const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
-    const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+    // Custom filters specific to maintenances
     const [statusFilter, setStatusFilter] = useState<MaintenanceStatus | ''>('');
     const [typeFilter, setTypeFilter] = useState<MaintenanceType | ''>('');
     const [realizationFilter, setRealizationFilter] = useState<MaintenanceRealization | ''>('');
@@ -66,6 +53,30 @@ const MaintenanceListPage: FC = () => {
     const [typeOptions, setTypeOptions] = useState<TypeOption[]>([]);
     const [realizationOptions, setRealizationOptions] = useState<RealizationOption[]>([]);
 
+    // Use shared list hook with custom filters
+    const {
+        items: maintenances,
+        meta,
+        isLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+        setCurrentPage,
+    } = useListPage<Maintenance, MaintenanceFilters>({
+        fetchFn: MaintenanceManager.getAll,
+        defaultSortDirection: 'desc',
+        additionalFilters: {
+            status: statusFilter || undefined,
+            type: typeFilter || undefined,
+            realization: realizationFilter || undefined,
+        },
+    });
+
     // Selected maintenance for edit/delete
     const [selectedMaintenance, setSelectedMaintenance] = useState<Maintenance | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -73,11 +84,8 @@ const MaintenanceListPage: FC = () => {
     // Pre-selected material from QR scan
     const [preselectedMaterialId, setPreselectedMaterialId] = useState<number | null>(null);
 
-    // Permissions
-    const canView = hasPermission('maintenance.view');
-    const canCreate = !isOnHeadquarters && hasPermission('maintenance.create');
-    const canUpdate = !isOnHeadquarters && hasPermission('maintenance.update');
-    const canDelete = !isOnHeadquarters && hasPermission('maintenance.delete');
+    // Permissions - maintenance requires NOT being on headquarters
+    const permissions = useEntityPermissions("maintenance");
     const canViewSite = isOnHeadquarters && hasPermission('site.view');
     const canViewMaterial = hasPermission('material.view');
 
@@ -117,100 +125,19 @@ const MaintenanceListPage: FC = () => {
         const materialParam = searchParams.get('material');
         const actionParam = searchParams.get('action');
 
-        if (materialParam && actionParam === 'create' && canCreate) {
-            // Mark as handled to prevent re-execution
+        if (materialParam && actionParam === 'create' && permissions.canCreate) {
             setQrScanHandled(true);
 
-            // Clear URL params
             const newParams = new URLSearchParams(searchParams);
             newParams.delete('material');
             newParams.delete('action');
             setSearchParams(newParams, { replace: true });
 
-            // Set preselected material and open modal
             setPreselectedMaterialId(parseInt(materialParam, 10));
             setSelectedMaintenance(null);
             maintenanceModal.openModal();
         }
-    }, [qrScanHandled, isLoading, searchParams, setSearchParams, canCreate, maintenanceModal]);
-
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const fetchMaintenances = useCallback(
-        async (filters: MaintenanceFilters) => {
-            setIsLoading(true);
-            setError(null);
-            const result = await MaintenanceManager.getAll(filters);
-            if (result.success && result.data) {
-                setMaintenances(result.data.data);
-                setMeta(result.data.meta);
-            } else {
-                setError(result.error || t('errors.generic'));
-            }
-            setIsLoading(false);
-        },
-        [t]
-    );
-
-    useEffect(() => {
-        const filters: MaintenanceFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-            status: statusFilter || undefined,
-            type: typeFilter || undefined,
-            realization: realizationFilter || undefined,
-        };
-        fetchMaintenances(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, statusFilter, typeFilter, realizationFilter, fetchMaintenances]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleClearFilters = () => {
-        setSearchQuery('');
-        setStatusFilter('');
-        setTypeFilter('');
-        setRealizationFilter('');
-        setCurrentPage(1);
-    };
-
-    const hasActiveFilters = searchQuery || statusFilter || typeFilter || realizationFilter;
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-        } else {
-            setSortBy(field);
-            setSortDirection('desc');
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === 'asc' ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
+    }, [qrScanHandled, isLoading, searchParams, setSearchParams, permissions.canCreate, maintenanceModal]);
 
     const handleCreate = () => {
         setSelectedMaintenance(null);
@@ -224,30 +151,30 @@ const MaintenanceListPage: FC = () => {
         maintenanceModal.openModal();
     };
 
-    const handleOpenDelete = (maintenance: Maintenance) => {
+    const handleDeleteClick = (maintenance: Maintenance) => {
         setSelectedMaintenance(maintenance);
         deleteModal.openModal();
     };
 
-    const handleDelete = async () => {
+    const handleDeleteConfirm = async () => {
         if (!selectedMaintenance) return;
 
         setIsDeleting(true);
         const result = await MaintenanceManager.delete(selectedMaintenance.id);
-
         if (result.success) {
             showSuccess(t('maintenances.messages.deleted'));
             deleteModal.closeModal();
-            fetchMaintenances({
-                page: currentPage,
-                search: debouncedSearch || undefined,
-                status: statusFilter || undefined,
-                type: typeFilter || undefined,
-            });
+            setSelectedMaintenance(null);
+            refresh();
         } else {
+            deleteModal.closeModal();
             showError(result.error || t('errors.generic'));
         }
         setIsDeleting(false);
+    };
+
+    const handleModalSuccess = () => {
+        refresh();
     };
 
     const handleModalClose = () => {
@@ -255,17 +182,15 @@ const MaintenanceListPage: FC = () => {
         setPreselectedMaterialId(null);
     };
 
-    const handleSuccess = () => {
-        fetchMaintenances({
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            status: statusFilter || undefined,
-            type: typeFilter || undefined,
-        });
+    const handleClearFilters = () => {
+        setSearchQuery('');
+        setStatusFilter('');
+        setTypeFilter('');
+        setRealizationFilter('');
+        setCurrentPage(1);
     };
 
-    // Check if any action is available
-    const hasAnyAction = canUpdate || canDelete;
+    const hasActiveFilters = searchQuery || statusFilter || typeFilter || realizationFilter;
 
     const getStatusBadgeColor = (status: MaintenanceStatus): 'brand' | 'warning' | 'success' | 'dark' => {
         switch (status) {
@@ -310,6 +235,11 @@ const MaintenanceListPage: FC = () => {
         }
     };
 
+    const getMaintenanceActions = (maintenance: Maintenance) => [
+        { ...createActions.edit(() => handleEdit(maintenance), t), hidden: !permissions.canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(maintenance), t), hidden: !permissions.canDelete },
+    ];
+
     return (
         <>
             <PageMeta title={t('maintenances.title')} description={t('maintenances.description')} />
@@ -327,7 +257,7 @@ const MaintenanceListPage: FC = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        {canCreate && (
+                        {permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -492,7 +422,7 @@ const MaintenanceListPage: FC = () => {
                                         {renderSortIcon('started_at')}
                                     </button>
                                 </TableCell>
-                                {hasAnyAction && (
+                                {permissions.hasAnyAction && (
                                     <TableCell isHeader className="w-20 px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t('common.actions')}
                                     </TableCell>
@@ -520,13 +450,13 @@ const MaintenanceListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-center">
                                             <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        <TableCell className="px-6 py-4 text-center">
+                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -535,7 +465,7 @@ const MaintenanceListPage: FC = () => {
                                 ))
                             ) : maintenances.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={hasAnyAction ? 8 : (isOnHeadquarters ? 8 : 7)} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                                    <TableCell colSpan={permissions.hasAnyAction ? 8 : (isOnHeadquarters ? 7 : 6)} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                                         <div className="flex flex-col items-center justify-center">
                                             <FaScrewdriverWrench className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
                                             <p>
@@ -544,7 +474,7 @@ const MaintenanceListPage: FC = () => {
                                             {hasActiveFilters && (
                                                 <button
                                                     onClick={handleClearFilters}
-                                                    className="text-sm text-brand-500 hover:text-brand-600"
+                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
                                                 >
                                                     {t('common.clearFilters')}
                                                 </button>
@@ -559,7 +489,7 @@ const MaintenanceListPage: FC = () => {
                                         className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                     >
                                         <TableCell className="px-6 py-4">
-                                            {canView ? (
+                                            {permissions.canView ? (
                                                 <Link
                                                     to={`/maintenances/${maintenance.id}`}
                                                     className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400">
@@ -575,16 +505,11 @@ const MaintenanceListPage: FC = () => {
                                         </TableCell>
                                         {isOnHeadquarters && (
                                             <TableCell className="px-6 py-4">
-                                                {maintenance.site && canViewSite ? (
-                                                    <Link
-                                                        to={`/sites/${maintenance.site.id}`}
-                                                        className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
-                                                    >
-                                                        {maintenance.site.name}
-                                                    </Link>
-                                                ) : (
-                                                    <span>{maintenance.site?.name ?? '-'}</span>
-                                                )}
+                                                <LinkedName
+                                                    canView={canViewSite}
+                                                    id={maintenance.site?.id}
+                                                    name={maintenance.site?.name}
+                                                    basePath="sites" />
                                             </TableCell>
                                         )}
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
@@ -618,21 +543,10 @@ const MaintenanceListPage: FC = () => {
                                                 <span>-</span>
                                             )}
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissions.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="flex items-center justify-end">
-                                                    <ActionsDropdown
-                                                        actions={[
-                                                            {
-                                                                ...createActions.edit(() => handleEdit(maintenance), t),
-                                                                hidden: !canUpdate,
-                                                            },
-                                                            {
-                                                                ...createActions.delete(() => handleOpenDelete(maintenance), t),
-                                                                hidden: !canDelete,
-                                                            },
-                                                        ]}
-                                                    />
+                                                    <ActionsDropdown actions={getMaintenanceActions(maintenance)} />
                                                 </div>
                                             </TableCell>
                                         )}
@@ -659,7 +573,7 @@ const MaintenanceListPage: FC = () => {
                 isOpen={maintenanceModal.isOpen}
                 onClose={handleModalClose}
                 maintenance={selectedMaintenance}
-                onSuccess={handleSuccess}
+                onSuccess={handleModalSuccess}
                 preselectedMaterialId={preselectedMaterialId}
             />
 
@@ -667,7 +581,7 @@ const MaintenanceListPage: FC = () => {
             <DeleteConfirmModal
                 isOpen={deleteModal.isOpen}
                 onClose={deleteModal.closeModal}
-                onConfirm={handleDelete}
+                onConfirm={handleDeleteConfirm}
                 isLoading={isDeleting}
                 title={t('maintenances.deleteTitle')}
                 message={t('common.confirmDelete', { name: selectedMaintenance?.description || '' })}

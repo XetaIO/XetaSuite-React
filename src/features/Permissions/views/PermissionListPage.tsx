@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback, type FC, type ChangeEvent } from "react";
+import { useState, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
     FaPlus,
     FaMagnifyingGlass,
-    FaArrowUp,
-    FaArrowDown,
+    FaLock,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
 import {
@@ -19,33 +18,36 @@ import {
     ActionsDropdown,
     createActions,
 } from "@/shared/components/ui";
-import { useAuth } from "@/features/Auth";
-import { useModal } from "@/shared/hooks";
+import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { PermissionManager } from "../services";
 import { PermissionModal } from "./PermissionModal";
 import type { Permission, PermissionDetail, PermissionFilters } from "../types";
-import type { PaginationMeta } from "@/shared/types";
 
 type SortField = "name" | "created_at" | "roles_count";
-type SortDirection = "asc" | "desc";
 
 const PermissionListPage: FC = () => {
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
 
-    // Permissions state
-    const [permissions, setPermissions] = useState<Permission[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    // Filters state
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [sortBy, setSortBy] = useState<SortField>("name");
-    const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+    // Use shared list hook
+    const {
+        items: permissions,
+        meta,
+        isLoading,
+        setIsLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+    } = useListPage<Permission, PermissionFilters>({
+        fetchFn: PermissionManager.getAll,
+        defaultSortField: "name",
+        defaultSortDirection: "asc",
+    });
 
     // Modals
     const createModal = useModal();
@@ -55,86 +57,8 @@ const PermissionListPage: FC = () => {
     const [permissionToDelete, setPermissionToDelete] = useState<Permission | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    // Permissions check
-    const canCreate = hasPermission("permission.create");
-    const canUpdate = hasPermission("permission.update");
-    const canDelete = hasPermission("permission.delete");
-    const canView = hasPermission("permission.view");
-
-    // Check if any action is available
-    const hasAnyAction = canUpdate || canDelete || canView;
-
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    // Fetch permissions
-    const fetchPermissions = useCallback(async () => {
-        setIsLoading(true);
-        setError(null);
-
-        const filters: PermissionFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortDirection,
-        };
-
-        const result = await PermissionManager.getAll(filters);
-        console.log(result);
-
-        if (result.success && result.data) {
-            setPermissions(result.data.data);
-            setMeta(result.data.meta);
-        } else {
-            setError(result.error || t("errors.generic"));
-        }
-
-        setIsLoading(false);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, t]);
-
-    useEffect(() => {
-        fetchPermissions();
-    }, [fetchPermissions]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-        } else {
-            setSortBy(field);
-            setSortDirection("asc");
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === "asc" ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
+    // Permissions - permission is HQ-only
+    const permissionChecks = useEntityPermissions("permission", { hqOnly: true });
 
     const handleEdit = async (permission: Permission) => {
         setIsLoading(true);
@@ -163,7 +87,7 @@ const PermissionListPage: FC = () => {
             showSuccess(t("common.messages.deleted", { name: permissionToDelete.name }));
             deleteModal.closeModal();
             setPermissionToDelete(null);
-            fetchPermissions();
+            refresh();
         } else {
             showError(result.error || t("errors.generic"));
         }
@@ -171,16 +95,16 @@ const PermissionListPage: FC = () => {
     };
 
     const handleCreateSuccess = () => {
-        fetchPermissions();
+        refresh();
     };
 
     const handleUpdateSuccess = () => {
-        fetchPermissions();
+        refresh();
     };
 
     const getPermissionActions = (permission: Permission) => [
-        { ...createActions.edit(() => handleEdit(permission), t), hidden: !canUpdate },
-        { ...createActions.delete(() => handleDeleteClick(permission), t), hidden: !canDelete },
+        { ...createActions.edit(() => handleEdit(permission), t), hidden: !permissionChecks.canUpdate },
+        { ...createActions.delete(() => handleDeleteClick(permission), t), hidden: !permissionChecks.canDelete },
     ];
 
     return (
@@ -202,7 +126,7 @@ const PermissionListPage: FC = () => {
                             {t("permissions.managePermissions")}
                         </p>
                     </div>
-                    {canCreate && (
+                    {permissionChecks.canCreate && (
                         <Button
                             variant="primary"
                             size="sm"
@@ -222,7 +146,7 @@ const PermissionListPage: FC = () => {
                             type="text"
                             placeholder={t("permissions.searchPlaceholder")}
                             value={searchQuery}
-                            onChange={handleSearchChange}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                         />
                         {searchQuery && (
@@ -278,7 +202,7 @@ const PermissionListPage: FC = () => {
                                         {renderSortIcon("created_at")}
                                     </button>
                                 </TableCell>
-                                {hasAnyAction && (
+                                {permissionChecks.hasAnyAction && (
                                     <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t("common.actions")}
                                     </TableCell>
@@ -298,7 +222,7 @@ const PermissionListPage: FC = () => {
                                         <TableCell className="px-6 py-4">
                                             <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissionChecks.hasAnyAction && (
                                             <TableCell className="px-6 py-4">
                                                 <div className="ml-auto h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                                             </TableCell>
@@ -307,27 +231,30 @@ const PermissionListPage: FC = () => {
                                 ))
                             ) : permissions.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={hasAnyAction ? 4 : 3} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                        {debouncedSearch ? (
-                                            <div>
-                                                <p>{t("permissions.noPermissionsFor", { search: debouncedSearch })}</p>
-                                                <button
-                                                    onClick={() => setSearchQuery("")}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t("common.clearSearch")}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <p>{t("permissions.noPermissions")}</p>
-                                        )}
+                                    <TableCell colSpan={permissionChecks.hasAnyAction ? 4 : 3} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                                        <div className="flex flex-col items-center justify-center">
+                                            <FaLock className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
+                                            {debouncedSearch ? (
+                                                <div>
+                                                    <p>{t("permissions.noPermissionsFor", { search: debouncedSearch })}</p>
+                                                    <button
+                                                        onClick={() => setSearchQuery("")}
+                                                        className="mt-2 text-sm text-brand-500 hover:text-brand-600"
+                                                    >
+                                                        {t("common.clearSearch")}
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <p>{t("permissions.noPermissions")}</p>
+                                            )}
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ) : (
                                 permissions.map((permission) => (
                                     <TableRow key={permission.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-white/2">
                                         <TableCell className="px-6 py-4">
-                                            {canView ? (
+                                            {permissionChecks.canView ? (
                                                 <Link
                                                     to={`/permissions/${permission.id}`}
                                                     className="font-medium font-mono text-sm text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300"
@@ -348,7 +275,7 @@ const PermissionListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                                             {formatDate(permission.created_at)}
                                         </TableCell>
-                                        {hasAnyAction && (
+                                        {permissionChecks.hasAnyAction && (
                                             <TableCell className="px-6 py-4 text-right">
                                                 <ActionsDropdown actions={getPermissionActions(permission)} />
                                             </TableCell>

@@ -1,47 +1,58 @@
-import { useState, useEffect, useCallback, type FC } from "react";
+import { useState, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
     FaMagnifyingGlass,
-    FaArrowUp,
-    FaArrowDown,
     FaArrowRightToBracket,
     FaArrowRightFromBracket,
+    FaArrowRightArrowLeft,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
 import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName } from "@/shared/components/ui";
-import { useModal } from "@/shared/hooks";
+import { useModal, useListPage } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
 import { ItemMovementManager } from "../services";
 import { ItemMovementModal } from "./ItemMovementModal";
 import type { ItemMovement, ItemMovementFilters, MovementType } from "../types";
-import type { PaginationMeta } from "@/shared/types";
 
 type SortField = "movement_date" | "quantity" | "total_price" | "type" | "created_at";
-type SortDirection = "asc" | "desc";
 
 const ItemMovementListPage: FC = () => {
     const { t } = useTranslation();
     const { hasPermission, isOnHeadquarters } = useAuth();
-    const [movements, setMovements] = useState<ItemMovement[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
+    // Custom filters specific to item movements
     const [typeFilter, setTypeFilter] = useState<MovementType | "">("");
-    const [sortBy, setSortBy] = useState<SortField>("movement_date");
-    const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+
+    // Use shared list hook with custom filters
+    const {
+        items: movements,
+        meta,
+        isLoading,
+        error,
+        searchQuery,
+        setSearchQuery,
+        debouncedSearch,
+        handleSort,
+        renderSortIcon,
+        handlePageChange,
+        refresh,
+        setCurrentPage,
+    } = useListPage<ItemMovement, ItemMovementFilters>({
+        fetchFn: ItemMovementManager.getAll,
+        defaultSortField: "movement_date",
+        defaultSortDirection: "desc",
+        additionalFilters: {
+            type: typeFilter || undefined,
+        },
+    });
 
     // Selected movement for operations
     const [selectedMovement, setSelectedMovement] = useState<ItemMovement | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    // Permissions
+    // Permissions - item movements use item permissions
     const canUpdate = hasPermission("item.update");
     const canViewItem = hasPermission("item.view");
     const canViewSite = isOnHeadquarters && hasPermission("site.view");
@@ -51,69 +62,6 @@ const ItemMovementListPage: FC = () => {
     // Modals
     const editModal = useModal();
     const deleteModal = useModal();
-
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    const fetchMovements = useCallback(async (filters: ItemMovementFilters) => {
-        setIsLoading(true);
-        setError(null);
-        const result = await ItemMovementManager.getAll(filters);
-        if (result.success && result.data) {
-            setMovements(result.data.data);
-            setMeta(result.data.meta);
-        } else {
-            setError(result.error || t("errors.generic"));
-        }
-        setIsLoading(false);
-    }, [t]);
-
-    useEffect(() => {
-        const filters: ItemMovementFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            type: typeFilter || undefined,
-            sort_by: sortBy,
-            sort_direction: sortDirection,
-        };
-        fetchMovements(filters);
-    }, [currentPage, debouncedSearch, typeFilter, sortBy, sortDirection, fetchMovements]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-        } else {
-            setSortBy(field);
-            setSortDirection("desc");
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === "asc" ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
 
     const handleEdit = (movement: ItemMovement) => {
         setSelectedMovement(movement);
@@ -137,7 +85,7 @@ const ItemMovementListPage: FC = () => {
             showSuccess(t("itemMovements.messages.deleted"));
             deleteModal.closeModal();
             setSelectedMovement(null);
-            refreshList();
+            refresh();
         } else {
             deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
@@ -146,18 +94,7 @@ const ItemMovementListPage: FC = () => {
     };
 
     const handleModalSuccess = () => {
-        refreshList();
-    };
-
-    const refreshList = () => {
-        const filters: ItemMovementFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            type: typeFilter || undefined,
-            sort_by: sortBy,
-            sort_direction: sortDirection,
-        };
-        fetchMovements(filters);
+        refresh();
     };
 
     const getTypeFilterOptions = (): { value: MovementType | ""; label: string }[] => [
@@ -189,8 +126,8 @@ const ItemMovementListPage: FC = () => {
     ];
 
     const handleClearFilters = () => {
-        setSearchQuery('');
-        setTypeFilter('');
+        setSearchQuery("");
+        setTypeFilter("");
         setCurrentPage(1);
     };
 
@@ -258,7 +195,7 @@ const ItemMovementListPage: FC = () => {
                                     onClick={handleClearFilters}
                                     className="text-sm text-brand-500 hover:text-brand-600"
                                 >
-                                    {t('common.clearFilters')}
+                                    {t("common.clearFilters")}
                                 </button>
                             )}
                             {/* Type Filter */}
@@ -278,7 +215,6 @@ const ItemMovementListPage: FC = () => {
                                 ))}
                             </select>
                         </div>
-
                     </div>
                 </div>
 
@@ -351,7 +287,6 @@ const ItemMovementListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                // Skeleton loading
                                 [...Array(8)].map((_, index) => (
                                     <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
                                         {isOnHeadquarters && (
@@ -389,21 +324,24 @@ const ItemMovementListPage: FC = () => {
                                 <TableRow>
                                     <TableCell
                                         className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
-                                        colSpan={8}
+                                        colSpan={isOnHeadquarters ? 9 : 8}
                                     >
-                                        {debouncedSearch || typeFilter ? (
-                                            <div>
-                                                <p>{t("itemMovements.noResultsWithFilters")}</p>
-                                                <button
-                                                    onClick={handleClearFilters}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t("common.clearFilters")}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            t("itemMovements.noMovements")
-                                        )}
+                                        <div className="flex flex-col items-center justify-center">
+                                            <FaArrowRightArrowLeft className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
+                                            {hasActiveFilters ? (
+                                                <div>
+                                                    <p>{t("itemMovements.noResultsWithFilters")}</p>
+                                                    <button
+                                                        onClick={handleClearFilters}
+                                                        className="mt-2 text-sm text-brand-500 hover:text-brand-600"
+                                                    >
+                                                        {t("common.clearFilters")}
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <p>{t("itemMovements.noMovements")}</p>
+                                            )}
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -493,7 +431,11 @@ const ItemMovementListPage: FC = () => {
                 </div>
 
                 {/* Pagination */}
-                {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
+                {meta && meta.last_page > 1 && (
+                    <div className="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
+                        <Pagination meta={meta} onPageChange={handlePageChange} />
+                    </div>
+                )}
             </div>
 
             {/* Edit Modal */}
