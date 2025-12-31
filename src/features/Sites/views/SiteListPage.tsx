@@ -1,11 +1,10 @@
 import { useState, useEffect, type FC } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaPlus, FaFileExport, FaBuilding } from "react-icons/fa6";
+import { FaPlus, FaFileExport } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, createActions, ActionsDropdown, SortableTableHeader, StaticTableHeader } from "@/shared/components/ui";
-import { Button } from "@/shared/components/ui";
-import { Checkbox, SearchInput } from "@/shared/components/form";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, createActions, ActionsDropdown, SortableTableHeader, StaticTableHeader, Button, ListPageCard, ListPageHeader, SearchSection, ErrorAlert, TableSkeletonRows, EmptyTableRow } from "@/shared/components/ui";
+import { Checkbox } from "@/shared/components/form";
 import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -135,6 +134,17 @@ const SiteListPage: FC = () => {
         { ...createActions.delete(() => handleDeleteClick(site), t), hidden: !permissions.canDelete },
     ];
 
+    const skeletonCells = [
+        ...(permissions.canExport ? [{ width: "w-4" }] : []),
+        { width: "w-32" },
+        { width: "w-48" },
+        { width: "w-8", center: true },
+        { width: "w-28" },
+        { width: "w-24" },
+        ...(permissions.hasAnyAction ? [{ width: "w-16", align: "right" as const }] : []),
+    ];
+    const colSpan = 6 + (permissions.canExport ? 1 : 0) + (permissions.hasAnyAction ? 1 : 0);
+
     return (
         <>
             <PageMeta title={`${t("sites.title")} | XetaSuite`} description={t("sites.description")} />
@@ -143,70 +153,59 @@ const SiteListPage: FC = () => {
                 breadcrumbs={[{ label: t("sites.title") }]}
             />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t("sites.listTitle")}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("sites.manageSitesAndTheirInformation")}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {permissions.canExport && selectedIds.size > 0 && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                startIcon={<FaFileExport className="h-4 w-4" />}
-                                onClick={handleExport}
-                                disabled={isExporting}
-                            >
-                                {isExporting
-                                    ? t("sites.export.exporting")
-                                    : t("sites.export.button", { count: selectedIds.size })}
-                            </Button>
-                        )}
-                        {permissions.canCreate && (
-                            <Button
-                                variant="primary"
-                                size="sm"
-                                startIcon={<FaPlus className="h-4 w-4" />}
-                                onClick={handleCreate}
-                            >
-                                {t("sites.create")}
-                            </Button>
-                        )}
-                    </div>
-                </div>
+            <ListPageCard>
+                <ListPageHeader
+                    title={t("sites.listTitle")}
+                    description={t("sites.manageSitesAndTheirInformation")}
+                    actions={
+                        <>
+                            {permissions.canExport && selectedIds.size > 0 && (
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    startIcon={<FaFileExport className="h-4 w-4" />}
+                                    onClick={handleExport}
+                                    disabled={isExporting}
+                                >
+                                    {isExporting
+                                        ? t("sites.export.exporting")
+                                        : t("sites.export.button", { count: selectedIds.size })}
+                                </Button>
+                            )}
+                            {permissions.canCreate && (
+                                <Button
+                                    variant="primary"
+                                    size="sm"
+                                    startIcon={<FaPlus className="h-4 w-4" />}
+                                    onClick={handleCreate}
+                                >
+                                    {t("sites.create")}
+                                </Button>
+                            )}
+                        </>
+                    }
+                />
 
-                {/* Search and Filters */}
-                <div className="card-body-border">
-                    <SearchInput
-                        value={searchQuery}
-                        onChange={setSearchQuery}
-                        className="max-w-md"
-                    />
-                    {permissions.canExport && selectedIds.size > 0 && (
-                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                            <span>{t("sites.export.selected", { count: selectedIds.size })}</span>
-                            <button
-                                onClick={() => setSelectedIds(new Set())}
-                                className="text-brand-500 hover:text-brand-600"
-                            >
-                                {t("sites.export.clearSelection")}
-                            </button>
-                        </div>
-                    )}
-                </div>
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    rightContent={
+                        permissions.canExport && selectedIds.size > 0 && (
+                            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span>{t("sites.export.selected", { count: selectedIds.size })}</span>
+                                <button
+                                    onClick={() => setSelectedIds(new Set())}
+                                    className="text-brand-500 hover:text-brand-600"
+                                >
+                                    {t("sites.export.clearSelection")}
+                                </button>
+                            </div>
+                        )
+                    }
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -251,62 +250,19 @@ const SiteListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(8)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        {permissions.canExport && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-28 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {permissions.hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows count={8} cells={skeletonCells} />
                             ) : sites.length === 0 ? (
-                                <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={permissions.canExport ? 7 : 6}>
-                                        <div className="flex flex-col items-center justify-center">
-                                            <FaBuilding className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                                            {debouncedSearch ? (
-                                                <div>
-                                                    <p>{t("sites.noSitesFor", { search: debouncedSearch })}</p>
-                                                    <button
-                                                        onClick={() => setSearchQuery("")}
-                                                        className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                    >
-                                                        {t("common.clearSearch")}
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <p>{t("sites.noSites")}</p>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={colSpan}
+                                    searchQuery={debouncedSearch}
+                                    onClearSearch={() => setSearchQuery("")}
+                                    emptyMessage={t("sites.noSites")}
+                                />
                             ) : (
                                 sites.map((site) => (
                                     <TableRow
                                         key={site.id}
-                                        className={`border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 ${selectedIds.has(site.id) ? "bg-brand-50/50 dark:bg-brand-500/5" : ""
-                                            }`}
+                                        className={`table-row-hover ${selectedIds.has(site.id) ? "bg-brand-50/50 dark:bg-brand-500/5" : ""}`}
                                     >
                                         {permissions.canExport && (
                                             <TableCell className="px-6 py-4">
@@ -366,7 +322,7 @@ const SiteListPage: FC = () => {
                         <Pagination meta={meta} onPageChange={handlePageChange} />
                     </div>
                 )}
-            </div>
+            </ListPageCard>
 
             {/* Create/Edit Modal */}
             <SiteModal

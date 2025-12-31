@@ -1,10 +1,7 @@
 import { useState, useEffect, type FC } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import {
-    FaPlus,
-    FaBroom,
-} from 'react-icons/fa6';
+import { FaPlus } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
 import {
     Table,
@@ -18,9 +15,14 @@ import {
     LinkedName,
     SortableTableHeader,
     StaticTableHeader,
+    Button,
+    ListPageCard,
+    ListPageHeader,
+    SearchSection,
+    ErrorAlert,
+    TableSkeletonRows,
+    EmptyTableRow,
 } from '@/shared/components/ui';
-import { Button } from '@/shared/components/ui';
-import { SearchInput } from '@/shared/components/form';
 import { useModal, useListPage, useEntityPermissions } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
@@ -193,6 +195,18 @@ const CleaningListPage: FC = () => {
 
     const hasActiveFilters = searchQuery || typeFilter;
 
+    const skeletonCells = [
+        { width: 'w-48' },
+        { width: 'w-24' },
+        ...(isOnHeadquarters ? [{ width: 'w-24' }] : []),
+        { width: 'w-16', centered: true },
+        { width: 'w-24' },
+        { width: 'w-24' },
+        { width: 'w-24' },
+        ...(permissions.hasAnyAction ? [{ width: 'w-16', alignRight: true }] : []),
+    ];
+    const colSpan = 7 + (isOnHeadquarters ? 1 : 0) + (permissions.hasAnyAction ? 1 : 0) - 1;
+
     return (
         <>
             <PageMeta
@@ -205,19 +219,12 @@ const CleaningListPage: FC = () => {
                 breadcrumbs={[{ label: t('cleanings.title') }]}
             />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t('cleanings.title')}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t('cleanings.subtitle')}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {permissions.canCreate && (
+            <ListPageCard>
+                <ListPageHeader
+                    title={t('cleanings.title')}
+                    description={t('cleanings.subtitle')}
+                    actions={
+                        permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -226,22 +233,16 @@ const CleaningListPage: FC = () => {
                             >
                                 {t('cleanings.create')}
                             </Button>
-                        )}
-                    </div>
-                </div>
+                        )
+                    }
+                />
 
-                {/* Filters */}
-                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        {/* Search */}
-                        <SearchInput
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder={t('cleanings.search')}
-                        />
-
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    placeholder={t('cleanings.search')}
+                    rightContent={
                         <div className="flex items-center gap-4">
-                            {/* Clear Filters */}
                             {hasActiveFilters && (
                                 <button
                                     onClick={handleClearFilters}
@@ -251,7 +252,6 @@ const CleaningListPage: FC = () => {
                                 </button>
                             )}
 
-                            {/* Type Filter */}
                             <select
                                 value={typeFilter}
                                 onChange={(e) => {
@@ -268,15 +268,11 @@ const CleaningListPage: FC = () => {
                                 ))}
                             </select>
                         </div>
-                    </div>
-                </div>
+                    }
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -310,65 +306,18 @@ const CleaningListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(8)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {isOnHeadquarters && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4">
-                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {permissions.hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows count={8} cells={skeletonCells} />
                             ) : cleanings.length === 0 ? (
-                                <TableRow>
-                                    <TableCell colSpan={permissions.hasAnyAction ? 7 : (isOnHeadquarters ? 7 : 6)} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                        <div className="flex flex-col items-center justify-center">
-                                            <FaBroom className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                                            <p>
-                                                {hasActiveFilters
-                                                    ? t('cleanings.empty.withFilters')
-                                                    : t('cleanings.empty.noData')}
-                                            </p>
-                                            {hasActiveFilters && (
-                                                <button
-                                                    onClick={handleClearFilters}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t('common.clearFilters')}
-                                                </button>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={colSpan}
+                                    searchQuery={hasActiveFilters ? 'filter' : ''}
+                                    onClearSearch={handleClearFilters}
+                                    emptyMessage={t('cleanings.empty.noData')}
+                                    noResultsMessage={t('cleanings.empty.withFilters')}
+                                />
                             ) : (
                                 cleanings.map((cleaning) => (
-                                    <TableRow
-                                        key={cleaning.id}
-                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
-                                    >
+                                    <TableRow key={cleaning.id} className="table-row-hover">
                                         <TableCell className="px-6 py-4">
                                             <LinkedName
                                                 canView={permissions.canView}
@@ -433,7 +382,7 @@ const CleaningListPage: FC = () => {
                         />
                     </div>
                 )}
-            </div>
+            </ListPageCard>
 
             {/* Create/Edit Modal */}
             <CleaningModal

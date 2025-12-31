@@ -1,6 +1,6 @@
 /**
  * UI Constants - Configuration values for consistent UI behavior across the application
- * 
+ *
  * Note: CSS classes are defined in src/app/styles/index.css using @layer components
  */
 

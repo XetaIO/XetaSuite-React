@@ -18,9 +18,14 @@ import {
     LinkedName,
     SortableTableHeader,
     StaticTableHeader,
+    Button,
+    ListPageCard,
+    ListPageHeader,
+    SearchSection,
+    ErrorAlert,
+    TableSkeletonRows,
+    EmptyTableRow,
 } from '@/shared/components/ui';
-import { Button } from '@/shared/components/ui';
-import { SearchInput } from '@/shared/components/form';
 import { useModal, useListPage, useEntityPermissions } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
@@ -203,24 +208,29 @@ const IncidentListPage: FC = () => {
 
     const hasActiveFilters = searchQuery || statusFilter || severityFilter;
 
+    const skeletonCells = [
+        { width: 'w-48' },
+        ...(isOnHeadquarters ? [{ width: 'w-24' }] : []),
+        { width: 'w-24' },
+        { width: 'w-16', centered: true },
+        { width: 'w-24' },
+        { width: 'w-24' },
+        { width: 'w-24' },
+        ...(permissions.hasAnyAction ? [{ width: 'w-16', alignRight: true }] : []),
+    ];
+    const colSpan = 7 + (isOnHeadquarters ? 1 : 0) + (permissions.hasAnyAction ? 1 : 0) - 1;
+
     return (
         <>
             <PageMeta title={`${t('incidents.title')} | XetaSuite`} description={t('incidents.description')} />
             <PageBreadcrumb pageTitle={t('incidents.title')} breadcrumbs={[{ label: t('incidents.title') }]} />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t('incidents.listTitle')}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t('incidents.manageIncidentsAndTheirInformation')}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {permissions.canCreate && (
+            <ListPageCard>
+                <ListPageHeader
+                    title={t('incidents.listTitle')}
+                    description={t('incidents.manageIncidentsAndTheirInformation')}
+                    actions={
+                        permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -229,22 +239,16 @@ const IncidentListPage: FC = () => {
                             >
                                 {t('incidents.create')}
                             </Button>
-                        )}
-                    </div>
-                </div>
+                        )
+                    }
+                />
 
-                {/* Search and Filters */}
-                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        {/* Search */}
-                        <SearchInput
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder={t('common.searchPlaceholder')}
-                        />
-
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    placeholder={t('common.searchPlaceholder')}
+                    rightContent={
                         <div className="flex items-center gap-4">
-                            {/* Clear Filters */}
                             {hasActiveFilters && (
                                 <button
                                     onClick={handleClearFilters}
@@ -254,7 +258,6 @@ const IncidentListPage: FC = () => {
                                 </button>
                             )}
 
-                            {/* Status Filter */}
                             <select
                                 value={statusFilter}
                                 title={t('incidents.status')}
@@ -272,7 +275,6 @@ const IncidentListPage: FC = () => {
                                 ))}
                             </select>
 
-                            {/* Severity Filter */}
                             <select
                                 value={severityFilter}
                                 title={t('incidents.severity')}
@@ -290,15 +292,11 @@ const IncidentListPage: FC = () => {
                                 ))}
                             </select>
                         </div>
-                    </div>
-                </div>
+                    }
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -338,66 +336,18 @@ const IncidentListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(8)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {isOnHeadquarters && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {permissions.hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows count={8} cells={skeletonCells} />
                             ) : incidents.length === 0 ? (
-                                <TableRow>
-                                    <TableCell
-                                        className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
-                                        colSpan={permissions.hasAnyAction ? 7 : (isOnHeadquarters ? 7 : 6)}
-                                    >
-                                        {debouncedSearch || statusFilter || severityFilter ? (
-                                            <div className="flex flex-col items-center justify-center">
-                                                <FaTriangleExclamation className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                                                <p>{t('incidents.noIncidentsFiltered')}</p>
-                                                <button
-                                                    onClick={handleClearFilters}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t('common.clearFilters')}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            t('incidents.noIncidents')
-                                        )}
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={colSpan}
+                                    searchQuery={debouncedSearch || statusFilter || severityFilter}
+                                    onClearSearch={handleClearFilters}
+                                    emptyMessage={t('incidents.noIncidents')}
+                                    noResultsMessage={t('incidents.noIncidentsFiltered')}
+                                />
                             ) : (
                                 incidents.map((incident) => (
-                                    <TableRow
-                                        key={incident.id}
-                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
-                                    >
+                                    <TableRow key={incident.id} className="table-row-hover">
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-start gap-2">
                                                 <FaTriangleExclamation className="mt-0.5 h-4 w-4 shrink-0 text-warning-500" />
@@ -487,7 +437,7 @@ const IncidentListPage: FC = () => {
 
                 {/* Pagination */}
                 {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
-            </div>
+            </ListPageCard>
 
             {/* Create/Edit Modal */}
             <IncidentModal

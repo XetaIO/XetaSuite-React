@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
     FaPlus,
-    FaLock,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
 import {
@@ -18,8 +17,13 @@ import {
     createActions,
     SortableTableHeader,
     StaticTableHeader,
+    ListPageCard,
+    ListPageHeader,
+    SearchSection,
+    ErrorAlert,
+    TableSkeletonRows,
+    EmptyTableRow,
 } from "@/shared/components/ui";
-import { SearchInput } from "@/shared/components/form";
 import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -109,6 +113,15 @@ const PermissionListPage: FC = () => {
         { ...createActions.delete(() => handleDeleteClick(permission), t), hidden: !permissionChecks.canDelete },
     ];
 
+    // Skeleton and empty state config
+    const skeletonCells = [
+        { width: "w-32" },
+        { width: "w-8", center: true as const },
+        { width: "w-24" },
+        ...(permissionChecks.hasAnyAction ? [{ width: "w-8", right: true as const }] : []),
+    ];
+    const colSpan = 3 + (permissionChecks.hasAnyAction ? 1 : 0);
+
     return (
         <>
             <PageMeta
@@ -117,44 +130,32 @@ const PermissionListPage: FC = () => {
             />
             <PageBreadcrumb pageTitle={t("permissions.title")} />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t("permissions.listTitle")}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("permissions.managePermissions")}
-                        </p>
-                    </div>
-                    {permissionChecks.canCreate && (
-                        <Button
-                            variant="primary"
-                            size="sm"
-                            startIcon={<FaPlus className="h-4 w-4" />}
-                            onClick={() => createModal.openModal()}
-                        >
-                            {t("permissions.create")}
-                        </Button>
-                    )}
-                </div>
+            <ListPageCard>
+                <ListPageHeader
+                    title={t("permissions.listTitle")}
+                    description={t("permissions.managePermissions")}
+                    actions={
+                        permissionChecks.canCreate && (
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                startIcon={<FaPlus className="h-4 w-4" />}
+                                onClick={() => createModal.openModal()}
+                            >
+                                {t("permissions.create")}
+                            </Button>
+                        )
+                    }
+                />
 
-                {/* Search */}
-                <div className="card-body-border">
-                    <SearchInput
-                        value={searchQuery}
-                        onChange={setSearchQuery}
-                        placeholder={t("permissions.searchPlaceholder")}
-                    />
-                </div>
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    placeholder={t("permissions.searchPlaceholder")}
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -187,48 +188,17 @@ const PermissionListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(6)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-5 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {permissionChecks.hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="ml-auto h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows count={6} cells={skeletonCells} />
                             ) : permissions.length === 0 ? (
-                                <TableRow>
-                                    <TableCell colSpan={permissionChecks.hasAnyAction ? 4 : 3} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                        <div className="flex flex-col items-center justify-center">
-                                            <FaLock className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                                            {debouncedSearch ? (
-                                                <div>
-                                                    <p>{t("permissions.noPermissionsFor", { search: debouncedSearch })}</p>
-                                                    <button
-                                                        onClick={() => setSearchQuery("")}
-                                                        className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                    >
-                                                        {t("common.clearSearch")}
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <p>{t("permissions.noPermissions")}</p>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={colSpan}
+                                    searchQuery={debouncedSearch}
+                                    onClearSearch={() => setSearchQuery("")}
+                                    emptyMessage={t("permissions.noPermissions")}
+                                />
                             ) : (
                                 permissions.map((permission) => (
-                                    <TableRow key={permission.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-white/2">
+                                    <TableRow key={permission.id} className="table-row-hover">
                                         <TableCell className="px-6 py-4">
                                             {permissionChecks.canView ? (
                                                 <Link
@@ -272,7 +242,7 @@ const PermissionListPage: FC = () => {
                         />
                     </div>
                 )}
-            </div>
+            </ListPageCard>
 
             {/* Create Modal */}
             <PermissionModal

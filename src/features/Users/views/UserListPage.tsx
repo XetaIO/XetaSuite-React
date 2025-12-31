@@ -18,8 +18,13 @@ import {
     createActions,
     SortableTableHeader,
     StaticTableHeader,
+    ListPageCard,
+    ListPageHeader,
+    SearchSection,
+    ErrorAlert,
+    TableSkeletonRows,
+    EmptyTableRow,
 } from "@/shared/components/ui";
-import { SearchInput } from "@/shared/components/form";
 import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -119,6 +124,17 @@ const UserListPage: FC = () => {
         { ...createActions.delete(() => handleDeleteClick(user), t), hidden: !!user.deleted_at || !permissions.canDelete },
     ];
 
+    const skeletonCells = [
+        { width: "w-32" },
+        { width: "w-40" },
+        { width: "w-16", center: true },
+        { width: "w-16", center: true },
+        { width: "w-16", center: true },
+        { width: "w-24" },
+        ...(permissions.hasAnyAction ? [{ width: "w-8", right: true }] : []),
+    ];
+    const colSpan = 6 + (permissions.hasAnyAction ? 1 : 0);
+
     return (
         <>
             <PageMeta
@@ -127,43 +143,31 @@ const UserListPage: FC = () => {
             />
             <PageBreadcrumb pageTitle={t("users.title")} />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t("users.listTitle")}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("users.manageUsersAndPermissions")}
-                        </p>
-                    </div>
-                    {permissions.canCreate && (
-                        <Button
-                            variant="primary"
-                            size="sm"
-                            startIcon={<FaPlus className="h-4 w-4" />}
-                            onClick={() => createModal.openModal()}
-                        >
-                            {t("users.create")}
-                        </Button>
-                    )}
-                </div>
+            <ListPageCard>
+                <ListPageHeader
+                    title={t("users.listTitle")}
+                    description={t("users.manageUsersAndPermissions")}
+                    actions={
+                        permissions.canCreate && (
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                startIcon={<FaPlus className="h-4 w-4" />}
+                                onClick={() => createModal.openModal()}
+                            >
+                                {t("users.create")}
+                            </Button>
+                        )
+                    }
+                />
 
-                {/* Search */}
-                <div className="card-body-border">
-                    <SearchInput
-                        value={searchQuery}
-                        onChange={setSearchQuery}
-                    />
-                </div>
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -198,63 +202,26 @@ const UserListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(6)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
-                                                <div>
-                                                    <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                                    <div className="mt-1 h-3 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                                </div>
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-40 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {permissions.hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="ml-auto h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows
+                                    count={6}
+                                    cells={skeletonCells}
+                                />
                             ) : users.length === 0 ? (
-                                <TableRow>
-                                    <TableCell colSpan={permissions.hasAnyAction ? 7 : 6} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                                <EmptyTableRow
+                                    colSpan={colSpan}
+                                    searchQuery={debouncedSearch}
+                                    onClearSearch={() => setSearchQuery("")}
+                                    emptyMessage={
                                         <div className="flex flex-col items-center justify-center">
                                             <FaUsers className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                                            {debouncedSearch ? (
-                                                <div>
-                                                    <p>{t("users.noUsersFor", { search: debouncedSearch })}</p>
-                                                    <button
-                                                        onClick={() => setSearchQuery("")}
-                                                        className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                    >
-                                                        {t("common.clearSearch")}
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <p>{t("users.noUsers")}</p>
-                                            )}
+                                            <p>{t("users.noUsers")}</p>
                                         </div>
-                                    </TableCell>
-                                </TableRow>
+                                    }
+                                    noResultsMessage={t("users.noUsersFor", { search: debouncedSearch })}
+                                />
                             ) : (
                                 users.map((user) => (
-                                    <TableRow key={user.id} className={`border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${user.deleted_at ? 'opacity-60' : ''}`}>
+                                    <TableRow key={user.id} className={`table-row-hover ${user.deleted_at ? 'opacity-60' : ''}`}>
                                         <TableCell className="px-6 py-4">
                                             {permissions.canView ? (
                                                 <Link
@@ -359,12 +326,8 @@ const UserListPage: FC = () => {
                 </div>
 
                 {/* Pagination */}
-                {meta && meta.last_page > 1 && (
-                    <div className="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
-                        <Pagination meta={meta} onPageChange={handlePageChange} />
-                    </div>
-                )}
-            </div>
+                {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
+            </ListPageCard>
 
             {/* Create Modal */}
             <UserModal

@@ -3,8 +3,7 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FaPlus, FaCubes } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ActionsDropdown, createActions, LinkedName, SortableTableHeader, StaticTableHeader } from "@/shared/components/ui";
-import { SearchInput } from "@/shared/components/form";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Button, Badge, ActionsDropdown, createActions, LinkedName, SortableTableHeader, StaticTableHeader, ListPageCard, ListPageHeader, SearchSection, ErrorAlert, TableSkeletonRows, EmptyTableRow } from "@/shared/components/ui";
 import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -142,24 +141,29 @@ const ItemListPage: FC = () => {
 
     const hasActiveFilters = searchQuery || stockStatusFilter;
 
+    const skeletonCells = [
+        { width: 'w-32', hasIcon: true },
+        ...(isOnHeadquarters ? [{ width: 'w-24' }] : []),
+        { width: 'w-20' },
+        { width: 'w-12' },
+        { width: 'w-16', rounded: 'rounded-full' as const },
+        { width: 'w-16' },
+        { width: 'w-24' },
+        ...(hasAnyAction ? [{ width: 'w-20', align: 'right' as const }] : []),
+    ];
+    const colSpan = 7 + (isOnHeadquarters ? 1 : 0) + (hasAnyAction ? 1 : 0);
+
     return (
         <>
             <PageMeta title={`${t("items.title")} | XetaSuite`} description={t("items.description")} />
             <PageBreadcrumb pageTitle={t("items.title")} breadcrumbs={[{ label: t("items.title") }]} />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t("items.listTitle")}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("items.manageItemsAndStock")}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {canCreate && (
+            <ListPageCard>
+                <ListPageHeader
+                    title={t("items.listTitle")}
+                    description={t("items.manageItemsAndStock")}
+                    actions={
+                        canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -168,29 +172,21 @@ const ItemListPage: FC = () => {
                             >
                                 {t("items.create")}
                             </Button>
-                        )}
-                    </div>
-                </div>
+                        )
+                    }
+                />
 
-                {/* Search and Filters */}
-                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        {/* Search */}
-                        <SearchInput
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder={t("items.searchPlaceholder")}
-                            className="max-w-md flex-1"
-                        />
-
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    placeholder={t("items.searchPlaceholder")}
+                    rightContent={
                         <div className="flex items-center gap-4">
-                            {/* Clear Filters */}
                             {hasActiveFilters && (
                                 <button onClick={handleClearFilters} className="text-sm text-brand-500 hover:text-brand-600">
                                     {t("common.clearFilters")}
                                 </button>
                             )}
-                            {/* Stock Status Filter */}
                             <select
                                 value={stockStatusFilter}
                                 onChange={(e) => setStockStatusFilter(e.target.value as StockStatus | "")}
@@ -202,15 +198,11 @@ const ItemListPage: FC = () => {
                                 ))}
                             </select>
                         </div>
-                    </div>
-                </div>
+                    }
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -233,48 +225,17 @@ const ItemListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(8)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="flex items-center gap-2">
-                                                <div className="h-4 w-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                                <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </div>
-                                        </TableCell>
-                                        {isOnHeadquarters && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4"><div className="h-4 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" /></TableCell>
-                                        <TableCell className="px-6 py-4"><div className="h-4 w-12 animate-pulse rounded bg-gray-200 dark:bg-gray-700" /></TableCell>
-                                        <TableCell className="px-6 py-4"><div className="h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" /></TableCell>
-                                        <TableCell className="px-6 py-4"><div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" /></TableCell>
-                                        <TableCell className="px-6 py-4"><div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" /></TableCell>
-                                        {hasAnyAction && (
-                                            <TableCell className="px-6 py-4"><div className="ml-auto h-4 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" /></TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows count={6} cells={skeletonCells} />
                             ) : items.length === 0 ? (
-                                <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={8}>
-                                        {debouncedSearch || stockStatusFilter ? (
-                                            <div className="flex flex-col items-center justify-center">
-                                                <FaCubes className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                                                <p>{t("items.noItemsFor")}</p>
-                                                <button onClick={handleClearFilters} className="mt-2 text-sm text-brand-500 hover:text-brand-600">
-                                                    {t("common.clearFilters")}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            t("items.noItems")
-                                        )}
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={colSpan}
+                                    searchQuery={debouncedSearch || stockStatusFilter}
+                                    onClearSearch={handleClearFilters}
+                                    emptyMessage={t("items.noItems")}
+                                />
                             ) : (
                                 items.map((item) => (
-                                    <TableRow key={item.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                    <TableRow key={item.id} className="table-row-hover">
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center gap-2">
                                                 <FaCubes className="h-4 w-4 text-gray-400" />
@@ -328,7 +289,7 @@ const ItemListPage: FC = () => {
 
                 {/* Pagination */}
                 {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
-            </div>
+            </ListPageCard>
 
             {/* Modals */}
             <ItemModal isOpen={itemModal.isOpen} onClose={itemModal.closeModal} item={selectedItem} onSuccess={handleModalSuccess} />

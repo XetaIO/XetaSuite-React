@@ -7,9 +7,7 @@ import {
     FaEnvelope,
 } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName, SortableTableHeader, StaticTableHeader } from '@/shared/components/ui';
-import { Button } from '@/shared/components/ui';
-import { SearchInput } from '@/shared/components/form';
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName, SortableTableHeader, StaticTableHeader, Button, ListPageCard, ListPageHeader, SearchSection, ErrorAlert, TableSkeletonRows, EmptyTableRow } from '@/shared/components/ui';
 import { useModal, useListPage, useEntityPermissions } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
@@ -100,24 +98,28 @@ const MaterialListPage: FC = () => {
         { ...createActions.delete(() => handleDeleteClick(material), t), hidden: !permissions.canDelete },
     ];
 
+    const skeletonCells = [
+        { width: 'w-32' },
+        { width: 'w-24' },
+        ...(isOnHeadquarters ? [{ width: 'w-24' }] : []),
+        { width: 'w-16', align: 'center' as const },
+        { width: 'w-24' },
+        { width: 'w-24' },
+        ...(permissions.hasAnyAction ? [{ width: 'w-16', align: 'right' as const }] : []),
+    ];
+    const colSpan = 6 + (isOnHeadquarters ? 1 : 0) + (permissions.hasAnyAction ? 1 : 0);
+
     return (
         <>
             <PageMeta title={`${t('materials.title')} | XetaSuite`} description={t('materials.description')} />
             <PageBreadcrumb pageTitle={t('materials.title')} breadcrumbs={[{ label: t('materials.title') }]} />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t('materials.listTitle')}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t('materials.manageMaterialsAndTheirInformation')}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {permissions.canCreate && (
+            <ListPageCard>
+                <ListPageHeader
+                    title={t('materials.listTitle')}
+                    description={t('materials.manageMaterialsAndTheirInformation')}
+                    actions={
+                        permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -126,27 +128,16 @@ const MaterialListPage: FC = () => {
                             >
                                 {t('materials.create')}
                             </Button>
-                        )}
-                    </div>
-                </div>
+                        )
+                    }
+                />
 
-                {/* Search and Filters */}
-                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <SearchInput
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder={t('common.searchPlaceholder')}
-                        />
-                    </div>
-                </div>
-
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                />
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -183,62 +174,19 @@ const MaterialListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(8)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {isOnHeadquarters && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {permissions.hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows count={6} cells={skeletonCells} />
                             ) : materials.length === 0 ? (
-                                <TableRow>
-                                    <TableCell
-                                        className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
-                                        colSpan={permissions.hasAnyAction ? 7 : isOnHeadquarters ? 7 : 6}
-                                    >
-                                        {debouncedSearch ? (
-                                            <div className="flex flex-col items-center justify-center">
-                                                <FaWrench className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                                                <p>{t('materials.noMaterialsFor', { search: debouncedSearch })}</p>
-                                                <button
-                                                    onClick={() => setSearchQuery('')}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t('common.clearSearch')}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            t('materials.noMaterials')
-                                        )}
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={colSpan}
+                                    searchQuery={debouncedSearch}
+                                    onClearSearch={() => setSearchQuery('')}
+                                    emptyMessage={t('materials.noMaterials')}
+                                />
                             ) : (
                                 materials.map((material) => (
                                     <TableRow
                                         key={material.id}
-                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+                                        className="table-row-hover"
                                     >
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center gap-2">
@@ -317,7 +265,7 @@ const MaterialListPage: FC = () => {
 
                 {/* Pagination */}
                 {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
-            </div>
+            </ListPageCard>
 
             {/* Create/Edit Modal */}
             <MaterialModal

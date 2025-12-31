@@ -3,7 +3,6 @@ import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
     FaPlus,
-    FaScrewdriverWrench,
 } from 'react-icons/fa6';
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from '@/shared/components/common';
 import {
@@ -18,9 +17,14 @@ import {
     LinkedName,
     SortableTableHeader,
     StaticTableHeader,
+    Button,
+    ListPageCard,
+    ListPageHeader,
+    SearchSection,
+    ErrorAlert,
+    TableSkeletonRows,
+    EmptyTableRow,
 } from '@/shared/components/ui';
-import { Button } from '@/shared/components/ui';
-import { SearchInput } from '@/shared/components/form';
 import { useModal, useListPage, useEntityPermissions } from '@/shared/hooks';
 import { showSuccess, showError, formatDate } from '@/shared/utils';
 import { useAuth } from '@/features/Auth';
@@ -244,19 +248,12 @@ const MaintenanceListPage: FC = () => {
             <PageMeta title={t('maintenances.title')} description={t('maintenances.description')} />
             <PageBreadcrumb pageTitle={t('maintenances.listTitle')} />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t('maintenances.listTitle')}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t('maintenances.manageMaintenancesAndTheirInformation')}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {permissions.canCreate && (
+            <ListPageCard>
+                <ListPageHeader
+                    title={t('maintenances.listTitle')}
+                    description={t('maintenances.manageMaintenancesAndTheirInformation')}
+                    actions={
+                        permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -265,23 +262,16 @@ const MaintenanceListPage: FC = () => {
                             >
                                 {t('maintenances.create')}
                             </Button>
-                        )}
-                    </div>
-                </div>
+                        )
+                    }
+                />
 
-                {/* Filters */}
-                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        {/* Search */}
-                        <SearchInput
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder={t('common.searchPlaceholder')}
-                            className="max-w-md flex-1"
-                        />
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    rightContent={
 
-                        <div className="flex items-center gap-4">
-                            {/* Clear Filters */}
+                        <>
                             {hasActiveFilters && (
                                 <button
                                     onClick={handleClearFilters}
@@ -291,7 +281,6 @@ const MaintenanceListPage: FC = () => {
                                 </button>
                             )}
 
-                            {/* Status Filter */}
                             <select
                                 value={statusFilter}
                                 onChange={(e) => {
@@ -309,7 +298,6 @@ const MaintenanceListPage: FC = () => {
                                 ))}
                             </select>
 
-                            {/* Type Filter */}
                             <select
                                 value={typeFilter}
                                 onChange={(e) => {
@@ -327,7 +315,6 @@ const MaintenanceListPage: FC = () => {
                                 ))}
                             </select>
 
-                            {/* Realization Filter */}
                             <select
                                 value={realizationFilter}
                                 onChange={(e) => {
@@ -344,16 +331,12 @@ const MaintenanceListPage: FC = () => {
                                     </option>
                                 ))}
                             </select>
-                        </div>
-                    </div>
-                </div>
+                        </>
+                    }
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -400,62 +383,31 @@ const MaintenanceListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(8)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {isOnHeadquarters && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {permissions.hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows
+                                    count={6}
+                                    cells={[
+                                        { width: 'w-48' },
+                                        ...(isOnHeadquarters ? [{ width: 'w-24' }] : []),
+                                        { width: 'w-24' },
+                                        { width: 'w-16', center: true },
+                                        { width: 'w-16', center: true },
+                                        { width: 'w-16', center: true },
+                                        { width: 'w-24' },
+                                        ...(permissions.hasAnyAction ? [{ width: 'w-16', right: true }] : []),
+                                    ]}
+                                />
                             ) : maintenances.length === 0 ? (
-                                <TableRow>
-                                    <TableCell colSpan={permissions.hasAnyAction ? 8 : (isOnHeadquarters ? 7 : 6)} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                        <div className="flex flex-col items-center justify-center">
-                                            <FaScrewdriverWrench className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                                            <p>
-                                                {t('maintenances.noMaintenancesFor')}
-                                            </p>
-                                            {hasActiveFilters && (
-                                                <button
-                                                    onClick={handleClearFilters}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t('common.clearFilters')}
-                                                </button>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={permissions.hasAnyAction ? 8 : (isOnHeadquarters ? 7 : 6)}
+                                    searchQuery={hasActiveFilters ? searchQuery : ''}
+                                    onClearSearch={handleClearFilters}
+                                    emptyMessage={t('maintenances.noMaintenancesFor')}
+                                />
                             ) : (
                                 maintenances.map((maintenance) => (
                                     <TableRow
                                         key={maintenance.id}
-                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+                                        className="table-row-hover"
                                     >
                                         <TableCell className="px-6 py-4">
                                             {permissions.canView ? (
@@ -535,7 +487,7 @@ const MaintenanceListPage: FC = () => {
                         />
                     </div>
                 )}
-            </div>
+            </ListPageCard>
 
             {/* Maintenance Modal */}
             <MaintenanceModal

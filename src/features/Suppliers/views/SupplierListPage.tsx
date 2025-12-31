@@ -2,9 +2,26 @@ import { useState, type FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPlus, FaFileExport } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, LinkedName, createActions, ActionsDropdown, SortableTableHeader, StaticTableHeader } from "@/shared/components/ui";
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableCell,
+    LinkedName,
+    createActions,
+    ActionsDropdown,
+    SortableTableHeader,
+    StaticTableHeader,
+    ListPageCard,
+    ListPageHeader,
+    SearchSection,
+    ErrorAlert,
+    TableSkeletonRows,
+    EmptyTableRow,
+} from "@/shared/components/ui";
 import { Button } from "@/shared/components/ui";
-import { Checkbox, SearchInput } from "@/shared/components/form";
+import { Checkbox } from "@/shared/components/form";
 import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -128,6 +145,19 @@ const SupplierListPage: FC = () => {
         { ...createActions.delete(() => handleDeleteClick(supplier), t), hidden: !permissions.canDelete },
     ];
 
+    // Skeleton cell configuration for loading state
+    const skeletonCells = [
+        ...(permissions.canExport ? [{ width: "w-4" }] : []),
+        { width: "w-32" },
+        { width: "w-48" },
+        { width: "w-8", center: true as const },
+        { width: "w-28" },
+        { width: "w-24" },
+        ...(permissions.hasAnyAction ? [{ width: "w-16", right: true as const }] : []),
+    ];
+
+    const colSpan = (permissions.canExport ? 1 : 0) + 5 + (permissions.hasAnyAction ? 1 : 0);
+
     return (
         <>
             <PageMeta title={`${t("suppliers.title")} | XetaSuite`} description={t("suppliers.description")} />
@@ -136,53 +166,46 @@ const SupplierListPage: FC = () => {
                 breadcrumbs={[{ label: t("suppliers.title") }]}
             />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+            <ListPageCard>
                 {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t("suppliers.listTitle")}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("suppliers.manageSuppliersAndTheirInformation")}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {permissions.canExport && selectedIds.size > 0 && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                startIcon={<FaFileExport className="h-4 w-4" />}
-                                onClick={handleExport}
-                                disabled={isExporting}
-                            >
-                                {isExporting
-                                    ? t("suppliers.export.exporting")
-                                    : t("suppliers.export.button", { count: selectedIds.size })}
-                            </Button>
-                        )}
-                        {permissions.canCreate && (
-                            <Button
-                                variant="primary"
-                                size="sm"
-                                startIcon={<FaPlus className="h-4 w-4" />}
-                                onClick={handleCreate}
-                            >
-                                {t("suppliers.create")}
-                            </Button>
-                        )}
-                    </div>
-                </div>
+                <ListPageHeader
+                    title={t("suppliers.listTitle")}
+                    description={t("suppliers.manageSuppliersAndTheirInformation")}
+                    actions={
+                        <>
+                            {permissions.canExport && selectedIds.size > 0 && (
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    startIcon={<FaFileExport className="h-4 w-4" />}
+                                    onClick={handleExport}
+                                    disabled={isExporting}
+                                >
+                                    {isExporting
+                                        ? t("suppliers.export.exporting")
+                                        : t("suppliers.export.button", { count: selectedIds.size })}
+                                </Button>
+                            )}
+                            {permissions.canCreate && (
+                                <Button
+                                    variant="primary"
+                                    size="sm"
+                                    startIcon={<FaPlus className="h-4 w-4" />}
+                                    onClick={handleCreate}
+                                >
+                                    {t("suppliers.create")}
+                                </Button>
+                            )}
+                        </>
+                    }
+                />
 
                 {/* Search and Filters */}
-                <div className="card-body-border">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <SearchInput
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            className="max-w-md flex-1"
-                        />
-                        {permissions.canExport && selectedIds.size > 0 && (
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    rightContent={
+                        permissions.canExport && selectedIds.size > 0 ? (
                             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                 <span>{t("suppliers.export.selected", { count: selectedIds.size })}</span>
                                 <button
@@ -192,16 +215,12 @@ const SupplierListPage: FC = () => {
                                     {t("suppliers.export.clearSelection")}
                                 </button>
                             </div>
-                        )}
-                    </div>
-                </div>
+                        ) : undefined
+                    }
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -246,58 +265,20 @@ const SupplierListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(6)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        {permissions.canExport && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-28 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {permissions.hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows count={6} cells={skeletonCells} />
                             ) : suppliers.length === 0 ? (
-                                <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={permissions.canExport ? 7 : 6}>
-                                        {debouncedSearch ? (
-                                            <div>
-                                                <p>{t("suppliers.noSuppliersFor", { search: debouncedSearch })}</p>
-                                                <button
-                                                    onClick={() => setSearchQuery("")}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t("common.clearSearch")}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            t("suppliers.noSuppliers")
-                                        )}
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={colSpan}
+                                    searchQuery={debouncedSearch}
+                                    onClearSearch={() => setSearchQuery("")}
+                                    emptyMessage={t("suppliers.noSuppliers")}
+                                    noResultsMessage={<p>{t("suppliers.noSuppliersFor", { search: debouncedSearch })}</p>}
+                                />
                             ) : (
                                 suppliers.map((supplier) => (
                                     <TableRow
                                         key={supplier.id}
-                                        className={`border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 ${selectedIds.has(supplier.id) ? "bg-brand-50/50 dark:bg-brand-500/5" : ""
+                                        className={`table-row-hover ${selectedIds.has(supplier.id) ? "bg-brand-50/50 dark:bg-brand-500/5" : ""
                                             }`}
                                     >
                                         {permissions.canExport && (
@@ -350,7 +331,7 @@ const SupplierListPage: FC = () => {
 
                 {/* Pagination */}
                 {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
-            </div>
+            </ListPageCard>
 
             {/* Create/Edit Modal */}
             <SupplierModal

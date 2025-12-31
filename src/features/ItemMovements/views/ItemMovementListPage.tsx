@@ -4,11 +4,9 @@ import { useTranslation } from "react-i18next";
 import {
     FaArrowRightToBracket,
     FaArrowRightFromBracket,
-    FaArrowRightArrowLeft,
 } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName, SortableTableHeader, StaticTableHeader } from "@/shared/components/ui";
-import { SearchInput } from "@/shared/components/form";
+import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, ActionsDropdown, createActions, LinkedName, SortableTableHeader, StaticTableHeader, ListPageCard, ListPageHeader, SearchSection, ErrorAlert, TableSkeletonRows, EmptyTableRow } from "@/shared/components/ui";
 import { useModal, useListPage } from "@/shared/hooks";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -141,32 +139,18 @@ const ItemMovementListPage: FC = () => {
                 breadcrumbs={[{ label: t("itemMovements.title") }]}
             />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t("itemMovements.listTitle")}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("itemMovements.listDescription")}
-                        </p>
-                    </div>
-                </div>
+            <ListPageCard>
+                <ListPageHeader
+                    title={t("itemMovements.listTitle")}
+                    description={t("itemMovements.listDescription")}
+                />
 
-                {/* Search and Filters */}
-                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        {/* Search */}
-                        <SearchInput
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            placeholder={t("itemMovements.searchPlaceholder")}
-                            className="max-w-md flex-1"
-                        />
-
-                        <div className="flex items-center gap-4">
-                            {/* Clear Filters */}
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    placeholder={t("itemMovements.searchPlaceholder")}
+                    rightContent={
+                        <>
                             {hasActiveFilters && (
                                 <button
                                     onClick={handleClearFilters}
@@ -175,7 +159,6 @@ const ItemMovementListPage: FC = () => {
                                     {t("common.clearFilters")}
                                 </button>
                             )}
-                            {/* Type Filter */}
                             <select
                                 value={typeFilter}
                                 onChange={(e) => {
@@ -191,16 +174,12 @@ const ItemMovementListPage: FC = () => {
                                     </option>
                                 ))}
                             </select>
-                        </div>
-                    </div>
-                </div>
+                        </>
+                    }
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -242,68 +221,33 @@ const ItemMovementListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(8)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        {isOnHeadquarters && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-12 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="ml-auto h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows
+                                    count={6}
+                                    cells={[
+                                        ...(isOnHeadquarters ? [{ width: 'w-24' }] : []),
+                                        { width: 'w-24' },
+                                        { width: 'w-16' },
+                                        { width: 'w-32' },
+                                        { width: 'w-12' },
+                                        { width: 'w-16' },
+                                        { width: 'w-24' },
+                                        { width: 'w-20' },
+                                        { width: 'w-8', right: true },
+                                    ]}
+                                />
                             ) : movements.length === 0 ? (
-                                <TableRow>
-                                    <TableCell
-                                        className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
-                                        colSpan={isOnHeadquarters ? 9 : 8}
-                                    >
-                                        <div className="flex flex-col items-center justify-center">
-                                            <FaArrowRightArrowLeft className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                                            {hasActiveFilters ? (
-                                                <div>
-                                                    <p>{t("itemMovements.noResultsWithFilters")}</p>
-                                                    <button
-                                                        onClick={handleClearFilters}
-                                                        className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                    >
-                                                        {t("common.clearFilters")}
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <p>{t("itemMovements.noMovements")}</p>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={isOnHeadquarters ? 9 : 8}
+                                    searchQuery={hasActiveFilters ? searchQuery : ''}
+                                    onClearSearch={handleClearFilters}
+                                    emptyMessage={t("itemMovements.noMovements")}
+                                    noResultsMessage={t("itemMovements.noResultsWithFilters")}
+                                />
                             ) : (
                                 movements.map((movement) => (
                                     <TableRow
                                         key={movement.id}
-                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+                                        className="table-row-hover"
                                     >
                                         {isOnHeadquarters && (
                                             <TableCell className="px-6 py-4">
@@ -391,7 +335,7 @@ const ItemMovementListPage: FC = () => {
                         <Pagination meta={meta} onPageChange={handlePageChange} />
                     </div>
                 )}
-            </div>
+            </ListPageCard>
 
             {/* Edit Modal */}
             {selectedMovement && (

@@ -2,9 +2,25 @@ import { useState, type FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPlus } from "react-icons/fa6";
 import { PageMeta, PageBreadcrumb, Pagination, DeleteConfirmModal } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, LinkedName, ActionsDropdown, createActions, SortableTableHeader, StaticTableHeader } from "@/shared/components/ui";
-import { Button } from "@/shared/components/ui";
-import { SearchInput } from "@/shared/components/form";
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableCell,
+    LinkedName,
+    ActionsDropdown,
+    createActions,
+    SortableTableHeader,
+    StaticTableHeader,
+    Button,
+    ListPageCard,
+    ListPageHeader,
+    SearchSection,
+    ErrorAlert,
+    TableSkeletonRows,
+    EmptyTableRow,
+} from "@/shared/components/ui";
 import { useModal, useListPage, useEntityPermissions } from "@/shared/hooks";
 import { showSuccess, showError, formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth";
@@ -86,6 +102,16 @@ const CompanyListPage: FC = () => {
         { ...createActions.delete(() => handleDeleteClick(company), t), hidden: !permissions.canDelete },
     ];
 
+    const skeletonCells = [
+        { width: "w-32" },
+        { width: "w-48" },
+        { width: "w-8", center: true },
+        { width: "w-28" },
+        { width: "w-24" },
+        ...(permissions.hasAnyAction ? [{ width: "w-16", right: true }] : []),
+    ];
+    const colSpan = 5 + (permissions.hasAnyAction ? 1 : 0);
+
     return (
         <>
             <PageMeta title={`${t("companies.title")} | XetaSuite`} description={t("companies.description")} />
@@ -94,19 +120,12 @@ const CompanyListPage: FC = () => {
                 breadcrumbs={[{ label: t("companies.title") }]}
             />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
-                            {t("companies.listTitle")}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("companies.manageCompaniesAndTheirInformation")}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        {permissions.canCreate && (
+            <ListPageCard>
+                <ListPageHeader
+                    title={t("companies.listTitle")}
+                    description={t("companies.manageCompaniesAndTheirInformation")}
+                    actions={
+                        permissions.canCreate && (
                             <Button
                                 variant="primary"
                                 size="sm"
@@ -115,35 +134,17 @@ const CompanyListPage: FC = () => {
                             >
                                 {t("companies.create")}
                             </Button>
-                        )}
-                    </div>
-                </div>
+                        )
+                    }
+                />
 
-                {/* Search and Filters */}
-                <div className="card-body-border">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <SearchInput
-                            value={searchQuery}
-                            onChange={setSearchQuery}
-                            className="max-w-md flex-1"
-                        />
-                        {debouncedSearch.length > 0 && (
-                            <button
-                                onClick={() => setSearchQuery("")}
-                                className="text-sm text-brand-500 hover:text-brand-600"
-                            >
-                                {t("common.clearFilters")}
-                            </button>
-                        )}
-                    </div>
-                </div>
+                <SearchSection
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                />
 
-                {/* Error message */}
-                {error && (
-                    <div className="alert-error">
-                        {error}
-                    </div>
-                )}
+                {/* Error Alert */}
+                {error && <ErrorAlert message={error} />}
 
                 {/* Table */}
                 <div className="overflow-x-auto">
@@ -180,54 +181,21 @@ const CompanyListPage: FC = () => {
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
-                                [...Array(6)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-28 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {permissions.hasAnyAction && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="ml-auto h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                ))
+                                <TableSkeletonRows
+                                    count={6}
+                                    cells={skeletonCells}
+                                />
                             ) : companies.length === 0 ? (
-                                <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={permissions.hasAnyAction ? 6 : 5}>
-                                        {debouncedSearch ? (
-                                            <div>
-                                                <p>{t("companies.noCompaniesFor", { search: debouncedSearch })}</p>
-                                                <button
-                                                    onClick={() => setSearchQuery("")}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t("common.clearSearch")}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            t("companies.noCompanies")
-                                        )}
-                                    </TableCell>
-                                </TableRow>
+                                <EmptyTableRow
+                                    colSpan={colSpan}
+                                    searchQuery={debouncedSearch}
+                                    onClearSearch={() => setSearchQuery("")}
+                                    emptyMessage={t("companies.noCompanies")}
+                                    noResultsMessage={t("companies.noCompaniesFor", { search: debouncedSearch })}
+                                />
                             ) : (
                                 companies.map((company) => (
-                                    <TableRow
-                                        key={company.id}
-                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
-                                    >
+                                    <TableRow key={company.id} className="table-row-hover">
                                         <TableCell className="px-6 py-4">
                                             <LinkedName
                                                 canView={permissions.canView}
@@ -273,7 +241,7 @@ const CompanyListPage: FC = () => {
 
                 {/* Pagination */}
                 {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
-            </div>
+            </ListPageCard>
 
             {/* Create/Edit Modal */}
             <CompanyModal
