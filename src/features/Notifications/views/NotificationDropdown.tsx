@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import { FaBroom, FaCubes } from "react-icons/fa6";
-import { Dropdown } from "../ui/dropdown/Dropdown";
-import { DropdownItem } from "../ui/dropdown/DropdownItem";
+import { FaBell, FaBroom, FaCubes } from "react-icons/fa6";
+import { Dropdown } from "../../../shared/components/ui/dropdown/Dropdown";
+import { DropdownItem } from "../../../shared/components/ui/dropdown/DropdownItem";
 import { NotificationManager, type Notification, type NotificationIcon } from "@/features/Notifications";
 
 export default function NotificationDropdown() {
@@ -127,8 +127,8 @@ export default function NotificationDropdown() {
       return iconMap[iconType];
     }
 
-    // Fallback to bell emoji
-    return <span>🔔</span>;
+    // Fallback to bell icon
+    return <FaBell />;
   };
 
   return (
@@ -215,7 +215,9 @@ export default function NotificationDropdown() {
             </li>
           ) : notifications.length === 0 ? (
             <li className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="text-4xl mb-2">🔔</div>
+              <div className="text-4xl mb-2">
+                <FaBell className="text-gray-500" />
+              </div>
               <p className="text-gray-500 dark:text-gray-400">
                 {t("notifications.empty")}
               </p>
@@ -269,7 +271,7 @@ export default function NotificationDropdown() {
                         handleDelete(e as unknown as React.MouseEvent, notification.id);
                       }
                     }}
-                    className="absolute right-3 top-3 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-error-500 hover:bg-error-50 dark:hover:bg-error-900/20 cursor-pointer"
+                    className="absolute right-3 top-3 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-error-500 hover:bg-error-50 dark:hover:bg-error-700/20 cursor-pointer"
                     title={t("notifications.delete")}
                   >
                     <svg

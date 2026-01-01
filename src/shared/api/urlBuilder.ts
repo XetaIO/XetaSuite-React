@@ -43,6 +43,7 @@ export const API_ENDPOINTS = {
     USER: {
         LOCALE: '/api/v1/user/locale',
         SITE: '/api/v1/user/site',
+        PASSWORD: '/api/v1/user/password',
     },
     // Suppliers
     SUPPLIERS: {

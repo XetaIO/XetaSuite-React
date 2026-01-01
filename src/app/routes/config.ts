@@ -67,6 +67,11 @@ const PermissionDetailPage = lazy(() => import("@/features/Permissions/views/Per
 // Lazy load Settings feature
 const SettingsListPage = lazy(() => import("@/features/Settings/views/SettingsListPage"));
 
+// Lazy load Account feature
+const NotificationsPage = lazy(() => import("@/features/Notifications/views/NotificationsPage"));
+const ChangePasswordPage = lazy(() => import("@/features/Account/views/ChangePasswordPage"));
+const SecurityPage = lazy(() => import("@/features/Account/views/SecurityPage"));
+
 /**
  * Guest-only routes (login, register, forgot password)
  */
@@ -292,6 +297,28 @@ export const protectedRoutes: RouteConfig[] = [
 ];
 
 /**
+ * Account routes (user profile, notifications, password, security)
+ * These routes are rendered within AccountLayout
+ */
+export const accountRoutes: RouteConfig[] = [
+    {
+        path: "/account/notifications",
+        element: NotificationsPage,
+        requireAuth: true,
+    },
+    {
+        path: "/account/password",
+        element: ChangePasswordPage,
+        requireAuth: true,
+    },
+    {
+        path: "/account/security",
+        element: SecurityPage,
+        requireAuth: true,
+    },
+];
+
+/**
  * Public routes (accessible without authentication)
  */
 export const publicRoutes: RouteConfig[] = [
@@ -304,4 +331,4 @@ export const publicRoutes: RouteConfig[] = [
 /**
  * All routes combined
  */
-export const routes: RouteConfig[] = [...guestRoutes, ...protectedRoutes, ...publicRoutes];
+export const routes: RouteConfig[] = [...guestRoutes, ...protectedRoutes, ...accountRoutes, ...publicRoutes];

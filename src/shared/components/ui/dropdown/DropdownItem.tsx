@@ -27,7 +27,8 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
   const combinedClasses = `${baseClassName} ${className}`.trim();
 
   const handleClick = (event: React.MouseEvent) => {
-    if (tag === "button") {
+    // Only prevent default for buttons without navigation
+    if (!to && tag === "button") {
       event.preventDefault();
     }
     if (onClick) onClick();

@@ -50,6 +50,7 @@
         "units": "unités",
         "editedBy": "Modifié par",
         "site": "Site",
+        "comingSoon": "Bientôt disponible",
         "export": {
             "button": "Exporter ({{count}})",
             "exporting": "Export en cours...",
@@ -1402,14 +1403,43 @@
     },
     "notifications": {
         "title": "Notifications",
+        "pageTitle": "Mes notifications",
+        "pageDescription": "Gérer vos notifications et alertes",
         "empty": "Aucune notification",
         "emptyDescription": "Vous n'avez aucune notification pour le moment",
         "new": "NEW",
+        "unread": "non lue(s)",
         "viewAll": "Voir toutes les notifications",
         "markAllAsRead": "Tout marquer comme lu",
+        "markAsRead": "Marquer comme lu",
         "deleteAll": "Tout supprimer",
         "delete": "Supprimer la notification",
+        "confirmDeleteAll": "Êtes-vous sûr de vouloir supprimer toutes les notifications ?",
         "noMore": "Plus de notifications",
         "loadMore": "Charger plus"
+    },
+    "account": {
+        "title": "Mon compte",
+        "menu": {
+            "notifications": "Notifications",
+            "profile": "Profil",
+            "password": "Mot de passe",
+            "security": "Sécurité"
+        },
+        "password": {
+            "pageTitle": "Changer mon mot de passe",
+            "description": "Mettez à jour votre mot de passe pour sécuriser votre compte",
+            "currentPassword": "Mot de passe actuel",
+            "newPassword": "Nouveau mot de passe",
+            "confirmPassword": "Confirmer le nouveau mot de passe",
+            "requirements": "Le mot de passe doit contenir au moins 8 caractères",
+            "submit": "Changer le mot de passe",
+            "success": "Votre mot de passe a été mis à jour avec succès"
+        },
+        "security": {
+            "pageTitle": "Sécurité",
+            "pageDescription": "Gérer les paramètres de sécurité de votre compte",
+            "comingSoonDescription": "Les options de sécurité avancées (authentification à deux facteurs, sessions actives, etc.) seront bientôt disponibles."
+        }
     }
 }

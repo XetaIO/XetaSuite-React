@@ -50,6 +50,7 @@
         "units": "units",
         "editedBy": "Edited by",
         "site": "Site",
+        "comingSoon": "Coming soon",
         "export": {
             "button": "Export ({{count}})",
             "exporting": "Exporting...",
@@ -1411,14 +1412,43 @@
     },
     "notifications": {
         "title": "Notifications",
+        "pageTitle": "My notifications",
+        "pageDescription": "Manage your notifications and alerts",
         "empty": "No notifications",
         "emptyDescription": "You have no notifications at the moment",
         "new": "NEW",
+        "unread": "unread",
         "viewAll": "View all notifications",
         "markAllAsRead": "Mark all as read",
+        "markAsRead": "Mark as read",
         "deleteAll": "Delete all",
         "delete": "Delete notification",
+        "confirmDeleteAll": "Are you sure you want to delete all notifications?",
         "noMore": "No more notifications",
         "loadMore": "Load more"
+    },
+    "account": {
+        "title": "My account",
+        "menu": {
+            "notifications": "Notifications",
+            "profile": "Profile",
+            "password": "Password",
+            "security": "Security"
+        },
+        "password": {
+            "pageTitle": "Change my password",
+            "description": "Update your password to secure your account",
+            "currentPassword": "Current password",
+            "newPassword": "New password",
+            "confirmPassword": "Confirm new password",
+            "requirements": "Password must contain at least 8 characters",
+            "submit": "Change password",
+            "success": "Your password has been updated successfully"
+        },
+        "security": {
+            "pageTitle": "Security",
+            "pageDescription": "Manage your account security settings",
+            "comingSoonDescription": "Advanced security options (two-factor authentication, active sessions, etc.) will be available soon."
+        }
     }
 }

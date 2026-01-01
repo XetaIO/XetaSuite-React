@@ -2,8 +2,8 @@ import { Suspense, type FC } from "react";
 import { Routes, Route } from "react-router";
 import { RequireAuth, RequireGuest, LoadingScreen } from "@/features/Auth/hooks/useRequireAuth";
 import { ProtectedRoute } from "@/features/Auth/hooks/useProtectedRoute";
-import { AppLayout } from "@/shared/components/layout";
-import { guestRoutes, protectedRoutes, publicRoutes } from "./routes";
+import { AppLayout, AccountLayout } from "@/shared/components/layout";
+import { guestRoutes, protectedRoutes, publicRoutes, accountRoutes } from "./routes";
 import type { RouteConfig } from "./routes";
 
 /**
@@ -64,6 +64,13 @@ const AppRoutes: FC = () => {
                 {protectedRoutes.map((route) => (
                     <Route key={route.path} path={route.path} element={<RouteElement config={route} />} />
                 ))}
+
+                {/* Account routes with nested AccountLayout */}
+                <Route element={<AccountLayout />}>
+                    {accountRoutes.map((route) => (
+                        <Route key={route.path} path={route.path} element={<RouteElement config={route} />} />
+                    ))}
+                </Route>
             </Route>
 
             {/* Public routes (404, etc.) - no auth required */}

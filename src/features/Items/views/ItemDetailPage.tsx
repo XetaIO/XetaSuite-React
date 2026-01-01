@@ -493,18 +493,20 @@ const ItemDetailPage: FC = () => {
                                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
                                             {recipient.full_name.charAt(0).toUpperCase()}
                                         </div>
-                                        <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                            <LinkedName
-                                                canView={canViewCreatorAndRecipient}
-                                                id={recipient.id}
-                                                name={recipient.full_name}
-                                                basePath="users" />
+                                        <div>
+                                            <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                                <LinkedName
+                                                    canView={canViewCreatorAndRecipient}
+                                                    id={recipient.id}
+                                                    name={recipient.full_name}
+                                                    basePath="users" />
+                                            </p>
                                             {recipient.email && (
                                                 <p className="text-xs text-gray-500 dark:text-gray-400">
                                                     {recipient.email}
                                                 </p>
                                             )}
-                                        </p>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

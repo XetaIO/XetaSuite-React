@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { useSidebar } from "@/shared/hooks/useSidebar";
 import { ThemeToggleButton } from "./ThemeToggleButton";
-import NotificationDropdown from "./NotificationDropdown";
+import NotificationDropdown from "../../../features/Notifications/views/NotificationDropdown";
 import UserDropdown from "./UserDropdown";
 import LanguageSwitcher from "./LanguageSwitcher";
 import SiteSwitcher from "./SiteSwitcher";
