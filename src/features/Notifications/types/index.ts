@@ -35,16 +35,6 @@ export interface NotificationData {
     message: string;
     icon: NotificationIcon;
     link: string;
-    // Cleaning alert specific
-    material_id?: number;
-    material_name?: string;
-    last_cleaning?: string;
-    next_cleaning?: string;
-    // Item warning stock specific
-    item_id?: number;
-    item_name?: string;
-    current_stock?: number;
-    warning_minimum?: number;
 }
 
 export interface NotificationCountResponse {

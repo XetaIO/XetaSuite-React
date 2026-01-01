@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FaBell, FaKey, FaUser, FaShieldHalved } from "react-icons/fa6";
+import { FaBell, FaKey, FaShieldHalved } from "react-icons/fa6";
 
 interface AccountMenuItem {
     path: string;
