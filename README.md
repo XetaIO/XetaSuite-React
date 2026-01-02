@@ -101,6 +101,15 @@ This SPA (Single Page Application) communicates with the Laravel backend via **S
 - **Responsive**: Mobile and tablet optimized
 - **Collapsible sidebar**: Workspace efficiency
 
+### 🔍 Global Search
+
+- **Quick access**: `Ctrl+K` / `Cmd+K` keyboard shortcut or header search icon
+- **Unified search**: Search across materials, zones, items, incidents, maintenances, companies, suppliers, sites
+- **Keyboard navigation**: Navigate results with arrow keys, select with Enter
+- **Type indicators**: Visual icons and colors for each result type
+- **Permission-aware**: Only shows results the user is allowed to see
+- **Mobile support**: Accessible via search button in header on mobile devices
+
 ---
 
 ## 🏗️ Technical Architecture
