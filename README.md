@@ -11,6 +11,7 @@
   <a href="#"><img src="https://img.shields.io/badge/TypeScript-5.9+-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"></a>
   <a href="#"><img src="https://img.shields.io/badge/Vite-7.x-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite"></a>
   <a href="#"><img src="https://img.shields.io/badge/TailwindCSS-4.x-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"></a>
+  <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/XetaIO/XetaSuite-React/lint.yml?style=flat-square" alt="Linter"></a>
   <a href="#"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License MIT"></a>
 </p>
 
