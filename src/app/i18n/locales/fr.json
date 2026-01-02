@@ -1422,7 +1422,6 @@
         "title": "Mon compte",
         "menu": {
             "notifications": "Notifications",
-            "profile": "Profil",
             "password": "Mot de passe",
             "security": "Sécurité"
         },

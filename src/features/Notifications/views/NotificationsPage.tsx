@@ -2,13 +2,14 @@ import { useState, useEffect, useCallback, type FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { FaBroom, FaCubes, FaTrash, FaCheck, FaCheckDouble, FaBell } from "react-icons/fa6";
-import { PageMeta } from "@/shared/components/common";
+import { DeleteConfirmModal, PageMeta } from "@/shared/components/common";
 import { Button, Alert, Badge } from "@/shared/components/ui";
 import { Pagination } from "@/shared/components/common";
 import { NotificationManager } from "../services";
 import type { Notification, NotificationIcon } from "../types";
 import type { PaginationMeta } from "@/shared/types";
 import { showError } from "@/shared/utils";
+import { useModal } from "@/shared/hooks";
 
 const NotificationsPage: FC = () => {
     const { t } = useTranslation();
@@ -17,6 +18,8 @@ const NotificationsPage: FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const deleteModal = useModal();
 
     const fetchNotifications = useCallback(async (page: number) => {
         setIsLoading(true);
@@ -70,8 +73,12 @@ const NotificationsPage: FC = () => {
         }
     };
 
+    const handleDeleteAllClick = () => {
+        deleteModal.openModal();
+    };
+
     const handleDeleteAll = async () => {
-        if (!confirm(t("notifications.confirmDeleteAll"))) return;
+        setIsDeleting(true);
 
         const result = await NotificationManager.deleteAll();
         if (result.success) {
@@ -79,6 +86,8 @@ const NotificationsPage: FC = () => {
         } else {
             showError(result.error || t("errors.generic"));
         }
+        setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const getNotificationIcon = (notification: Notification): React.ReactNode => {
@@ -130,7 +139,7 @@ const NotificationsPage: FC = () => {
                             <Button
                                 variant="danger"
                                 size="sm"
-                                onClick={handleDeleteAll}
+                                onClick={handleDeleteAllClick}
                             >
                                 <FaTrash className="w-4 h-4 mr-2" />
                                 {t("notifications.deleteAll")}
@@ -236,6 +245,16 @@ const NotificationsPage: FC = () => {
                     </div>
                 )}
             </div>
+
+            {/* Delete Confirmation Modal */}
+            <DeleteConfirmModal
+                isOpen={deleteModal.isOpen}
+                onClose={deleteModal.closeModal}
+                onConfirm={handleDeleteAll}
+                title={t('notifications.deleteAll')}
+                message={t('notifications.confirmDeleteAll')}
+                isLoading={isDeleting}
+            />
         </>
     );
 };

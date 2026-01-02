@@ -1431,7 +1431,6 @@
         "title": "My account",
         "menu": {
             "notifications": "Notifications",
-            "profile": "Profile",
             "password": "Password",
             "security": "Security"
         },
