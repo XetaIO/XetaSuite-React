@@ -269,8 +269,7 @@ const MaintenanceListPage: FC = () => {
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
                     rightContent={
-
-                        <>
+                        <div className="flex items-center gap-4">
                             {hasActiveFilters && (
                                 <button
                                     onClick={handleClearFilters}
@@ -330,7 +329,7 @@ const MaintenanceListPage: FC = () => {
                                     </option>
                                 ))}
                             </select>
-                        </>
+                        </div>
                     }
                 />
 
