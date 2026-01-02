@@ -71,7 +71,6 @@
         "search": "Rechercher ou taper une commande...",
         "notifications": "Notifications",
         "profile": "Profil",
-        "editProfile": "Modifier le profil",
         "accountSettings": "Paramètres du compte",
         "settings": "Paramètres",
         "logout": "Déconnexion",
@@ -120,6 +119,8 @@
         "welcome": "Bienvenue, {{name}}",
         "headquartersView": "Vue Siège",
         "aggregatedStats": "Statistiques agrégées de tous les sites",
+        "demoModeActive": "Mode démo actif",
+        "demoModeInfo": "Vous êtes actuellement en mode démo. Certaines fonctionnalités peuvent être limitées ou désactivées.",
         "stats": {
             "maintenancesThisMonth": "Maintenances ce mois",
             "maintenancesTrend": "Tendance des maintenances",
@@ -1445,5 +1446,25 @@
         "modeActive": "Mode Démo Actif",
         "resetNotice": "Les données sont réinitialisées toutes les 6 heures. Certaines actions sont restreintes.",
         "actionBlocked": "Cette action est désactivée en mode démo."
+    },
+    "search": {
+        "placeholder": "Rechercher matériels, zones, articles...",
+        "minChars": "Saisissez au moins 2 caractères pour rechercher",
+        "noResults": "Aucun résultat trouvé pour \"{{query}}\"",
+        "startTyping": "Commencez à taper pour rechercher",
+        "searchHint": "Recherchez parmi les matériels, zones, articles, incidents, maintenances et plus",
+        "navigate": "naviguer",
+        "select": "sélectionner",
+        "close": "fermer",
+        "types": {
+            "materials": "Matériels",
+            "zones": "Zones",
+            "items": "Articles",
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "companies": "Entreprises",
+            "suppliers": "Fournisseurs",
+            "sites": "Sites"
+        }
     }
 }

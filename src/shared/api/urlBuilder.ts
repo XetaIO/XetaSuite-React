@@ -188,4 +188,9 @@ export const API_ENDPOINTS = {
         DELETE: (id: string) => `/api/v1/notifications/${id}`,
         DELETE_ALL: '/api/v1/notifications',
     },
+    // Global Search
+    SEARCH: {
+        BASE: '/api/v1/search',
+        TYPES: '/api/v1/search/types',
+    },
 } as const;

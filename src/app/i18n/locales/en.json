@@ -71,7 +71,6 @@
         "search": "Search or type command...",
         "notifications": "Notifications",
         "profile": "Profile",
-        "editProfile": "Edit profile",
         "accountSettings": "Account settings",
         "settings": "Settings",
         "logout": "Log out",
@@ -119,6 +118,8 @@
         "pageDescription": "XetaSuite Dashboard - Maintenance, incident and stock management",
         "welcome": "Welcome, {{name}}",
         "headquartersView": "Headquarters View",
+        "demoModeActive": "Demo mode active",
+        "demoModeInfo": "You are currently in demo mode. Some features may be limited or disabled.",
         "aggregatedStats": "Aggregated statistics from all sites",
         "stats": {
             "maintenancesThisMonth": "Maintenances this month",
@@ -1454,5 +1455,25 @@
         "modeActive": "Demo Mode Active",
         "resetNotice": "Data is reset every 6 hours. Some actions are restricted.",
         "actionBlocked": "This action is disabled in demo mode."
+    },
+    "search": {
+        "placeholder": "Search materials, zones, items...",
+        "minChars": "Type at least 2 characters to search",
+        "noResults": "No results found for \"{{query}}\"",
+        "startTyping": "Start typing to search",
+        "searchHint": "Search across materials, zones, items, incidents, maintenances and more",
+        "navigate": "to navigate",
+        "select": "to select",
+        "close": "to close",
+        "types": {
+            "materials": "Materials",
+            "zones": "Zones",
+            "items": "Items",
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "companies": "Companies",
+            "suppliers": "Suppliers",
+            "sites": "Sites"
+        }
     }
 }

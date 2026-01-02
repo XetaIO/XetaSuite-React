@@ -25,10 +25,12 @@ import {
 } from "react-icons/fa6";
 import { DashboardRepository } from "./services";
 import type { DashboardData } from "./types";
+import { useAppConfig } from "@/shared/store";
 
 export default function Home() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { isDemoMode } = useAppConfig();
 
   // Dashboard data state
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
@@ -176,6 +178,17 @@ export default function Home() {
         description={t('dashboard.pageDescription')}
       />
       <div className="grid grid-cols-12 gap-4 md:gap-6">
+        {/* Demo Mode Banner */}
+        {isDemoMode && (
+          <div className="col-span-12">
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg px-4 py-2 text-yellow-700 dark:text-yellow-300 text-sm">
+              <span className="font-medium">{t('dashboard.demoModeActive')}</span>
+              {' - '}
+              {t('dashboard.demoModeInfo')}
+            </div>
+          </div>
+        )}
+
         {/* HQ indicator */}
         {dashboardData?.is_headquarters && (
           <div className="col-span-12">
