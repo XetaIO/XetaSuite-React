@@ -78,14 +78,13 @@ const ItemMovementListPage: FC = () => {
         );
         if (result.success) {
             showSuccess(t("itemMovements.messages.deleted"));
-            deleteModal.closeModal();
             setSelectedMovement(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleModalSuccess = () => {

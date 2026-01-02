@@ -88,14 +88,13 @@ const SupplierListPage: FC = () => {
         const result = await SupplierManager.delete(selectedSupplier.id);
         if (result.success) {
             showSuccess(t("suppliers.messages.deleted", { name: selectedSupplier.name }));
-            deleteModal.closeModal();
             setSelectedSupplier(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleModalSuccess = () => {

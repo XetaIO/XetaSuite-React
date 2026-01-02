@@ -166,14 +166,13 @@ const MaintenanceListPage: FC = () => {
         const result = await MaintenanceManager.delete(selectedMaintenance.id);
         if (result.success) {
             showSuccess(t('maintenances.messages.deleted'));
-            deleteModal.closeModal();
             setSelectedMaintenance(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t('errors.generic'));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleModalSuccess = () => {

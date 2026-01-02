@@ -73,14 +73,13 @@ const MaterialListPage: FC = () => {
         const result = await MaterialManager.delete(selectedMaterial.id);
         if (result.success) {
             showSuccess(t('materials.messages.deleted', { name: selectedMaterial.name }));
-            deleteModal.closeModal();
             setSelectedMaterial(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t('errors.generic'));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleQrCode = (material: Material) => {

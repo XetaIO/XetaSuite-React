@@ -8,6 +8,7 @@ import { Pagination } from "@/shared/components/common";
 import { NotificationManager } from "../services";
 import type { Notification, NotificationIcon } from "../types";
 import type { PaginationMeta } from "@/shared/types";
+import { showError } from "@/shared/utils";
 
 const NotificationsPage: FC = () => {
     const { t } = useTranslation();
@@ -75,6 +76,8 @@ const NotificationsPage: FC = () => {
         const result = await NotificationManager.deleteAll();
         if (result.success) {
             setNotifications([]);
+        } else {
+            showError(result.error || t("errors.generic"));
         }
     };
 

@@ -139,14 +139,13 @@ const CleaningListPage: FC = () => {
         const result = await CleaningManager.delete(selectedCleaning.id);
         if (result.success) {
             showSuccess(t('cleanings.messages.deleted'));
-            deleteModal.closeModal();
             setSelectedCleaning(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t('errors.generic'));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleModalSuccess = () => {

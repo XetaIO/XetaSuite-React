@@ -91,13 +91,13 @@ const RoleListPage: FC = () => {
 
         if (result.success) {
             showSuccess(t("common.messages.deleted", { name: roleToDelete.name }));
-            deleteModal.closeModal();
             setRoleToDelete(null);
             refresh();
         } else {
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleCreateSuccess = () => {

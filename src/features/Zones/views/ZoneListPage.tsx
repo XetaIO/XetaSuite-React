@@ -65,14 +65,13 @@ const ZoneListPage: FC = () => {
         const result = await ZoneManager.delete(selectedZone.id);
         if (result.success) {
             showSuccess(t("zones.messages.deleted", { name: selectedZone.name }));
-            deleteModal.closeModal();
             setSelectedZone(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleModalSuccess = () => {

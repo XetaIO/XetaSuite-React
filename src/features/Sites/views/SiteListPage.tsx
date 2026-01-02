@@ -77,14 +77,13 @@ const SiteListPage: FC = () => {
         const result = await SiteManager.delete(selectedSite.id);
         if (result.success) {
             showSuccess(t("sites.messages.deleted", { name: selectedSite.name }));
-            deleteModal.closeModal();
             setSelectedSite(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleModalSuccess = () => {

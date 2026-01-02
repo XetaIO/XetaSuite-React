@@ -150,14 +150,13 @@ const IncidentListPage: FC = () => {
         const result = await IncidentManager.delete(selectedIncident.id);
         if (result.success) {
             showSuccess(t('incidents.messages.deleted'));
-            deleteModal.closeModal();
             setSelectedIncident(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t('errors.generic'));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleModalSuccess = () => {

@@ -198,13 +198,13 @@ export function MaintenanceDetailPage() {
         const result = await MaintenanceManager.delete(maintenance.id);
 
         if (result.success) {
-            deleteModal.closeModal();
             navigate('/maintenances', { replace: true });
         } else {
             setDeleteError(result.error || t('maintenances.errors.deleteFailed'));
         }
 
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     // Show resolved_at only for completed/canceled

@@ -90,14 +90,13 @@ const ItemListPage: FC = () => {
         const result = await ItemManager.delete(selectedItem.id);
         if (result.success) {
             showSuccess(t("items.messages.deleted", { name: selectedItem.name }));
-            deleteModal.closeModal();
             setSelectedItem(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     }, [selectedItem, t, deleteModal, refresh]);
 
     const handleQrCode = useCallback((item: Item) => {

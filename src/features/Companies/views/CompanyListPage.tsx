@@ -83,14 +83,13 @@ const CompanyListPage: FC = () => {
         const result = await CompanyManager.delete(selectedCompany.id);
         if (result.success) {
             showSuccess(t("companies.messages.deleted", { name: selectedCompany.name }));
-            deleteModal.closeModal();
             setSelectedCompany(null);
             refresh();
         } else {
-            deleteModal.closeModal();
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleModalSuccess = () => {

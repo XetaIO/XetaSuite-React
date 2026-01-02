@@ -91,13 +91,13 @@ const UserListPage: FC = () => {
 
         if (result.success) {
             showSuccess(t("common.messages.deleted", { name: selectedUser.full_name }));
-            deleteModal.closeModal();
             setSelectedUser(null);
             refresh();
         } else {
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleCreateSuccess = () => {

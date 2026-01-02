@@ -91,13 +91,13 @@ const PermissionListPage: FC = () => {
 
         if (result.success) {
             showSuccess(t("common.messages.deleted", { name: permissionToDelete.name }));
-            deleteModal.closeModal();
             setPermissionToDelete(null);
             refresh();
         } else {
             showError(result.error || t("errors.generic"));
         }
         setIsDeleting(false);
+        deleteModal.closeModal();
     };
 
     const handleCreateSuccess = () => {
