@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { BrowserRouter } from "react-router";
 import { HelmetProvider } from "react-helmet-async";
 import { ThemeProvider } from "@/shared/hooks";
+import { AppConfigProvider } from "@/shared/store";
 import { ThemedToastContainer } from "@/shared/components/common";
 import { AuthProvider } from "@/features/Auth/store/AuthContext";
 import { SettingsProvider } from "@/features/Settings";
@@ -16,14 +17,16 @@ const App: FC = () => {
     return (
         <HelmetProvider>
             <ThemeProvider>
-                <BrowserRouter>
-                    <AuthProvider>
-                        <SettingsProvider>
-                            <AppRoutes />
-                            <ThemedToastContainer />
-                        </SettingsProvider>
-                    </AuthProvider>
-                </BrowserRouter>
+                <AppConfigProvider>
+                    <BrowserRouter>
+                        <AuthProvider>
+                            <SettingsProvider>
+                                <AppRoutes />
+                                <ThemedToastContainer />
+                            </SettingsProvider>
+                        </AuthProvider>
+                    </BrowserRouter>
+                </AppConfigProvider>
             </ThemeProvider>
         </HelmetProvider>
     );

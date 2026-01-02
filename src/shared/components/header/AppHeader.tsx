@@ -111,10 +111,16 @@ export const AppHeader: React.FC = () => {
                     </Link>*/}
 
                     <Link to="/dashboard" className="flex items-center gap-2 lg:hidden">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
-                            <span className="text-lg font-bold text-white">X</span>
-                        </div>
-                        <span className="text-xl font-semibold text-slate-800 dark:text-white/90">XetaSuite</span>
+                        <img
+                            className="h-10 dark:hidden"
+                            src="/images/logo.svg"
+                            alt="XetaSuite"
+                        />
+                        <img
+                            className="h-10 hidden dark:block"
+                            src="/images/logo-dark.svg"
+                            alt="XetaSuite"
+                        />
                     </Link>
 
                     <button

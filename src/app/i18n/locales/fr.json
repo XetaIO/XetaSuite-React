@@ -1440,5 +1440,10 @@
             "pageDescription": "Gérer les paramètres de sécurité de votre compte",
             "comingSoonDescription": "Les options de sécurité avancées (authentification à deux facteurs, sessions actives, etc.) seront bientôt disponibles."
         }
+    },
+    "demo": {
+        "modeActive": "Mode Démo Actif",
+        "resetNotice": "Les données sont réinitialisées toutes les 6 heures. Certaines actions sont restreintes.",
+        "actionBlocked": "Cette action est désactivée en mode démo."
     }
 }

@@ -28,6 +28,10 @@ export const buildUrl = (baseUrl: string, params?: QueryParams): string => {
  * API endpoints constants
  */
 export const API_ENDPOINTS = {
+    // App Config (public, no auth required)
+    APP: {
+        CONFIG: '/api/v1/app/config',
+    },
     // Auth
     AUTH: {
         CSRF: '/sanctum/csrf-cookie',

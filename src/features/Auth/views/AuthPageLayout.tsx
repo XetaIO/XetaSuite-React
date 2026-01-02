@@ -19,17 +19,19 @@ export default function AuthPageLayout({ children }: AuthPageLayoutProps) {
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 {/* Logo */}
                 <div className="flex justify-center">
-                    <div className="flex items-center gap-2">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600 shadow-lg">
-                            <span className="text-2xl font-bold text-white">X</span>
-                        </div>
-                    </div>
+                    <img
+                        className="h-15 dark:hidden"
+                        src="/images/logo.svg"
+                        alt="XetaSuite"
+                    />
+                    <img
+                        className="h-15 hidden dark:block"
+                        src="/images/logo-dark.svg"
+                        alt="XetaSuite"
+                    />
                 </div>
-                <h1 className="mt-4 text-center text-2xl font-bold text-gray-800 dark:text-white">
-                    XetaSuite
-                </h1>
-                <p className="mt-1 text-center text-sm text-gray-500 dark:text-gray-400">
-                    Enterprise Resource Planning
+                <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                    Facility Management ERP
                 </p>
             </div>
 

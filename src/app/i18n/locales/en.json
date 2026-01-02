@@ -1449,5 +1449,10 @@
             "pageDescription": "Manage your account security settings",
             "comingSoonDescription": "Advanced security options (two-factor authentication, active sessions, etc.) will be available soon."
         }
+    },
+    "demo": {
+        "modeActive": "Demo Mode Active",
+        "resetNotice": "Data is reset every 6 hours. Some actions are restricted.",
+        "actionBlocked": "This action is disabled in demo mode."
     }
 }
