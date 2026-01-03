@@ -1,0 +1,1447 @@
+{
+    "common": {
+        "loading": "Chargement...",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "create": "Créer",
+        "update": "Mettre à jour",
+        "search": "Rechercher",
+        "searchPlaceholder": "Rechercher par nom ou description...",
+        "noResults": "Aucun résultat",
+        "noSearchResults": "Aucun résultat pour cette recherche",
+        "notAvailable": "Non disponible",
+        "actions": "Actions",
+        "yes": "Oui",
+        "no": "Non",
+        "confirm": "Confirmer",
+        "back": "Retour",
+        "close": "Fermer",
+        "name": "Nom",
+        "description": "Description",
+        "createdAt": "Créé le",
+        "createdBy": "Créé par",
+        "updatedAt": "Modifié le",
+        "resolvedAt": "Résolu le",
+        "creator": "Créateur",
+        "clearSearch": "Effacer la recherche",
+        "clearFilters": "Effacer les filtres",
+        "collaborators": "Collaborateurs",
+        "user": "Utilisateur",
+        "support": "Support",
+        "viewAll": "Voir tout",
+        "new": "nouveau",
+        "beta": "beta",
+        "error": "Erreur",
+        "enabled": "Activé",
+        "disabled": "Désactivé",
+        "optional": "optionnel",
+        "qrCode": "QR Code",
+        "retry": "Réessayer",
+        "refresh": "Actualiser",
+        "increase": "Augmenter",
+        "decrease": "Diminuer",
+        "view": "Voir",
+        "restore": "Restaurer",
+        "details": "Détails",
+        "history": "Historique",
+        "notFound": "Non trouvé",
+        "units": "unités",
+        "editedBy": "Modifié par",
+        "site": "Site",
+        "comingSoon": "Bientôt disponible",
+        "export": {
+            "button": "Exporter ({{count}})",
+            "exporting": "Export en cours...",
+            "selected": "{{count}} sélectionné(s)",
+            "selectAll": "Tout sélectionner",
+            "deselectAll": "Tout désélectionner",
+            "clearSelection": "Effacer la sélection",
+            "comingSoon": "L'export sera bientôt disponible"
+        },
+        "messages": {
+            "created": "\"{{name}}\" a été créé avec succès",
+            "updated": "\"{{name}}\" a été mis à jour avec succès",
+            "deleted": "\"{{name}}\" a été supprimé avec succès"
+        },
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible."
+    },
+    "header": {
+        "search": "Rechercher ou taper une commande...",
+        "notifications": "Notifications",
+        "profile": "Profil",
+        "accountSettings": "Paramètres du compte",
+        "settings": "Paramètres",
+        "logout": "Déconnexion",
+        "signOut": "Se déconnecter",
+        "switchSite": "Changer de site",
+        "selectSite": "Sélectionner un site"
+    },
+    "language": {
+        "title": "Langue",
+        "fr": "Français",
+        "en": "English"
+    },
+    "sidebar": {
+        "dashboard": "Tableau de bord",
+        "sites": "Sites",
+        "zones": "Zones",
+        "materials": "Matériels",
+        "items": "Articles",
+        "companies": "Entreprises",
+        "maintenances": "Maintenances",
+        "incidents": "Incidents",
+        "cleanings": "Nettoyages",
+        "users": "Utilisateurs",
+        "settings": "Paramètres",
+        "jobCategories": "Catégories métier",
+        "managementCategories": "Catégories gestion",
+        "manageMaintenances": "Gérer les maintenances",
+        "manageCompanies": "Gérer les entreprises",
+        "manageItems": "Gérer les articles",
+        "manageItemsMovements": "Gérer les mouvements",
+        "manageMaterials": "Gérer les matériels",
+        "manageZones": "Gérer les zones",
+        "zoneTree": "Arborescence des zones",
+        "manageSites": "Gérer les sites",
+        "manageUsers": "Gérer les utilisateurs",
+        "rolesPermissions": "Rôles et permissions",
+        "manageRoles": "Gérer les rôles",
+        "managePermissions": "Gérer les permissions"
+    },
+    "dashboard": {
+        "title": "Tableau de bord",
+        "pageTitle": "Tableau de bord | XetaSuite",
+        "pageDescription": "Tableau de bord XetaSuite - Gestion des maintenances, incidents et stocks",
+        "welcome": "Bienvenue, {{name}}",
+        "headquartersView": "Vue Siège",
+        "aggregatedStats": "Statistiques agrégées de tous les sites",
+        "demoModeActive": "Mode démo actif",
+        "demoModeInfo": "Vous êtes actuellement en mode démo. Certaines fonctionnalités peuvent être limitées ou désactivées.",
+        "stats": {
+            "maintenancesThisMonth": "Maintenances ce mois",
+            "maintenancesTrend": "Tendance des maintenances",
+            "cleaningsThisMonth": "Nettoyages ce mois",
+            "cleaningsTrend": "Tendance des nettoyages",
+            "openIncidents": "Incidents ouverts",
+            "itemsInStock": "Articles en stock"
+        },
+        "charts": {
+            "maintenanceEvolution": "Évolution des maintenances",
+            "maintenanceEvolutionDesc": "Maintenances réalisées sur les 12 derniers mois",
+            "stockEvolution": "Évolution des stocks",
+            "stockEvolutionDesc": "Mouvements de stock sur les 12 derniers mois",
+            "incidentsByMonth": "Incidents par mois",
+            "incidentsByMonthDesc": "Nombre d'incidents signalés mensuellement"
+        },
+        "activity": {
+            "title": "Activité récente",
+            "noActivity": "Aucune activité récente",
+            "status": {
+                "pending": "En attente",
+                "completed": "Terminé",
+                "inProgress": "En cours",
+                "entry": "Entrée",
+                "exit": "Sortie"
+            }
+        },
+        "incidents": {
+            "summary": "Résumé des incidents",
+            "open": "Ouverts",
+            "inProgress": "En cours",
+            "resolved": "Résolus",
+            "bySeverity": "Par sévérité",
+            "severity": {
+                "critical": "Critique",
+                "high": "Haute",
+                "medium": "Moyenne",
+                "low": "Basse"
+            }
+        },
+        "maintenances": {
+            "upcoming": "Maintenances à venir",
+            "noUpcoming": "Aucune maintenance à venir",
+            "schedule": "Planifier",
+            "priority": {
+                "low": "Basse",
+                "medium": "Moyenne",
+                "high": "Haute"
+            },
+            "type": {
+                "preventive": "Préventive",
+                "corrective": "Corrective"
+            }
+        },
+        "lowStock": {
+            "title": "Stock faible",
+            "itemsCount": "{{count}} articles",
+            "noItems": "Aucun article en stock faible"
+        }
+    },
+    "items": {
+        "title": "Articles",
+        "description": "Gestion des articles en stock",
+        "listTitle": "Liste des articles",
+        "notFound": "Article introuvable",
+        "notFoundMessage": "L'article que vous recherchez n'existe pas ou a été supprimé.",
+        "backToList": "Retour à la liste des articles",
+        "create": "Nouvel article",
+        "edit": "Modifier l'article",
+        "manageItemsAndStock": "Gérez vos articles et niveaux de stock",
+        "noItems": "Aucun article trouvé",
+        "noItemsFor": "Aucun article trouvé pour cette recherche",
+        "noCompany": "Aucune entreprise",
+        "noMaterialsAvailable": "Aucun matériel disponible",
+        "noRecipientsAvailable": "Aucun destinataire disponible",
+        "searchPlaceholder": "Rechercher par nom ou référence...",
+        "detail": {
+            "info": "Informations"
+        },
+        "fields": {
+            "site": "Site",
+            "name": "Nom",
+            "reference": "Référence",
+            "description": "Description",
+            "stock": "Stock",
+            "currentStock": "Stock actuel",
+            "status": "Statut",
+            "price": "Prix",
+            "purchasePrice": "Prix d'achat",
+            "currency": "Devise",
+            "company": "Entreprise",
+            "companyReference": "Référence entreprise",
+            "qrCodeScans": "Scans QR code"
+        },
+        "filters": {
+            "allStatuses": "Tous les statuts",
+            "stockStatus": "Filtrer par statut"
+        },
+        "form": {
+            "searchCompany": "Rechercher une entreprise...",
+            "selectCompany": "Sélectionner une entreprise",
+            "currentCompany": "Entreprise actuelle"
+        },
+        "stockStatus": {
+            "ok": "En stock",
+            "warning": "Attention",
+            "critical": "Critique",
+            "empty": "Épuisé"
+        },
+        "sections": {
+            "basicInfo": "Informations générales",
+            "pricing": "Tarification",
+            "company": "Entreprise",
+            "stockAlerts": "Alertes de stock",
+            "materials": "Matériels associés",
+            "recipients": "Destinataires des alertes"
+        },
+        "materialsHelp": "Sélectionnez les matériels qui utilisent cet article",
+        "recipientsHelp": "Utilisateurs qui recevront les alertes de stock",
+        "alerts": {
+            "warning": "Seuil d'alerte",
+            "warningDescription": "Alerte lorsque le stock est faible",
+            "critical": "Seuil critique",
+            "criticalDescription": "Alerte lorsque le stock est très faible",
+            "enableWarning": "Activer l'alerte d'attention",
+            "enableCritical": "Activer l'alerte critique",
+            "warningThresholdHelp": "Alerte lorsque le stock passe sous ce niveau",
+            "criticalThresholdHelp": "Alerte critique lorsque le stock passe sous ce niveau"
+        },
+        "validation": {
+            "criticalLessThanWarning": "Le seuil critique doit être inférieur au seuil d'attention"
+        },
+        "stats": {
+            "title": "Mouvements de stock",
+            "entries": "Entrées",
+            "exits": "Sorties",
+            "totalEntries": "Total entrées",
+            "totalExits": "Total sorties",
+            "noData": "Aucune donnée de mouvement disponible"
+        },
+        "movements": {
+            "entry": "Entrée",
+            "exit": "Sortie",
+            "addEntry": "Ajouter une entrée",
+            "addExit": "Ajouter une sortie",
+            "confirmEntry": "Confirmer l'entrée",
+            "confirmExit": "Confirmer la sortie",
+            "history": "Historique des mouvements",
+            "noMovements": "Aucun mouvement enregistré",
+            "availableStock": "Disponible : {{count}} unités",
+            "totalPrice": "Total",
+            "fields": {
+                "date": "Date",
+                "type": "Type",
+                "quantity": "Quantité",
+                "price": "Prix",
+                "unitPrice": "Prix unitaire",
+                "company": "Entreprise",
+                "invoiceNumber": "N° de facture",
+                "invoiceDate": "Date de facture",
+                "notes": "Notes",
+                "createdBy": "Créé par"
+            },
+            "validation": {
+                "quantityRequired": "La quantité est requise",
+                "insufficientStock": "Stock insuffisant (disponible : {{available}})"
+            },
+            "messages": {
+                "entryCreated": "Entrée de {{quantity}} unités enregistrée",
+                "exitCreated": "Sortie de {{quantity}} unités enregistrée"
+            },
+            "itemCompany": "Entreprise de l'article"
+        },
+        "qrCode": {
+            "title": "QR Code",
+            "size": "Taille",
+            "download": "Télécharger",
+            "print": "Imprimer",
+            "help": "Scannez ce QR code pour accéder rapidement aux détails de l'article",
+            "printTitle": "QR Code - {{name}}"
+        },
+        "delete": {
+            "title": "Supprimer l'article",
+            "message": "Êtes-vous sûr de vouloir supprimer \"{{name}}\" ? Cette action est irréversible."
+        },
+        "messages": {
+            "created": "L'article \"{{name}}\" a été créé avec succès",
+            "updated": "L'article \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "L'article \"{{name}}\" a été supprimé avec succès"
+        },
+        "priceHistory": {
+            "title": "Historique des prix",
+            "price": "Prix",
+            "currentPrice": "Prix actuel",
+            "averagePrice": "Prix moyen",
+            "minMax": "Min / Max",
+            "evolution": "Évolution",
+            "noData": "Aucun historique de prix disponible"
+        }
+    },
+    "itemMovements": {
+        "title": "Mouvements d'articles",
+        "description": "Gestion des mouvements de stock (entrées et sorties)",
+        "listTitle": "Liste des mouvements",
+        "listDescription": "Historique de tous les mouvements de stock",
+        "noMovements": "Aucun mouvement enregistré",
+        "noResultsWithFilters": "Aucun mouvement ne correspond aux filtres",
+        "searchPlaceholder": "Rechercher par article, fournisseur, n° facture...",
+        "editTitle": "Modifier le mouvement",
+        "types": {
+            "entry": "Entrée",
+            "exit": "Sortie"
+        },
+        "filters": {
+            "allTypes": "Tous les types"
+        },
+        "fields": {
+            "site": "Site",
+            "movementDate": "Date",
+            "type": "Type",
+            "item": "Article",
+            "quantity": "Quantité",
+            "unitPrice": "Prix unitaire",
+            "totalPrice": "Prix total",
+            "company": "Entreprise",
+            "createdBy": "Créé par"
+        },
+        "deleteConfirm": {
+            "title": "Supprimer le mouvement",
+            "message": "Êtes-vous sûr de vouloir supprimer ce mouvement ? Le stock de l'article sera ajusté en conséquence. Cette action est irréversible."
+        },
+        "messages": {
+            "deleted": "Le mouvement a été supprimé avec succès",
+            "updated": "Le mouvement a été mis à jour avec succès"
+        }
+    },
+    "sites": {
+        "title": "Sites",
+        "description": "Gestion des sites",
+        "listTitle": "Liste des sites",
+        "notFound": "Site introuvable",
+        "notFoundMessage": "Le site que vous recherchez n'existe pas ou a été supprimé.",
+        "create": "Nouveau site",
+        "edit": "Modifier le site",
+        "name": "Nom",
+        "nameLabel": "Nom *",
+        "zones": "Zones",
+        "manageSitesAndTheirInformation": "Gérez vos sites et leurs informations",
+        "noSites": "Aucun site trouvé",
+        "noSitesFor": "Aucun site trouvé pour \"{{search}}\"",
+        "deleteTitle": "Supprimer le site",
+        "form": {
+            "namePlaceholder": "Nom du site",
+            "managers": "Managers",
+            "managersHint": "Sélectionnez les collaborateurs qui géreront ce site",
+            "noUsersAvailable": "Aucun utilisateur disponible",
+            "email": "Email",
+            "emailPlaceholder": "email@exemple.com",
+            "officePhone": "Téléphone bureau",
+            "officePhonePlaceholder": "01 23 45 67 89",
+            "cellPhone": "Téléphone portable",
+            "cellPhonePlaceholder": "06 12 34 56 78",
+            "address": "Adresse",
+            "addressPlaceholder": "123 rue Principale",
+            "zipCode": "Code postal",
+            "zipCodePlaceholder": "75001",
+            "city": "Ville",
+            "cityPlaceholder": "Paris"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des sites",
+            "headquarters": "Siège social",
+            "totalZones": "Zones",
+            "totalUsers": "Utilisateurs",
+            "contactInfo": "Informations de contact",
+            "noContact": "Aucune information de contact",
+            "managers": "Managers",
+            "noManagers": "Aucun gestionnaire assigné",
+            "zonesListTitle": "Zones du site",
+            "zonesListDescription": "Liste des zones de {{name}}",
+            "members": "Membres du site",
+            "membersDescription": "Utilisateurs ayant accès à ce site",
+            "noMembers": "Aucun membre sur ce site"
+        },
+        "table": {
+            "fullName": "Nom complet",
+            "email": "Email",
+            "roles": "Rôles",
+            "createdAt": "Date de création"
+        },
+        "export": {
+            "button": "Exporter ({{count}})",
+            "exporting": "Export en cours...",
+            "selected": "{{count}} sélectionné(s)",
+            "selectAll": "Tout sélectionner",
+            "deselectAll": "Tout désélectionner",
+            "clearSelection": "Effacer la sélection",
+            "comingSoon": "L'export sera bientôt disponible"
+        },
+        "messages": {
+            "created": "Le site \"{{name}}\" a été créé avec succès",
+            "updated": "Le site \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "Le site \"{{name}}\" a été supprimé avec succès"
+        }
+    },
+    "zones": {
+        "title": "Zones",
+        "description": "Gestion des zones",
+        "listTitle": "Liste des zones",
+        "notFound": "Zone introuvable",
+        "notFoundMessage": "La zone que vous recherchez n'existe pas ou a été supprimée.",
+        "create": "Nouvelle zone",
+        "edit": "Modifier la zone",
+        "manageZonesAndTheirInformation": "Gérez vos zones et leurs informations",
+        "noZones": "Aucune zone trouvée",
+        "noZonesFor": "Aucune zone trouvée pour \"{{search}}\"",
+        "deleteTitle": "Supprimer la zone",
+        "site": "Site",
+        "parent": "Zone parente",
+        "children": "Enfants",
+        "materials": "Matériels",
+        "subZones": "Sous-zones",
+        "allowMaterial": "Autoriser les matériels",
+        "allowsMaterials": "Autorise les matériels",
+        "form": {
+            "selectSite": "Sélectionner un site",
+            "namePlaceholder": "Nom de la zone",
+            "noParent": "Aucune zone parente (zone racine)",
+            "parentHint": "Sélectionnez une zone parente optionnelle",
+            "allowMaterial": "Cette zone peut contenir des matériels",
+            "allowMaterialHint": "Activez si cette zone peut contenir directement des matériels"
+        },
+        "table": {
+            "name": "Nom",
+            "allowMaterial": "Autorise les matériels",
+            "materialCount": "Matériels",
+            "materialName": "Nom du matériel",
+            "materialDescription": "Description"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des zones",
+            "allowsMaterials": "Autorise les matériels",
+            "info": "Informations de la zone",
+            "siteInfo": "Site associé",
+            "totalChildZones": "Sous-zones",
+            "totalMaterials": "Matériels",
+            "childZones": "Zones enfants",
+            "childZonesDescription": "Sous-zones contenues dans cette zone",
+            "materials": "Matériels",
+            "materialsDescription": "Matériels assignés à cette zone",
+            "noChildren": "Aucune zone enfant",
+            "noMaterials": "Aucun matériel assigné",
+            "emptyZone": "Cette zone ne contient ni sous-zones ni matériels"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger la zone",
+            "notFound": "Zone introuvable"
+        },
+        "messages": {
+            "created": "La zone \"{{name}}\" a été créée avec succès",
+            "updated": "La zone \"{{name}}\" a été mise à jour avec succès",
+            "deleted": "La zone \"{{name}}\" a été supprimée avec succès"
+        },
+        "tree": {
+            "title": "Arborescence des zones",
+            "description": "Visualisation hiérarchique des zones",
+            "pageTitle": "Architecture des zones",
+            "pageDescription": "Visualisez l'organisation hiérarchique des zones",
+            "totalZones": "zones",
+            "expandAll": "Tout déplier",
+            "collapseAll": "Tout replier",
+            "currentSite": "Site actuel",
+            "selectSite": "Sélectionner un site",
+            "noZones": "Aucune zone trouvée pour ce site",
+            "goToManagement": "Aller à la gestion des zones",
+            "subzones": "sous-zones",
+            "allowsMaterials": "Matériels autorisés"
+        }
+    },
+    "materials": {
+        "title": "Matériels",
+        "description": "Gestion des matériels",
+        "listTitle": "Liste des matériels",
+        "notFound": "Matériel introuvable",
+        "notFoundMessage": "Le matériel que vous recherchez n'existe pas ou a été supprimé.",
+        "create": "Nouveau matériel",
+        "edit": "Modifier le matériel",
+        "manageMaterialsAndTheirInformation": "Gérez vos matériels et leurs informations",
+        "noMaterials": "Aucun matériel trouvé",
+        "noMaterialsFor": "Aucun matériel trouvé pour \"{{search}}\"",
+        "deleteTitle": "Supprimer le matériel",
+        "zone": "Zone",
+        "site": "Site",
+        "createdBy": "Créé par",
+        "cleaningAlert": "Alerte de nettoyage",
+        "cleaningAlertSettings": "Paramètres d'alerte de nettoyage",
+        "cleaningAlertEnabled": "Alerte de nettoyage activée",
+        "cleaningAlertDisabled": "Alerte de nettoyage désactivée",
+        "emailNotificationEnabled": "Notification par email activée",
+        "emailEnabled": "Email activé",
+        "lastCleaning": "Dernier nettoyage",
+        "neverCleaned": "Jamais nettoyé",
+        "frequency": "Fréquence",
+        "every": "Tous les",
+        "frequencyDaily": "jour(s)",
+        "frequencyWeekly": "semaine(s)",
+        "frequencyMonthly": "mois",
+        "recipients": "Destinataires",
+        "stats": {
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Nettoyages",
+            "items": "Articles"
+        },
+        "form": {
+            "selectZone": "Sélectionner une zone",
+            "searchZone": "Rechercher une zone...",
+            "namePlaceholder": "Nom du matériel",
+            "descriptionPlaceholder": "Description du matériel (optionnel)",
+            "zoneHint": "Seules les zones autorisant les matériels sont affichées",
+            "enableCleaningAlert": "Activer les alertes de nettoyage",
+            "enableCleaningAlertHint": "Recevez des rappels pour le nettoyage de ce matériel",
+            "enableEmailNotification": "Envoyer les alertes par email",
+            "enableEmailNotificationHint": "Les destinataires recevront un email lors des alertes",
+            "frequencyEvery": "Tous les",
+            "frequencyType": "Période",
+            "recipients": "Destinataires des alertes",
+            "recipientsHint": "Sélectionnez les utilisateurs qui recevront les alertes",
+            "noRecipientsAvailable": "Aucun utilisateur disponible"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des matériels",
+            "info": "Informations du matériel"
+        },
+        "charts": {
+            "incidentsMaintenances": "Incidents & Maintenances",
+            "incidentsMaintenancesDesc": "Incidents et maintenances mensuels sur les 12 derniers mois",
+            "cleaningsItemMovements": "Nettoyages & Utilisation d'articles",
+            "cleaningsItemMovementsDesc": "Nettoyages et utilisation d'articles (sorties) mensuels sur les 12 derniers mois",
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Nettoyages",
+            "itemMovements": "Sorties d'articles"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger le matériel",
+            "notFound": "Matériel introuvable"
+        },
+        "messages": {
+            "created": "Le matériel \"{{name}}\" a été créé avec succès",
+            "updated": "Le matériel \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "Le matériel \"{{name}}\" a été supprimé avec succès"
+        },
+        "tabs": {
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Nettoyages",
+            "items": "Articles",
+            "searchIncidents": "Rechercher des incidents...",
+            "searchMaintenances": "Rechercher des maintenances...",
+            "searchCleanings": "Rechercher des nettoyages...",
+            "searchItems": "Rechercher des articles...",
+            "noIncidents": "Aucun incident pour ce matériel",
+            "noMaintenances": "Aucune maintenance pour ce matériel",
+            "noCleanings": "Aucun nettoyage pour ce matériel",
+            "noItems": "Aucun article associé à ce matériel"
+        },
+        "qrCode": {
+            "title": "QR Code",
+            "size": "Taille",
+            "download": "Télécharger",
+            "print": "Imprimer",
+            "help": "Scannez ce QR code pour accéder rapidement aux détails du matériel",
+            "printTitle": "QR Code - {{name}}"
+        }
+    },
+    "incidents": {
+        "title": "Incidents",
+        "description": "Gestion des incidents",
+        "listTitle": "Liste des incidents",
+        "create": "Nouvel incident",
+        "edit": "Modifier l'incident",
+        "manageIncidentsAndTheirInformation": "Gérez les incidents et leur suivi",
+        "noIncidents": "Aucun incident trouvé",
+        "noIncidentsFiltered": "Aucun incident ne correspond aux filtres sélectionnés",
+        "deleteTitle": "Supprimer l'incident",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet incident ? Cette action est irréversible.",
+        "material": "Matériel",
+        "maintenance": "Maintenance",
+        "severity": "Sévérité",
+        "status": "Statut",
+        "reportedBy": "Signalé par",
+        "startedAt": "Débuté le",
+        "resolvedAt": "Résolu le",
+        "linkedToMaintenance": "Lié à la maintenance",
+        "allStatuses": "Tous les statuts",
+        "allSeverities": "Toutes les sévérités",
+        "noMaterialsAvailable": "Aucun matériel disponible",
+        "statuses": {
+            "open": "Ouvert",
+            "in_progress": "En cours",
+            "resolved": "Résolu",
+            "closed": "Clôturé"
+        },
+        "severities": {
+            "low": "Basse",
+            "medium": "Moyenne",
+            "high": "Haute",
+            "critical": "Critique"
+        },
+        "form": {
+            "selectMaterial": "Sélectionner un matériel",
+            "selectMaintenance": "Sélectionner une maintenance (optionnel)",
+            "noMaintenance": "Aucune maintenance",
+            "selectSeverity": "Sélectionner une sévérité",
+            "selectStatus": "Sélectionner un statut",
+            "descriptionPlaceholder": "Décrivez l'incident en détail...",
+            "materialCannotBeChanged": "Le matériel ne peut pas être modifié après création",
+            "maintenanceHint": "Associez optionnellement cet incident à une maintenance existante",
+            "searchMaterial": "Rechercher un matériel...",
+            "searchMaintenance": "Rechercher par ID, description ou matériel...",
+            "startedAtHint": "Date de début de l'incident",
+            "resolvedAtHint": "Date de résolution de l'incident",
+            "currentMaterial": "Matériel actuel",
+            "currentMaintenance": "Maintenance actuelle"
+        },
+        "validation": {
+            "materialRequired": "Le matériel est requis"
+        },
+        "messages": {
+            "created": "L'incident a été créé avec succès",
+            "updated": "L'incident a été mis à jour avec succès",
+            "deleted": "L'incident a été supprimé avec succès"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger l'incident",
+            "notFound": "Incident non trouvé"
+        }
+    },
+    "validation": {
+        "required": "Ce champ est requis",
+        "nameRequired": "Le nom est requis",
+        "siteRequired": "Le site est requis",
+        "zoneRequired": "La zone est requise",
+        "typesRequired": "Au moins un type est requis",
+        "email": "Veuillez entrer une adresse email valide",
+        "min": "Ce champ doit contenir au moins {{min}} caractères",
+        "max": "Ce champ ne doit pas dépasser {{max}} caractères",
+        "nameMaxLength": "Le nom ne peut pas dépasser 255 caractères",
+        "descriptionMaxLength": "La description ne peut pas dépasser 1000 caractères"
+    },
+    "auth": {
+        "login": "Connexion",
+        "logout": "Déconnexion",
+        "email": "Adresse email",
+        "emailPlaceholder": "Entrez votre email",
+        "password": "Mot de passe",
+        "passwordPlaceholder": "Entrez votre mot de passe",
+        "rememberMe": "Se souvenir de moi",
+        "forgotPassword": "Mot de passe oublié ?",
+        "forgotPasswordTitle": "Mot de passe oublié ?",
+        "forgotPasswordDesc": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+        "resetPassword": "Réinitialiser le mot de passe",
+        "resetPasswordTitle": "Réinitialiser votre mot de passe",
+        "resetPasswordDesc": "Entrez votre nouveau mot de passe ci-dessous.",
+        "loginButton": "Se connecter",
+        "signInToAccount": "Connectez-vous à votre compte",
+        "signingIn": "Connexion en cours...",
+        "backToSignIn": "Retour à la connexion",
+        "emailSent": "Email envoyé !",
+        "emailSentDesc": "Si un compte existe avec cette adresse email, vous recevrez bientôt un lien de réinitialisation.",
+        "sending": "Envoi en cours...",
+        "sendResetLink": "Envoyer le lien",
+        "newPassword": "Nouveau mot de passe",
+        "newPasswordPlaceholder": "Entrez votre nouveau mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "confirmPasswordPlaceholder": "Confirmez votre nouveau mot de passe",
+        "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+        "passwordMinLengthHint": "Doit contenir au moins 8 caractères",
+        "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+        "passwordResetSuccess": "Mot de passe réinitialisé avec succès. Veuillez vous connecter.",
+        "passwordNotSetup": "Mot de passe pas encore configuré ?",
+        "invalidLink": "Lien invalide",
+        "invalidLinkDesc": "Ce lien de réinitialisation est invalide ou a expiré. Veuillez en demander un nouveau.",
+        "resetting": "Réinitialisation en cours...",
+        "setupPassword": {
+            "title": "Créer mon mot de passe",
+            "desc": "Bienvenue {{name}} ! Veuillez créer votre mot de passe pour accéder à votre compte.",
+            "passwordPlaceholder": "Choisissez un mot de passe",
+            "create": "Créer mon mot de passe",
+            "creating": "Création en cours...",
+            "success": "Votre mot de passe a été créé avec succès. Vous pouvez maintenant vous connecter.",
+            "verifying": "Vérification du lien...",
+            "invalidLink": "Ce lien de création de mot de passe est invalide.",
+            "linkExpired": "Ce lien a expiré. Veuillez contacter votre administrateur pour en demander un nouveau.",
+            "alreadySetup": "Vous avez déjà configuré votre mot de passe. Veuillez vous connecter.",
+            "linkError": "Lien invalide"
+        },
+        "resendSetupPassword": {
+            "title": "Renvoyer le lien de configuration de votre mot de passe",
+            "desc": "Vous devez impérativement configurer votre mot de passe avant de pouvoir vous connecter pour la première fois à votre compte.",
+            "sendLink": "Renvoyer le lien",
+            "successDesc": "Si un compte existe avec cette adresse email et n'a pas encore de mot de passe configuré, vous recevrez un email avec le lien de configuration."
+        }
+    },
+    "errors": {
+        "generic": "Une erreur est survenue",
+        "notFound": "Page non trouvée",
+        "pageNotFound": "La page que vous recherchez n'existe pas.",
+        "backToHome": "Retour à l'accueil",
+        "unauthorized": "Accès non autorisé",
+        "unauthorizedDescription": "Vous n'avez pas les permissions nécessaires pour accéder à cette page. Veuillez contacter votre administrateur si vous pensez qu'il s'agit d'une erreur.",
+        "backToDashboard": "Retour au tableau de bord",
+        "forbidden": "Accès interdit"
+    },
+    "maintenances": {
+        "title": "Maintenances",
+        "description": "Gestion des maintenances",
+        "maintenance": "Maintenance",
+        "reason": "Raison",
+        "listTitle": "Liste des maintenances",
+        "notFound": "Maintenance introuvable",
+        "notFoundMessage": "La maintenance que vous recherchez n'existe pas ou a été supprimée.",
+        "create": "Nouvelle maintenance",
+        "edit": "Modifier la maintenance",
+        "manageMaintenances": "Gérez vos maintenances et leur suivi",
+        "manageMaintenancesAndTheirInformation": "Gérez vos maintenances et leurs informations",
+        "noMaintenancesFor": "Aucune maintenance trouvée pour cette recherche",
+        "deleteTitle": "Supprimer la maintenance",
+        "forMaterial": "Matériel",
+        "searchPlaceholder": "Rechercher par description...",
+        "spareParts": "Pièces détachées",
+        "resolvedAt": "Date de résolution",
+        "operators": "Opérateurs",
+        "companies": "Entreprises",
+        "incidents": "Incidents",
+        "fields": {
+            "site": "Site",
+            "description": "Description",
+            "descriptionPlaceholder": "Description de la maintenance...",
+            "reason": "Raison",
+            "reasonPlaceholder": "Raison de la maintenance...",
+            "type": "Type",
+            "status": "Statut",
+            "realization": "Réalisation",
+            "material": "Matériel",
+            "selectMaterial": "Sélectionner un matériel",
+            "started_at": "Date de début",
+            "resolved_at": "Date de résolution",
+            "incidents": "Incidents",
+            "selectIncidents": "Sélectionner des incidents",
+            "operators": "Opérateurs",
+            "selectOperators": "Sélectionner des opérateurs",
+            "companies": "Entreprises",
+            "selectCompanies": "Sélectionner des entreprises",
+            "spareParts": "Pièces détachées",
+            "addSpareParts": "Ajouter des pièces détachées"
+        },
+        "filters": {
+            "allStatuses": "Tous les statuts",
+            "allTypes": "Tous les types",
+            "allRealizations": "Toutes les réalisations"
+        },
+        "status": {
+            "planned": "Planifiée",
+            "in_progress": "En cours",
+            "completed": "Terminée",
+            "canceled": "Annulée"
+        },
+        "type": {
+            "corrective": "Corrective",
+            "preventive": "Préventive",
+            "inspection": "Inspection",
+            "improvement": "Amélioration"
+        },
+        "realization": {
+            "internal": "Interne",
+            "external": "Externe",
+            "both": "Mixte"
+        },
+        "detail": {
+            "info": "Informations",
+            "backToList": "Retour à la liste des maintenances",
+            "descriptionAndReason": "Description et Raison",
+            "operators": "Opérateurs",
+            "companies": "Entreprises",
+            "linkedIncidents": "Incidents liés",
+            "spareParts": "Pièces détachées utilisées",
+            "totalCost": "Coût total",
+            "incidentDescription": "Description",
+            "incidentStatus": "Statut",
+            "incidentSeverity": "Sévérité",
+            "incidentStartedAt": "Date de début",
+            "itemName": "Article",
+            "itemReference": "Référence",
+            "quantity": "Quantité",
+            "unitPrice": "Prix unitaire",
+            "totalPrice": "Prix total"
+        },
+        "stats": {
+            "incidents": "Incidents",
+            "operators": "Opérateurs",
+            "companies": "Entreprises",
+            "spareParts": "Pièces détachées"
+        },
+        "form": {
+            "selectType": "Sélectionner un type",
+            "selectStatus": "Sélectionner un statut",
+            "selectRealization": "Sélectionner une réalisation",
+            "selectMaterial": "Sélectionner un matériel",
+            "noMaterial": "Aucun matériel sélectionné",
+            "currentMaterial": "Matériel actuel",
+            "noMaterialsAvailable": "Aucun matériel disponible",
+            "noIncidentsAvailable": "Aucun incident disponible",
+            "noOperatorsAvailable": "Aucun opérateur disponible",
+            "noCompaniesAvailable": "Aucune entreprise disponible",
+            "noItemsAvailable": "Aucun article disponible",
+            "searchMaterial": "Rechercher un matériel...",
+            "searchOperators": "Rechercher des opérateurs...",
+            "searchCompanies": "Rechercher des entreprises...",
+            "searchIncidents": "Rechercher des incidents...",
+            "searchItems": "Rechercher des articles...",
+            "operatorsRequired": "Au moins un opérateur est requis pour une maintenance interne ou mixte",
+            "companiesRequired": "Au moins une entreprise est requise pour une maintenance externe ou mixte",
+            "selectItem": "Sélectionner un article",
+            "selectOperators": "Sélectionner des opérateurs",
+            "selectCompanies": "Sélectionner des entreprises",
+            "selectIncidents": "Sélectionner des incidents",
+            "selected": "sélectionné(s)",
+            "incidentsSelected": "incident(s) sélectionné(s)",
+            "addSparePart": "Ajouter une pièce détachée",
+            "currentStock": "Stock actuel",
+            "itemPrice": "Prix",
+            "stockAvailable": "Stock disponible",
+            "descriptionPlaceholder": "Description de la maintenance...",
+            "reasonPlaceholder": "Raison de la maintenance..."
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger les informations de maintenance",
+            "createFailed": "Impossible de créer la maintenance",
+            "updateFailed": "Impossible de mettre à jour la maintenance",
+            "deleteFailed": "Impossible de supprimer la maintenance"
+        },
+        "messages": {
+            "created": "La maintenance a été créée avec succès",
+            "updated": "La maintenance a été mise à jour avec succès",
+            "deleted": "La maintenance a été supprimée avec succès"
+        }
+    },
+    "pagination": {
+        "showing": "Affichage de {{from}} à {{to}} sur {{total}} résultats",
+        "showingText": "Affichage de",
+        "to": "à",
+        "of": "sur",
+        "results": "résultats",
+        "previous": "Précédent",
+        "next": "Suivant"
+    },
+    "qrScan": {
+        "title": "Scan QR Code",
+        "loading": "Chargement des informations...",
+        "error": "Impossible de charger les informations",
+        "zone": "Zone",
+        "site": "Site",
+        "stock": "Stock actuel",
+        "reference": "Référence",
+        "noDescription": "Aucune description",
+        "unknownSite": "Site inconnu",
+        "materialDescription": "Matériel scanné",
+        "itemDescription": "Article scanné",
+        "actionLabel": "Choisir une action",
+        "selectAction": "Sélectionner une action...",
+        "noActionsAvailable": "Aucune action disponible pour cet élément",
+        "switchingSite": "Changement de site en cours...",
+        "siteMismatch": {
+            "title": "Site différent",
+            "description": "Cet élément appartient à un site auquel vous n'avez pas accès avec votre session actuelle.",
+            "switchSite": "Changer de site"
+        },
+        "actions": {
+            "title": "Actions disponibles",
+            "cleaning": "Créer un nettoyage",
+            "maintenance": "Créer une maintenance",
+            "incident": "Signaler un incident",
+            "entry": "Entrée de stock",
+            "exit": "Sortie de stock",
+            "createCleaning": "Créer un nettoyage",
+            "createMaintenance": "Créer une maintenance",
+            "createIncident": "Signaler un incident",
+            "stockEntry": "Entrée de stock",
+            "stockExit": "Sortie de stock",
+            "noActions": "Aucune action disponible"
+        }
+    },
+    "cleanings": {
+        "title": "Nettoyages",
+        "subtitle": "Gérer les nettoyages des matériels",
+        "description": "Gestion des nettoyages",
+        "cleaning": "Nettoyage",
+        "create": "Nouveau nettoyage",
+        "edit": "Modifier le nettoyage",
+        "delete": "Supprimer le nettoyage",
+        "deleteTitle": "Supprimer le nettoyage",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce nettoyage ? Cette action est irréversible.",
+        "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce nettoyage ? Cette action est irréversible.",
+        "noDescription": "Aucune description fournie",
+        "search": "Rechercher par matériel ou description...",
+        "material": "Matériel",
+        "zone": "Zone",
+        "type": "Type",
+        "date": "Date",
+        "id": "ID de nettoyage",
+        "site": "Site",
+        "createdBy": "Créé par",
+        "forMaterial": "Pour le matériel",
+        "detail": {
+            "info": "Informations sur le nettoyage",
+            "backToList": "Retour à la liste des nettoyages"
+        },
+        "noMaterialsAvailable": "Aucun matériel disponible",
+        "filters": {
+            "allTypes": "Tous les types"
+        },
+        "types": {
+            "daily": "Quotidien",
+            "weekly": "Hebdomadaire",
+            "bimonthly": "Bimensuel",
+            "monthly": "Mensuel",
+            "quarterly": "Trimestriel",
+            "biannual": "Semestriel",
+            "annual": "Annuel",
+            "casual": "Occasionnel"
+        },
+        "form": {
+            "selectMaterial": "Sélectionner un matériel",
+            "searchMaterial": "Rechercher un matériel...",
+            "selectType": "Sélectionner un type",
+            "descriptionPlaceholder": "Décrivez le nettoyage effectué...",
+            "materialCannotBeChanged": "Le matériel ne peut pas être modifié après création",
+            "currentMaterial": "Matériel actuel"
+        },
+        "empty": {
+            "title": "Aucun nettoyage",
+            "noData": "Aucun nettoyage n'a encore été enregistré.",
+            "withFilters": "Aucun nettoyage ne correspond aux filtres sélectionnés."
+        },
+        "messages": {
+            "created": "Le nettoyage a été créé avec succès",
+            "updated": "Le nettoyage a été mis à jour avec succès",
+            "deleted": "Le nettoyage a été supprimé avec succès"
+        },
+        "errors": {
+            "loadFailed": "Impossible de charger le nettoyage",
+            "notFound": "Nettoyage non trouvé"
+        }
+    },
+    "companies": {
+        "title": "Entreprises",
+        "description": "Gestion des entreprises de maintenance",
+        "listTitle": "Liste des entreprises",
+        "notFound": "Entreprise introuvable",
+        "notFoundMessage": "L'entreprise que vous recherchez n'existe pas ou a été supprimée.",
+        "create": "Nouvelle entreprise",
+        "edit": "Modifier l'entreprise",
+        "name": "Nom",
+        "nameLabel": "Nom *",
+        "maintenances": "Maintenances",
+        "items": "Articles",
+        "manageCompaniesAndTheirInformation": "Gérez vos entreprises de maintenance et leurs informations",
+        "noCompanies": "Aucune entreprise trouvée",
+        "noCompaniesFor": "Aucune entreprise trouvée pour \"{{search}}\"",
+        "deleteTitle": "Supprimer l'entreprise",
+        "form": {
+            "namePlaceholder": "Nom de l'entreprise",
+            "descriptionPlaceholder": "Description de l'entreprise (optionnel)",
+            "descriptionLabel": "Description",
+            "typesLabel": "Types d'entreprise *",
+            "contactInfo": "Informations de contact",
+            "emailLabel": "Email",
+            "emailPlaceholder": "contact@entreprise.com",
+            "phoneLabel": "Téléphone",
+            "phonePlaceholder": "+33 1 23 45 67 89",
+            "addressLabel": "Adresse",
+            "addressPlaceholder": "Adresse de l'entreprise..."
+        },
+        "messages": {
+            "created": "L'entreprise \"{{name}}\" a été créée avec succès",
+            "updated": "L'entreprise \"{{name}}\" a été mise à jour avec succès",
+            "deleted": "L'entreprise \"{{name}}\" a été supprimée avec succès"
+        },
+        "detail": {
+            "backToList": "Retour à la liste des entreprises",
+            "totalItems": "Articles totaux",
+            "totalMaintenances": "Maintenances totales",
+            "maintenancesListTitle": "Liste des maintenances",
+            "maintenancesListDescription": "Maintenances liées à l'entreprise {{name}}",
+            "searchMaintenances": "Rechercher des maintenances...",
+            "noMaintenances": "Aucune maintenance liée à cette entreprise",
+            "noMaintenancesFor": "Aucune maintenance trouvée pour \"{{search}}\"",
+            "material": "Matériel",
+            "maintenance": "Maintenance",
+            "site": "Site",
+            "type": "Type",
+            "status": "Statut",
+            "startedAt": "Date de début",
+            "charts": {
+                "bySite": "Maintenances par site",
+                "byType": "Maintenances par type",
+                "byStatus": "Maintenances par statut",
+                "byMonth": "Évolution mensuelle"
+            }
+        },
+        "tabs": {
+            "items": "Articles",
+            "maintenances": "Maintenances",
+            "searchItems": "Rechercher des articles...",
+            "searchMaintenances": "Rechercher des maintenances...",
+            "noItems": "Aucun article fourni par cette entreprise",
+            "noMaintenances": "Aucune maintenance effectuée par cette entreprise"
+        },
+        "types": {
+            "label": "Types",
+            "item_provider": "Fournisseur d'articles",
+            "maintenance_provider": "Prestataire de maintenance"
+        }
+    },
+    "roles": {
+        "title": "Rôles",
+        "description": "Gestion des rôles et de leurs permissions",
+        "listTitle": "Liste des rôles",
+        "manageRolesAndPermissions": "Gérez les rôles et leurs permissions associées",
+        "create": "Nouveau rôle",
+        "createRole": "Créer un rôle",
+        "editRole": "Modifier le rôle",
+        "name": "Nom du rôle",
+        "namePlaceholder": "Entrez le nom du rôle",
+        "guard": "Guard",
+        "permissions": "Permissions",
+        "permissionsCount": "{{count}} permission(s)",
+        "selectPermissions": "Sélectionner les permissions",
+        "searchPermissions": "Rechercher des permissions...",
+        "selectedPermissions": "{{count}} permission(s) sélectionnée(s)",
+        "noPermissionsSelected": "Aucune permission sélectionnée",
+        "users": "Utilisateurs",
+        "usersCount": "{{count}} utilisateur(s)",
+        "site": "Site",
+        "global": "Global",
+        "permissionsTab": "Permissions",
+        "usersTab": "Utilisateurs",
+        "noRoles": "Aucun rôle trouvé",
+        "noRolesFor": "Aucun rôle trouvé pour \"{{search}}\"",
+        "noPermissions": "Aucune permission assignée à ce rôle",
+        "noUsers": "Aucun utilisateur n'a ce rôle",
+        "notFound": "Rôle introuvable",
+        "notFoundMessage": "Le rôle que vous recherchez n'existe pas ou a été supprimé.",
+        "backToList": "Retour à la liste des rôles",
+        "searchPlaceholder": "Rechercher un rôle...",
+        "deleteTitle": "Supprimer le rôle",
+        "deleteMessage": "Êtes-vous sûr de vouloir supprimer le rôle \"{{name}}\" ? Cette action est irréversible.",
+        "cannotDeleteWithUsers": "Impossible de supprimer ce rôle car il est assigné à des utilisateurs.",
+        "confirmDelete": "Supprimer le rôle",
+        "confirmDeleteMessage": "Êtes-vous sûr de vouloir supprimer le rôle \"{{name}}\" ? Cette action est irréversible.",
+        "selectedPermissionsCount": "{{count}} permission(s) sélectionnée(s)",
+        "guardName": "Guard",
+        "level": "Niveau",
+        "levelPlaceholder": "0 - 100",
+        "levelHint": "Le niveau détermine la hiérarchie du rôle (0-100). Un utilisateur ne peut assigner que des rôles de niveau inférieur ou égal au sien.",
+        "siteAssignment": "Assignation au site",
+        "selectSite": "Sélectionner un site...",
+        "searchSites": "Rechercher un site...",
+        "globalRole": "Global (tous les sites)",
+        "siteAssignmentHint": "Sélectionnez un site spécifique ou laissez vide pour créer un rôle global disponible sur tous les sites.",
+        "siteCannotBeChanged": "Le site d'un rôle ne peut pas être modifié après sa création.",
+        "detail": {
+            "backToList": "Retour à la liste des rôles",
+            "roleInfo": "Informations du rôle",
+            "createdAt": "Créé le",
+            "updatedAt": "Modifié le"
+        },
+        "messages": {
+            "created": "Le rôle \"{{name}}\" a été créé avec succès",
+            "updated": "Le rôle \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "Le rôle \"{{name}}\" a été supprimé avec succès"
+        },
+        "validation": {
+            "nameRequired": "Le nom du rôle est requis"
+        },
+        "permissionDescriptions": {
+            "activity": {
+                "delete": "Supprimer des activités",
+                "search": "Rechercher des activités",
+                "view": "Voir les détails d'une activité",
+                "viewAny": "Voir la liste des activités"
+            },
+            "calendar-event": {
+                "create": "Créer des événements calendrier",
+                "delete": "Supprimer des événements calendrier",
+                "search": "Rechercher des événements calendrier",
+                "update": "Modifier des événements calendrier",
+                "view": "Voir les détails d'un événement",
+                "viewAny": "Voir la liste des événements"
+            },
+            "calendar": {
+                "create": "Créer des calendriers",
+                "delete": "Supprimer des calendriers",
+                "update": "Modifier des calendriers",
+                "view": "Voir les détails d'un calendrier",
+                "viewAny": "Voir la liste des calendriers"
+            },
+            "cleaning": {
+                "create": "Créer des nettoyages",
+                "delete": "Supprimer des nettoyages",
+                "export": "Exporter les nettoyages",
+                "generatePlan": "Générer un plan de nettoyage",
+                "search": "Rechercher des nettoyages",
+                "update": "Modifier des nettoyages",
+                "view": "Voir les détails d'un nettoyage",
+                "viewAny": "Voir la liste des nettoyages"
+            },
+            "company": {
+                "create": "Créer des entreprises",
+                "delete": "Supprimer des entreprises",
+                "export": "Exporter les entreprises",
+                "search": "Rechercher des entreprises",
+                "update": "Modifier des entreprises",
+                "view": "Voir les détails d'une entreprise",
+                "viewAny": "Voir la liste des entreprises"
+            },
+            "role": {
+                "create": "Créer des rôles",
+                "delete": "Supprimer des rôles",
+                "search": "Rechercher des rôles",
+                "update": "Modifier des rôles",
+                "view": "Voir les détails d'un rôle",
+                "viewAny": "Voir la liste des rôles"
+            },
+            "permission": {
+                "create": "Créer des permissions",
+                "delete": "Supprimer des permissions",
+                "search": "Rechercher des permissions",
+                "update": "Modifier des permissions",
+                "view": "Voir les détails d'une permission",
+                "viewAny": "Voir la liste des permissions"
+            },
+            "user": {
+                "assignDirectPermission": "Assigner des permissions directes",
+                "assignSite": "Assigner un utilisateur à un site",
+                "create": "Créer des utilisateurs",
+                "delete": "Supprimer des utilisateurs",
+                "restore": "Restaurer des utilisateurs",
+                "search": "Rechercher des utilisateurs",
+                "update": "Modifier des utilisateurs",
+                "view": "Voir les détails d'un utilisateur",
+                "viewAny": "Voir la liste des utilisateurs"
+            },
+            "material": {
+                "create": "Créer des matériels",
+                "delete": "Supprimer des matériels",
+                "export": "Exporter les matériels",
+                "generateQrCode": "Générer des QR codes matériel",
+                "scanQrCode": "Scanner des QR codes matériel",
+                "search": "Rechercher des matériels",
+                "update": "Modifier des matériels",
+                "view": "Voir les détails d'un matériel",
+                "viewAny": "Voir la liste des matériels"
+            },
+            "setting": {
+                "create": "Créer des paramètres",
+                "delete": "Supprimer des paramètres",
+                "update": "Modifier des paramètres",
+                "view": "Voir les détails d'un paramètre",
+                "viewAny": "Voir la liste des paramètres"
+            },
+            "zone": {
+                "create": "Créer des zones",
+                "delete": "Supprimer des zones",
+                "export": "Exporter les zones",
+                "search": "Rechercher des zones",
+                "update": "Modifier des zones",
+                "view": "Voir les détails d'une zone",
+                "viewAny": "Voir la liste des zones"
+            },
+            "site": {
+                "create": "Créer des sites",
+                "delete": "Supprimer des sites",
+                "export": "Exporter les sites",
+                "search": "Rechercher des sites",
+                "update": "Modifier des sites",
+                "view": "Voir les détails d'un site",
+                "viewAny": "Voir la liste des sites"
+            },
+            "maintenance": {
+                "create": "Créer des maintenances",
+                "delete": "Supprimer des maintenances",
+                "export": "Exporter les maintenances",
+                "search": "Rechercher des maintenances",
+                "update": "Modifier des maintenances",
+                "view": "Voir les détails d'une maintenance",
+                "viewAny": "Voir la liste des maintenances"
+            },
+            "incident": {
+                "create": "Créer des incidents",
+                "delete": "Supprimer des incidents",
+                "export": "Exporter les incidents",
+                "search": "Rechercher des incidents",
+                "update": "Modifier des incidents",
+                "view": "Voir les détails d'un incident",
+                "viewAny": "Voir la liste des incidents"
+            },
+            "item": {
+                "create": "Créer des articles",
+                "delete": "Supprimer des articles",
+                "export": "Exporter les articles",
+                "generateQrCode": "Générer des QR codes article",
+                "scanQrCode": "Scanner des QR codes article",
+                "search": "Rechercher des articles",
+                "update": "Modifier des articles",
+                "view": "Voir les détails d'un article",
+                "viewAny": "Voir la liste des articles",
+                "viewOthersSites": "Voir les articles d'autres sites"
+            },
+            "item-movement": {
+                "create": "Créer des mouvements",
+                "delete": "Supprimer des mouvements",
+                "export": "Exporter les mouvements",
+                "search": "Rechercher des mouvements",
+                "update": "Modifier des mouvements",
+                "view": "Voir les détails d'un mouvement",
+                "viewAny": "Voir la liste des mouvements"
+            },
+            "bypass": {
+                "login": "Contourner l'authentification"
+            }
+        }
+    },
+    "permissions": {
+        "title": "Permissions",
+        "description": "Gestion des permissions de l'application",
+        "listTitle": "Liste des permissions",
+        "managePermissions": "Gérer les permissions et leurs rôles associés",
+        "create": "Nouvelle permission",
+        "createPermission": "Créer une permission",
+        "editPermission": "Modifier la permission",
+        "name": "Nom de la permission",
+        "namePlaceholder": "ex. ressource.action",
+        "nameHint": "Utilisez le format ressource.action (ex. user.create, item.view)",
+        "roles": "Rôles",
+        "rolesCount": "{{count}} rôle(s)",
+        "noPermissions": "Aucune permission trouvée",
+        "noPermissionsFor": "Aucune permission trouvée pour \"{{search}}\"",
+        "noRoles": "Aucun rôle n'a cette permission",
+        "notFound": "Permission introuvable",
+        "notFoundMessage": "La permission que vous recherchez n'existe pas ou a été supprimée.",
+        "backToList": "Retour à la liste des permissions",
+        "searchPlaceholder": "Rechercher des permissions...",
+        "confirmDelete": "Supprimer la permission",
+        "confirmDeleteMessage": "Êtes-vous sûr de vouloir supprimer la permission \"{{name}}\" ? Cette action est irréversible.",
+        "rolesWithPermission": "Rôles avec cette permission",
+        "validation": {
+            "nameRequired": "Le nom de la permission est requis"
+        },
+        "messages": {
+            "created": "La permission \"{{name}}\" a été créée avec succès",
+            "updated": "La permission \"{{name}}\" a été mise à jour avec succès",
+            "deleted": "La permission \"{{name}}\" a été supprimée avec succès"
+        }
+    },
+    "users": {
+        "title": "Utilisateurs",
+        "description": "Gestion des utilisateurs et de leurs accès",
+        "listTitle": "Liste des utilisateurs",
+        "searchPlaceholder": "Rechercher par nom ou email...",
+        "create": "Nouvel utilisateur",
+        "edit": "Modifier l'utilisateur",
+        "notFound": "Utilisateur introuvable",
+        "notFoundMessage": "L'utilisateur que vous recherchez n'existe pas ou a été supprimé.",
+        "noUsers": "Aucun utilisateur trouvé",
+        "noUsersFor": "Aucun utilisateur trouvé pour \"{{search}}\"",
+        "deleteTitle": "Supprimer l'utilisateur",
+        "manageUsersAndPermissions": "Gérez les utilisateurs et leurs permissions par site",
+        "username": "Nom d'utilisateur",
+        "usernamePlaceholder": "Entrez le nom d'utilisateur",
+        "email": "Email",
+        "emailPlaceholder": "Entrez l'adresse email",
+        "firstName": "Prénom",
+        "firstNamePlaceholder": "Entrez le prénom",
+        "lastName": "Nom",
+        "lastNamePlaceholder": "Entrez le nom de famille",
+        "password": "Mot de passe",
+        "passwordPlaceholder": "Entrez le mot de passe",
+        "passwordPlaceholderEdit": "Laissez vide pour ne pas changer",
+        "locale": "Langue",
+        "officePhone": "Téléphone fixe",
+        "officePhonePlaceholder": "Entrez le numéro de téléphone fixe",
+        "cellPhone": "Téléphone mobile",
+        "cellPhonePlaceholder": "Entrez le numéro de téléphone mobile",
+        "endEmploymentContract": "Fin de contrat",
+        "sites": "Sites",
+        "roles": "Rôles",
+        "rolesOnCurrentSite": "Rôles (site actuel)",
+        "permissions": "Permissions",
+        "siteAssignments": "Affectations aux sites",
+        "siteAssignmentsInfo": "Assignez l'utilisateur à un ou plusieurs sites avec des rôles et permissions spécifiques à chaque site.",
+        "noSiteAssignments": "Aucun site assigné. Cliquez sur \"Ajouter un site\" pour commencer.",
+        "addSite": "Ajouter un site",
+        "selectSite": "Sélectionner un site",
+        "selectRoles": "Sélectionner les rôles",
+        "selectPermissions": "Sélectionner les permissions",
+        "rolesSelected": "{{count}} rôle(s) sélectionné(s)",
+        "permissionsSelected": "{{count}} permission(s) sélectionnée(s)",
+        "directPermissions": "Permissions directes",
+        "status": "Statut",
+        "deleted": "Supprimé",
+        "active": "Actif",
+        "deletedWarning": "Attention",
+        "deletedMessage": "Cet utilisateur a été supprimé le {{date}} par {{by}}.",
+        "deletedMessageUnknown": "Cet utilisateur a été supprimé le {{date}}.",
+        "restoreMessage": "Vous devez le restaurer avant de faire une modification de cet utilisateur.",
+        "restore": "Restaurer",
+        "restoring": "Restauration...",
+        "detail": {
+            "backToList": "Retour à la liste des utilisateurs",
+            "contractEnds": "Fin de contrat",
+            "sitesTab": "Sites",
+            "cleaningsTab": "Nettoyages",
+            "maintenancesTab": "Maintenances",
+            "incidentsTab": "Incidents",
+            "sitesWithRoles": "Sites et rôles assignés",
+            "noSites": "Aucun site assigné à cet utilisateur",
+            "noRoles": "Aucun rôle",
+            "noCleanings": "Aucun nettoyage effectué par cet utilisateur",
+            "noMaintenances": "Aucune maintenance effectuée par cet utilisateur",
+            "noIncidents": "Aucun incident déclaré par cet utilisateur"
+        },
+        "messages": {
+            "created": "L'utilisateur \"{{name}}\" a été créé avec succès",
+            "updated": "L'utilisateur \"{{name}}\" a été mis à jour avec succès",
+            "deleted": "L'utilisateur \"{{name}}\" a été supprimé avec succès",
+            "restored": "L'utilisateur \"{{name}}\" a été restauré avec succès"
+        }
+    },
+    "settings": {
+        "title": "Paramètres",
+        "applicationSettings": "Paramètres de l'application",
+        "applicationSettingsDescription": "Configurez les paramètres globaux de l'application.",
+        "noSettings": "Aucun paramètre disponible",
+        "headquartersOnly": "Les paramètres ne peuvent être modifiés que depuis le siège.",
+        "keys": {
+            "currency": "Devise",
+            "currency_symbol": "Symbole de devise",
+            "login_enabled": "Connexion activée"
+        },
+        "descriptions": {
+            "currency": "Le code de devise utilisé pour les prix (ex: EUR, USD).",
+            "currency_symbol": "Le symbole affiché pour les prix (ex: €, $).",
+            "login_enabled": "Lorsque désactivé, les utilisateurs ne peuvent pas se connecter à l'application."
+        },
+        "messages": {
+            "updated": "Le paramètre \"{{name}}\" a été mis à jour avec succès"
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "pageTitle": "Mes notifications",
+        "pageDescription": "Gérer vos notifications et alertes",
+        "empty": "Aucune notification",
+        "emptyDescription": "Vous n'avez aucune notification pour le moment",
+        "new": "NEW",
+        "unread": "non lue(s)",
+        "viewAll": "Voir toutes les notifications",
+        "markAllAsRead": "Tout marquer comme lu",
+        "markAsRead": "Marquer comme lu",
+        "deleteAll": "Tout supprimer",
+        "delete": "Supprimer la notification",
+        "confirmDeleteAll": "Êtes-vous sûr de vouloir supprimer toutes les notifications ?",
+        "noMore": "Plus de notifications",
+        "loadMore": "Charger plus"
+    },
+    "account": {
+        "title": "Mon compte",
+        "menu": {
+            "notifications": "Notifications",
+            "password": "Mot de passe",
+            "security": "Sécurité"
+        },
+        "password": {
+            "pageTitle": "Changer mon mot de passe",
+            "description": "Mettez à jour votre mot de passe pour sécuriser votre compte",
+            "currentPassword": "Mot de passe actuel",
+            "newPassword": "Nouveau mot de passe",
+            "confirmPassword": "Confirmer le nouveau mot de passe",
+            "requirements": "Le mot de passe doit contenir au moins 8 caractères",
+            "submit": "Changer le mot de passe",
+            "success": "Votre mot de passe a été mis à jour avec succès"
+        },
+        "security": {
+            "pageTitle": "Sécurité",
+            "pageDescription": "Gérer les paramètres de sécurité de votre compte",
+            "comingSoonDescription": "Les options de sécurité avancées (authentification à deux facteurs, sessions actives, etc.) seront bientôt disponibles."
+        }
+    },
+    "demo": {
+        "modeActive": "Mode Démo Actif",
+        "resetNotice": "Les données sont réinitialisées toutes les 6 heures. Certaines actions sont restreintes.",
+        "actionBlocked": "Cette action est désactivée en mode démo."
+    },
+    "search": {
+        "placeholder": "Rechercher matériels, zones, articles...",
+        "minChars": "Saisissez au moins 2 caractères pour rechercher",
+        "noResults": "Aucun résultat trouvé pour \"{{query}}\"",
+        "startTyping": "Commencez à taper pour rechercher",
+        "searchHint": "Recherchez parmi les matériels, zones, articles, incidents, maintenances et plus",
+        "navigate": "naviguer",
+        "select": "sélectionner",
+        "close": "fermer",
+        "types": {
+            "materials": "Matériels",
+            "zones": "Zones",
+            "items": "Articles",
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "companies": "Entreprises",
+            "sites": "Sites"
+        }
+    }
+}

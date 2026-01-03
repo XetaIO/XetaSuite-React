@@ -1,0 +1,1456 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "update": "Update",
+        "search": "Search",
+        "searchPlaceholder": "Search by name or description...",
+        "noResults": "No results",
+        "noSearchResults": "No results found for this search",
+        "notAvailable": "Not available",
+        "actions": "Actions",
+        "yes": "Yes",
+        "no": "No",
+        "confirm": "Confirm",
+        "back": "Back",
+        "close": "Close",
+        "name": "Name",
+        "description": "Description",
+        "createdAt": "Created at",
+        "createdBy": "Created by",
+        "updatedAt": "Updated at",
+        "resolvedAt": "Resolved at",
+        "creator": "Creator",
+        "clearSearch": "Clear search",
+        "clearFilters": "Clear filters",
+        "collaborators": "Collaborators",
+        "user": "User",
+        "support": "Support",
+        "viewAll": "View all",
+        "new": "new",
+        "beta": "beta",
+        "error": "Error",
+        "disabled": "Disabled",
+        "enabled": "Enabled",
+        "optional": "optional",
+        "qrCode": "QR Code",
+        "retry": "Retry",
+        "refresh": "Refresh",
+        "increase": "Increase",
+        "decrease": "Decrease",
+        "view": "View",
+        "restore": "Restore",
+        "details": "Details",
+        "history": "History",
+        "notFound": "Not found",
+        "units": "units",
+        "editedBy": "Edited by",
+        "site": "Site",
+        "comingSoon": "Coming soon",
+        "export": {
+            "button": "Export ({{count}})",
+            "exporting": "Exporting...",
+            "selected": "{{count}} selected",
+            "selectAll": "Select all",
+            "deselectAll": "Deselect all",
+            "clearSelection": "Clear selection",
+            "comingSoon": "Export feature coming soon"
+        },
+        "messages": {
+            "created": "\"{{name}}\" has been created successfully",
+            "updated": "\"{{name}}\" has been updated successfully",
+            "deleted": "\"{{name}}\" has been deleted successfully"
+        },
+        "confirmDelete": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+    },
+    "header": {
+        "search": "Search or type command...",
+        "notifications": "Notifications",
+        "profile": "Profile",
+        "accountSettings": "Account settings",
+        "settings": "Settings",
+        "logout": "Log out",
+        "signOut": "Sign out",
+        "switchSite": "Switch site",
+        "selectSite": "Select a site"
+    },
+    "language": {
+        "title": "Language",
+        "fr": "Français",
+        "en": "English"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "sites": "Sites",
+        "zones": "Zones",
+        "materials": "Materials",
+        "items": "Items",
+        "companies": "Companies",
+        "maintenances": "Maintenances",
+        "incidents": "Incidents",
+        "cleanings": "Cleanings",
+        "users": "Users",
+        "settings": "Settings",
+        "jobCategories": "Job Categories",
+        "managementCategories": "Management Categories",
+        "manageMaintenances": "Manage Maintenances",
+        "manageCompanies": "Manage Companies",
+        "manageItems": "Manage Items",
+        "manageItemsMovements": "Manage Movements",
+        "manageMaterials": "Manage Materials",
+        "manageZones": "Manage Zones",
+        "zoneTree": "Zone Tree",
+        "manageSites": "Manage Sites",
+        "manageUsers": "Manage Users",
+        "rolesPermissions": "Roles & Permissions",
+        "manageRoles": "Manage Roles",
+        "managePermissions": "Manage Permissions"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "pageTitle": "Dashboard | XetaSuite",
+        "pageDescription": "XetaSuite Dashboard - Maintenance, incident and stock management",
+        "welcome": "Welcome, {{name}}",
+        "headquartersView": "Headquarters View",
+        "demoModeActive": "Demo mode active",
+        "demoModeInfo": "You are currently in demo mode. Some features may be limited or disabled.",
+        "aggregatedStats": "Aggregated statistics from all sites",
+        "stats": {
+            "maintenancesThisMonth": "Maintenances this month",
+            "maintenancesTrend": "Maintenances trend",
+            "cleaningsThisMonth": "Cleanings this month",
+            "cleaningsTrend": "Cleanings trend",
+            "openIncidents": "Open incidents",
+            "itemsInStock": "Items in stock"
+        },
+        "charts": {
+            "maintenanceEvolution": "Maintenance evolution",
+            "maintenanceEvolutionDesc": "Maintenances performed over the last 12 months",
+            "stockEvolution": "Stock evolution",
+            "stockEvolutionDesc": "Stock movements over the last 12 months",
+            "incidentsByMonth": "Incidents by month",
+            "incidentsByMonthDesc": "Monthly reported incidents"
+        },
+        "activity": {
+            "title": "Recent activity",
+            "noActivity": "No recent activity",
+            "status": {
+                "pending": "Pending",
+                "completed": "Completed",
+                "inProgress": "In progress",
+                "entry": "Entry",
+                "exit": "Exit"
+            }
+        },
+        "incidents": {
+            "summary": "Incidents summary",
+            "open": "Open",
+            "inProgress": "In progress",
+            "resolved": "Resolved",
+            "bySeverity": "By severity",
+            "severity": {
+                "critical": "Critical",
+                "high": "High",
+                "medium": "Medium",
+                "low": "Low"
+            }
+        },
+        "maintenances": {
+            "upcoming": "Upcoming maintenances",
+            "noUpcoming": "No upcoming maintenances",
+            "schedule": "Schedule",
+            "priority": {
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High"
+            },
+            "type": {
+                "preventive": "Preventive",
+                "corrective": "Corrective"
+            }
+        },
+        "lowStock": {
+            "title": "Low stock",
+            "itemsCount": "{{count}} items",
+            "noItems": "No low stock items"
+        }
+    },
+    "items": {
+        "title": "Items",
+        "description": "Manage stock items",
+        "listTitle": "Items list",
+        "notFound": "Item not found",
+        "notFoundMessage": "The item you are looking for does not exist or has been deleted.",
+        "backToList": "Back to list",
+        "create": "New item",
+        "edit": "Edit item",
+        "manageItemsAndStock": "Manage your items and stock levels",
+        "noItems": "No items found",
+        "noItemsFor": "No items found for this search",
+        "noCompany": "No company",
+        "noMaterialsAvailable": "No materials available",
+        "noRecipientsAvailable": "No recipients available",
+        "searchPlaceholder": "Search by name or reference...",
+        "detail": {
+            "info": "Information"
+        },
+        "fields": {
+            "notes": "Notes",
+            "site": "Site",
+            "name": "Name",
+            "reference": "Reference",
+            "description": "Description",
+            "stock": "Stock",
+            "currentStock": "Current stock",
+            "status": "Status",
+            "price": "Price",
+            "purchasePrice": "Purchase price",
+            "currency": "Currency",
+            "company": "Company",
+            "companyReference": "Company reference",
+            "qrCodeScans": "QR code scans"
+        },
+        "filters": {
+            "allStatuses": "All statuses",
+            "stockStatus": "Filter by status"
+        },
+        "form": {
+            "searchCompany": "Search for a company...",
+            "selectCompany": "Select a company",
+            "currentCompany": "Current company"
+        },
+        "stockStatus": {
+            "ok": "In stock",
+            "warning": "Warning",
+            "critical": "Critical",
+            "empty": "Out of stock"
+        },
+        "sections": {
+            "basicInfo": "Basic information",
+            "pricing": "Pricing",
+            "company": "Company",
+            "stockAlerts": "Stock alerts",
+            "materials": "Associated materials",
+            "recipients": "Alert recipients"
+        },
+        "materialsHelp": "Select materials that use this item",
+        "recipientsHelp": "Users who will receive stock alerts",
+        "alerts": {
+            "warning": "Warning threshold",
+            "warningDescription": "Alert when stock is low",
+            "critical": "Critical threshold",
+            "criticalDescription": "Alert when stock is very low",
+            "enableWarning": "Enable warning alert",
+            "enableCritical": "Enable critical alert",
+            "warningThresholdHelp": "Alert when stock falls below this level",
+            "criticalThresholdHelp": "Critical alert when stock falls below this level"
+        },
+        "validation": {
+            "criticalLessThanWarning": "Critical threshold must be less than warning threshold"
+        },
+        "stats": {
+            "title": "Stock movements",
+            "entries": "Entries",
+            "exits": "Exits",
+            "totalEntries": "Total entries",
+            "totalExits": "Total exits",
+            "noData": "No movement data available"
+        },
+        "movements": {
+            "entry": "Entry",
+            "exit": "Exit",
+            "addEntry": "Add entry",
+            "addExit": "Add exit",
+            "confirmEntry": "Confirm entry",
+            "confirmExit": "Confirm exit",
+            "history": "Movement history",
+            "noMovements": "No movements recorded",
+            "availableStock": "Available: {{count}} units",
+            "totalPrice": "Total",
+            "fields": {
+                "date": "Date",
+                "type": "Type",
+                "quantity": "Quantity",
+                "price": "Price",
+                "unitPrice": "Unit price",
+                "company": "Company",
+                "invoiceNumber": "Invoice number",
+                "invoiceDate": "Invoice date",
+                "notes": "Notes",
+                "createdBy": "Created by"
+            },
+            "validation": {
+                "quantityRequired": "Quantity is required",
+                "insufficientStock": "Insufficient stock (available: {{available}})"
+            },
+            "messages": {
+                "entryCreated": "Entry of {{quantity}} units recorded",
+                "exitCreated": "Exit of {{quantity}} units recorded"
+            },
+            "itemCompany": "Item's company"
+        },
+        "qrCode": {
+            "title": "QR Code",
+            "size": "Size",
+            "download": "Download",
+            "print": "Print",
+            "help": "Scan this QR code to quickly access item details",
+            "printTitle": "QR Code - {{name}}"
+        },
+        "delete": {
+            "title": "Delete item",
+            "message": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+        },
+        "messages": {
+            "created": "Item \"{{name}}\" has been created successfully",
+            "updated": "Item \"{{name}}\" has been updated successfully",
+            "deleted": "Item \"{{name}}\" has been deleted successfully"
+        },
+        "priceHistory": {
+            "title": "Price History",
+            "price": "Price",
+            "currentPrice": "Current price",
+            "averagePrice": "Average price",
+            "minMax": "Min / Max",
+            "evolution": "Evolution",
+            "noData": "No price history available"
+        }
+    },
+    "itemMovements": {
+        "title": "Stock movements",
+        "description": "Track entries and exits of stock items",
+        "listTitle": "All movements",
+        "listDescription": "View all item stock movements",
+        "noMovements": "No stock movements recorded yet",
+        "noResultsWithFilters": "No movements matching the current filters",
+        "searchPlaceholder": "Search by item, company...",
+        "editTitle": "Edit movement",
+        "types": {
+            "entry": "Entry",
+            "exit": "Exit"
+        },
+        "filters": {
+            "allTypes": "All types",
+            "entries": "Entries only",
+            "exits": "Exits only"
+        },
+        "fields": {
+            "site": "Site",
+            "item": "Item",
+            "movementDate": "Date",
+            "date": "Date",
+            "type": "Type",
+            "quantity": "Quantity",
+            "price": "Price",
+            "unitPrice": "Unit price",
+            "totalPrice": "Total price",
+            "company": "Company",
+            "invoiceNumber": "Invoice number",
+            "invoiceDate": "Invoice date",
+            "notes": "Notes",
+            "createdBy": "Created by",
+            "createdAt": "Created at"
+        },
+        "deleteConfirm": {
+            "title": "Delete movement",
+            "message": "Are you sure you want to delete this stock movement? The item stock will be adjusted accordingly."
+        },
+        "messages": {
+            "updated": "Movement successfully updated",
+            "deleted": "Movement successfully deleted"
+        }
+    },
+    "sites": {
+        "title": "Sites",
+        "description": "Manage sites",
+        "listTitle": "Sites list",
+        "notFound": "Site not found",
+        "notFoundMessage": "The site you are looking for does not exist or has been deleted.",
+        "create": "New site",
+        "edit": "Edit site",
+        "name": "Name",
+        "nameLabel": "Name *",
+        "zones": "Zones",
+        "manageSitesAndTheirInformation": "Manage your sites and their information",
+        "noSites": "No sites found",
+        "noSitesFor": "No sites found for \"{{search}}\"",
+        "deleteTitle": "Delete site",
+        "form": {
+            "namePlaceholder": "Site name",
+            "managers": "Managers",
+            "managersHint": "Select the users who will manage this site",
+            "noUsersAvailable": "No users available",
+            "email": "Email",
+            "emailPlaceholder": "email@example.com",
+            "officePhone": "Office phone",
+            "officePhonePlaceholder": "01 23 45 67 89",
+            "cellPhone": "Cell phone",
+            "cellPhonePlaceholder": "06 12 34 56 78",
+            "address": "Address",
+            "addressPlaceholder": "123 Main Street",
+            "zipCode": "Postal code",
+            "zipCodePlaceholder": "75001",
+            "city": "City",
+            "cityPlaceholder": "Paris"
+        },
+        "detail": {
+            "backToList": "Back to sites list",
+            "headquarters": "Headquarters",
+            "totalZones": "Zones",
+            "totalUsers": "Users",
+            "contactInfo": "Contact information",
+            "noContact": "No contact information",
+            "managers": "Managers",
+            "noManagers": "No managers assigned",
+            "zonesListTitle": "Site zones",
+            "zonesListDescription": "List of zones in {{name}}",
+            "members": "Site members",
+            "membersDescription": "Users with access to this site",
+            "noMembers": "No members on this site"
+        },
+        "table": {
+            "fullName": "Full name",
+            "email": "Email",
+            "roles": "Roles",
+            "createdAt": "Created at"
+        },
+        "export": {
+            "button": "Export ({{count}})",
+            "exporting": "Exporting...",
+            "selected": "{{count}} selected",
+            "selectAll": "Select all",
+            "deselectAll": "Deselect all",
+            "clearSelection": "Clear selection",
+            "comingSoon": "Export feature coming soon"
+        },
+        "messages": {
+            "created": "Site \"{{name}}\" has been created successfully",
+            "updated": "Site \"{{name}}\" has been updated successfully",
+            "deleted": "Site \"{{name}}\" has been deleted successfully"
+        }
+    },
+    "zones": {
+        "title": "Zones",
+        "description": "Manage zones",
+        "listTitle": "Zones list",
+        "notFound": "Zone not found",
+        "notFoundMessage": "The zone you are looking for does not exist or has been deleted.",
+        "create": "New zone",
+        "edit": "Edit zone",
+        "manageZonesAndTheirInformation": "Manage your zones and their information",
+        "noZones": "No zones found",
+        "noZonesFor": "No zones found for \"{{search}}\"",
+        "deleteTitle": "Delete zone",
+        "site": "Site",
+        "parent": "Parent zone",
+        "children": "Children",
+        "materials": "Materials",
+        "subZones": "Sub-zones",
+        "allowMaterial": "Allow materials",
+        "allowsMaterials": "Allows materials",
+        "form": {
+            "selectSite": "Select a site",
+            "namePlaceholder": "Zone name",
+            "noParent": "No parent zone (root zone)",
+            "parentHint": "Select an optional parent zone",
+            "allowMaterial": "This zone can contain materials",
+            "allowMaterialHint": "Enable if this zone can directly contain materials"
+        },
+        "table": {
+            "name": "Name",
+            "allowMaterial": "Allows materials",
+            "materialCount": "Materials",
+            "materialName": "Material name",
+            "materialDescription": "Description"
+        },
+        "detail": {
+            "backToList": "Back to zones list",
+            "allowsMaterials": "Allows materials",
+            "info": "Zone information",
+            "siteInfo": "Associated site",
+            "totalChildZones": "Sub-zones",
+            "totalMaterials": "Materials",
+            "childZones": "Child zones",
+            "childZonesDescription": "Sub-zones contained within this zone",
+            "materials": "Materials",
+            "materialsDescription": "Materials assigned to this zone",
+            "noChildren": "No child zones",
+            "noMaterials": "No materials assigned",
+            "emptyZone": "This zone contains neither sub-zones nor materials"
+        },
+        "errors": {
+            "loadFailed": "Unable to load zone",
+            "notFound": "Zone not found"
+        },
+        "messages": {
+            "created": "Zone \"{{name}}\" has been created successfully",
+            "updated": "Zone \"{{name}}\" has been updated successfully",
+            "deleted": "Zone \"{{name}}\" has been deleted successfully"
+        },
+        "tree": {
+            "title": "Zone Tree",
+            "description": "Hierarchical visualization of zones",
+            "pageTitle": "Zone Architecture",
+            "pageDescription": "Visualize the hierarchical organization of zones",
+            "totalZones": "zones",
+            "expandAll": "Expand all",
+            "collapseAll": "Collapse all",
+            "currentSite": "Current site",
+            "selectSite": "Select a site",
+            "noZones": "No zones found for this site",
+            "goToManagement": "Go to zone management",
+            "subzones": "subzones",
+            "allowsMaterials": "Allows materials"
+        }
+    },
+    "materials": {
+        "title": "Materials",
+        "description": "Manage materials",
+        "listTitle": "Materials list",
+        "notFound": "Material not found",
+        "notFoundMessage": "The material you are looking for does not exist or has been deleted.",
+        "create": "New material",
+        "edit": "Edit material",
+        "manageMaterialsAndTheirInformation": "Manage your materials and their information",
+        "noMaterials": "No materials found",
+        "noMaterialsFor": "No materials found for \"{{search}}\"",
+        "deleteTitle": "Delete material",
+        "zone": "Zone",
+        "site": "Site",
+        "createdBy": "Created by",
+        "cleaningAlert": "Cleaning alert",
+        "cleaningAlertSettings": "Cleaning alert settings",
+        "cleaningAlertEnabled": "Cleaning alert enabled",
+        "cleaningAlertDisabled": "Cleaning alert disabled",
+        "emailNotificationEnabled": "Email notification enabled",
+        "emailEnabled": "Email enabled",
+        "lastCleaning": "Last cleaning",
+        "neverCleaned": "Never cleaned",
+        "frequency": "Frequency",
+        "every": "Every",
+        "frequencyDaily": "day(s)",
+        "frequencyWeekly": "week(s)",
+        "frequencyMonthly": "month(s)",
+        "recipients": "Recipients",
+        "stats": {
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Cleanings",
+            "items": "Items"
+        },
+        "form": {
+            "selectZone": "Select a zone",
+            "searchZone": "Search for a zone...",
+            "namePlaceholder": "Material name",
+            "descriptionPlaceholder": "Material description (optional)",
+            "zoneHint": "Only zones that allow materials are displayed",
+            "enableCleaningAlert": "Enable cleaning alerts",
+            "enableCleaningAlertHint": "Receive reminders for cleaning this material",
+            "enableEmailNotification": "Send alerts by email",
+            "enableEmailNotificationHint": "Recipients will receive an email when alerts are triggered",
+            "frequencyEvery": "Every",
+            "frequencyType": "Period",
+            "recipients": "Alert recipients",
+            "recipientsHint": "Select users who will receive the alerts",
+            "noRecipientsAvailable": "No users available"
+        },
+        "detail": {
+            "backToList": "Back to materials list",
+            "info": "Material information"
+        },
+        "charts": {
+            "incidentsMaintenances": "Incidents & Maintenances",
+            "incidentsMaintenancesDesc": "Monthly incidents and maintenances over the last 12 months",
+            "cleaningsItemMovements": "Cleanings & Item Usage",
+            "cleaningsItemMovementsDesc": "Monthly cleanings and item usage (exits) over the last 12 months",
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Cleanings",
+            "itemMovements": "Item exits"
+        },
+        "errors": {
+            "loadFailed": "Unable to load material",
+            "notFound": "Material not found"
+        },
+        "messages": {
+            "created": "Material \"{{name}}\" has been created successfully",
+            "updated": "Material \"{{name}}\" has been updated successfully",
+            "deleted": "Material \"{{name}}\" has been deleted successfully"
+        },
+        "tabs": {
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "cleanings": "Cleanings",
+            "items": "Items",
+            "searchIncidents": "Search incidents...",
+            "searchMaintenances": "Search maintenances...",
+            "searchCleanings": "Search cleanings...",
+            "searchItems": "Search items...",
+            "noIncidents": "No incidents for this material",
+            "noMaintenances": "No maintenances for this material",
+            "noCleanings": "No cleanings for this material",
+            "noItems": "No items associated with this material"
+        },
+        "qrCode": {
+            "title": "QR Code",
+            "size": "Size",
+            "download": "Download",
+            "print": "Print",
+            "help": "Scan this QR code to quickly access material details",
+            "printTitle": "QR Code - {{name}}"
+        }
+    },
+    "incidents": {
+        "title": "Incidents",
+        "description": "Incident management",
+        "listTitle": "Incidents list",
+        "create": "New incident",
+        "edit": "Edit incident",
+        "manageIncidentsAndTheirInformation": "Manage incidents and their tracking",
+        "noIncidents": "No incidents found",
+        "noIncidentsFiltered": "No incidents match the selected filters",
+        "deleteTitle": "Delete incident",
+        "confirmDelete": "Are you sure you want to delete this incident? This action cannot be undone.",
+        "material": "Material",
+        "maintenance": "Maintenance",
+        "severity": "Severity",
+        "status": "Status",
+        "reportedBy": "Reported by",
+        "startedAt": "Started at",
+        "resolvedAt": "Resolved at",
+        "linkedToMaintenance": "Linked to maintenance",
+        "allStatuses": "All statuses",
+        "allSeverities": "All severities",
+        "noMaterialsAvailable": "No materials available",
+        "statuses": {
+            "open": "Open",
+            "in_progress": "In Progress",
+            "resolved": "Resolved",
+            "closed": "Closed"
+        },
+        "severities": {
+            "low": "Low",
+            "medium": "Medium",
+            "high": "High",
+            "critical": "Critical"
+        },
+        "form": {
+            "selectMaterial": "Select a material",
+            "selectMaintenance": "Select a maintenance (optional)",
+            "noMaintenance": "No maintenance",
+            "selectSeverity": "Select a severity",
+            "selectStatus": "Select a status",
+            "descriptionPlaceholder": "Describe the incident in detail...",
+            "materialCannotBeChanged": "Material cannot be changed after creation",
+            "maintenanceHint": "Optionally associate this incident with an existing maintenance",
+            "searchMaterial": "Search for a material...",
+            "searchMaintenance": "Search by ID, description or material...",
+            "startedAtHint": "Incident start date",
+            "resolvedAtHint": "Incident resolution date",
+            "currentMaterial": "Current material",
+            "currentMaintenance": "Current maintenance"
+        },
+        "validation": {
+            "materialRequired": "Material is required"
+        },
+        "messages": {
+            "created": "Incident has been created successfully",
+            "updated": "Incident has been updated successfully",
+            "deleted": "Incident has been deleted successfully"
+        },
+        "errors": {
+            "loadFailed": "Failed to load incident",
+            "notFound": "Incident not found"
+        }
+    },
+    "validation": {
+        "required": "This field is required",
+        "nameRequired": "Name is required",
+        "siteRequired": "Site is required",
+        "zoneRequired": "Zone is required",
+        "typesRequired": "At least one type is required",
+        "email": "Please enter a valid email address",
+        "min": "This field must be at least {{min}} characters",
+        "max": "This field must not exceed {{max}} characters",
+        "nameMaxLength": "Name cannot exceed 255 characters",
+        "descriptionMaxLength": "Description cannot exceed 1000 characters"
+    },
+    "auth": {
+        "login": "Login",
+        "logout": "Log out",
+        "email": "Email address",
+        "emailPlaceholder": "Enter your email",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "rememberMe": "Remember me",
+        "forgotPassword": "Forgot password?",
+        "forgotPasswordTitle": "Forgot your password?",
+        "forgotPasswordDesc": "Enter your email address and we'll send you a link to reset your password.",
+        "resetPassword": "Reset password",
+        "resetPasswordTitle": "Reset your password",
+        "resetPasswordDesc": "Enter your new password below.",
+        "loginButton": "Sign in",
+        "signInToAccount": "Sign in to your account",
+        "signingIn": "Signing in...",
+        "backToSignIn": "Back to sign in",
+        "emailSent": "Email sent!",
+        "emailSentDesc": "If an account exists with that email address, you will receive a password reset link shortly.",
+        "sending": "Sending...",
+        "sendResetLink": "Send reset link",
+        "newPassword": "New Password",
+        "newPasswordPlaceholder": "Enter your new password",
+        "confirmPassword": "Confirm Password",
+        "confirmPasswordPlaceholder": "Confirm your new password",
+        "passwordMinLength": "Password must be at least 8 characters",
+        "passwordMinLengthHint": "Must be at least 8 characters",
+        "passwordsDoNotMatch": "Passwords do not match",
+        "passwordResetSuccess": "Password reset successfully. Please sign in.",
+        "passwordNotSetup": "Password not set up yet ?",
+        "invalidLink": "Invalid link",
+        "invalidLinkDesc": "This password reset link is invalid or has expired. Please request a new one.",
+        "resetting": "Resetting...",
+        "setupPassword": {
+            "title": "Create my password",
+            "desc": "Welcome {{name}}! Please create your password to access your account.",
+            "passwordPlaceholder": "Choose a password",
+            "create": "Create my password",
+            "creating": "Creating...",
+            "success": "Your password has been created successfully. You can now sign in.",
+            "verifying": "Verifying link...",
+            "invalidLink": "This password setup link is invalid.",
+            "linkExpired": "This link has expired. Please contact your administrator to request a new one.",
+            "alreadySetup": "You have already set up your password. Please sign in.",
+            "linkError": "Invalid link"
+        },
+        "resendSetupPassword": {
+            "title": "Resend password setup link",
+            "desc": "You must set up your password before you can sign in for the first time.",
+            "sendLink": "Resend link",
+            "successDesc": "If an account exists with that email address and has not yet set up a password, you will receive an email with the setup link."
+        }
+    },
+    "errors": {
+        "generic": "An error occurred",
+        "notFound": "Page not found",
+        "pageNotFound": "The page you are looking for does not exist.",
+        "backToHome": "Back to home",
+        "unauthorized": "Unauthorized access",
+        "unauthorizedDescription": "You don't have the required permissions to access this page. Please contact your administrator if you believe this is an error.",
+        "backToDashboard": "Back to dashboard",
+        "forbidden": "Access forbidden"
+    },
+    "maintenances": {
+        "title": "Maintenances",
+        "description": "Maintenance management",
+        "maintenance": "Maintenance",
+        "reason": "Reason",
+        "listTitle": "Maintenance list",
+        "notFound": "Maintenance not found",
+        "notFoundMessage": "The maintenance you are looking for does not exist or has been deleted.",
+        "create": "New maintenance",
+        "edit": "Edit maintenance",
+        "manageMaintenances": "Manage your maintenances and their tracking",
+        "manageMaintenancesAndTheirInformation": "Manage your maintenances and their information",
+        "noMaintenancesFor": "No maintenance found for this search",
+        "deleteTitle": "Delete maintenance",
+        "forMaterial": "Material",
+        "searchPlaceholder": "Search by description...",
+        "spareParts": "Spare parts",
+        "resolvedAt": "Resolution date",
+        "operators": "Operators",
+        "companies": "Companies",
+        "incidents": "Incidents",
+        "fields": {
+            "site": "Site",
+            "description": "Description",
+            "descriptionPlaceholder": "Maintenance description...",
+            "reason": "Reason",
+            "reasonPlaceholder": "Maintenance reason...",
+            "type": "Type",
+            "status": "Status",
+            "realization": "Realization",
+            "material": "Material",
+            "selectMaterial": "Select a material",
+            "started_at": "Start date",
+            "resolved_at": "Resolution date",
+            "incidents": "Incidents",
+            "selectIncidents": "Select incidents",
+            "operators": "Operators",
+            "selectOperators": "Select operators",
+            "companies": "Companies",
+            "selectCompanies": "Select companies",
+            "spareParts": "Spare parts",
+            "addSpareParts": "Add spare parts"
+        },
+        "filters": {
+            "allStatuses": "All statuses",
+            "allTypes": "All types",
+            "allRealizations": "All realizations"
+        },
+        "status": {
+            "planned": "Planned",
+            "in_progress": "In progress",
+            "completed": "Completed",
+            "canceled": "Canceled"
+        },
+        "type": {
+            "corrective": "Corrective",
+            "preventive": "Preventive",
+            "inspection": "Inspection",
+            "improvement": "Improvement"
+        },
+        "realization": {
+            "internal": "Internal",
+            "external": "External",
+            "both": "Both"
+        },
+        "detail": {
+            "info": "Information",
+            "backToList": "Back to maintenances list",
+            "descriptionAndReason": "Description and Reason",
+            "operators": "Operators",
+            "companies": "Companies",
+            "linkedIncidents": "Linked incidents",
+            "spareParts": "Spare parts used",
+            "totalCost": "Total cost",
+            "incidentDescription": "Description",
+            "incidentStatus": "Status",
+            "incidentSeverity": "Severity",
+            "incidentStartedAt": "Start date",
+            "itemName": "Item",
+            "itemReference": "Reference",
+            "quantity": "Quantity",
+            "unitPrice": "Unit price",
+            "totalPrice": "Total price"
+        },
+        "stats": {
+            "incidents": "Incidents",
+            "operators": "Operators",
+            "companies": "Companies",
+            "spareParts": "Spare parts"
+        },
+        "form": {
+            "selectType": "Select a type",
+            "selectStatus": "Select a status",
+            "selectRealization": "Select a realization",
+            "selectMaterial": "Select a material",
+            "noMaterial": "No material selected",
+            "currentMaterial": "Current material",
+            "noMaterialsAvailable": "No materials available",
+            "noIncidentsAvailable": "No incidents available",
+            "noOperatorsAvailable": "No operators available",
+            "noCompaniesAvailable": "No companies available",
+            "noItemsAvailable": "No items available",
+            "searchMaterial": "Search for a material...",
+            "searchOperators": "Search for operators...",
+            "searchCompanies": "Search for companies...",
+            "searchIncidents": "Search for incidents...",
+            "searchItems": "Search for items...",
+            "operatorsRequired": "At least one operator is required for internal or mixed maintenance",
+            "companiesRequired": "At least one company is required for external or mixed maintenance",
+            "selectItem": "Select an item",
+            "selectOperators": "Select operators",
+            "selectCompanies": "Select companies",
+            "selectIncidents": "Select incidents",
+            "selected": "selected",
+            "incidentsSelected": "incident(s) selected",
+            "addSparePart": "Add a spare part",
+            "currentStock": "Current stock",
+            "itemPrice": "Price",
+            "stockAvailable": "Available stock",
+            "descriptionPlaceholder": "Maintenance description...",
+            "reasonPlaceholder": "Maintenance reason..."
+        },
+        "errors": {
+            "loadFailed": "Unable to load maintenance information",
+            "createFailed": "Unable to create maintenance",
+            "updateFailed": "Unable to update maintenance",
+            "deleteFailed": "Unable to delete maintenance"
+        },
+        "messages": {
+            "created": "Maintenance has been created successfully",
+            "updated": "Maintenance has been updated successfully",
+            "deleted": "Maintenance has been deleted successfully"
+        }
+    },
+    "pagination": {
+        "showing": "Showing {{from}} to {{to}} of {{total}} results",
+        "showingText": "Showing",
+        "to": "to",
+        "of": "of",
+        "results": "results",
+        "previous": "Previous",
+        "next": "Next"
+    },
+    "qrScan": {
+        "title": "QR Code Scan",
+        "loading": "Loading information...",
+        "error": "Unable to load information",
+        "zone": "Zone",
+        "site": "Site",
+        "stock": "Current stock",
+        "reference": "Reference",
+        "noDescription": "No description",
+        "unknownSite": "Unknown site",
+        "materialDescription": "Scanned material",
+        "itemDescription": "Scanned item",
+        "actionLabel": "Choose an action",
+        "selectAction": "Select an action...",
+        "noActionsAvailable": "No actions available for this element",
+        "switchingSite": "Switching site...",
+        "siteMismatch": {
+            "title": "Different site",
+            "description": "This item belongs to a site you don't have access to with your current session.",
+            "switchSite": "Switch site"
+        },
+        "actions": {
+            "title": "Available actions",
+            "cleaning": "Create cleaning",
+            "maintenance": "Create maintenance",
+            "incident": "Report incident",
+            "entry": "Stock entry",
+            "exit": "Stock exit",
+            "createCleaning": "Create cleaning",
+            "createMaintenance": "Create maintenance",
+            "createIncident": "Report incident",
+            "stockEntry": "Stock entry",
+            "stockExit": "Stock exit",
+            "noActions": "No actions available"
+        }
+    },
+    "cleanings": {
+        "title": "Cleanings",
+        "subtitle": "Manage material cleanings",
+        "description": "Cleaning management",
+        "cleaning": "Cleaning",
+        "create": "New cleaning",
+        "edit": "Edit cleaning",
+        "delete": "Delete cleaning",
+        "deleteTitle": "Delete cleaning",
+        "confirmDelete": "Are you sure you want to delete this cleaning? This action cannot be undone.",
+        "deleteConfirm": "Are you sure you want to delete this cleaning? This action cannot be undone.",
+        "noDescription": "No description provided",
+        "search": "Search by material or description...",
+        "material": "Material",
+        "zone": "Zone",
+        "type": "Type",
+        "date": "Date",
+        "id": "Cleaning ID",
+        "site": "Site",
+        "createdBy": "Created by",
+        "forMaterial": "For material",
+        "detail": {
+            "info": "Cleaning information",
+            "backToList": "Back to cleanings list"
+        },
+        "noMaterialsAvailable": "No materials available",
+        "filters": {
+            "allTypes": "All types"
+        },
+        "types": {
+            "daily": "Daily",
+            "weekly": "Weekly",
+            "bimonthly": "Bi-monthly",
+            "monthly": "Monthly",
+            "quarterly": "Quarterly",
+            "biannual": "Bi-annual",
+            "annual": "Annual",
+            "casual": "Casual"
+        },
+        "form": {
+            "selectMaterial": "Select a material",
+            "searchMaterial": "Search for a material...",
+            "selectType": "Select a type",
+            "descriptionPlaceholder": "Describe the cleaning performed...",
+            "materialCannotBeChanged": "Material cannot be changed after creation",
+            "currentMaterial": "Current material"
+        },
+        "empty": {
+            "title": "No cleanings",
+            "noData": "No cleanings have been recorded yet.",
+            "withFilters": "No cleanings match the selected filters."
+        },
+        "messages": {
+            "created": "Cleaning has been created successfully",
+            "updated": "Cleaning has been updated successfully",
+            "deleted": "Cleaning has been deleted successfully"
+        },
+        "errors": {
+            "loadFailed": "Failed to load cleaning",
+            "notFound": "Cleaning not found"
+        }
+    },
+    "companies": {
+        "title": "Companies",
+        "description": "Maintenance companies management",
+        "listTitle": "Companies list",
+        "notFound": "Company not found",
+        "notFoundMessage": "The company you are looking for does not exist or has been deleted.",
+        "create": "New company",
+        "edit": "Edit company",
+        "name": "Name",
+        "nameLabel": "Name *",
+        "maintenances": "Maintenances",
+        "items": "Items",
+        "manageCompaniesAndTheirInformation": "Manage your maintenance companies and their information",
+        "noCompanies": "No companies found",
+        "noCompaniesFor": "No companies found for \"{{search}}\"",
+        "deleteTitle": "Delete company",
+        "form": {
+            "namePlaceholder": "Company name",
+            "descriptionPlaceholder": "Company description (optional)",
+            "descriptionLabel": "Description",
+            "typesLabel": "Company types *",
+            "contactInfo": "Contact Information",
+            "emailLabel": "Email",
+            "emailPlaceholder": "contact@company.com",
+            "phoneLabel": "Phone",
+            "phonePlaceholder": "+33 1 23 45 67 89",
+            "addressLabel": "Address",
+            "addressPlaceholder": "Company address..."
+        },
+        "messages": {
+            "created": "Company \"{{name}}\" has been created successfully",
+            "updated": "Company \"{{name}}\" has been updated successfully",
+            "deleted": "Company \"{{name}}\" has been deleted successfully"
+        },
+        "detail": {
+            "backToList": "Back to companies list",
+            "totalItems": "Total items",
+            "totalMaintenances": "Total maintenances",
+            "maintenancesListTitle": "Maintenances list",
+            "maintenancesListDescription": "Maintenances linked to company {{name}}",
+            "searchMaintenances": "Search maintenances...",
+            "noMaintenances": "No maintenances linked to this company",
+            "noMaintenancesFor": "No maintenances found for \"{{search}}\"",
+            "material": "Material",
+            "maintenance": "Maintenance",
+            "site": "Site",
+            "type": "Type",
+            "status": "Status",
+            "startedAt": "Start date",
+            "charts": {
+                "bySite": "Maintenances by site",
+                "byType": "Maintenances by type",
+                "byStatus": "Maintenances by status",
+                "byMonth": "Monthly evolution"
+            }
+        },
+        "tabs": {
+            "items": "Items",
+            "maintenances": "Maintenances",
+            "searchItems": "Search items...",
+            "searchMaintenances": "Search maintenances...",
+            "noItems": "No items supplied by this company",
+            "noMaintenances": "No maintenances performed by this company"
+        },
+        "types": {
+            "label": "Types",
+            "item_provider": "Item Provider",
+            "maintenance_provider": "Maintenance Provider"
+        }
+    },
+    "roles": {
+        "title": "Roles",
+        "description": "Role and permission management",
+        "listTitle": "Roles list",
+        "manageRolesAndPermissions": "Manage roles and their associated permissions",
+        "create": "New role",
+        "createRole": "Create role",
+        "editRole": "Edit role",
+        "name": "Role name",
+        "namePlaceholder": "Enter role name",
+        "guard": "Guard",
+        "permissions": "Permissions",
+        "permissionsCount": "{{count}} permission(s)",
+        "selectPermissions": "Select permissions",
+        "searchPermissions": "Search permissions...",
+        "selectedPermissions": "{{count}} permission(s) selected",
+        "noPermissionsSelected": "No permissions selected",
+        "users": "Users",
+        "usersCount": "{{count}} user(s)",
+        "site": "Site",
+        "global": "Global",
+        "permissionsTab": "Permissions",
+        "usersTab": "Users",
+        "noRoles": "No roles found",
+        "noRolesFor": "No roles found for \"{{search}}\"",
+        "noPermissions": "No permissions assigned to this role",
+        "noUsers": "No users have this role",
+        "notFound": "Role not found",
+        "notFoundMessage": "The role you are looking for does not exist or has been deleted.",
+        "backToList": "Back to roles list",
+        "searchPlaceholder": "Search roles...",
+        "deleteTitle": "Delete role",
+        "deleteMessage": "Are you sure you want to delete the role \"{{name}}\"? This action cannot be undone.",
+        "cannotDeleteWithUsers": "Cannot delete this role because it is assigned to users.",
+        "confirmDelete": "Delete role",
+        "confirmDeleteMessage": "Are you sure you want to delete the role \"{{name}}\"? This action cannot be undone.",
+        "selectedPermissionsCount": "{{count}} permission(s) selected",
+        "guardName": "Guard",
+        "level": "Level",
+        "levelPlaceholder": "0 - 100",
+        "levelHint": "The level determines the role hierarchy (0-100). A user can only assign roles with a level equal to or lower than their own.",
+        "siteAssignment": "Site assignment",
+        "selectSite": "Select a site...",
+        "searchSites": "Search sites...",
+        "globalRole": "Global (all sites)",
+        "siteAssignmentHint": "Select a specific site or leave empty to create a global role available on all sites.",
+        "siteCannotBeChanged": "A role's site cannot be changed after creation.",
+        "detail": {
+            "backToList": "Back to roles list",
+            "roleInfo": "Role information",
+            "createdAt": "Created at",
+            "updatedAt": "Updated at"
+        },
+        "messages": {
+            "created": "Role \"{{name}}\" has been created successfully",
+            "updated": "Role \"{{name}}\" has been updated successfully",
+            "deleted": "Role \"{{name}}\" has been deleted successfully"
+        },
+        "validation": {
+            "nameRequired": "Role name is required"
+        },
+        "permissionDescriptions": {
+            "activity": {
+                "delete": "Delete activities",
+                "search": "Search activities",
+                "view": "View activity details",
+                "viewAny": "View activities list"
+            },
+            "calendar-event": {
+                "create": "Create calendar events",
+                "delete": "Delete calendar events",
+                "search": "Search calendar events",
+                "update": "Edit calendar events",
+                "view": "View event details",
+                "viewAny": "View events list"
+            },
+            "calendar": {
+                "create": "Create calendars",
+                "delete": "Delete calendars",
+                "update": "Edit calendars",
+                "view": "View calendar details",
+                "viewAny": "View calendars list"
+            },
+            "cleaning": {
+                "create": "Create cleanings",
+                "delete": "Delete cleanings",
+                "export": "Export cleanings",
+                "generatePlan": "Generate cleaning plan",
+                "search": "Search cleanings",
+                "update": "Edit cleanings",
+                "view": "View cleaning details",
+                "viewAny": "View cleanings list"
+            },
+            "company": {
+                "create": "Create companies",
+                "delete": "Delete companies",
+                "export": "Export companies",
+                "search": "Search companies",
+                "update": "Edit companies",
+                "view": "View company details",
+                "viewAny": "View companies list"
+            },
+            "role": {
+                "create": "Create roles",
+                "delete": "Delete roles",
+                "search": "Search roles",
+                "update": "Edit roles",
+                "view": "View role details",
+                "viewAny": "View roles list"
+            },
+            "permission": {
+                "create": "Create permissions",
+                "delete": "Delete permissions",
+                "search": "Search permissions",
+                "update": "Edit permissions",
+                "view": "View permission details",
+                "viewAny": "View permissions list"
+            },
+            "user": {
+                "assignDirectPermission": "Assign direct permissions",
+                "assignSite": "Assign user to site",
+                "create": "Create users",
+                "delete": "Delete users",
+                "restore": "Restore users",
+                "search": "Search users",
+                "update": "Edit users",
+                "view": "View user details",
+                "viewAny": "View users list"
+            },
+            "material": {
+                "create": "Create materials",
+                "delete": "Delete materials",
+                "export": "Export materials",
+                "generateQrCode": "Generate material QR codes",
+                "scanQrCode": "Scan material QR codes",
+                "search": "Search materials",
+                "update": "Edit materials",
+                "view": "View material details",
+                "viewAny": "View materials list"
+            },
+            "setting": {
+                "create": "Create settings",
+                "delete": "Delete settings",
+                "update": "Edit settings",
+                "view": "View setting details",
+                "viewAny": "View settings list"
+            },
+            "zone": {
+                "create": "Create zones",
+                "delete": "Delete zones",
+                "export": "Export zones",
+                "search": "Search zones",
+                "update": "Edit zones",
+                "view": "View zone details",
+                "viewAny": "View zones list"
+            },
+            "site": {
+                "create": "Create sites",
+                "delete": "Delete sites",
+                "export": "Export sites",
+                "search": "Search sites",
+                "update": "Edit sites",
+                "view": "View site details",
+                "viewAny": "View sites list"
+            },
+            "maintenance": {
+                "create": "Create maintenances",
+                "delete": "Delete maintenances",
+                "export": "Export maintenances",
+                "search": "Search maintenances",
+                "update": "Edit maintenances",
+                "view": "View maintenance details",
+                "viewAny": "View maintenances list"
+            },
+            "incident": {
+                "create": "Create incidents",
+                "delete": "Delete incidents",
+                "export": "Export incidents",
+                "search": "Search incidents",
+                "update": "Edit incidents",
+                "view": "View incident details",
+                "viewAny": "View incidents list"
+            },
+            "item": {
+                "create": "Create items",
+                "delete": "Delete items",
+                "export": "Export items",
+                "generateQrCode": "Generate item QR codes",
+                "scanQrCode": "Scan item QR codes",
+                "search": "Search items",
+                "update": "Edit items",
+                "view": "View item details",
+                "viewAny": "View items list",
+                "viewOthersSites": "View items from other sites"
+            },
+            "item-movement": {
+                "create": "Create movements",
+                "delete": "Delete movements",
+                "export": "Export movements",
+                "search": "Search movements",
+                "update": "Edit movements",
+                "view": "View movement details",
+                "viewAny": "View movements list"
+            },
+            "bypass": {
+                "login": "Bypass authentication"
+            }
+        }
+    },
+    "permissions": {
+        "title": "Permissions",
+        "description": "Permission management for the application",
+        "listTitle": "Permissions list",
+        "managePermissions": "Manage permissions and their associated roles",
+        "create": "New permission",
+        "createPermission": "Create permission",
+        "editPermission": "Edit permission",
+        "name": "Permission name",
+        "namePlaceholder": "e.g. resource.action",
+        "nameHint": "Use the format resource.action (e.g. user.create, item.view)",
+        "roles": "Roles",
+        "rolesCount": "{{count}} role(s)",
+        "noPermissions": "No permissions found",
+        "noPermissionsFor": "No permissions found for \"{{search}}\"",
+        "noRoles": "No roles have this permission",
+        "notFound": "Permission not found",
+        "notFoundMessage": "The permission you are looking for does not exist or has been deleted.",
+        "backToList": "Back to permissions list",
+        "searchPlaceholder": "Search permissions...",
+        "confirmDelete": "Delete permission",
+        "confirmDeleteMessage": "Are you sure you want to delete the permission \"{{name}}\"? This action cannot be undone.",
+        "rolesWithPermission": "Roles with this permission",
+        "validation": {
+            "nameRequired": "Permission name is required"
+        },
+        "messages": {
+            "created": "Permission \"{{name}}\" has been created successfully",
+            "updated": "Permission \"{{name}}\" has been updated successfully",
+            "deleted": "Permission \"{{name}}\" has been deleted successfully"
+        }
+    },
+    "users": {
+        "title": "Users",
+        "description": "User and access management",
+        "listTitle": "Users list",
+        "searchPlaceholder": "Search by name or email...",
+        "create": "New user",
+        "edit": "Edit user",
+        "notFound": "User not found",
+        "notFoundMessage": "The user you are looking for does not exist or has been deleted.",
+        "noUsers": "No users found",
+        "noUsersFor": "No users found for \"{{search}}\"",
+        "deleteTitle": "Delete user",
+        "manageUsersAndPermissions": "Manage users and their permissions per site",
+        "username": "Username",
+        "usernamePlaceholder": "Enter username",
+        "email": "Email",
+        "emailPlaceholder": "Enter email address",
+        "firstName": "First name",
+        "firstNamePlaceholder": "Enter first name",
+        "lastName": "Last name",
+        "lastNamePlaceholder": "Enter last name",
+        "password": "Password",
+        "passwordPlaceholder": "Enter password",
+        "passwordPlaceholderEdit": "Leave empty to keep unchanged",
+        "locale": "Language",
+        "officePhone": "Office phone",
+        "officePhonePlaceholder": "Enter office phone number",
+        "cellPhone": "Cell phone",
+        "cellPhonePlaceholder": "Enter cell phone number",
+        "endEmploymentContract": "Contract end date",
+        "sites": "Sites",
+        "roles": "Roles",
+        "rolesOnCurrentSite": "Roles (current site)",
+        "permissions": "Permissions",
+        "siteAssignments": "Site assignments",
+        "siteAssignmentsInfo": "Assign the user to one or more sites with specific roles and permissions for each site.",
+        "noSiteAssignments": "No site assigned. Click \"Add site\" to begin.",
+        "addSite": "Add site",
+        "selectSite": "Select a site",
+        "selectRoles": "Select roles",
+        "selectPermissions": "Select permissions",
+        "rolesSelected": "{{count}} role(s) selected",
+        "permissionsSelected": "{{count}} permission(s) selected",
+        "directPermissions": "Direct permissions",
+        "status": "Status",
+        "deleted": "Deleted",
+        "active": "Active",
+        "deletedWarning": "Warning",
+        "deletedMessage": "This user was deleted on {{date}} by {{by}}.",
+        "deletedMessageUnknown": "This user was deleted on {{date}}.",
+        "restoreMessage": "You must restore it before making any changes to this user.",
+        "restore": "Restore",
+        "restoring": "Restoring...",
+        "detail": {
+            "backToList": "Back to users list",
+            "contractEnds": "Contract ends",
+            "sitesTab": "Sites",
+            "cleaningsTab": "Cleanings",
+            "maintenancesTab": "Maintenances",
+            "incidentsTab": "Incidents",
+            "sitesWithRoles": "Assigned sites and roles",
+            "noSites": "No site assigned to this user",
+            "noRoles": "No role",
+            "noCleanings": "No cleanings performed by this user",
+            "noMaintenances": "No maintenances performed by this user",
+            "noIncidents": "No incidents reported by this user"
+        },
+        "messages": {
+            "created": "User \"{{name}}\" has been created successfully",
+            "updated": "User \"{{name}}\" has been updated successfully",
+            "deleted": "User \"{{name}}\" has been deleted successfully",
+            "restored": "User \"{{name}}\" has been restored successfully"
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "applicationSettings": "Application Settings",
+        "applicationSettingsDescription": "Configure global application settings.",
+        "noSettings": "No settings available",
+        "headquartersOnly": "Settings can only be modified from headquarters.",
+        "keys": {
+            "currency": "Currency",
+            "currency_symbol": "Currency Symbol",
+            "login_enabled": "Login Enabled"
+        },
+        "descriptions": {
+            "currency": "The currency code used for prices (e.g., EUR, USD).",
+            "currency_symbol": "The symbol displayed for prices (e.g., €, $).",
+            "login_enabled": "When disabled, users cannot log in to the application."
+        },
+        "messages": {
+            "updated": "Setting \"{{name}}\" has been updated successfully"
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "pageTitle": "My notifications",
+        "pageDescription": "Manage your notifications and alerts",
+        "empty": "No notifications",
+        "emptyDescription": "You have no notifications at the moment",
+        "new": "NEW",
+        "unread": "unread",
+        "viewAll": "View all notifications",
+        "markAllAsRead": "Mark all as read",
+        "markAsRead": "Mark as read",
+        "deleteAll": "Delete all",
+        "delete": "Delete notification",
+        "confirmDeleteAll": "Are you sure you want to delete all notifications?",
+        "noMore": "No more notifications",
+        "loadMore": "Load more"
+    },
+    "account": {
+        "title": "My account",
+        "menu": {
+            "notifications": "Notifications",
+            "password": "Password",
+            "security": "Security"
+        },
+        "password": {
+            "pageTitle": "Change my password",
+            "description": "Update your password to secure your account",
+            "currentPassword": "Current password",
+            "newPassword": "New password",
+            "confirmPassword": "Confirm new password",
+            "requirements": "Password must contain at least 8 characters",
+            "submit": "Change password",
+            "success": "Your password has been updated successfully"
+        },
+        "security": {
+            "pageTitle": "Security",
+            "pageDescription": "Manage your account security settings",
+            "comingSoonDescription": "Advanced security options (two-factor authentication, active sessions, etc.) will be available soon."
+        }
+    },
+    "demo": {
+        "modeActive": "Demo Mode Active",
+        "resetNotice": "Data is reset every 6 hours. Some actions are restricted.",
+        "actionBlocked": "This action is disabled in demo mode."
+    },
+    "search": {
+        "placeholder": "Search materials, zones, items...",
+        "minChars": "Type at least 2 characters to search",
+        "noResults": "No results found for \"{{query}}\"",
+        "startTyping": "Start typing to search",
+        "searchHint": "Search across materials, zones, items, incidents, maintenances and more",
+        "navigate": "to navigate",
+        "select": "to select",
+        "close": "to close",
+        "types": {
+            "materials": "Materials",
+            "zones": "Zones",
+            "items": "Items",
+            "incidents": "Incidents",
+            "maintenances": "Maintenances",
+            "companies": "Companies",
+            "sites": "Sites"
+        }
+    }
+}

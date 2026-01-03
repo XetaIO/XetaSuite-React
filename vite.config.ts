@@ -1,27 +1,47 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import path from 'path';
+import react from "@vitejs/plugin-react";
 import tailwindcss from '@tailwindcss/vite'
-import path from 'path'
+import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    svgr({
+      svgrOptions: {
+        icon: true,
+        // This will transform your SVG to a React component
+        exportType: "named",
+        namedExport: "ReactComponent",
+      },
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // Build output configuration
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+  },
   server: {
     proxy: {
-      // Proxy API requests to Laravel backend
-      '/api': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
+      // Sanctum CSRF cookie (development only)
       '/sanctum': {
-        target: 'http://localhost:8000',
+        target: 'https://xetasuite.test',
         changeOrigin: true,
+        secure: false,
       },
+      // API routes (development only)
+      '/api': {
+        target: 'https://xetasuite.test',
+        changeOrigin: true,
+        secure: false,
+      }
     },
   },
-})
+});

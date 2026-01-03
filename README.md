@@ -1,34 +1,216 @@
-# XetaSuite-React
+<p align="center">
+  <img src="https://raw.githubusercontent.com/XetaIO/XetaSuite-React/main/.github/logo.svg" width="400" alt="XetaSuite Logo">
+</p>
 
-A React-based frontend for XetaSuite ERP, designed to work with Laravel 12 (Sanctum + Fortify) as the backend.
+<p align="center">
+  <strong>React Interface for XetaSuite - Multi-Tenant Facility Management ERP</strong>
+</p>
 
-## Features
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/React-19.2+-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React 19"></a>
+  <a href="#"><img src="https://img.shields.io/badge/TypeScript-5.9+-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Vite-7.x-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite"></a>
+  <a href="#"><img src="https://img.shields.io/badge/TailwindCSS-4.x-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"></a>
+  <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/XetaIO/XetaSuite-React/lint.yml?style=flat-square" alt="Linter"></a>
+  <a href="#"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License MIT"></a>
+</p>
 
-- 🔐 **Authentication** - Login, Logout, Forgot Password, Reset Password
-- 🛡️ **Role & Permission Management** - Integration with spatie/laravel-permission
-- 👥 **Team Support** - Multi-tenancy with team switching
-- 🎨 **Modern UI** - TailwindCSS with a clean admin dashboard design
-- ⚡ **Fast Development** - Vite for instant HMR and fast builds
-- 📱 **Responsive** - Mobile-friendly layout with collapsible sidebar
+---
 
-## Tech Stack
+## 📋 About
 
-- **React 19** - Latest React with TypeScript
-- **Vite** - Next generation frontend tooling
-- **TailwindCSS 4** - Utility-first CSS framework
-- **React Router 7** - Declarative routing
-- **Axios** - HTTP client for API requests
-- **Heroicons** - Beautiful hand-crafted SVG icons
+**XetaSuite-React** is the modern and responsive user interface for [XetaSuite](https://github.com/XetaIO/XetaSuite-core), a multi-tenant ERP dedicated to facility, equipment, and inventory management.
 
-## Prerequisites
+This SPA (Single Page Application) communicates with the Laravel backend via **Sanctum stateful authentication** (secure cookies).
 
-- Node.js 18+
+---
+
+## ✨ Interface Features
+
+### 🔐 Authentication & Security
+
+- **Secure login**: Authentication via Laravel Sanctum (cookies)
+- **Forgot password**: Email-based password reset
+- **Profile management**: Personal information editing
+- **Password change**: With current password validation
+
+### 🏢 Multi-Site Dashboard
+
+- **Overview**: Key statistics and indicators per site
+- **Site selector**: Quick switching between locations
+- **Custom widgets**: Real-time charts and metrics
+
+### 🗺️ Zone Management
+
+- **Visual tree**: Navigate through zone hierarchy
+- **Nested creation**: Add sub-zones in cascade
+
+### 🔧 Material Management
+
+- **Paginated list**: Advanced search and filters
+- **Detailed records**: Complete equipment information
+- **QR Codes**: Display and download for identification
+- **History**: View past interventions
+
+### 📦 Stock Management
+
+- **Item catalog**: List view with search
+- **Stock movements**: Entry/exit transfers with full traceability
+- **QR Codes**: Display and download for identification
+- **Price history**: Track purchase cost evolution
+
+### 🏢 Company Management
+
+- **Unified company model**: Companies can be item providers, maintenance contractors, or both
+- **Type-based display**: Visual badges showing company roles (Item Provider, Maintenance Provider)
+- **Tabbed detail view**: Items tab and Maintenances tab based on company type
+- **Headquarters management**: Centralized database managed from HQ site
+- **Full traceability**: Track all items and maintenances linked to each company
+
+### 🛠️ Interventions
+
+#### Maintenances
+- **Forms**: Create and edit interventions
+- **Statuses**: Workflow tracking (scheduled → completed)
+
+#### Incidents
+- **Quick reporting**: Simplified form
+- **Visual priorities**: Color-coded urgency levels
+- **Resolution**: Processing workflow
+
+#### Cleanings
+- **Scheduling**: Frequency management
+- **Validation**: Session confirmation
+
+### 👥 Administration
+
+- **Users**: Create, edit, deactivate
+- **Roles**: Define access profiles
+- **Permissions**: Granular per-site attribution
+
+### 🔔 Notifications
+
+- **Notification center**: Complete history
+- **Real-time badge**: Unread indicator in header
+- **Bulk actions**: Mark all as read
+
+### 🌐 Internationalization
+
+- **Multi-language**: French and English
+- **Auto-detection**: Browser language
+- **User preference**: Saved choice
+
+### 🎨 Modern Interface
+
+- **Design System**: Based on TailAdmin
+- **Dark mode**: Light/dark theme toggle
+- **Responsive**: Mobile and tablet optimized
+- **Collapsible sidebar**: Workspace efficiency
+
+### 🔍 Global Search
+
+- **Quick access**: `Ctrl+K` / `Cmd+K` keyboard shortcut or header search icon
+- **Unified search**: Search across materials, zones, items, incidents, maintenances, companies, sites
+- **Keyboard navigation**: Navigate results with arrow keys, select with Enter
+- **Type indicators**: Visual icons and colors for each result type
+- **Permission-aware**: Only shows results the user is allowed to see
+- **Mobile support**: Accessible via search button in header on mobile devices
+
+---
+
+## 🏗️ Technical Architecture
+
+### Technology Stack
+
+| Component | Technology | Version |
+|-----------|------------|---------|
+| **UI Library** | React | 19.2+ |
+| **Language** | TypeScript | 5.9+ |
+| **Build Tool** | Vite | 7.2+ |
+| **Styling** | Tailwind CSS | 4.1+ |
+| **Routing** | React Router | 7.9+ |
+| **HTTP Client** | Axios | 1.13+ |
+| **i18n** | i18next + react-i18next | 25.x / 16.x |
+| **Calendar** | FullCalendar | 6.x |
+| **Charts** | ApexCharts | 4.x |
+| **Notifications** | React Toastify | 11.x |
+
+### Code Architecture
+
+```
+src/
+├── app/                         # Application entry point
+│   ├── routes/                  # Route configuration
+│   ├── i18n/                    # Internationalization
+│   │   └── locales/             # Translation files
+│   ├── styles/                  # Global styles
+│   ├── App.tsx                  # Main component
+│   └── AppRoutes.tsx            # Route generator
+│
+├── features/                    # Business modules
+│   ├── Auth/                    # Authentication
+│   │   ├── services/            # Repository + Manager
+│   │   ├── store/               # React Context
+│   │   ├── hooks/               # useAuth, useRequireAuth
+│   │   └── views/               # Login, reset pages, etc.
+│   ├── Sites/                   # Site management
+│   ├── Zones/                   # Zone management
+│   ├── Materials/               # Material management
+│   ├── Items/                   # Stock management
+│   ├── Maintenances/            # Interventions
+│   ├── Incidents/               # Reports
+│   ├── Cleanings/               # Cleanings
+│   ├── Companies/               # Company management (item providers & contractors)
+│   ├── Users/                   # Users
+│   ├── Roles/                   # Roles
+│   ├── Permissions/             # Permissions
+│   └── Notifications/           # Notifications
+│
+└── shared/                      # Shared code
+    ├── api/                     # httpClient, urlBuilder
+    ├── components/              # Reusable UI components
+    │   ├── ui/                  # Button, Modal, Alert, Table
+    │   ├── form/                # Input, Select, Checkbox
+    │   └── common/              # Pagination, DeleteConfirmModal
+    ├── hooks/                   # Utility hooks
+    └── types/                   # Global TypeScript types
+```
+
+### Repository + Manager Pattern
+
+```typescript
+// Repository: Raw API calls
+export const CompanyRepository = {
+    getAll: async (params?) => {
+        const response = await httpClient.get('/api/v1/companies', { params });
+        return response.data;
+    },
+};
+
+// Manager: Error handling + transformation
+export const CompanyManager = {
+    getAll: async (params?) => {
+        try {
+            const data = await CompanyRepository.getAll(params);
+            return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+};
+```
+
+---
+
+## 🚀 Installation
+
+### Prerequisites
+
+- Node.js 18 or higher
 - npm or yarn
-- Laravel 12 backend with Sanctum and Fortify configured
+- [XetaSuite-core](https://github.com/XetaIO/XetaSuite-core) backend configured
 
-## Getting Started
-
-### Installation
+### Setup
 
 ```bash
 # Clone the repository
@@ -38,7 +220,7 @@ cd XetaSuite-React
 # Install dependencies
 npm install
 
-# Copy environment file
+# Configure environment
 cp .env.example .env
 
 # Start development server
@@ -47,153 +229,169 @@ npm run dev
 
 ### Environment Variables
 
-Create a `.env` file in the root directory:
-
 ```env
-VITE_API_URL=http://localhost:8000
+# API URL (empty to use Vite proxy)
+VITE_API_URL=
+
+# In production
+VITE_API_URL=https://api.xetasuite.com
 ```
 
-### Available Scripts
+---
+
+## 📝 Available Scripts
 
 ```bash
-# Start development server
+# Development server (http://localhost:5173)
 npm run dev
 
-# Build for production
+# Production build (with TypeScript check)
 npm run build
 
 # Preview production build
 npm run preview
 
-# Run linter
+# ESLint linter
 npm run lint
 ```
 
-## Backend Requirements
+---
 
-Your Laravel 12 backend should have:
+## 🔐 Sanctum Authentication
 
-1. **Laravel Sanctum** configured for SPA authentication
-2. **Laravel Fortify** for authentication features
-3. **spatie/laravel-permission** with Team support enabled
-
-### Sanctum Configuration
-
-Ensure your Laravel `config/cors.php` allows credentials:
-
-```php
-'supports_credentials' => true,
-```
-
-And configure Sanctum stateful domains in `.env`:
-
-```env
-SANCTUM_STATEFUL_DOMAINS=localhost:5173,localhost:3000
-```
-
-### Required API Endpoints
-
-The frontend expects these endpoints:
-
-- `GET /sanctum/csrf-cookie` - Get CSRF token
-- `POST /login` - User login
-- `POST /logout` - User logout
-- `POST /forgot-password` - Request password reset
-- `POST /reset-password` - Reset password with token
-- `GET /api/user` - Get authenticated user with roles/permissions
-
-### User API Response Format
-
-The `/api/user` endpoint should return:
-
-```json
-{
-  "id": 1,
-  "name": "John Doe",
-  "email": "john@example.com",
-  "email_verified_at": "2024-01-01T00:00:00.000000Z",
-  "created_at": "2024-01-01T00:00:00.000000Z",
-  "updated_at": "2024-01-01T00:00:00.000000Z",
-  "roles": [
-    {
-      "id": 1,
-      "name": "admin",
-      "guard_name": "web",
-      "team_id": 1,
-      "permissions": [...]
-    }
-  ],
-  "permissions": [...],
-  "current_team_id": 1,
-  "current_team": {
-    "id": 1,
-    "name": "Default Team",
-    "slug": "default-team"
-  }
-}
-```
-
-## Project Structure
+### Authentication Flow
 
 ```
-src/
-├── components/
-│   ├── layout/          # Layout components (AppLayout, AuthLayout, Sidebar, Header)
-│   └── ui/              # Reusable UI components (Button, Input, Alert)
-├── contexts/
-│   └── AuthContext.tsx  # Authentication context and provider
-├── hooks/
-│   └── useRequireAuth.tsx  # Route protection hooks
-├── pages/
-│   ├── auth/            # Authentication pages (Login, ForgotPassword, ResetPassword)
-│   └── dashboard/       # Dashboard page
-├── services/
-│   └── api.ts           # API service with Axios configuration
-├── types/
-│   └── index.ts         # TypeScript type definitions
-├── App.tsx              # Main app component with routing
-├── main.tsx             # App entry point
-└── index.css            # Global styles with Tailwind
+1. GET /sanctum/csrf-cookie  → Retrieves CSRF token
+2. POST /api/v1/auth/login   → Authentication
+3. Session cookie created    → Used for all requests
 ```
 
-## Adding New Pages
+### Axios Configuration
 
-1. Create a new page component in `src/pages/`
-2. Add the route in `src/App.tsx`
-3. Add navigation item in `src/components/layout/Sidebar.tsx`
+```typescript
+const httpClient = axios.create({
+    baseURL: import.meta.env.VITE_API_URL || '',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+    },
+    withCredentials: true,   // Required for Sanctum
+    withXSRFToken: true,     // Auto-include XSRF token
+});
+```
 
-## Role & Permission Checking
+---
 
-Use the `useAuth` hook to check roles and permissions:
+## 🛡️ Permission Management
+
+### Checking in Components
 
 ```tsx
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/features/Auth/hooks';
 
 function MyComponent() {
-  const { hasRole, hasPermission, hasAnyRole, hasAnyPermission } = useAuth();
+    const { hasPermission, hasRole, hasAnyPermission } = useAuth();
 
-  if (hasRole('admin')) {
-    // Show admin content
-  }
-
-  if (hasPermission('users.create')) {
-    // Show create user button
-  }
+    return (
+        <div>
+            {hasPermission('company.create') && (
+                <Button>Create Company</Button>
+            )}
+            {hasRole('admin') && <AdminPanel />}
+        </div>
+    );
 }
 ```
 
-Or use route-level protection:
+### Protected Routes
 
 ```tsx
-<Route
-  element={
-    <RequireAuth roles={['admin']} permissions={['users.view']}>
-      <UsersPage />
+<Route element={
+    <RequireAuth permissions={['material.viewAny']}>
+        <AppLayout />
     </RequireAuth>
-  }
-/>
+}>
+    <Route path="/materials" element={<MaterialListPage />} />
+</Route>
 ```
 
-## License
+---
 
-This project is open-sourced software licensed under the [MIT license](LICENSE).
+## 🎨 Styling with Tailwind CSS 4
+
+### Custom Theme
+
+Colors are defined in `src/app/styles/index.css`:
+
+```css
+@theme {
+  --color-brand-500: #465fff;
+  --color-success-500: #22c55e;
+  --color-error-500: #ef4444;
+  --color-warning-500: #f97316;
+}
+```
+
+### Dark Mode
+
+```tsx
+<div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-white">
+  Theme-adaptive content
+</div>
+```
+
+---
+
+## 🌐 Internationalization
+
+### Configuration
+
+```typescript
+i18n.init({
+    resources: {
+        en: { translation: en },
+        fr: { translation: fr },
+    },
+    fallbackLng: 'en',
+    detection: {
+        order: ['cookie', 'localStorage', 'navigator'],
+    },
+});
+```
+
+### Usage
+
+```tsx
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+    const { t } = useTranslation();
+    return <h1>{t('common.welcome')}</h1>;
+}
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+```bash
+# Run linter before committing
+npm run lint
+```
+
+---
+
+## 📄 License
+
+XetaSuite-React is open-source software licensed under the [MIT](LICENSE) license.
+
+---
+
+## 🔗 Links
+
+- **Laravel Backend**: [XetaSuite-core](https://github.com/XetaIO/XetaSuite-core)
+- **Issues**: [GitHub Issues](https://github.com/XetaIO/XetaSuite-React/issues)
