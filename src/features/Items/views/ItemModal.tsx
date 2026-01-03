@@ -7,7 +7,7 @@ import { ItemManager } from "../services";
 import type {
     Item,
     ItemFormData,
-    AvailableSupplier,
+    AvailableCompany,
     AvailableMaterial,
     AvailableRecipient,
 } from "../types";
@@ -26,36 +26,36 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
     const [formData, setFormData] = useState<ItemFormData>(ItemManager.getDefaultFormData());
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingDropdowns, setIsLoadingDropdowns] = useState(false);
-    const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(false);
+    const [isLoadingCompanies, setIsLoadingCompanies] = useState(false);
     const [isLoadingMaterials, setIsLoadingMaterials] = useState(false);
     const [isLoadingRecipients, setIsLoadingRecipients] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     // Dropdown options
-    const [suppliers, setSuppliers] = useState<AvailableSupplier[]>([]);
+    const [companies, setCompanies] = useState<AvailableCompany[]>([]);
     const [materials, setMaterials] = useState<AvailableMaterial[]>([]);
     const [recipients, setRecipients] = useState<AvailableRecipient[]>([]);
 
-    // Search filters for materials and recipients (supplier uses SearchableDropdown)
+    // Search filters for materials and recipients (company uses SearchableDropdown)
     const [materialSearch, setMaterialSearch] = useState("");
     const [recipientSearch, setRecipientSearch] = useState("");
 
-    // Original supplier for pinned item when editing
-    const [originalSupplier, setOriginalSupplier] = useState<AvailableSupplier | null>(null);
+    // Original company for pinned item when editing
+    const [originalCompany, setOriginalCompany] = useState<AvailableCompany | null>(null);
 
     // Debounce refs for materials and recipients
     const materialSearchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
     const recipientSearchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Search suppliers (includeId ensures current supplier is always included)
-    const searchSuppliers = useCallback(async (search: string) => {
-        setIsLoadingSuppliers(true);
-        const result = await ItemManager.getAvailableSuppliers(search || undefined, formData.supplier_id ?? undefined);
+    // Search companies (includeId ensures current company is always included)
+    const searchCompanies = useCallback(async (search: string) => {
+        setIsLoadingCompanies(true);
+        const result = await ItemManager.getAvailableCompanies(search || undefined, formData.company_id ?? undefined);
         if (result.success && result.data) {
-            setSuppliers(result.data);
+            setCompanies(result.data);
         }
-        setIsLoadingSuppliers(false);
-    }, [formData.supplier_id]);
+        setIsLoadingCompanies(false);
+    }, [formData.company_id]);
 
     // Search materials with debounce
     const searchMaterials = useCallback(async (search: string) => {
@@ -99,17 +99,17 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
         }, 300);
     };
 
-    // Load dropdown data (supplierId ensures current supplier is included in edit mode)
-    const loadDropdownData = useCallback(async (supplierId?: number | null) => {
+    // Load dropdown data (companyId ensures current company is included in edit mode)
+    const loadDropdownData = useCallback(async (companyId?: number | null) => {
         setIsLoadingDropdowns(true);
-        const [suppliersResult, materialsResult, recipientsResult] = await Promise.all([
-            ItemManager.getAvailableSuppliers(undefined, supplierId ?? undefined),
+        const [companiesResult, materialsResult, recipientsResult] = await Promise.all([
+            ItemManager.getAvailableCompanies(undefined, companyId ?? undefined),
             ItemManager.getAvailableMaterials(),
             ItemManager.getAvailableRecipients(),
         ]);
 
-        if (suppliersResult.success && suppliersResult.data) {
-            setSuppliers(suppliersResult.data);
+        if (companiesResult.success && companiesResult.data) {
+            setCompanies(companiesResult.data);
         }
         if (materialsResult.success && materialsResult.data) {
             setMaterials(materialsResult.data);
@@ -130,11 +130,11 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
             const itemData = result.data.data;
             setFormData(ItemManager.toFormData(itemData));
 
-            // Save original supplier for pinned item
-            if (itemData.supplier_id && itemData.supplier) {
-                setOriginalSupplier({
-                    id: itemData.supplier_id,
-                    name: itemData.supplier.name,
+            // Save original company for pinned item
+            if (itemData.company_id && itemData.company) {
+                setOriginalCompany({
+                    id: itemData.company_id,
+                    name: itemData.company.name,
                     item: {
                         id: itemData.id,
                         name: itemData.name,
@@ -150,21 +150,21 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
 
     useEffect(() => {
         if (isOpen) {
-            // In edit mode, pass item's supplier_id to ensure it appears first in dropdown
-            loadDropdownData(isEditing ? item?.supplier_id : undefined);
+            // In edit mode, pass item's company_id to ensure it appears first in dropdown
+            loadDropdownData(isEditing ? item?.company_id : undefined);
             if (isEditing) {
                 loadItemData();
             } else {
                 setFormData(ItemManager.getDefaultFormData());
-                setOriginalSupplier(null);
+                setOriginalCompany(null);
             }
             setErrors({});
             setMaterialSearch("");
             setRecipientSearch("");
         } else {
-            setOriginalSupplier(null);
+            setOriginalCompany(null);
         }
-    }, [isOpen, isEditing, item?.supplier_id, loadDropdownData, loadItemData]);
+    }, [isOpen, isEditing, item?.company_id, loadDropdownData, loadItemData]);
 
     const handleChange = (field: keyof ItemFormData, value: ItemFormData[keyof ItemFormData]) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
@@ -331,42 +331,42 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                         </div>
                     </div>
 
-                    {/* Supplier */}
+                    {/* Company */}
                     <div className="space-y-4">
                         <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            {t("items.sections.supplier")}
+                            {t("items.sections.company")}
                         </h4>
 
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
-                                <Label>{t("items.fields.supplier")}</Label>
+                                <Label>{t("items.fields.company")}</Label>
                                 <SearchableDropdown
-                                    value={formData.supplier_id}
-                                    onChange={(value) => handleChange("supplier_id", value)}
-                                    options={suppliers}
-                                    placeholder={t("items.form.selectSupplier")}
-                                    searchPlaceholder={t("items.form.searchSupplier")}
-                                    noSelectionText={t("items.noSupplier")}
+                                    value={formData.company_id}
+                                    onChange={(value) => handleChange("company_id", value)}
+                                    options={companies}
+                                    placeholder={t("items.form.selectCompany")}
+                                    searchPlaceholder={t("items.form.searchCompany")}
+                                    noSelectionText={t("items.noCompany")}
                                     noResultsText={t("common.noResults")}
                                     loadingText={t("common.loading")}
                                     nullable
                                     disabled={isLoading}
-                                    isLoading={isLoadingDropdowns || isLoadingSuppliers}
-                                    onSearch={searchSuppliers}
-                                    pinnedItem={originalSupplier ? {
-                                        id: originalSupplier.id,
-                                        name: originalSupplier.name,
-                                        label: t("items.form.currentSupplier"),
+                                    isLoading={isLoadingDropdowns || isLoadingCompanies}
+                                    onSearch={searchCompanies}
+                                    pinnedItem={originalCompany ? {
+                                        id: originalCompany.id,
+                                        name: originalCompany.name,
+                                        label: t("items.form.currentCompany"),
                                     } as PinnedItem : undefined}
                                     className="mt-1.5"
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="supplier_reference">{t("items.fields.supplierReference")}</Label>
+                                <Label htmlFor="company_reference">{t("items.fields.companyReference")}</Label>
                                 <Input
-                                    id="supplier_reference"
-                                    value={formData.supplier_reference}
-                                    onChange={(e) => handleChange("supplier_reference", e.target.value)}
+                                    id="company_reference"
+                                    value={formData.company_reference}
+                                    onChange={(e) => handleChange("company_reference", e.target.value)}
                                     disabled={isLoading}
                                 />
                             </div>
@@ -403,7 +403,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                                                 error={!!errors.number_warning_minimum}
                                                 hint={errors.number_warning_minimum}
                                                 disabled={isLoading}
-                                                className="max-w-[150px]"
+                                                className="max-w-37.5"
                                             />
                                             <p className="mt-1 text-xs text-gray-500">
                                                 {t("items.alerts.warningThresholdHelp")}
@@ -436,7 +436,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                                                 error={!!errors.number_critical_minimum}
                                                 hint={errors.number_critical_minimum}
                                                 disabled={isLoading}
-                                                className="max-w-[150px]"
+                                                className="max-w-37.5"
                                             />
                                             <p className="mt-1 text-xs text-gray-500">
                                                 {t("items.alerts.criticalThresholdHelp")}

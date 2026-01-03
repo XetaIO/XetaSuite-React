@@ -16,11 +16,11 @@ export interface ListPageHeaderProps {
  *
  * @example
  * <ListPageHeader
- *     title={t("suppliers.listTitle")}
- *     description={t("suppliers.description")}
+ *     title={t("companies.listTitle")}
+ *     description={t("companies.description")}
  *     actions={
  *         <Button onClick={handleCreate}>
- *             {t("suppliers.create")}
+ *             {t("companies.create")}
  *         </Button>
  *     }
  * />

@@ -1,15 +1,15 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { FaArrowLeft, FaPenToSquare, FaMagnifyingGlass, FaLayerGroup, FaGear, FaCalendar } from 'react-icons/fa6';
+import { FaArrowLeft, FaPenToSquare, FaMagnifyingGlass, FaLayerGroup, FaCalendar, FaWrench } from 'react-icons/fa6';
 import { ZoneManager } from '../services/ZoneManager';
 import { ZoneModal } from './ZoneModal';
 import type { Zone, ZoneChild, ZoneMaterial } from '../types';
 import PageBreadcrumb from '@/shared/components/common/PageBreadcrumb';
 import PageMeta from '@/shared/components/common/PageMeta';
-import { Button, Badge } from '@/shared/components/ui';
+import { Button, Badge, LinkedName } from '@/shared/components/ui';
 import { Table, TableHeader, TableBody, TableRow, TableCell } from '@/shared/components/ui/table';
-import { useModal } from '@/shared/hooks';
+import { useEntityPermissions, useModal } from '@/shared/hooks';
 import { useAuth } from '@/features/Auth/hooks';
 import { formatDate } from "@/shared/utils";
 import { NotFoundContent } from '@/shared/components/errors';
@@ -17,7 +17,7 @@ import { NotFoundContent } from '@/shared/components/errors';
 export function ZoneDetailPage() {
     const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
-    const { hasPermission } = useAuth();
+    const { hasPermission, isOnHeadquarters } = useAuth();
 
     // Zone state
     const [zone, setZone] = useState<Zone | null>(null);
@@ -38,7 +38,9 @@ export function ZoneDetailPage() {
     const editModal = useModal();
 
     // Permissions
-    const canUpdate = hasPermission('zone.update');
+    const permissions = useEntityPermissions("zone", { hasPermission, isOnHeadquarters });
+    const canViewSite = isOnHeadquarters && hasPermission('site.view');
+    const canViewMaterial = hasPermission('material.view');
 
     // Filtered data (client-side filtering)
     const filteredChildren = useMemo(() => {
@@ -187,7 +189,7 @@ export function ZoneDetailPage() {
                             </p>
                         </div>
                     </div>
-                    {canUpdate && (
+                    {permissions.canUpdate && (
                         <Button
                             variant="outline"
                             size="sm"
@@ -213,7 +215,7 @@ export function ZoneDetailPage() {
 
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success-100 dark:bg-success-500/20">
-                            <FaGear className="h-5 w-5 text-success-600 dark:text-success-400" />
+                            <FaWrench className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
                         <div>
                             <p className="text-2xl font-semibold text-gray-900 dark:text-white">{zone.material_count}</p>
@@ -263,7 +265,7 @@ export function ZoneDetailPage() {
                         </div>
 
                         <div className="flex items-start gap-3">
-                            <FaGear className="mt-0.5 h-4 w-4 text-gray-400" />
+                            <FaWrench className="mt-0.5 h-4 w-4 text-gray-400" />
                             <div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('zones.allowMaterial')}</p>
                                 <p className="text-gray-900 dark:text-white">
@@ -287,7 +289,11 @@ export function ZoneDetailPage() {
                                 {zone.site.name.charAt(0).toUpperCase()}
                             </div>
                             <div>
-                                <span className="font-medium text-gray-900 dark:text-white">{zone.site.name}</span>
+                                <LinkedName
+                                    canView={canViewSite}
+                                    id={zone.site.id}
+                                    name={zone.site.name}
+                                    basePath="sites" />
                             </div>
                         </div>
                     ) : (
@@ -404,6 +410,11 @@ export function ZoneDetailPage() {
                                                 >
                                                     {child.name}
                                                 </Link>
+                                                <LinkedName
+                                                    canView={permissions.canView}
+                                                    id={child.id}
+                                                    name={child.name}
+                                                    basePath="zones" />
                                             </TableCell>
                                             <TableCell className="px-6 py-4">
                                                 <Badge
@@ -518,12 +529,11 @@ export function ZoneDetailPage() {
                                             className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
                                         >
                                             <TableCell className="px-6 py-4">
-                                                <Link
-                                                    to={`/materials/${material.id}`}
-                                                    className="font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400"
-                                                >
-                                                    {material.name}
-                                                </Link>
+                                                <LinkedName
+                                                    canView={canViewMaterial}
+                                                    id={material.id}
+                                                    name={material.name}
+                                                    basePath="materials" />
                                             </TableCell>
                                             <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                                 {material.description || <span className="text-gray-400">—</span>}

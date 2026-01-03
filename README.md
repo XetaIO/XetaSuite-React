@@ -58,7 +58,14 @@ This SPA (Single Page Application) communicates with the Laravel backend via **S
 - **Stock movements**: Entry/exit transfers with full traceability
 - **QR Codes**: Display and download for identification
 - **Price history**: Track purchase cost evolution
-- **Suppliers**: Centralized management (headquarters only)
+
+### 🏢 Company Management
+
+- **Unified company model**: Companies can be item providers, maintenance contractors, or both
+- **Type-based display**: Visual badges showing company roles (Item Provider, Maintenance Provider)
+- **Tabbed detail view**: Items tab and Maintenances tab based on company type
+- **Headquarters management**: Centralized database managed from HQ site
+- **Full traceability**: Track all items and maintenances linked to each company
 
 ### 🛠️ Interventions
 
@@ -80,7 +87,6 @@ This SPA (Single Page Application) communicates with the Laravel backend via **S
 - **Users**: Create, edit, deactivate
 - **Roles**: Define access profiles
 - **Permissions**: Granular per-site attribution
-- **Contractors**: External company management
 
 ### 🔔 Notifications
 
@@ -104,7 +110,7 @@ This SPA (Single Page Application) communicates with the Laravel backend via **S
 ### 🔍 Global Search
 
 - **Quick access**: `Ctrl+K` / `Cmd+K` keyboard shortcut or header search icon
-- **Unified search**: Search across materials, zones, items, incidents, maintenances, companies, suppliers, sites
+- **Unified search**: Search across materials, zones, items, incidents, maintenances, companies, sites
 - **Keyboard navigation**: Navigate results with arrow keys, select with Enter
 - **Type indicators**: Visual icons and colors for each result type
 - **Permission-aware**: Only shows results the user is allowed to see
@@ -154,8 +160,7 @@ src/
 │   ├── Maintenances/            # Interventions
 │   ├── Incidents/               # Reports
 │   ├── Cleanings/               # Cleanings
-│   ├── Suppliers/               # Suppliers
-│   ├── Companies/               # Contractors
+│   ├── Companies/               # Company management (item providers & contractors)
 │   ├── Users/                   # Users
 │   ├── Roles/                   # Roles
 │   ├── Permissions/             # Permissions
@@ -175,18 +180,18 @@ src/
 
 ```typescript
 // Repository: Raw API calls
-export const SupplierRepository = {
+export const CompanyRepository = {
     getAll: async (params?) => {
-        const response = await httpClient.get('/api/v1/suppliers', { params });
+        const response = await httpClient.get('/api/v1/companies', { params });
         return response.data;
     },
 };
 
 // Manager: Error handling + transformation
-export const SupplierManager = {
+export const CompanyManager = {
     getAll: async (params?) => {
         try {
-            const data = await SupplierRepository.getAll(params);
+            const data = await CompanyRepository.getAll(params);
             return { success: true, data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };
@@ -291,8 +296,8 @@ function MyComponent() {
 
     return (
         <div>
-            {hasPermission('supplier.create') && (
-                <Button>Create Supplier</Button>
+            {hasPermission('company.create') && (
+                <Button>Create Company</Button>
             )}
             {hasRole('admin') && <AdminPanel />}
         </div>

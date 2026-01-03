@@ -65,7 +65,7 @@ const ItemDetailPage: FC = () => {
     const canDelete = !isOnHeadquarters && hasPermission("item.delete");
     const canGenerateQrCode = !isOnHeadquarters && hasPermission('item.generateQrCode');
     const canCreateMovement = hasPermission("item-movement.create");
-    const canViewSupplier = hasPermission("supplier.view");
+    const canViewCompany = hasPermission("company.view");
     const canViewCreatorAndRecipient = isOnHeadquarters && hasPermission("user.view");
 
     // Modals
@@ -354,17 +354,17 @@ const ItemDetailPage: FC = () => {
                             <FaTruckRampBox className="mt-0.5 h-4 w-4 text-gray-400" />
                             <div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("items.fields.supplier")}
+                                    {t("items.fields.company")}
                                 </p>
                                 <LinkedName
-                                    canView={canViewSupplier}
-                                    id={item.supplier?.id}
-                                    name={item.supplier?.name}
-                                    basePath="suppliers" />
+                                    canView={canViewCompany}
+                                    id={item.company?.id}
+                                    name={item.company?.name}
+                                    basePath="companies" />
 
-                                {item.supplier_reference && (
+                                {item.company_reference && (
                                     <p className="mt-1 text-xs text-gray-500">
-                                        {t("items.fields.supplierReference")}: {item.supplier_reference}
+                                        {t("items.fields.companyReference")}: {item.company_reference}
                                     </p>
                                 )}
                             </div>

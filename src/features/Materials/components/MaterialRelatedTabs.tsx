@@ -41,7 +41,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
     const canViewCleaning = hasPermission('cleaning.view');
     const canViewItem = hasPermission('item.view');
     const canViewCreator = isOnHeadquarters && hasPermission('user.view');
-    const canViewSupplier = hasPermission('supplier.view');
+    const canViewCompany = hasPermission('company.view');
 
     // Incidents state
     const [incidents, setIncidents] = useState<MaterialIncident[]>([]);
@@ -448,7 +448,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                                     {t('items.fields.stock')}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t('items.fields.supplier')}
+                                                    {t('items.fields.company')}
                                                 </TableCell>
                                             </TableRow>
                                         </TableHeader>
@@ -476,10 +476,10 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4 text-gray-600 dark:text-gray-300">
                                                         <LinkedName
-                                                            canView={canViewSupplier}
-                                                            id={item.supplier?.id}
-                                                            name={item.supplier?.name}
-                                                            basePath="suppliers"
+                                                            canView={canViewCompany}
+                                                            id={item.company?.id}
+                                                            name={item.company?.name}
+                                                            basePath="companies"
                                                         />
                                                     </TableCell>
                                                 </TableRow>

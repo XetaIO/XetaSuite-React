@@ -6,7 +6,7 @@ import type {
     ItemMovementFormData,
     ItemMovementFilters,
 } from '../types';
-import type { AvailableSupplier } from '@/features/Items/types';
+import type { AvailableCompany } from '@/features/Items/types';
 import { ItemRepository } from "@/features/Items/services";
 
 /**
@@ -75,11 +75,11 @@ export const ItemMovementManager = {
     },
 
     /**
-     * Get available suppliers
+     * Get available companies
      */
-    getAvailableSuppliers: async (search?: string, includeId?: number): Promise<ManagerResult<AvailableSupplier[]>> => {
+    getAvailableCompanies: async (search?: string, includeId?: number): Promise<ManagerResult<AvailableCompany[]>> => {
         try {
-            const response = await ItemRepository.getAvailableSuppliers(search, includeId);
+            const response = await ItemRepository.getAvailableCompanies(search, includeId);
             return { success: true, data: response };
         } catch (error) {
             return { success: false, error: handleApiError(error) };

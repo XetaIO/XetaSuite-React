@@ -1,15 +1,35 @@
+// Company type enum values
+export type CompanyType = 'item_provider' | 'maintenance_provider';
+
 // Company types
 export interface Company {
     id: number;
     name: string;
     description: string | null;
+
+    // Types
+    types: CompanyType[];
+    is_item_provider: boolean;
+    is_maintenance_provider: boolean;
+
+    // Contact info
+    email: string | null;
+    phone: string | null;
+    address: string | null;
+
+    // Creator
     created_by_id: number;
     created_by_name?: string;
     creator?: {
         id: number;
         full_name: string;
     };
+
+    // Counts
+    item_count: number;
     maintenance_count: number;
+
+    // Timestamps
     created_at: string;
     updated_at: string;
 }
@@ -17,12 +37,41 @@ export interface Company {
 export interface CompanyFormData {
     name: string;
     description: string;
+    types: CompanyType[];
+    email?: string;
+    phone?: string;
+    address?: string;
 }
 
 export interface CompanyFilters {
     page?: number;
     search?: string;
+    type?: CompanyType;
     sort_by?: 'name' | 'maintenances_count' | 'created_at';
+    sort_direction?: 'asc' | 'desc';
+}
+
+// Item for company detail
+export interface CompanyItem {
+    id: number;
+    name: string;
+    reference: string | null;
+    description: string | null;
+    current_price: number;
+    item_entry_total: number;
+    item_exit_total: number;
+    site_id: number;
+    site?: {
+        id: number;
+        name: string;
+    };
+    created_at: string;
+}
+
+export interface ItemFilters {
+    page?: number;
+    search?: string;
+    sort_by?: 'name' | 'reference' | 'current_price' | 'created_at';
     sort_direction?: 'asc' | 'desc';
 }
 

@@ -14,6 +14,7 @@ import {
     SortableTableHeader,
     StaticTableHeader,
     Button,
+    Badge,
     ListPageCard,
     ListPageHeader,
     SearchSection,
@@ -103,13 +104,15 @@ const CompanyListPage: FC = () => {
 
     const skeletonCells = [
         { width: "w-32" },
+        { width: "w-24" },
         { width: "w-48" },
+        { width: "w-8", center: true },
         { width: "w-8", center: true },
         { width: "w-28" },
         { width: "w-24" },
         ...(permissions.hasAnyAction ? [{ width: "w-16", right: true }] : []),
     ];
-    const colSpan = 5 + (permissions.hasAnyAction ? 1 : 0);
+    const colSpan = 6 + (permissions.hasAnyAction ? 1 : 0);
 
     return (
         <>
@@ -156,10 +159,18 @@ const CompanyListPage: FC = () => {
                                     onSort={handleSort}
                                     renderSortIcon={renderSortIcon}
                                 />
+                                <StaticTableHeader label={t("companies.types.label")} />
                                 <StaticTableHeader label={t("common.description")} />
                                 <SortableTableHeader
                                     field="maintenances_count"
                                     label={t("companies.maintenances")}
+                                    onSort={handleSort}
+                                    renderSortIcon={renderSortIcon}
+                                    align="center"
+                                />
+                                <SortableTableHeader
+                                    field="items_count"
+                                    label={t("companies.items")}
                                     onSort={handleSort}
                                     renderSortIcon={renderSortIcon}
                                     align="center"
@@ -181,7 +192,7 @@ const CompanyListPage: FC = () => {
                         <TableBody>
                             {isLoading ? (
                                 <TableSkeletonRows
-                                    count={6}
+                                    count={7}
                                     cells={skeletonCells}
                                 />
                             ) : companies.length === 0 ? (
@@ -202,6 +213,19 @@ const CompanyListPage: FC = () => {
                                                 name={company.name}
                                                 basePath="companies" />
                                         </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            <div className="flex flex-wrap gap-1">
+                                                {company.types.map((type) => (
+                                                    <Badge
+                                                        key={type}
+                                                        size="sm"
+                                                        color={type === 'item_provider' ? 'brand' : 'success'}
+                                                    >
+                                                        {t(`companies.types.${type}`)}
+                                                    </Badge>
+                                                ))}
+                                            </div>
+                                        </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             {company.description ? (
                                                 <span className="line-clamp-1">{company.description}</span>
@@ -212,6 +236,11 @@ const CompanyListPage: FC = () => {
                                         <TableCell className="px-6 py-4 text-center">
                                             <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
                                                 {company.maintenance_count}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-center">
+                                            <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                                                {company.item_count}
                                             </span>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">

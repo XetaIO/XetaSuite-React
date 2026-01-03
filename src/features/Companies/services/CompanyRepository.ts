@@ -1,7 +1,7 @@
 import { httpClient } from '@/shared/api';
 import { buildUrl, API_ENDPOINTS } from '@/shared/api';
 import type { PaginatedResponse, SingleResponse } from '@/shared/types';
-import type { Company, CompanyFormData, CompanyFilters, CompanyMaintenance, MaintenanceFilters, CompanyStats } from '../types';
+import type { Company, CompanyFormData, CompanyFilters, CompanyItem, ItemFilters, CompanyMaintenance, MaintenanceFilters, CompanyStats } from '../types';
 
 /**
  * Company Repository - Responsible for interacting with the data source
@@ -59,6 +59,20 @@ export const CompanyRepository = {
      */
     delete: async (id: number): Promise<void> => {
         await httpClient.delete(API_ENDPOINTS.COMPANIES.DETAIL(id));
+    },
+
+    /**
+     * Get paginated list of items for a company
+     */
+    getItems: async (id: number, filters: ItemFilters = {}): Promise<PaginatedResponse<CompanyItem>> => {
+        const url = buildUrl(API_ENDPOINTS.COMPANIES.ITEMS(id), {
+            page: filters.page,
+            search: filters.search,
+            sort_by: filters.sort_by,
+            sort_direction: filters.sort_direction,
+        });
+        const response = await httpClient.get<PaginatedResponse<CompanyItem>>(url);
+        return response.data;
     },
 
     /**

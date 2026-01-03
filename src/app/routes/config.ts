@@ -12,10 +12,6 @@ const ResendSetupPasswordPage = lazy(() => import("@/features/Auth/views/ResendS
 const HomePage = lazy(() => import("@/features/Dashboard/Home"));
 const NotFoundPage = lazy(() => import("@/shared/components/errors/NotFoundPage"));
 
-// Lazy load Suppliers feature
-const SupplierListPage = lazy(() => import("@/features/Suppliers/views/SupplierListPage"));
-const SupplierDetailPage = lazy(() => import("@/features/Suppliers/views/SupplierDetailPage"));
-
 // Lazy load Sites feature
 const SiteListPage = lazy(() => import("@/features/Sites/views/SiteListPage"));
 const SiteDetailPage = lazy(() => import("@/features/Sites/views/SiteDetailPage"));
@@ -117,18 +113,6 @@ export const protectedRoutes: RouteConfig[] = [
         element: UnauthorizedPage,
         requireAuth: true,
     },*/
-    {
-        path: "/suppliers",
-        element: SupplierListPage,
-        requireAuth: true,
-        permission: "supplier.viewAny",
-    },
-    {
-        path: "/suppliers/:id",
-        element: SupplierDetailPage,
-        requireAuth: true,
-        permission: "supplier.view",
-    },
     {
         path: "/sites",
         element: SiteListPage,

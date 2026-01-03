@@ -1,32 +1,29 @@
-import { useState, useEffect, useCallback, type FC } from "react";
+import { useState, useEffect, type FC } from "react";
 import { useParams, Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import {
     FaArrowLeft,
-    FaArrowUp,
-    FaArrowDown,
-    FaMagnifyingGlass,
-    FaWrench,
+    FaScrewdriverWrench,
     FaCalendar,
     FaUser,
-    FaPenToSquare
+    FaPenToSquare,
+    FaCubes,
+    FaEnvelope,
+    FaPhone,
+    FaLocationDot
 } from "react-icons/fa6";
-import { PageMeta, PageBreadcrumb, Pagination } from "@/shared/components/common";
-import { Table, TableHeader, TableBody, TableRow, TableCell, Badge, Button, LinkedName } from "@/shared/components/ui";
-import type { BadgeColor } from "@/shared/components/ui/badge/Badge";
+import { PageMeta, PageBreadcrumb } from "@/shared/components/common";
+import { Button, LinkedName } from "@/shared/components/ui";
 import { NotFoundContent } from "@/shared/components/errors";
 import { CompanyManager } from "../services";
 import { CompanyModal } from "./CompanyModal";
-import type { Company, CompanyMaintenance, MaintenanceFilters, CompanyStats } from "../types";
-import type { PaginationMeta } from "@/shared/types";
+import { CompanyRelatedTabs } from "../components";
+import type { Company, CompanyStats } from "../types";
 import { formatDate } from "@/shared/utils";
 import { useAuth } from "@/features/Auth/hooks";
 import { useModal, useTheme } from "@/shared/hooks";
-
-type SortField = "type" | "status" | "started_at" | "resolved_at";
-type SortDirection = "asc" | "desc";
 
 const CompanyDetailPage: FC = () => {
     const { t } = useTranslation();
@@ -44,28 +41,12 @@ const CompanyDetailPage: FC = () => {
     const [stats, setStats] = useState<CompanyStats | null>(null);
     const [isLoadingStats, setIsLoadingStats] = useState(true);
 
-    // Maintenances state
-    const [maintenances, setMaintenances] = useState<CompanyMaintenance[]>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(null);
-    const [isLoadingMaintenances, setIsLoadingMaintenances] = useState(true);
-    const [maintenancesError, setMaintenancesError] = useState<string | null>(null);
-
-    // Filters
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [sortBy, setSortBy] = useState<SortField | undefined>(undefined);
-    const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
-
     // Modal
     const editModal = useModal();
 
     // Permissions
     const canUpdate = isOnHeadquarters && hasPermission('company.update');
     const canViewCreator = isOnHeadquarters && hasPermission('user.view');
-    const canViewMaterial = hasPermission('material.view');
-    const canViewMaintenance = hasPermission('maintenance.view');
-    const canViewSite = isOnHeadquarters && hasPermission('site.view');
 
     // Chart colors
     const chartColors = ['#465fff', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
@@ -106,88 +87,10 @@ const CompanyDetailPage: FC = () => {
         fetchStats();
     }, [companyId]);
 
-    // Debounce search input
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(searchQuery);
-            setCurrentPage(1);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [searchQuery]);
-
-    // Fetch maintenances
-    const fetchMaintenances = useCallback(
-        async (filters: MaintenanceFilters) => {
-            if (!companyId) return;
-
-            setIsLoadingMaintenances(true);
-            setMaintenancesError(null);
-            const result = await CompanyManager.getMaintenances(companyId, filters);
-            if (result.success && result.data) {
-                setMaintenances(result.data.data);
-                setMeta(result.data.meta);
-            } else {
-                setMaintenancesError(result.error || t("errors.generic"));
-            }
-            setIsLoadingMaintenances(false);
-        },
-        [companyId, t]
-    );
-
-    useEffect(() => {
-        const filters: MaintenanceFilters = {
-            page: currentPage,
-            search: debouncedSearch || undefined,
-            sort_by: sortBy,
-            sort_direction: sortBy ? sortDirection : undefined,
-        };
-        fetchMaintenances(filters);
-    }, [currentPage, debouncedSearch, sortBy, sortDirection, fetchMaintenances]);
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleSort = (field: SortField) => {
-        if (sortBy === field) {
-            setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-        } else {
-            setSortBy(field);
-            setSortDirection("asc");
-        }
-        setCurrentPage(1);
-    };
-
-    const renderSortIcon = (field: SortField) => {
-        if (sortBy !== field) {
-            return (
-                <span className="ml-1 text-gray-300 dark:text-gray-600">
-                    <FaArrowUp className="h-3 w-3" />
-                </span>
-            );
-        }
-        return sortDirection === "asc" ? (
-            <FaArrowUp className="ml-1 h-3 w-3 text-brand-500" />
-        ) : (
-            <FaArrowDown className="ml-1 h-3 w-3 text-brand-500" />
-        );
-    };
-
     const handleEditSuccess = async () => {
         const result = await CompanyManager.getById(companyId);
         if (result.success && result.data) {
             setCompany(result.data.data);
-        }
-    };
-
-    const getStatusColor = (status: string): BadgeColor => {
-        switch (status) {
-            case 'completed': return 'success';
-            case 'in_progress': return 'warning';
-            case 'planned': return 'brand';
-            case 'canceled': return 'error';
-            default: return 'light';
         }
     };
 
@@ -367,6 +270,36 @@ const CompanyDetailPage: FC = () => {
                             <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{company.name}</h1>
                         </div>
                         {company.description && <p className="mt-3 text-gray-600 dark:text-gray-400">{company.description}</p>}
+
+                        {/* Contact Information */}
+                        {(company.email || company.phone || company.address) && (
+                            <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400">
+                                {company.email && (
+                                    <a
+                                        href={`mailto:${company.email}`}
+                                        className="inline-flex items-center gap-2 hover:text-brand-500 dark:hover:text-brand-400"
+                                    >
+                                        <FaEnvelope className="h-4 w-4" />
+                                        {company.email}
+                                    </a>
+                                )}
+                                {company.phone && (
+                                    <a
+                                        href={`tel:${company.phone}`}
+                                        className="inline-flex items-center gap-2 hover:text-brand-500 dark:hover:text-brand-400"
+                                    >
+                                        <FaPhone className="h-4 w-4" />
+                                        {company.phone}
+                                    </a>
+                                )}
+                                {company.address && (
+                                    <span className="inline-flex items-center gap-2">
+                                        <FaLocationDot className="h-4 w-4" />
+                                        {company.address}
+                                    </span>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {canUpdate && (
@@ -382,10 +315,22 @@ const CompanyDetailPage: FC = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div className={`mt-6 grid grid-cols-1 gap-4 ${company.is_item_provider ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3'}`}>
+                    {company.is_item_provider && (
+                        <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
+                                <FaCubes className="h-5 w-5 text-brand-600 dark:text-brand-400" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-semibold text-gray-900 dark:text-white">{company.item_count}</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">{t("companies.detail.totalItems")}</p>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
-                            <FaWrench className="h-5 w-5 text-brand-600 dark:text-brand-400" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
+                            <FaScrewdriverWrench className="h-5 w-5 text-warning-600 dark:text-warning-400" />
                         </div>
                         <div>
                             <p className="text-2xl font-semibold text-gray-900 dark:text-white">{company.maintenance_count}</p>
@@ -408,8 +353,8 @@ const CompanyDetailPage: FC = () => {
                     </div>
 
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
-                            <FaCalendar className="h-5 w-5 text-warning-600 dark:text-warning-400" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-500/20">
+                            <FaCalendar className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                         </div>
                         <div>
                             <p className="text-sm font-medium text-gray-900 dark:text-white">
@@ -486,215 +431,8 @@ const CompanyDetailPage: FC = () => {
                 </div>
             )}
 
-            {/* Maintenances Table */}
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-base font-medium text-gray-800 dark:text-white/90">{t("companies.detail.maintenancesListTitle")}</h3>
-                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            {t("companies.detail.maintenancesListDescription", { name: company.name })}
-                        </p>
-                    </div>
-                </div>
-
-                {/* Search */}
-                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-                    <div className="relative max-w-md">
-                        <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder={t("companies.detail.searchMaintenances")}
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                        />
-                        {searchQuery && (
-                            <button
-                                onClick={() => setSearchQuery("")}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                title={t("common.clearSearch")}
-                            >
-                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        )}
-                    </div>
-                </div>
-
-                {/* Error message */}
-                {maintenancesError && (
-                    <div className="mx-6 mt-4 rounded-lg bg-error-50 p-4 text-sm text-error-600 dark:bg-error-500/10 dark:text-error-400">
-                        {maintenancesError}
-                    </div>
-                )}
-
-                {/* Table */}
-                <div className="overflow-x-auto">
-                    <Table>
-                        <TableHeader>
-                            <TableRow className="border-b border-gray-200 dark:border-gray-800">
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("companies.detail.maintenance")}
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t("companies.detail.material")}
-                                </TableCell>
-                                {isOnHeadquarters && (
-                                    <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                        {t("companies.detail.site")}
-                                    </TableCell>
-                                )}
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("type")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("companies.detail.type")}
-                                        {renderSortIcon("type")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("status")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("companies.detail.status")}
-                                        {renderSortIcon("status")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("started_at")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("companies.detail.startedAt")}
-                                        {renderSortIcon("started_at")}
-                                    </button>
-                                </TableCell>
-                                <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    <button
-                                        onClick={() => handleSort("resolved_at")}
-                                        className="inline-flex items-center hover:text-gray-700 dark:hover:text-gray-200"
-                                    >
-                                        {t("common.resolvedAt")}
-                                        {renderSortIcon("resolved_at")}
-                                    </button>
-                                </TableCell>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {isLoadingMaintenances ? (
-                                [...Array(5)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        {isOnHeadquarters && (
-                                            <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-5 w-20 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <div className="mx-auto h-5 w-20 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            ) : maintenances.length === 0 ? (
-                                <TableRow>
-                                    <TableCell className="px-6 py-12 text-center text-gray-500 dark:text-gray-400" colSpan={isOnHeadquarters ? 7 : 6}>
-                                        {debouncedSearch ? (
-                                            <div>
-                                                <p>{t("companies.detail.noMaintenancesFor", { search: debouncedSearch })}</p>
-                                                <button
-                                                    onClick={() => setSearchQuery("")}
-                                                    className="mt-2 text-sm text-brand-500 hover:text-brand-600"
-                                                >
-                                                    {t("common.clearSearch")}
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            t("companies.detail.noMaintenances")
-                                        )}
-                                    </TableCell>
-                                </TableRow>
-                            ) : (
-                                maintenances.map((maintenance) => (
-                                    <TableRow
-                                        key={maintenance.id}
-                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
-                                    >
-                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            <LinkedName
-                                                canView={canViewMaintenance}
-                                                id={maintenance.id}
-                                                name={`#${maintenance.id} - ${maintenance.description}`}
-                                                basePath="maintenances"
-                                                className="line-clamp-2" />
-                                            {maintenance.reason && (
-                                                <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
-                                                    {maintenance.reason}
-                                                </p>
-                                            )}
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4">
-                                            <div>
-                                                <LinkedName
-                                                    canView={canViewMaterial}
-                                                    id={maintenance.material?.id}
-                                                    name={maintenance.material?.name || maintenance.material_name}
-                                                    basePath="materials" />
-                                            </div>
-                                        </TableCell>
-                                        {isOnHeadquarters && (
-                                            <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                                <LinkedName
-                                                    canView={canViewSite}
-                                                    id={maintenance.site?.id}
-                                                    name={maintenance.site?.name}
-                                                    basePath="sites"
-                                                    className="line-clamp-2" />
-                                            </TableCell>
-                                        )}
-                                        <TableCell className="px-6 py-4">
-                                            <Badge color="light" size="sm">
-                                                {maintenance.type_label}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-center">
-                                            <Badge color={getStatusColor(maintenance.status)} size="sm">
-                                                {maintenance.status_label}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {maintenance.started_at ? formatDate(maintenance.started_at) : '—'}
-                                        </TableCell>
-                                        <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {maintenance.resolved_at ? formatDate(maintenance.resolved_at) : '—'}
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-
-                {/* Pagination */}
-                {meta && <Pagination meta={meta} onPageChange={handlePageChange} />}
-            </div>
+            {/* Related Tabs (Items, Maintenances) */}
+            <CompanyRelatedTabs company={company} />
 
             {/* Edit Modal */}
             <CompanyModal

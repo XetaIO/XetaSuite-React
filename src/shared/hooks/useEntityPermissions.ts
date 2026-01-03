@@ -42,7 +42,7 @@ export interface EntityPermissions {
  * Hook to get standardized entity permissions
  * Reduces boilerplate permission checks in components
  *
- * @param entity - The entity name (e.g., "item", "supplier", "material")
+ * @param entity - The entity name (e.g., "item", "company", "material")
  * @param auth - Auth context values (hasPermission, isOnHeadquarters)
  * @param options - Configuration options for location-based permissions
  *
@@ -52,8 +52,8 @@ export interface EntityPermissions {
  * const { canCreate, canUpdate, canDelete } = useEntityPermissions("item", { hasPermission, isOnHeadquarters });
  *
  * @example
- * // For suppliers (HQ only)
- * const { canCreate, canUpdate } = useEntityPermissions("supplier", { hasPermission, isOnHeadquarters }, { hqOnly: true });
+ * // For companies (HQ only)
+ * const { canCreate, canUpdate } = useEntityPermissions("company", { hasPermission, isOnHeadquarters }, { hqOnly: true });
  */
 export function useEntityPermissions(
     entity: string,

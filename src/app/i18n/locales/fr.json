@@ -89,7 +89,6 @@
         "zones": "Zones",
         "materials": "Matériels",
         "items": "Articles",
-        "suppliers": "Fournisseurs",
         "companies": "Entreprises",
         "maintenances": "Maintenances",
         "incidents": "Incidents",
@@ -102,7 +101,6 @@
         "manageCompanies": "Gérer les entreprises",
         "manageItems": "Gérer les articles",
         "manageItemsMovements": "Gérer les mouvements",
-        "manageSuppliers": "Gérer les fournisseurs",
         "manageMaterials": "Gérer les matériels",
         "manageZones": "Gérer les zones",
         "zoneTree": "Arborescence des zones",
@@ -181,61 +179,6 @@
             "noItems": "Aucun article en stock faible"
         }
     },
-    "suppliers": {
-        "title": "Fournisseurs",
-        "description": "Gestion des fournisseurs",
-        "listTitle": "Liste des fournisseurs",
-        "notFound": "Fournisseur introuvable",
-        "notFoundMessage": "Le fournisseur que vous recherchez n'existe pas ou a été supprimé.",
-        "create": "Nouveau fournisseur",
-        "edit": "Modifier le fournisseur",
-        "name": "Nom",
-        "nameLabel": "Nom *",
-        "items": "Articles",
-        "manageSuppliersAndTheirInformation": "Gérez vos fournisseurs et leurs informations",
-        "noSuppliers": "Aucun fournisseur trouvé",
-        "noSuppliersFor": "Aucun fournisseur trouvé pour \"{{search}}\"",
-        "deleteTitle": "Supprimer le fournisseur",
-        "form": {
-            "namePlaceholder": "Nom du fournisseur",
-            "descriptionPlaceholder": "Description du fournisseur (optionnel)",
-            "descriptionLabel": "Description"
-        },
-        "detail": {
-            "backToList": "Retour à la liste des fournisseurs",
-            "totalItems": "Articles total",
-            "itemsListTitle": "Articles du fournisseur",
-            "itemsListDescription": "Liste des articles fournis par {{name}}",
-            "searchItems": "Rechercher un article...",
-            "reference": "Référence",
-            "stock": "Stock",
-            "status": "État",
-            "price": "Prix d'achat",
-            "site": "Site",
-            "noItems": "Aucun article pour ce fournisseur",
-            "noItemsFor": "Aucun article trouvé pour \"{{search}}\"",
-            "stockStatus": {
-                "ok": "En stock",
-                "warning": "Attention",
-                "critical": "Critique",
-                "empty": "Rupture"
-            }
-        },
-        "export": {
-            "button": "Exporter ({{count}})",
-            "exporting": "Export en cours...",
-            "selected": "{{count}} sélectionné(s)",
-            "selectAll": "Tout sélectionner",
-            "deselectAll": "Tout désélectionner",
-            "clearSelection": "Effacer la sélection",
-            "comingSoon": "L'export sera bientôt disponible"
-        },
-        "messages": {
-            "created": "Le fournisseur \"{{name}}\" a été créé avec succès",
-            "updated": "Le fournisseur \"{{name}}\" a été mis à jour avec succès",
-            "deleted": "Le fournisseur \"{{name}}\" a été supprimé avec succès"
-        }
-    },
     "items": {
         "title": "Articles",
         "description": "Gestion des articles en stock",
@@ -248,7 +191,7 @@
         "manageItemsAndStock": "Gérez vos articles et niveaux de stock",
         "noItems": "Aucun article trouvé",
         "noItemsFor": "Aucun article trouvé pour cette recherche",
-        "noSupplier": "Aucun fournisseur",
+        "noCompany": "Aucune entreprise",
         "noMaterialsAvailable": "Aucun matériel disponible",
         "noRecipientsAvailable": "Aucun destinataire disponible",
         "searchPlaceholder": "Rechercher par nom ou référence...",
@@ -266,8 +209,8 @@
             "price": "Prix",
             "purchasePrice": "Prix d'achat",
             "currency": "Devise",
-            "supplier": "Fournisseur",
-            "supplierReference": "Référence fournisseur",
+            "company": "Entreprise",
+            "companyReference": "Référence entreprise",
             "qrCodeScans": "Scans QR code"
         },
         "filters": {
@@ -275,9 +218,9 @@
             "stockStatus": "Filtrer par statut"
         },
         "form": {
-            "searchSupplier": "Rechercher un fournisseur...",
-            "selectSupplier": "Sélectionner un fournisseur",
-            "currentSupplier": "Fournisseur actuel"
+            "searchCompany": "Rechercher une entreprise...",
+            "selectCompany": "Sélectionner une entreprise",
+            "currentCompany": "Entreprise actuelle"
         },
         "stockStatus": {
             "ok": "En stock",
@@ -288,7 +231,7 @@
         "sections": {
             "basicInfo": "Informations générales",
             "pricing": "Tarification",
-            "supplier": "Fournisseur",
+            "company": "Entreprise",
             "stockAlerts": "Alertes de stock",
             "materials": "Matériels associés",
             "recipients": "Destinataires des alertes"
@@ -333,7 +276,7 @@
                 "quantity": "Quantité",
                 "price": "Prix",
                 "unitPrice": "Prix unitaire",
-                "supplier": "Fournisseur",
+                "company": "Entreprise",
                 "invoiceNumber": "N° de facture",
                 "invoiceDate": "Date de facture",
                 "notes": "Notes",
@@ -347,7 +290,7 @@
                 "entryCreated": "Entrée de {{quantity}} unités enregistrée",
                 "exitCreated": "Sortie de {{quantity}} unités enregistrée"
             },
-            "itemSupplier": "Fournisseur de l'article"
+            "itemCompany": "Entreprise de l'article"
         },
         "qrCode": {
             "title": "QR Code",
@@ -400,7 +343,7 @@
             "quantity": "Quantité",
             "unitPrice": "Prix unitaire",
             "totalPrice": "Prix total",
-            "supplier": "Fournisseur",
+            "company": "Entreprise",
             "createdBy": "Créé par"
         },
         "deleteConfirm": {
@@ -720,6 +663,7 @@
         "nameRequired": "Le nom est requis",
         "siteRequired": "Le site est requis",
         "zoneRequired": "La zone est requise",
+        "typesRequired": "Au moins un type est requis",
         "email": "Veuillez entrer une adresse email valide",
         "min": "Ce champ doit contenir au moins {{min}} caractères",
         "max": "Ce champ ne doit pas dépasser {{max}} caractères",
@@ -1042,6 +986,7 @@
         "name": "Nom",
         "nameLabel": "Nom *",
         "maintenances": "Maintenances",
+        "items": "Articles",
         "manageCompaniesAndTheirInformation": "Gérez vos entreprises de maintenance et leurs informations",
         "noCompanies": "Aucune entreprise trouvée",
         "noCompaniesFor": "Aucune entreprise trouvée pour \"{{search}}\"",
@@ -1049,7 +994,15 @@
         "form": {
             "namePlaceholder": "Nom de l'entreprise",
             "descriptionPlaceholder": "Description de l'entreprise (optionnel)",
-            "descriptionLabel": "Description"
+            "descriptionLabel": "Description",
+            "typesLabel": "Types d'entreprise *",
+            "contactInfo": "Informations de contact",
+            "emailLabel": "Email",
+            "emailPlaceholder": "contact@entreprise.com",
+            "phoneLabel": "Téléphone",
+            "phonePlaceholder": "+33 1 23 45 67 89",
+            "addressLabel": "Adresse",
+            "addressPlaceholder": "Adresse de l'entreprise..."
         },
         "messages": {
             "created": "L'entreprise \"{{name}}\" a été créée avec succès",
@@ -1058,6 +1011,7 @@
         },
         "detail": {
             "backToList": "Retour à la liste des entreprises",
+            "totalItems": "Articles totaux",
             "totalMaintenances": "Maintenances totales",
             "maintenancesListTitle": "Liste des maintenances",
             "maintenancesListDescription": "Maintenances liées à l'entreprise {{name}}",
@@ -1076,6 +1030,19 @@
                 "byStatus": "Maintenances par statut",
                 "byMonth": "Évolution mensuelle"
             }
+        },
+        "tabs": {
+            "items": "Articles",
+            "maintenances": "Maintenances",
+            "searchItems": "Rechercher des articles...",
+            "searchMaintenances": "Rechercher des maintenances...",
+            "noItems": "Aucun article fourni par cette entreprise",
+            "noMaintenances": "Aucune maintenance effectuée par cette entreprise"
+        },
+        "types": {
+            "label": "Types",
+            "item_provider": "Fournisseur d'articles",
+            "maintenance_provider": "Prestataire de maintenance"
         }
     },
     "roles": {
@@ -1463,7 +1430,6 @@
             "incidents": "Incidents",
             "maintenances": "Maintenances",
             "companies": "Entreprises",
-            "suppliers": "Fournisseurs",
             "sites": "Sites"
         }
     }

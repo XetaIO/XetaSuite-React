@@ -4,7 +4,7 @@ type LinkedNameProps = {
     canView: boolean;
     id?: number | null;
     name?: string | null;
-    basePath: string; // ex: "materials", "incidents", "suppliers"
+    basePath: string; // ex: "materials", "incidents", "companies"
     className?: string;
 };
 

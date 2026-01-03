@@ -1,6 +1,6 @@
 # XetaSuite-React - Copilot Instructions
 
-> **Last updated**: December 2025
+> **Last updated**: January 2026
 
 ## Project Overview
 
@@ -90,10 +90,10 @@ features/{Feature}/
 ### Repository Pattern (Boundary Layer)
 ```typescript
 // Repository: Raw API calls, no error handling
-export const SupplierRepository = {
-    getAll: async (params?: QueryParams): Promise<PaginatedResponse<Supplier>> => {
-        const response = await httpClient.get<PaginatedResponse<Supplier>>(
-            buildUrl(API_ENDPOINTS.SUPPLIERS.BASE, params)
+export const CompanyRepository = {
+    getAll: async (params?: QueryParams): Promise<PaginatedResponse<Company>> => {
+        const response = await httpClient.get<PaginatedResponse<Company>>(
+            buildUrl(API_ENDPOINTS.COMPANIES.BASE, params)
         );
         return response.data;
     },
@@ -103,10 +103,10 @@ export const SupplierRepository = {
 ### Manager Pattern (Business Layer)
 ```typescript
 // Manager: Error handling + data transformation
-export const SupplierManager = {
-    getAll: async (params?: QueryParams): Promise<ManagerResult<PaginatedResponse<Supplier>>> => {
+export const CompanyManager = {
+    getAll: async (params?: QueryParams): Promise<ManagerResult<PaginatedResponse<Company>>> => {
         try {
-            const data = await SupplierRepository.getAll(params);
+            const data = await CompanyRepository.getAll(params);
             return { success: true, data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };
@@ -148,9 +148,9 @@ function MyComponent() {
 
     return (
         <div>
-            {hasPermission('supplier.create') && <Button>Create Supplier</Button>}
+            {hasPermission('company.create') && <Button>Create Company</Button>}
             {hasRole('admin') && <AdminPanel />}
-            {hasAnyPermission(['supplier.update', 'supplier.delete']) && <EditMenu />}
+            {hasAnyPermission(['company.update', 'company.delete']) && <EditMenu />}
         </div>
     );
 }
@@ -159,11 +159,11 @@ function MyComponent() {
 ### Protected Routes with Permissions
 ```tsx
 <Route element={
-    <RequireAuth permissions={['supplier.viewAny']}>
+    <RequireAuth permissions={['company.viewAny']}>
         <AppLayout />
     </RequireAuth>
 }>
-    <Route path="/suppliers" element={<SupplierListPage />} />
+    <Route path="/companies" element={<CompanyListPage />} />
 </Route>
 ```
 
@@ -278,8 +278,9 @@ src/
     │   └── views/                  # SignIn, ForgotPassword, ResetPassword
     └── Suppliers/                # Feature fournisseurs
         ├── types/
-        ├── services/             # SupplierRepository + SupplierManager
-        └── views/                 # SupplierListPage, SupplierDetailPage, SupplierModal
+        ├── services/             # CompanyRepository + CompanyManager
+        ├── components/         # CompanyRelatedTabs
+        └── views/                 # CompanyListPage, CompanyDetailPage, CompanyModal
 ```
 
 ## Conventions
@@ -401,8 +402,8 @@ function MyComponent() {
 </Route>
 
 // Protected route - requires specific permissions
-<Route element={<RequireAuth permissions={['supplier.viewAny']}><AppLayout /></RequireAuth>}>
-  <Route path="/suppliers" element={<SupplierListPage />} />
+<Route element={<RequireAuth permissions={['company.viewAny']}><AppLayout /></RequireAuth>}>
+  <Route path="/companies" element={<CompanyListPage />} />
 </Route>
 
 // Guest-only route (login page)
@@ -593,8 +594,7 @@ This frontend manages:
 - **Maintenances**: Scheduled/completed maintenance tasks
 - **Incidents**: Issue reports
 - **Cleanings**: Cleaning schedules and records
-- **Companies**: External maintenance providers
-- **Suppliers**: Item suppliers (HQ-only)
+- **Companies**: Item providers and/or maintenance contractors (HQ-only, unified model with types)
 - **Users**: With role-based permissions per site
 
 ## Roles & Permissions (Summary)
@@ -606,7 +606,7 @@ Permissions are **scoped to the current site** (team-based multi-tenancy):
 const { hasPermission, hasRole, hasAnyPermission, hasAnyRole } = useAuth();
 
 // Conditional rendering based on permissions
-{hasPermission('supplier.create') && <Button>Create Supplier</Button>}
+{hasPermission('company.create') && <Button>Create Company</Button>}
 {hasRole('admin') && <AdminPanel />}
 
 // In routes - use RequireAuth with permissions/roles

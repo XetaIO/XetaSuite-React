@@ -17,7 +17,6 @@ import {
     FaSignsPost,
     FaSitemap,
     FaTriangleExclamation,
-    FaTruckRampBox,
     FaUsersGear,
     FaUserTie,
     FaWrench,
@@ -94,12 +93,6 @@ const navItems: NavItem[] = [
                 nameKey: "sidebar.manageItemsMovements",
                 path: "/items-movements",
                 permission: "item-movement.viewAny",
-            },
-            {
-                icon: <FaTruckRampBox />,
-                nameKey: "sidebar.manageSuppliers",
-                path: "/suppliers",
-                permission: "supplier.viewAny",
             }
         ],
     },

@@ -43,7 +43,7 @@ const getAlignmentClass = (align: TextAlign): string => {
  * @example
  * <SortableTableHeader
  *     field="name"
- *     label={t("suppliers.name")}
+ *     label={t("companies.name")}
  *     currentSortField={sortBy}
  *     currentSortDirection={sortDirection}
  *     onSort={handleSort}

@@ -1,6 +1,6 @@
 import { handleApiError } from "@/shared/api";
 import type { PaginatedResponse, SingleResponse, ManagerResult } from "@/shared/types";
-import type { Company, CompanyFormData, CompanyFilters, CompanyMaintenance, MaintenanceFilters, CompanyStats } from "../types";
+import type { Company, CompanyFormData, CompanyFilters, CompanyItem, ItemFilters, CompanyMaintenance, MaintenanceFilters, CompanyStats } from "../types";
 import { CompanyRepository } from "./CompanyRepository";
 
 /**
@@ -63,6 +63,18 @@ export const CompanyManager = {
         try {
             await CompanyRepository.delete(id);
             return { success: true };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+
+    /**
+     * Get paginated list of items for a company
+     */
+    getItems: async (id: number, filters: ItemFilters = {}): Promise<ManagerResult<PaginatedResponse<CompanyItem>>> => {
+        try {
+            const data = await CompanyRepository.getItems(id, filters);
+            return { success: true, data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };
         }

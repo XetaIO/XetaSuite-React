@@ -30,10 +30,10 @@ export interface ItemMovement {
     unit_price: number;
     total_price: number;
 
-    supplier_id: number | null;
-    supplier_name: string | null;
-    supplier_invoice_number: string | null;
-    supplier?: {
+    company_id: number | null;
+    company_name: string | null;
+    company_invoice_number: string | null;
+    company?: {
         id: number;
         name: string;
     };
@@ -62,8 +62,8 @@ export interface ItemMovementFormData {
     type: MovementType;
     quantity: number;
     unit_price?: number;
-    supplier_id?: number;
-    supplier_invoice_number?: string;
+    company_id?: number;
+    company_invoice_number?: string;
     invoice_date?: string;
     notes?: string;
     movement_date?: string;

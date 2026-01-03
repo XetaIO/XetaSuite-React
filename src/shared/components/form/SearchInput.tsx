@@ -24,7 +24,7 @@ export interface SearchInputProps {
  * <SearchInput
  *     value={searchQuery}
  *     onChange={setSearchQuery}
- *     placeholder={t("suppliers.searchPlaceholder")}
+ *     placeholder={t("companies.searchPlaceholder")}
  * />
  */
 export const SearchInput: FC<SearchInputProps> = ({

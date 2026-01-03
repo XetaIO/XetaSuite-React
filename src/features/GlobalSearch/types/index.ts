@@ -9,7 +9,6 @@ export type SearchableType =
     | 'incidents'
     | 'maintenances'
     | 'companies'
-    | 'suppliers'
     | 'sites';
 
 export interface SearchResultMeta {

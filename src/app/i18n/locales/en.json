@@ -89,7 +89,6 @@
         "zones": "Zones",
         "materials": "Materials",
         "items": "Items",
-        "suppliers": "Suppliers",
         "companies": "Companies",
         "maintenances": "Maintenances",
         "incidents": "Incidents",
@@ -102,7 +101,6 @@
         "manageCompanies": "Manage Companies",
         "manageItems": "Manage Items",
         "manageItemsMovements": "Manage Movements",
-        "manageSuppliers": "Manage Suppliers",
         "manageMaterials": "Manage Materials",
         "manageZones": "Manage Zones",
         "zoneTree": "Zone Tree",
@@ -181,61 +179,6 @@
             "noItems": "No low stock items"
         }
     },
-    "suppliers": {
-        "title": "Suppliers",
-        "description": "Manage suppliers",
-        "listTitle": "Suppliers list",
-        "notFound": "Supplier not found",
-        "notFoundMessage": "The supplier you are looking for does not exist or has been deleted.",
-        "create": "New supplier",
-        "edit": "Edit supplier",
-        "name": "Name",
-        "nameLabel": "Name *",
-        "items": "Items",
-        "manageSuppliersAndTheirInformation": "Manage your suppliers and their information",
-        "noSuppliers": "No suppliers found",
-        "noSuppliersFor": "No suppliers found for \"{{search}}\"",
-        "deleteTitle": "Delete supplier",
-        "form": {
-            "namePlaceholder": "Supplier name",
-            "descriptionPlaceholder": "Supplier description (optional)",
-            "descriptionLabel": "Description"
-        },
-        "detail": {
-            "backToList": "Back to suppliers list",
-            "totalItems": "Total items",
-            "itemsListTitle": "Supplier items",
-            "itemsListDescription": "List of items supplied by {{name}}",
-            "searchItems": "Search items...",
-            "reference": "Reference",
-            "stock": "Stock",
-            "status": "Status",
-            "price": "Purchase price",
-            "site": "Site",
-            "noItems": "No items for this supplier",
-            "noItemsFor": "No items found for \"{{search}}\"",
-            "stockStatus": {
-                "ok": "In stock",
-                "warning": "Warning",
-                "critical": "Critical",
-                "empty": "Out of stock"
-            }
-        },
-        "export": {
-            "button": "Export ({{count}})",
-            "exporting": "Exporting...",
-            "selected": "{{count}} selected",
-            "selectAll": "Select all",
-            "deselectAll": "Deselect all",
-            "clearSelection": "Clear selection",
-            "comingSoon": "Export feature coming soon"
-        },
-        "messages": {
-            "created": "Supplier \"{{name}}\" has been created successfully",
-            "updated": "Supplier \"{{name}}\" has been updated successfully",
-            "deleted": "Supplier \"{{name}}\" has been deleted successfully"
-        }
-    },
     "items": {
         "title": "Items",
         "description": "Manage stock items",
@@ -248,7 +191,7 @@
         "manageItemsAndStock": "Manage your items and stock levels",
         "noItems": "No items found",
         "noItemsFor": "No items found for this search",
-        "noSupplier": "No supplier",
+        "noCompany": "No company",
         "noMaterialsAvailable": "No materials available",
         "noRecipientsAvailable": "No recipients available",
         "searchPlaceholder": "Search by name or reference...",
@@ -267,8 +210,8 @@
             "price": "Price",
             "purchasePrice": "Purchase price",
             "currency": "Currency",
-            "supplier": "Supplier",
-            "supplierReference": "Supplier reference",
+            "company": "Company",
+            "companyReference": "Company reference",
             "qrCodeScans": "QR code scans"
         },
         "filters": {
@@ -276,9 +219,9 @@
             "stockStatus": "Filter by status"
         },
         "form": {
-            "searchSupplier": "Search for a supplier...",
-            "selectSupplier": "Select a supplier",
-            "currentSupplier": "Current supplier"
+            "searchCompany": "Search for a company...",
+            "selectCompany": "Select a company",
+            "currentCompany": "Current company"
         },
         "stockStatus": {
             "ok": "In stock",
@@ -289,7 +232,7 @@
         "sections": {
             "basicInfo": "Basic information",
             "pricing": "Pricing",
-            "supplier": "Supplier",
+            "company": "Company",
             "stockAlerts": "Stock alerts",
             "materials": "Associated materials",
             "recipients": "Alert recipients"
@@ -334,7 +277,7 @@
                 "quantity": "Quantity",
                 "price": "Price",
                 "unitPrice": "Unit price",
-                "supplier": "Supplier",
+                "company": "Company",
                 "invoiceNumber": "Invoice number",
                 "invoiceDate": "Invoice date",
                 "notes": "Notes",
@@ -348,7 +291,7 @@
                 "entryCreated": "Entry of {{quantity}} units recorded",
                 "exitCreated": "Exit of {{quantity}} units recorded"
             },
-            "itemSupplier": "Item's supplier"
+            "itemCompany": "Item's company"
         },
         "qrCode": {
             "title": "QR Code",
@@ -384,7 +327,7 @@
         "listDescription": "View all item stock movements",
         "noMovements": "No stock movements recorded yet",
         "noResultsWithFilters": "No movements matching the current filters",
-        "searchPlaceholder": "Search by item, supplier...",
+        "searchPlaceholder": "Search by item, company...",
         "editTitle": "Edit movement",
         "types": {
             "entry": "Entry",
@@ -405,7 +348,7 @@
             "price": "Price",
             "unitPrice": "Unit price",
             "totalPrice": "Total price",
-            "supplier": "Supplier",
+            "company": "Company",
             "invoiceNumber": "Invoice number",
             "invoiceDate": "Invoice date",
             "notes": "Notes",
@@ -729,6 +672,7 @@
         "nameRequired": "Name is required",
         "siteRequired": "Site is required",
         "zoneRequired": "Zone is required",
+        "typesRequired": "At least one type is required",
         "email": "Please enter a valid email address",
         "min": "This field must be at least {{min}} characters",
         "max": "This field must not exceed {{max}} characters",
@@ -1051,6 +995,7 @@
         "name": "Name",
         "nameLabel": "Name *",
         "maintenances": "Maintenances",
+        "items": "Items",
         "manageCompaniesAndTheirInformation": "Manage your maintenance companies and their information",
         "noCompanies": "No companies found",
         "noCompaniesFor": "No companies found for \"{{search}}\"",
@@ -1058,7 +1003,15 @@
         "form": {
             "namePlaceholder": "Company name",
             "descriptionPlaceholder": "Company description (optional)",
-            "descriptionLabel": "Description"
+            "descriptionLabel": "Description",
+            "typesLabel": "Company types *",
+            "contactInfo": "Contact Information",
+            "emailLabel": "Email",
+            "emailPlaceholder": "contact@company.com",
+            "phoneLabel": "Phone",
+            "phonePlaceholder": "+33 1 23 45 67 89",
+            "addressLabel": "Address",
+            "addressPlaceholder": "Company address..."
         },
         "messages": {
             "created": "Company \"{{name}}\" has been created successfully",
@@ -1067,6 +1020,7 @@
         },
         "detail": {
             "backToList": "Back to companies list",
+            "totalItems": "Total items",
             "totalMaintenances": "Total maintenances",
             "maintenancesListTitle": "Maintenances list",
             "maintenancesListDescription": "Maintenances linked to company {{name}}",
@@ -1085,6 +1039,19 @@
                 "byStatus": "Maintenances by status",
                 "byMonth": "Monthly evolution"
             }
+        },
+        "tabs": {
+            "items": "Items",
+            "maintenances": "Maintenances",
+            "searchItems": "Search items...",
+            "searchMaintenances": "Search maintenances...",
+            "noItems": "No items supplied by this company",
+            "noMaintenances": "No maintenances performed by this company"
+        },
+        "types": {
+            "label": "Types",
+            "item_provider": "Item Provider",
+            "maintenance_provider": "Maintenance Provider"
         }
     },
     "roles": {
@@ -1472,7 +1439,6 @@
             "incidents": "Incidents",
             "maintenances": "Maintenances",
             "companies": "Companies",
-            "suppliers": "Suppliers",
             "sites": "Sites"
         }
     }

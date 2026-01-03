@@ -10,7 +10,7 @@ import type {
     ItemMonthlyStats,
     ItemMaterial,
     ItemPriceHistory,
-    AvailableSupplier,
+    AvailableCompany,
     AvailableMaterial,
     AvailableRecipient,
 } from '../types';
@@ -29,7 +29,7 @@ export const ItemRepository = {
             page: filters.page,
             per_page: filters.per_page,
             search: filters.search,
-            supplier_id: filters.supplier_id,
+            company_id: filters.company_id,
             stock_status: filters.stock_status,
             sort_by: filters.sort_by,
             sort_direction: filters.sort_direction,
@@ -130,12 +130,12 @@ export const ItemRepository = {
     },
 
     /**
-     * Get available suppliers for dropdown
+     * Get available companies for dropdown
      */
-    getAvailableSuppliers: async (search?: string, includeId?: number): Promise<AvailableSupplier[]> => {
-        const url = buildUrl(API_ENDPOINTS.ITEMS.AVAILABLE_SUPPLIERS, { search, include_id: includeId });
-        const response = await httpClient.get<{ suppliers: AvailableSupplier[] }>(url);
-        return response.data.suppliers;
+    getAvailableCompanies: async (search?: string, includeId?: number): Promise<AvailableCompany[]> => {
+        const url = buildUrl(API_ENDPOINTS.ITEMS.AVAILABLE_COMPANIES, { search, include_id: includeId });
+        const response = await httpClient.get<{ companies: AvailableCompany[] }>(url);
+        return response.data.companies;
     },
 
     /**

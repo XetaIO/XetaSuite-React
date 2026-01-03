@@ -49,12 +49,6 @@ export const API_ENDPOINTS = {
         SITE: '/api/v1/user/site',
         PASSWORD: '/api/v1/user/password',
     },
-    // Suppliers
-    SUPPLIERS: {
-        BASE: '/api/v1/suppliers',
-        DETAIL: (id: number) => `/api/v1/suppliers/${id}`,
-        ITEMS: (id: number) => `/api/v1/suppliers/${id}/items`,
-    },
     // Sites
     SITES: {
         BASE: '/api/v1/sites',
@@ -92,7 +86,7 @@ export const API_ENDPOINTS = {
         MATERIALS: (id: number) => `/api/v1/items/${id}/materials`,
         PRICE_HISTORY: (id: number) => `/api/v1/items/${id}/price-history`,
         QR_CODE: (id: number) => `/api/v1/items/${id}/qr-code`,
-        AVAILABLE_SUPPLIERS: '/api/v1/items/available-suppliers',
+        AVAILABLE_COMPANIES: '/api/v1/items/available-companies',
         AVAILABLE_MATERIALS: '/api/v1/items/available-materials',
         AVAILABLE_RECIPIENTS: '/api/v1/items/available-recipients',
     },
@@ -142,6 +136,7 @@ export const API_ENDPOINTS = {
     COMPANIES: {
         BASE: '/api/v1/companies',
         DETAIL: (id: number) => `/api/v1/companies/${id}`,
+        ITEMS: (id: number) => `/api/v1/companies/${id}/items`,
         MAINTENANCES: (id: number) => `/api/v1/companies/${id}/maintenances`,
         STATS: (id: number) => `/api/v1/companies/${id}/stats`,
     },

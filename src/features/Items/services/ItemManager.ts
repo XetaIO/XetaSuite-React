@@ -9,7 +9,7 @@ import type {
     ItemMonthlyStats,
     ItemMaterial,
     ItemPriceHistory,
-    AvailableSupplier,
+    AvailableCompany,
     AvailableMaterial,
     AvailableRecipient,
     StockStatus,
@@ -131,11 +131,11 @@ export const ItemManager = {
     },
 
     /**
-     * Get available suppliers for dropdown
+     * Get available companies for dropdown
      */
-    getAvailableSuppliers: async (search?: string, includeId?: number): Promise<ManagerResult<AvailableSupplier[]>> => {
+    getAvailableCompanies: async (search?: string, includeId?: number): Promise<ManagerResult<AvailableCompany[]>> => {
         try {
-            const data = await ItemRepository.getAvailableSuppliers(search, includeId);
+            const data = await ItemRepository.getAvailableCompanies(search, includeId);
             return { success: true, data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };
@@ -206,8 +206,8 @@ export const ItemManager = {
         reference: "",
         description: "",
         current_price: null,
-        supplier_id: null,
-        supplier_reference: "",
+        company_id: null,
+        company_reference: "",
         number_warning_enabled: false,
         number_warning_minimum: 10,
         number_critical_enabled: false,
@@ -224,8 +224,8 @@ export const ItemManager = {
         reference: item.reference || "",
         description: item.description || "",
         current_price: item.current_price,
-        supplier_id: item.supplier_id,
-        supplier_reference: item.supplier_reference || "",
+        company_id: item.company_id,
+        company_reference: item.company_reference || "",
         number_warning_enabled: item.number_warning_enabled,
         number_warning_minimum: item.number_warning_minimum,
         number_critical_enabled: item.number_critical_enabled,

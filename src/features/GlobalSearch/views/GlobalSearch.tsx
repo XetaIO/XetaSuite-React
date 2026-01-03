@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { FaMagnifyingGlass, FaSpinner, FaScrewdriverWrench, FaSignsPost, FaCubes, FaTriangleExclamation, FaWrench, FaBuildingUser, FaTruckRampBox, FaBuildingFlag } from 'react-icons/fa6';
+import { FaMagnifyingGlass, FaSpinner, FaScrewdriverWrench, FaSignsPost, FaCubes, FaTriangleExclamation, FaWrench, FaBuildingUser, FaBuildingFlag } from 'react-icons/fa6';
 import { GlobalSearchManager } from '../services';
 import type { GlobalSearchResults, SearchResult, SearchableType } from '../types';
 
@@ -17,7 +17,6 @@ const TYPE_ICONS: Record<SearchableType, React.ReactNode> = {
     incidents: <FaTriangleExclamation className="w-4 h-4" />,
     maintenances: <FaScrewdriverWrench className="w-4 h-4" />,
     companies: <FaBuildingUser className="w-4 h-4" />,
-    suppliers: <FaTruckRampBox className="w-4 h-4" />,
     sites: <FaBuildingFlag className="w-4 h-4" />,
 };
 
@@ -28,7 +27,6 @@ const TYPE_COLORS: Record<SearchableType, string> = {
     incidents: 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400',
     maintenances: 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400',
     companies: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400',
-    suppliers: 'bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400',
     sites: 'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400',
 };
 

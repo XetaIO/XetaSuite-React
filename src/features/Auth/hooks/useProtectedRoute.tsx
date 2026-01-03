@@ -29,14 +29,14 @@ interface ProtectedRouteProps {
  *
  * @example
  * // Single permission
- * <ProtectedRoute permission="supplier.viewAny">
- *   <SuppliersPage />
+ * <ProtectedRoute permission="company.viewAny">
+ *   <CompaniesPage />
  * </ProtectedRoute>
  *
  * @example
  * // Multiple permissions (user needs ANY of them)
- * <ProtectedRoute permissions={["supplier.viewAny", "supplier.create"]}>
- *   <SuppliersPage />
+ * <ProtectedRoute permissions={["company.viewAny", "company.create"]}>
+ *   <CompaniesPage />
  * </ProtectedRoute>
  */
 export function ProtectedRoute({

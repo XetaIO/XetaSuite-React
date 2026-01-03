@@ -43,8 +43,8 @@ export interface Item {
         id: number;
         name: string;
     };
-    supplier_id: number | null;
-    supplier?: {
+    company_id: number | null;
+    company?: {
         id: number;
         name: string;
     };
@@ -57,8 +57,8 @@ export interface Item {
  * Detailed Item interface with all relations
  */
 export interface ItemDetail extends Item {
-    supplier_reference: string | null;
-    supplier_name: string | null;
+    company_reference: string | null;
+    company_name: string | null;
 
     // Creator info
     created_by_id: number | null;
@@ -112,9 +112,9 @@ export interface ItemMovement {
     quantity: number;
     unit_price: number;
     total_price: number;
-    supplier_id: number | null;
-    supplier_name: string | null;
-    supplier_invoice_number: string | null;
+    company_id: number | null;
+    company_name: string | null;
+    company_invoice_number: string | null;
     invoice_date: string | null;
     movable_type: string | null;
     movable_id: number | null;
@@ -137,7 +137,7 @@ export interface ItemPriceHistoryEntry {
     id: number;
     price: number;
     effective_date: string;
-    supplier_name: string | null;
+    company_name: string | null;
     created_by_name: string | null;
     notes: string | null;
     created_at: string;
@@ -197,8 +197,8 @@ export interface ItemFormData {
     reference: string;
     description: string;
     current_price: number | null;
-    supplier_id: number | null;
-    supplier_reference: string;
+    company_id: number | null;
+    company_reference: string;
     number_warning_enabled: boolean;
     number_warning_minimum: number;
     number_critical_enabled: boolean;
@@ -214,16 +214,16 @@ export interface ItemFilters {
     page?: number;
     per_page?: number;
     search?: string;
-    supplier_id?: number;
+    company_id?: number;
     stock_status?: StockStatus;
     sort_by?: 'name' | 'reference' | 'current_stock' | 'current_price' | 'created_at';
     sort_direction?: 'asc' | 'desc';
 }
 
 /**
- * Available supplier for dropdown
+ * Available company for dropdown
  */
-export interface AvailableSupplier {
+export interface AvailableCompany {
     id: number;
     name: string;
     item: {

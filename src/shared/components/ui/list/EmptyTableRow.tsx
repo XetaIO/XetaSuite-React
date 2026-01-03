@@ -25,7 +25,7 @@ export interface EmptyTableRowProps {
  *     colSpan={6}
  *     searchQuery={debouncedSearch}
  *     onClearSearch={() => setSearchQuery("")}
- *     emptyMessage={t("suppliers.noSuppliers")}
+ *     emptyMessage={t("companies.noCompanies")}
  * />
  */
 export const EmptyTableRow: FC<EmptyTableRowProps> = ({

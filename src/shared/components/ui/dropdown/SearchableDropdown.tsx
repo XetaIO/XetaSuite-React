@@ -48,7 +48,7 @@ export interface SearchableDropdownProps<T extends DropdownOption> {
     onSearch?: (search: string) => void;
     /** Debounce delay in ms for search (default: 300) */
     searchDebounceMs?: number;
-    /** Pinned item to show at top of list (e.g., item's original supplier) */
+    /** Pinned item to show at top of list (e.g., item's original company) */
     pinnedItem?: PinnedItem;
     /** Custom render function for option content */
     renderOption?: (option: T) => ReactNode;

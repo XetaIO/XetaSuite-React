@@ -49,7 +49,7 @@ const ItemListPage: FC = () => {
     const { canView, canCreate, canUpdate, canDelete, canGenerateQrCode } = useEntityPermissions("item", { hasPermission, isOnHeadquarters });
     const canCreateMovement = hasPermission("item-movement.create");
     const canViewSite = isOnHeadquarters && hasPermission("site.view");
-    const canViewSupplier = hasPermission("supplier.view");
+    const canViewCompany = hasPermission("company.view");
 
     // Selected item for operations
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
@@ -216,7 +216,7 @@ const ItemListPage: FC = () => {
                                 <SortableTableHeader field="current_stock" label={t("items.fields.stock")} onSort={handleSort} renderSortIcon={renderSortIcon} />
                                 <StaticTableHeader label={t("items.fields.status")} />
                                 <SortableTableHeader field="current_price" label={t("items.fields.price")} onSort={handleSort} renderSortIcon={renderSortIcon} />
-                                <StaticTableHeader label={t("items.fields.supplier")} />
+                                <StaticTableHeader label={t("items.fields.company")} />
                                 {hasAnyAction && (
                                     <StaticTableHeader label={t("common.actions")} align="right" />
                                 )}
@@ -270,7 +270,7 @@ const ItemListPage: FC = () => {
                                             {formatCurrency(item.current_price, getCurrency())}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            <LinkedName canView={canViewSupplier} id={item.supplier?.id} name={item.supplier?.name} basePath="suppliers" />
+                                            <LinkedName canView={canViewCompany} id={item.company?.id} name={item.company?.name} basePath="companies" />
                                         </TableCell>
                                         {hasAnyAction && (
                                             <TableCell className="px-6 py-4">

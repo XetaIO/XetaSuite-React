@@ -23,7 +23,7 @@ export interface UseFormModalOptions<TEntity, TFormData> {
     onClose: () => void;
     /** Callback on successful create/update */
     onSuccess: () => void;
-    /** Translation key prefix for success messages (e.g., "suppliers" for "suppliers.messages.created") */
+    /** Translation key prefix for success messages (e.g., "companies" for "companies.messages.created") */
     translationPrefix: string;
     /** Function to create entity */
     createFn: (data: TFormData) => Promise<ManagerResult<SingleResponse<TEntity>>>;
@@ -77,13 +77,13 @@ export interface UseFormModalReturn<TFormData> {
  *   handleSubmit,
  * } = useFormModal({
  *   initialFormData: { name: "", description: "" },
- *   entity: supplier,
+ *   entity: company,
  *   isOpen,
  *   onClose,
  *   onSuccess,
- *   translationPrefix: "suppliers",
- *   createFn: SupplierManager.create,
- *   updateFn: SupplierManager.update,
+ *   translationPrefix: "companies",
+ *   createFn: CompanyManager.create,
+ *   updateFn: CompanyManager.update,
  *   validate: (data, t) => {
  *     const errors: Record<string, string> = {};
  *     if (!data.name.trim()) errors.name = t("validation.nameRequired");

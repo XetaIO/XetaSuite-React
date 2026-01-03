@@ -157,9 +157,9 @@ export interface MaterialItem {
     current_stock: number;
     stock_status: string;
     stock_status_color: string;
-    supplier_id?: number | null;
-    supplier_name?: string | null;
-    supplier?: {
+    company_id?: number | null;
+    company_name?: string | null;
+    company?: {
         id: number;
         name: string;
     } | null;

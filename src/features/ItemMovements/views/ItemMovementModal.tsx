@@ -7,7 +7,7 @@ import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useSettings } from "@/features/Settings";
 import { ItemMovementManager } from "../services";
 import type { MovementType, ItemMovementFormData, ItemMovement } from "../types";
-import type { AvailableSupplier } from "@/features/Items/types";
+import type { AvailableCompany } from "@/features/Items/types";
 
 interface ItemMovementModalProps {
     isOpen: boolean;
@@ -19,7 +19,7 @@ interface ItemMovementModalProps {
         reference?: string | null;
         current_stock: number;
         current_price?: number | null;
-        supplier_id?: number | null;
+        company_id?: number | null;
     } | null;
     type?: MovementType;
     // For edit mode
@@ -50,39 +50,39 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
         reference: movement.item.reference,
         current_stock: movement.item.current_stock ?? 0,
         current_price: movement.item.current_price ?? 0,
-        supplier_id: movement.supplier_id,
+        company_id: movement.company_id,
     } : item;
 
     // Use primitive values for useEffect dependencies to avoid infinite loops
     const itemId = effectiveItem?.id;
-    const itemSupplierId = effectiveItem?.supplier_id;
+    const itemCompanyId = effectiveItem?.company_id;
     const movementId = movement?.id;
 
     const [formData, setFormData] = useState<ItemMovementFormData>({
         type: effectiveType,
         quantity: 1,
         unit_price: undefined,
-        supplier_id: undefined,
-        supplier_invoice_number: "",
+        company_id: undefined,
+        company_invoice_number: "",
         invoice_date: "",
         notes: "",
         movement_date: new Date().toISOString().split("T")[0],
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingSuppliers, setIsLoadingSuppliers] = useState(false);
+    const [isLoadingCompanies, setIsLoadingCompanies] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const [suppliers, setSuppliers] = useState<AvailableSupplier[]>([]);
-    const [itemSupplier, setItemSupplier] = useState<AvailableSupplier | null>(null);
+    const [companies, setCompanies] = useState<AvailableCompany[]>([]);
+    const [itemCompany, setItemCompany] = useState<AvailableCompany | null>(null);
 
-    // Search suppliers (includeId ensures current supplier is always included)
-    const searchSuppliers = useCallback(async (search: string) => {
-        setIsLoadingSuppliers(true);
-        const result = await ItemMovementManager.getAvailableSuppliers(search || undefined, formData.supplier_id ?? itemSupplierId ?? undefined);
+    // Search companies (includeId ensures current company is always included)
+    const searchCompanies = useCallback(async (search: string) => {
+        setIsLoadingCompanies(true);
+        const result = await ItemMovementManager.getAvailableCompanies(search || undefined, formData.company_id ?? itemCompanyId ?? undefined);
         if (result.success && result.data) {
-            setSuppliers(result.data);
+            setCompanies(result.data);
         }
-        setIsLoadingSuppliers(false);
-    }, [formData.supplier_id, itemSupplierId]);
+        setIsLoadingCompanies(false);
+    }, [formData.company_id, itemCompanyId]);
 
     useEffect(() => {
         if (isOpen) {
@@ -92,8 +92,8 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
                     type: movement.type,
                     quantity: movement.quantity,
                     unit_price: movement.unit_price || undefined,
-                    supplier_id: movement.supplier_id || undefined,
-                    supplier_invoice_number: movement.supplier_invoice_number || "",
+                    company_id: movement.company_id || undefined,
+                    company_invoice_number: movement.company_invoice_number || "",
                     invoice_date: movement.invoice_date?.split("T")[0] || "",
                     notes: movement.notes || "",
                     movement_date: movement.movement_date?.split("T")[0] || new Date().toISOString().split("T")[0],
@@ -104,36 +104,36 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
                     type: effectiveType,
                     quantity: 1,
                     unit_price: undefined,
-                    supplier_id: isEntry ? itemSupplierId || undefined : undefined,
-                    supplier_invoice_number: "",
+                    company_id: isEntry ? itemCompanyId || undefined : undefined,
+                    company_invoice_number: "",
                     invoice_date: "",
                     notes: "",
                     movement_date: new Date().toISOString().split("T")[0],
                 });
             }
             setErrors({});
-            setItemSupplier(null);
+            setItemCompany(null);
 
-            // Load suppliers for entry (include item's supplier to ensure it's always in the list)
+            // Load companies for entry (include item's company to ensure it's always in the list)
             if (isEntry) {
-                setIsLoadingSuppliers(true);
-                ItemMovementManager.getAvailableSuppliers(undefined, itemSupplierId || undefined)
+                setIsLoadingCompanies(true);
+                ItemMovementManager.getAvailableCompanies(undefined, itemCompanyId || undefined)
                     .then((result) => {
                         if (result.success && result.data) {
-                            setSuppliers(result.data);
-                            // The item's supplier is now the first in the list if includeId was provided
-                            if (itemSupplierId) {
-                                const found = result.data.find(s => s.id === itemSupplierId);
+                            setCompanies(result.data);
+                            // The item's company is now the first in the list if includeId was provided
+                            if (itemCompanyId) {
+                                const found = result.data.find(s => s.id === itemCompanyId);
                                 if (found) {
-                                    setItemSupplier(found);
+                                    setItemCompany(found);
                                 }
                             }
                         }
-                        setIsLoadingSuppliers(false);
+                        setIsLoadingCompanies(false);
                     });
             }
         }
-    }, [isOpen, isEditMode, movementId, effectiveType, isEntry, itemId, itemSupplierId]);
+    }, [isOpen, isEditMode, movementId, effectiveType, isEntry, itemId, itemCompanyId]);
 
     const handleChange = (
         field: keyof ItemMovementFormData,
@@ -310,26 +310,26 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
                             )}
                         </div>
 
-                        {/* Supplier */}
+                        {/* Company */}
                         <div>
-                            <Label>{t("items.movements.fields.supplier")}</Label>
+                            <Label>{t("items.movements.fields.company")}</Label>
                             <SearchableDropdown
-                                value={formData.supplier_id ?? null}
-                                onChange={(value) => handleChange("supplier_id", value ?? undefined)}
-                                options={suppliers}
-                                placeholder={t("items.form.selectSupplier")}
-                                searchPlaceholder={t("items.form.searchSupplier")}
-                                noSelectionText={t("items.noSupplier")}
+                                value={formData.company_id ?? null}
+                                onChange={(value) => handleChange("company_id", value ?? undefined)}
+                                options={companies}
+                                placeholder={t("items.form.selectCompany")}
+                                searchPlaceholder={t("items.form.searchCompany")}
+                                noSelectionText={t("items.noCompany")}
                                 noResultsText={t("common.noResults")}
                                 loadingText={t("common.loading")}
                                 nullable
                                 disabled={isLoading}
-                                isLoading={isLoadingSuppliers}
-                                onSearch={searchSuppliers}
-                                pinnedItem={itemSupplier ? {
-                                    id: itemSupplier.id,
-                                    name: itemSupplier.name,
-                                    label: t("items.movements.itemSupplier"),
+                                isLoading={isLoadingCompanies}
+                                onSearch={searchCompanies}
+                                pinnedItem={itemCompany ? {
+                                    id: itemCompany.id,
+                                    name: itemCompany.name,
+                                    label: t("items.movements.itemCompany"),
                                 } as PinnedItem : undefined}
                                 className="mt-1.5"
                             />
@@ -338,14 +338,14 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
                         {/* Invoice fields */}
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
-                                <Label htmlFor="supplier_invoice_number">
+                                <Label htmlFor="company_invoice_number">
                                     {t("items.movements.fields.invoiceNumber")}
                                 </Label>
                                 <Input
-                                    id="supplier_invoice_number"
-                                    value={formData.supplier_invoice_number || ""}
+                                    id="company_invoice_number"
+                                    value={formData.company_invoice_number || ""}
                                     onChange={(e) =>
-                                        handleChange("supplier_invoice_number", e.target.value)
+                                        handleChange("company_invoice_number", e.target.value)
                                     }
                                     disabled={isLoading}
                                 />

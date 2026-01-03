@@ -52,7 +52,7 @@ const ItemMovementListPage: FC = () => {
     const canViewItem = hasPermission("item.view");
     const canViewSite = isOnHeadquarters && hasPermission("site.view");
     const canViewCreator = isOnHeadquarters && hasPermission("user.view");
-    const canViewSupplier = hasPermission("supplier.view");
+    const canViewCompany = hasPermission("company.view");
 
     // Modals
     const editModal = useModal();
@@ -213,7 +213,7 @@ const ItemMovementListPage: FC = () => {
                                     onSort={handleSort}
                                     renderSortIcon={renderSortIcon}
                                 />
-                                <StaticTableHeader label={t("itemMovements.fields.supplier")} />
+                                <StaticTableHeader label={t("itemMovements.fields.company")} />
                                 <StaticTableHeader label={t("itemMovements.fields.createdBy")} />
                                 <StaticTableHeader label={t("common.actions")} align="right" />
                             </TableRow>
@@ -291,21 +291,21 @@ const ItemMovementListPage: FC = () => {
                                             {formatCurrency(movement.total_price)}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                            {movement.supplier && canViewSupplier ? (
+                                            {movement.company && canViewCompany ? (
                                                 <Link
-                                                    to={`/suppliers/${movement.supplier_id}`}
+                                                    to={`/companies/${movement.company_id}`}
                                                     className="font-medium text-gray-900 hover:text-brand-600 dark:text-white dark:hover:text-brand-400"
                                                 >
-                                                    {movement.supplier.name}
-                                                    {movement.supplier_invoice_number && (
+                                                    {movement.company.name}
+                                                    {movement.company_invoice_number && (
                                                         <span className="ml-1.5 text-xs text-gray-500 dark:text-gray-400">
-                                                            ({movement.supplier_invoice_number})
+                                                            ({movement.company_invoice_number})
                                                         </span>
                                                     )}
                                                 </Link>
                                             ) : (
                                                 <span className="text-gray-400">
-                                                    {movement.supplier_name || "—"}
+                                                    {movement.company_name || "—"}
                                                 </span>
                                             )}
                                         </TableCell>
