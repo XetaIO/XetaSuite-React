@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/XetaIO/XetaSuite-React/main/.github/logo.svg" width="400" alt="XetaSuite Logo">
+  <img src=".github/logos/logo.svg#gh-light-mode-only" width="400" alt="XetaSuite Logo">
+    <img src=".github/logos/logo-dark.svg#gh-dark-mode-only" width="400" alt="XetaSuite Logo">
 </p>
 
 <p align="center">
