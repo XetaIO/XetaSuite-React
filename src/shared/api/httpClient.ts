@@ -89,6 +89,29 @@ export const request = async <T>(config: AxiosRequestConfig): Promise<T> => {
 };
 
 /**
+ * Extract validation errors from API response as a field -> message map
+ * Returns null if error is not a validation error (422)
+ */
+export const extractValidationErrors = (error: unknown): Record<string, string> | null => {
+    if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ errors?: Record<string, string[]> }>;
+
+        if (axiosError.response?.status === 422 && axiosError.response?.data?.errors) {
+            const errors = axiosError.response.data.errors;
+            const result: Record<string, string> = {};
+
+            for (const [field, messages] of Object.entries(errors)) {
+                result[field] = messages[0] || '';
+            }
+
+            return result;
+        }
+    }
+
+    return null;
+};
+
+/**
  * Error handler helper - extracts meaningful error messages from API responses
  */
 export const handleApiError = (error: unknown): string => {

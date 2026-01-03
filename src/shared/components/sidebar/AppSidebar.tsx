@@ -185,6 +185,7 @@ const othersItems: NavItem[] = [
         icon: <FaGear />,
         nameKey: "sidebar.settings",
         path: "/settings",
+        permission: "setting.viewAny",
         requiresHQ: true,
     },
 ];

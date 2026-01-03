@@ -210,7 +210,7 @@ export function SearchableDropdown<T extends DropdownOption>({
                     {/* Options List */}
                     <div className="max-h-48 overflow-y-auto">
                         {isLoading ? (
-                            <div className="p-3 text-center text-sm text-gray-500">
+                            <div className="p-3 text-center text-sm text-gray-500 dark:text-gray-400">
                                 {loadingText}
                             </div>
                         ) : (
@@ -234,7 +234,7 @@ export function SearchableDropdown<T extends DropdownOption>({
                                     <button
                                         type="button"
                                         onClick={() => handleSelect(pinnedItem.id)}
-                                        className="flex w-full items-center justify-between border-l-2 border-brand-500 px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                        className="flex w-full items-center justify-between border-l-2 border-brand-500 px-4 py-2.5 text-left text-sm text-gray-800 hover:bg-gray-50 dark:text-white/90 dark:hover:bg-gray-800"
                                     >
                                         <div className="flex items-center gap-2">
                                             <span className="font-medium text-gray-800 dark:text-white/90">
@@ -252,7 +252,7 @@ export function SearchableDropdown<T extends DropdownOption>({
 
                                 {/* Options list */}
                                 {displayOptions.length === 0 && search ? (
-                                    <div className="p-3 text-center text-sm text-gray-500">
+                                    <div className="p-3 text-center text-sm text-gray-500 dark:text-gray-400">
                                         {noResultsText}
                                     </div>
                                 ) : (
@@ -261,7 +261,7 @@ export function SearchableDropdown<T extends DropdownOption>({
                                             key={option.id}
                                             type="button"
                                             onClick={() => handleSelect(option.id)}
-                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-gray-800 hover:bg-gray-50 dark:text-white/90 dark:hover:bg-gray-800"
                                         >
                                             {renderOption ? (
                                                 renderOption(option)

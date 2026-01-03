@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, type FC, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { FaXmark } from "react-icons/fa6";
-import { Modal, Button, MultiSelectDropdown, type MultiSelectOption } from "@/shared/components/ui";
+import { FaXmark, FaCircleInfo } from "react-icons/fa6";
+import { Modal, Button, MultiSelectDropdown, SearchableDropdown, type MultiSelectOption } from "@/shared/components/ui";
 import { Label, Input } from "@/shared/components/form";
 import { showSuccess, showError } from "@/shared/utils";
 import { RoleManager } from "../services";
-import type { RoleDetail, RoleFormData, AvailablePermission } from "../types";
+import type { RoleDetail, RoleFormData, AvailablePermission, AvailableSite } from "../types";
 
 interface RoleModalProps {
     isOpen: boolean;
@@ -26,10 +26,16 @@ export const RoleModal: FC<RoleModalProps> = ({
     // Form state
     const [formData, setFormData] = useState<RoleFormData>({
         name: "",
+        level: null,
+        site_id: null,
         permissions: [],
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Available sites
+    const [availableSites, setAvailableSites] = useState<AvailableSite[]>([]);
+    const [isLoadingSites, setIsLoadingSites] = useState(false);
 
     // Available permissions
     const [availablePermissions, setAvailablePermissions] = useState<AvailablePermission[]>([]);
@@ -44,6 +50,8 @@ export const RoleModal: FC<RoleModalProps> = ({
             if (role) {
                 setFormData({
                     name: role.name,
+                    level: role.level,
+                    site_id: role.site_id, // In edit mode, site_id cannot be changed but we display it
                     permissions: role.permissions?.map((p) => p.id) || [],
                 });
                 // Initialize cache with role's permissions
@@ -53,6 +61,8 @@ export const RoleModal: FC<RoleModalProps> = ({
             } else {
                 setFormData({
                     name: "",
+                    level: null,
+                    site_id: null,
                     permissions: [],
                 });
                 setSelectedPermissionsCache(new Map());
@@ -72,12 +82,25 @@ export const RoleModal: FC<RoleModalProps> = ({
         setIsLoadingPermissions(false);
     }, []);
 
-    // Load permissions when modal opens
+    // Fetch available sites for role assignment
+    const fetchAvailableSites = useCallback(async () => {
+        setIsLoadingSites(true);
+        const result = await RoleManager.getAvailableSites();
+        if (result.success && result.data) {
+            setAvailableSites(result.data);
+        }
+        setIsLoadingSites(false);
+    }, []);
+
+    // Load permissions and sites when modal opens (only for create mode, sites not needed in edit)
     useEffect(() => {
         if (isOpen) {
             fetchPermissions();
+            if (!isEditMode) {
+                fetchAvailableSites();
+            }
         }
-    }, [isOpen, fetchPermissions]);
+    }, [isOpen, isEditMode, fetchPermissions, fetchAvailableSites]);
 
     // Handle permission search with debounce
     useEffect(() => {
@@ -122,7 +145,13 @@ export const RoleModal: FC<RoleModalProps> = ({
             onSuccess();
             onClose();
         } else {
-            showError(result.error || t("errors.generic"));
+            // Check for validation errors from the backend (422)
+            if (result.validationErrors) {
+                setErrors(result.validationErrors);
+            } else {
+                // Generic error - show as toast
+                showError(result.error || t("errors.generic"));
+            }
         }
 
         setIsSubmitting(false);
@@ -250,6 +279,65 @@ export const RoleModal: FC<RoleModalProps> = ({
                             placeholder={t("roles.namePlaceholder")}
                         />
                     </div>
+
+                    {/* Level */}
+                    <div>
+                        <Label htmlFor="level">{t("roles.level")}</Label>
+                        <Input
+                            id="level"
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={formData.level ?? ""}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                const value = e.target.value === "" ? null : parseInt(e.target.value, 10);
+                                setFormData((prev) => ({ ...prev, level: value }));
+                            }}
+                            error={!!errors.level}
+                            hint={errors.level}
+                            placeholder={t("roles.levelPlaceholder")}
+                        />
+                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                            {t("roles.levelHint")}
+                        </p>
+                    </div>
+
+                    {/* Site assignment - Only in create mode */}
+                    {!isEditMode && (
+                        <div>
+                            <Label>{t("roles.siteAssignment")}</Label>
+                            <SearchableDropdown
+                                value={formData.site_id}
+                                onChange={(siteId) => setFormData((prev) => ({ ...prev, site_id: siteId }))}
+                                options={availableSites.map((site) => ({
+                                    id: site.id,
+                                    name: site.name + (site.is_headquarters ? ` (${t("common.headquarters")})` : ""),
+                                }))}
+                                placeholder={t("roles.selectSite")}
+                                searchPlaceholder={t("roles.searchSites")}
+                                noSelectionText={t("roles.globalRole")}
+                                noResultsText={t("common.noResults")}
+                                loadingText={t("common.loading")}
+                                isLoading={isLoadingSites}
+                                nullable={true}
+                            />
+                            {/* Info hint */}
+                            <p className="mt-2 flex items-start gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                                <FaCircleInfo className="mt-0.5 h-3 w-3 shrink-0" />
+                                <span>{t("roles.siteAssignmentHint")}</span>
+                            </p>
+                        </div>
+                    )}
+
+                    {/* Edit mode notice - site cannot be changed */}
+                    {isEditMode && role?.site_id !== null && (
+                        <div className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
+                            <FaCircleInfo className="mt-0.5 h-4 w-4 shrink-0 text-gray-500 dark:text-gray-400" />
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                                {t("roles.siteCannotBeChanged")}
+                            </p>
+                        </div>
+                    )}
 
                     {/* Permissions */}
                     <div>

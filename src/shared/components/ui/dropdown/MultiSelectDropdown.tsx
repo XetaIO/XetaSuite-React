@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { FaChevronDown, FaCheck, FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 
 /**
@@ -65,6 +66,7 @@ export function MultiSelectDropdown<T extends MultiSelectOption>({
     className = "",
     selectedCountLabel,
 }: MultiSelectDropdownProps<T>) {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState("");
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -155,6 +157,7 @@ export function MultiSelectDropdown<T extends MultiSelectOption>({
                         >
                             {name}
                             <button
+                                title={t("common.delete")}
                                 type="button"
                                 onClick={(e) => handleRemove(value[idx], e)}
                                 className="hover:text-brand-900 dark:hover:text-brand-100"
@@ -181,7 +184,7 @@ export function MultiSelectDropdown<T extends MultiSelectOption>({
                 type="button"
                 onClick={() => !disabled && setIsOpen(!isOpen)}
                 disabled={disabled}
-                className={`flex w-full min-h-[42px] items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800 ${disabled ? "cursor-not-allowed opacity-60" : ""
+                className={`flex w-full min-h-10.5 items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800 ${disabled ? "cursor-not-allowed opacity-60" : ""
                     }`}
             >
                 <div className="flex-1 pr-2">

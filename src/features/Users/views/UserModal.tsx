@@ -170,9 +170,18 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
     const handleSiteChange = (index: number, siteId: number | null) => {
         if (siteId === null) return;
         const site = availableSites.find((s) => s.id === siteId);
+
+        // Get valid role names for the new site
+        const validRoleNames = availableRoles
+            .filter((role) => role.site_id === null || role.site_id === siteId)
+            .map((role) => role.name);
+
         setSiteAssignments((prev) => {
             const updated = [...prev];
-            updated[index] = { ...updated[index], id: siteId, name: site?.name };
+            // Filter out roles that are not valid for the new site
+            const currentRoles = updated[index].roles || [];
+            const filteredRoles = currentRoles.filter((roleName) => validRoleNames.includes(roleName));
+            updated[index] = { ...updated[index], id: siteId, name: site?.name, roles: filteredRoles };
             return updated;
         });
     };
@@ -253,13 +262,12 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
                 : t("common.messages.created", { name: `${formData.first_name} ${formData.last_name}` });
             showSuccess(successMessage);
             onSuccess();
-            onClose();
         } else {
             showError(result.error || t("errors.generic"));
             setErrors({ general: result.error || t("errors.generic") });
         }
-
         setIsLoading(false);
+        onClose();
     };
 
     // Prepare site options for dropdown (excluding already assigned sites)
@@ -270,11 +278,16 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
         );
     };
 
-    // Prepare role options as MultiSelectOption
-    const roleOptions = availableRoles.map((role) => ({
-        id: role.name,
-        name: role.name,
-    }));
+    // Prepare role options as MultiSelectOption, filtered by site
+    // Show only roles where site_id is null (global) or matches the selected site
+    const getRoleOptionsForSite = (siteId: number) => {
+        return availableRoles
+            .filter((role) => role.site_id === null || role.site_id === siteId)
+            .map((role) => ({
+                id: role.name,
+                name: role.name,
+            }));
+    };
 
     // Prepare permission options as MultiSelectOption
     const permissionOptions = availablePermissions.map((perm) => ({
@@ -470,7 +483,7 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
                                     size="sm"
                                     startIcon={<FaPlus className="h-3 w-3" />}
                                     onClick={handleAddSite}
-                                    disabled={siteAssignments.length > availableSites.length}
+                                    disabled={siteAssignments.length >= availableSites.length}
                                 >
                                     {t("users.addSite")}
                                 </Button>
@@ -528,7 +541,7 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
                                                         <MultiSelectDropdown
                                                             value={assignment.roles || []}
                                                             onChange={(values) => handleRolesChange(index, values)}
-                                                            options={roleOptions}
+                                                            options={getRoleOptionsForSite(assignment.id)}
                                                             placeholder={t("users.selectRoles")}
                                                             searchPlaceholder={t("common.search")}
                                                             noResultsText={t("common.noResults")}

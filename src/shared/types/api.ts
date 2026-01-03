@@ -18,4 +18,4 @@ export interface SingleResponse<T> {
 // Supports void operations (delete) where data is not needed
 export type ManagerResult<T> =
     | (T extends void ? { success: true; data?: undefined } : { success: true; data: T })
-    | { success: false; error: string; data?: undefined };
+    | { success: false; error: string; data?: undefined; validationErrors?: Record<string, string> };

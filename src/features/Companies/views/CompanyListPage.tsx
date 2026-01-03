@@ -234,14 +234,14 @@ const CompanyListPage: FC = () => {
                                             )}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
-                                            <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                                            <Badge color="brand" size="sm">
                                                 {company.maintenance_count}
-                                            </span>
+                                            </Badge>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
-                                            <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-sm font-medium text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                                            <Badge color="info" size="sm">
                                                 {company.item_count}
-                                            </span>
+                                            </Badge>
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-gray-500 dark:text-gray-400">
                                             <LinkedName

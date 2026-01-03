@@ -6,6 +6,12 @@ export interface Role {
     id: number;
     name: string;
     guard_name: string;
+    level: number | null;
+    site_id: number | null;
+    site?: {
+        id: number;
+        name: string;
+    } | null;
     permissions_count: number;
     users_count: number;
     created_at: string;
@@ -23,6 +29,8 @@ export interface RolePermission {
 
 export interface RoleFormData {
     name: string;
+    level?: number | null;
+    site_id?: number | null;
     permissions?: number[];
 }
 
@@ -49,4 +57,10 @@ export interface RoleUser {
         id: number;
         name: string;
     } | null;
+}
+
+export interface AvailableSite {
+    id: number;
+    name: string;
+    is_headquarters: boolean;
 }

@@ -7,6 +7,7 @@ import type {
     RoleFormData,
     RoleFilters,
     AvailablePermission,
+    AvailableSite,
     RoleUser,
 } from '../types';
 
@@ -86,6 +87,15 @@ export const RoleRepository = {
     getUsers: async (roleId: number, page: number = 1, search?: string): Promise<PaginatedResponse<RoleUser>> => {
         const url = buildUrl(API_ENDPOINTS.ROLES.USERS(roleId), { page, search });
         const response = await httpClient.get<PaginatedResponse<RoleUser>>(url);
+        return response.data;
+    },
+
+    /**
+     * Get available sites for role assignment
+     */
+    getAvailableSites: async (search?: string): Promise<{ data: AvailableSite[] }> => {
+        const url = buildUrl(API_ENDPOINTS.USERS.AVAILABLE_SITES, { search });
+        const response = await httpClient.get<{ data: AvailableSite[] }>(url);
         return response.data;
     },
 };

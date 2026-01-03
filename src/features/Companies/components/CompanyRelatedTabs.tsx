@@ -174,7 +174,7 @@ export function CompanyRelatedTabs({ company }: CompanyRelatedTabsProps) {
 
     // Render empty state
     const renderEmpty = (icon: React.ReactNode, message: string) => (
-        <div className="p-8 text-center">
+        <div className="flex flex-col items-center p-8">
             <div className="mx-auto mb-3 text-gray-400">{icon}</div>
             <p className="text-gray-500 dark:text-gray-400">{message}</p>
         </div>
@@ -222,20 +222,20 @@ export function CompanyRelatedTabs({ company }: CompanyRelatedTabsProps) {
                                         <TableHeader>
                                             <TableRow className="border-b border-gray-200 dark:border-gray-700">
                                                 <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t('items.name')}
+                                                    {t('items.fields.name')}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t('items.reference')}
+                                                    {t('items.fields.reference')}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-right text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t('items.currentPrice')}
+                                                    {t('items.fields.price')}
                                                 </TableCell>
                                                 <TableCell isHeader className="px-6 py-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                    {t('items.stock')}
+                                                    {t('items.fields.stock')}
                                                 </TableCell>
                                                 {isOnHeadquarters && (
                                                     <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                        {t('items.site')}
+                                                        {t('items.fields.site')}
                                                     </TableCell>
                                                 )}
                                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">

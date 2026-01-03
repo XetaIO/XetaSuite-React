@@ -1,4 +1,4 @@
-import { handleApiError } from '@/shared/api';
+import { handleApiError, extractValidationErrors } from '@/shared/api';
 import type { PaginatedResponse, SingleResponse, ManagerResult } from '@/shared/types';
 import { RoleRepository } from './RoleRepository';
 import type {
@@ -7,6 +7,7 @@ import type {
     RoleFormData,
     RoleFilters,
     AvailablePermission,
+    AvailableSite,
     RoleUser,
 } from '../types';
 
@@ -46,7 +47,12 @@ export const RoleManager = {
             const result = await RoleRepository.create(data);
             return { success: true, data: result };
         } catch (error) {
-            return { success: false, error: handleApiError(error) };
+            const validationErrors = extractValidationErrors(error);
+            return {
+                success: false,
+                error: handleApiError(error),
+                validationErrors: validationErrors || undefined,
+            };
         }
     },
 
@@ -58,7 +64,12 @@ export const RoleManager = {
             const result = await RoleRepository.update(id, data);
             return { success: true, data: result };
         } catch (error) {
-            return { success: false, error: handleApiError(error) };
+            const validationErrors = extractValidationErrors(error);
+            return {
+                success: false,
+                error: handleApiError(error),
+                validationErrors: validationErrors || undefined,
+            };
         }
     },
 
@@ -93,6 +104,18 @@ export const RoleManager = {
         try {
             const data = await RoleRepository.getUsers(roleId, page, search);
             return { success: true, data };
+        } catch (error) {
+            return { success: false, error: handleApiError(error) };
+        }
+    },
+
+    /**
+     * Get available sites for role assignment
+     */
+    getAvailableSites: async (search?: string): Promise<ManagerResult<AvailableSite[]>> => {
+        try {
+            const result = await RoleRepository.getAvailableSites(search);
+            return { success: true, data: result.data };
         } catch (error) {
             return { success: false, error: handleApiError(error) };
         }

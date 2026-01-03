@@ -133,6 +133,7 @@ export const AppHeader: React.FC = () => {
 
                         {/* Mobile Menu Button */}
                         <button
+                            title="Toggle menu"
                             onClick={toggleApplicationMenu}
                             className="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
                         >
@@ -162,7 +163,7 @@ export const AppHeader: React.FC = () => {
                                 <FaMagnifyingGlass className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                             </span>
                             {t('search.placeholder')}
-                            <span className="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-1.75 py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
+                            <span className="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-1.75 py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/3 dark:text-gray-400">
                                 <span> ⌘ </span>
                                 <span> K </span>
                             </span>

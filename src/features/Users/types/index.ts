@@ -90,6 +90,7 @@ export interface AvailableSite {
 export interface AvailableRole {
     id: number;
     name: string;
+    site_id: number | null;
 }
 
 export interface AvailablePermission {

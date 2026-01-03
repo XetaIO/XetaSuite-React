@@ -116,12 +116,14 @@ const RoleListPage: FC = () => {
     // Skeleton and empty state config
     const skeletonCells = [
         { width: "w-32" },
+        { width: "w-20" },
+        { width: "w-12", center: true as const },
         { width: "w-8", center: true as const },
         { width: "w-8", center: true as const },
         { width: "w-24" },
         ...(permissions.hasAnyAction ? [{ width: "w-8", right: true as const }] : []),
     ];
-    const colSpan = 4 + (permissions.hasAnyAction ? 1 : 0);
+    const colSpan = 6 + (permissions.hasAnyAction ? 1 : 0);
 
     return (
         <>
@@ -169,6 +171,8 @@ const RoleListPage: FC = () => {
                                     onSort={handleSort}
                                     renderSortIcon={renderSortIcon}
                                 />
+                                <StaticTableHeader label={t("roles.site")} />
+                                <StaticTableHeader label={t("roles.level")} align="center" />
                                 <SortableTableHeader
                                     field="permissions_count"
                                     label={t("roles.permissions")}
@@ -219,6 +223,26 @@ const RoleListPage: FC = () => {
                                                 <span className="font-medium text-gray-800 dark:text-white/90">
                                                     {role.name}
                                                 </span>
+                                            )}
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4">
+                                            {role.site ? (
+                                                <span className="text-sm text-gray-700 dark:text-gray-300">
+                                                    {role.site.name}
+                                                </span>
+                                            ) : (
+                                                <Badge variant="light" color="success">
+                                                    {t("roles.global")}
+                                                </Badge>
+                                            )}
+                                        </TableCell>
+                                        <TableCell className="px-6 py-4 text-center">
+                                            {role.level !== null ? (
+                                                <Badge variant="light" color="dark">
+                                                    {role.level}
+                                                </Badge>
+                                            ) : (
+                                                <span className="text-gray-400">—</span>
                                             )}
                                         </TableCell>
                                         <TableCell className="px-6 py-4 text-center">
