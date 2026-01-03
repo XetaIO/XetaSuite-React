@@ -23,15 +23,20 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // Build output configuration
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+  },
   server: {
     proxy: {
-      // Sanctum CSRF cookie
+      // Sanctum CSRF cookie (development only)
       '/sanctum': {
         target: 'https://xetasuite.test',
         changeOrigin: true,
         secure: false,
       },
-      // API routes
+      // API routes (development only)
       '/api': {
         target: 'https://xetasuite.test',
         changeOrigin: true,
