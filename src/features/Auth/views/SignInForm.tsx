@@ -3,20 +3,26 @@ import { Link, useNavigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useAuth } from '../hooks';
+import { useAppConfig } from '@/shared/store';
 import Label from "@/shared/components/form/Label";
 import Input from "@/shared/components/form/input/InputField";
 import Checkbox from "@/shared/components/form/input/Checkbox";
 import Button from "@/shared/components/ui/button/Button";
 import Alert from '@/shared/components/ui/alert/Alert';
 
+// Demo credentials
+const DEMO_EMAIL = 'admin@xetasuite.demo';
+const DEMO_PASSWORD = 'password';
+
 export default function SignInForm() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
     const { login } = useAuth();
+    const { isDemoMode } = useAppConfig();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState(isDemoMode ? DEMO_EMAIL : '');
+    const [password, setPassword] = useState(isDemoMode ? DEMO_PASSWORD : '');
     const [showPassword, setShowPassword] = useState(false);
     const [remember, setRemember] = useState(false);
     const [error, setError] = useState('');

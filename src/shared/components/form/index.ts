@@ -17,7 +17,6 @@ export { default as Label } from "./Label";
 
 // Select
 export { default as Select } from "./Select";
-export { default as MultiSelect } from "./MultiSelect";
 
 // DatePicker
 export { default as DatePicker } from "./DatePicker";
