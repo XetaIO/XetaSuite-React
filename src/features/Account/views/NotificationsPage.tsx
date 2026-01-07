@@ -5,8 +5,8 @@ import { FaBroom, FaCubes, FaTrash, FaCheck, FaCheckDouble, FaBell } from "react
 import { DeleteConfirmModal, PageMeta } from "@/shared/components/common";
 import { Button, Alert, Badge } from "@/shared/components/ui";
 import { Pagination } from "@/shared/components/common";
-import { NotificationManager } from "../services";
-import type { Notification, NotificationIcon } from "../types";
+import { NotificationManager } from "@/features/Notifications/services";
+import type { Notification, NotificationIcon } from "@/features/Notifications/types";
 import type { PaginationMeta } from "@/shared/types";
 import { showError } from "@/shared/utils";
 import { useModal } from "@/shared/hooks";
@@ -102,7 +102,7 @@ const NotificationsPage: FC = () => {
             return iconMap[iconType];
         }
 
-        return <span className="text-xl">🔔</span>;
+        return <FaBell className="w-5 h-5 text-gray-500" />;
     };
 
     const unreadCount = notifications.filter(n => !n.is_read).length;
@@ -161,7 +161,7 @@ const NotificationsPage: FC = () => {
                     ) : notifications.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-16 text-center">
                             <div className="text-6xl mb-4">
-                                <FaBell />
+                                <FaBell className="text-gray-500 dark:text-gray-400" />
                             </div>
                             <h3 className="text-lg font-medium text-gray-800 dark:text-white mb-2">
                                 {t("notifications.empty")}

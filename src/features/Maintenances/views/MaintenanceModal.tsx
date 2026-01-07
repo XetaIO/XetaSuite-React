@@ -302,7 +302,6 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                 }
             }
         } else {
-            // Creating new cleaning
             // Check for preselected material from QR scan
             if (preselectedMaterialId) {
                 setFormData((prev) => ({ ...prev, material_id: preselectedMaterialId }));
@@ -993,17 +992,19 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                     <button
                                                         type="button"
                                                         onClick={() => updateSparePartQuantity(im.item_id, im.quantity - 1)}
-                                                        className="rounded bg-gray-200 p-1 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                                                        className="rounded bg-gray-200 p-1 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-400"
                                                         disabled={im.quantity <= 1}
                                                         title={t('common.decrease')}
                                                     >
                                                         <FaMinus className="h-3 w-3" />
                                                     </button>
-                                                    <span className="w-8 text-center text-sm font-medium">{im.quantity}</span>
+                                                    <span className="w-8 text-center text-sm font-medium dark:text-gray-400">
+                                                        {im.quantity}
+                                                    </span>
                                                     <button
                                                         type="button"
                                                         onClick={() => updateSparePartQuantity(im.item_id, im.quantity + 1)}
-                                                        className="rounded bg-gray-200 p-1 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                                                        className="rounded bg-gray-200 p-1 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-400"
                                                         disabled={im.quantity >= item.current_stock}
                                                         title={t('common.increase')}
                                                     >

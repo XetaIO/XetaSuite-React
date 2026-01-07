@@ -64,7 +64,7 @@ const PermissionDetailPage = lazy(() => import("@/features/Permissions/views/Per
 const SettingsListPage = lazy(() => import("@/features/Settings/views/SettingsListPage"));
 
 // Lazy load Account feature
-const NotificationsPage = lazy(() => import("@/features/Notifications/views/NotificationsPage"));
+const NotificationsPage = lazy(() => import("@/features/Account/views/NotificationsPage"));
 const ChangePasswordPage = lazy(() => import("@/features/Account/views/ChangePasswordPage"));
 const SecurityPage = lazy(() => import("@/features/Account/views/SecurityPage"));
 
