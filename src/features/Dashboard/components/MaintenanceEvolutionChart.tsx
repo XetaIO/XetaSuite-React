@@ -37,7 +37,7 @@ export function MaintenanceEvolutionChart({ className }: MaintenanceEvolutionCha
                 const chartsData = await DashboardRepository.getChartsData();
                 setData(chartsData.maintenances_evolution);
             } catch (err) {
-                setError('Failed to load chart data');
+                setError('Failed to load chart data :' + err);
             } finally {
                 setIsLoading(false);
             }
