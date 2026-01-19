@@ -134,7 +134,7 @@ export default function NotificationDropdown() {
   return (
     <div className="relative">
       <button
-        className="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full dropdown-toggle hover:text-gray-700 h-11 w-11 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+        className="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full dropdown-toggle hover:text-gray-700 h-11 w-11 hover:bg-gray-100 dark:bg-white/3 dark:border-white/5 dark:text-white/90 dark:hover:bg-neutral-900 dark:hover:text-gray-200"
         onClick={handleClick}
         aria-label={t("notifications.title")}
       >
@@ -161,9 +161,9 @@ export default function NotificationDropdown() {
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
-        className="absolute -right-60 mt-4.25 flex h-120 w-87.5 flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-90.25 lg:right-0"
+        className="absolute -right-60 mt-4.25 flex h-120 w-87.5 flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:bg-neutral-900 dark:border-white/5 dark:text-white/90  sm:w-90.25 lg:right-0"
       >
-        <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-100 dark:border-gray-700">
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-100 dark:border-white/5">
           <div className="flex items-center gap-2">
             <h5 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
               {t("notifications.title")}
@@ -230,13 +230,13 @@ export default function NotificationDropdown() {
               <li key={notification.id}>
                 <DropdownItem
                   onItemClick={closeDropdown}
-                  className={`relative flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5 group ${!notification.is_read ? "bg-brand-50 dark:bg-brand-900/10" : ""
+                  className={`relative flex gap-3 border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:hover:bg-white/5 dark:border-white/5 group ${!notification.is_read ? "bg-brand-50 dark:bg-white/3 " : ""
                     }`}
                   to={notification.data?.link || undefined}
                   onMouseEnter={() => handleNotificationHover(notification)}
                   onMouseLeave={() => handleNotificationLeave(notification.id)}
                 >
-                  <span className="flex items-center justify-center w-10 h-10 text-xl rounded-full bg-gray-100 dark:bg-gray-800">
+                  <span className="flex items-center justify-center w-10 h-10 text-xl rounded-full bg-gray-100 dark:bg-neutral-800">
                     {getNotificationIcon(notification)}
                   </span>
 
@@ -299,7 +299,7 @@ export default function NotificationDropdown() {
               closeDropdown();
               navigate("/account/notifications");
             }}
-            className="block w-full px-4 py-2 mt-3 text-sm font-medium text-center text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
+            className="block w-full px-4 py-2 mt-3 text-sm font-medium text-center text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 dark:bg-white/3 dark:border-white/5 dark:text-white/90 dark:hover:bg-neutral-900 dark:hover:text-gray-200"
           >
             {t("notifications.viewAll")}
           </button>

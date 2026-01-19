@@ -39,7 +39,7 @@ export default function UserDropdown() {
             <Dropdown
                 isOpen={isOpen}
                 onClose={closeDropdown}
-                className="absolute right-0 mt-4.25 flex w-65 flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
+                className="absolute right-0 mt-4.25 flex w-65 flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:bg-neutral-900 dark:border-white/5 dark:text-white/90 dark:hover:bg-neutral-900 dark:hover:text-gray-200"
             >
                 <div>
                     <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
@@ -50,7 +50,7 @@ export default function UserDropdown() {
                     </span>
                 </div>
 
-                <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
+                <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-white/5">
                     <li>
                         <DropdownItem
                             onItemClick={closeDropdown}

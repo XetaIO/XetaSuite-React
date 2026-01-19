@@ -3,8 +3,6 @@ import { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import PageMeta from "@/shared/components/common/PageMeta";
 import ComponentCard from "@/shared/components/common/ComponentCard";
-import LineChartOne from "@/shared/components/charts/line/LineChartOne";
-import BarChartOne from "@/shared/components/charts/bar/BarChartOne";
 import { QrCodeScanModal } from "@/features/Qrcode/views";
 import {
   StatCard,
@@ -26,6 +24,7 @@ import {
 import { DashboardRepository } from "./services";
 import type { DashboardData } from "./types";
 import { useAppConfig } from "@/shared/store";
+import { MaintenanceEvolutionChart, IncidentEvolutionChart } from "./components";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -277,12 +276,12 @@ export default function Home() {
         {/* Charts Row */}
         <div className="col-span-12 xl:col-span-7">
           <ComponentCard title={t('dashboard.charts.maintenanceEvolution')} desc={t('dashboard.charts.maintenanceEvolutionDesc')}>
-            <LineChartOne />
+            <MaintenanceEvolutionChart />
           </ComponentCard>
         </div>
         <div className="col-span-12 xl:col-span-5">
           <ComponentCard title={t('dashboard.charts.incidentsByMonth')} desc={t('dashboard.charts.incidentsByMonthDesc')}>
-            <BarChartOne />
+            <IncidentEvolutionChart />
           </ComponentCard>
         </div>
       </div>

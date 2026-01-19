@@ -317,7 +317,7 @@ const SiteListPage: FC = () => {
 
                 {/* Pagination */}
                 {meta && meta.last_page > 1 && (
-                    <div className="border-t border-gray-200 px-6 py-4 dark:border-gray-800">
+                    <div className="border-t border-gray-200 px-6 py-4 dark:border-white/5">
                         <Pagination meta={meta} onPageChange={handlePageChange} />
                     </div>
                 )}

@@ -181,7 +181,7 @@ const RoleDetailPage: FC = () => {
                 <div className="flex items-center gap-4">
                     <Link
                         to="/roles"
-                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition hover:bg-gray-50 dark:border-white/5 dark:text-gray-400 dark:hover:bg-neutral-800"
                     >
                         <FaArrowLeft className="h-4 w-4" />
                     </Link>
@@ -214,7 +214,7 @@ const RoleDetailPage: FC = () => {
             </div>
 
             {/* Role Info Card */}
-            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {/* Permissions Count */}
                     <div className="flex items-center gap-3">
@@ -248,7 +248,7 @@ const RoleDetailPage: FC = () => {
 
                     {/* Created At */}
                     <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-neutral-800">
                             <FaCalendar className="h-5 w-5 text-gray-500" />
                         </div>
                         <div>
@@ -263,7 +263,7 @@ const RoleDetailPage: FC = () => {
 
                     {/* Updated At */}
                     <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-neutral-800">
                             <FaCalendar className="h-5 w-5 text-gray-500" />
                         </div>
                         <div>
@@ -279,9 +279,9 @@ const RoleDetailPage: FC = () => {
             </div>
 
             {/* Tabs */}
-            <div className="mb-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
                 {/* Tab Headers */}
-                <div className="flex border-b border-gray-200 dark:border-gray-800">
+                <div className="flex border-b border-gray-200 dark:border-white/5">
                     {tabs.map((tab) => {
                         const Icon = tab.icon;
                         const isActive = activeTab === tab.id;
@@ -327,7 +327,7 @@ const RoleDetailPage: FC = () => {
                                                 <div
                                                     key={permission.id}
                                                     title={hasDescription ? description : permission.name}
-                                                    className="group relative flex flex-col gap-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 transition-colors hover:border-brand-300 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-brand-500/50 dark:hover:bg-brand-500/10"
+                                                    className="group relative flex flex-col gap-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 transition-colors hover:border-brand-300 hover:bg-brand-50 dark:border-white/5 dark:bg-neutral-800/50 dark:hover:border-brand-500/50 dark:hover:bg-brand-500/10"
                                                 >
                                                     <div className="flex items-center gap-2">
                                                         <FaKey className="h-3 w-3 shrink-0 text-brand-500" />
@@ -374,7 +374,7 @@ const RoleDetailPage: FC = () => {
                                         placeholder={t('common.search')}
                                         value={usersSearchInput}
                                         onChange={(e) => setUsersSearchInput(e.target.value)}
-                                        className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                        className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                                     />
                                     {usersSearchInput && (
                                         <button
@@ -403,7 +403,7 @@ const RoleDetailPage: FC = () => {
                                 <>
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                            <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                 <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t("common.user")}
                                                 </TableCell>
@@ -417,7 +417,7 @@ const RoleDetailPage: FC = () => {
                                         </TableHeader>
                                         <TableBody>
                                             {users.map((user) => (
-                                                <TableRow key={user.id} className="border-b border-gray-100 dark:border-gray-800">
+                                                <TableRow key={user.id} className="border-b border-gray-100 dark:border-white/5">
                                                     <TableCell className="px-4 py-3">
                                                         <div className="flex items-center gap-3">
                                                             {user.avatar && (

@@ -111,9 +111,9 @@ const NotificationsPage: FC = () => {
         <>
             <PageMeta title={t("notifications.pageTitle")} description={t("notifications.pageDescription")} />
 
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
+            <div className="bg-white rounded-xl border border-gray-200 dark:bg-white/3 dark:border-white/5">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-6 border-b border-gray-200 dark:border-gray-800">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-6 border-b border-gray-200 dark:border-white/5">
                     <div className="flex items-center gap-3">
                         <h1 className="text-xl font-semibold text-gray-800 dark:text-white">
                             {t("notifications.pageTitle")}
@@ -174,11 +174,11 @@ const NotificationsPage: FC = () => {
                         notifications.map((notification) => (
                             <div
                                 key={notification.id}
-                                className={`flex items-start gap-4 p-4 sm:p-6 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50 ${!notification.is_read ? "bg-brand-50/50 dark:bg-brand-900/10" : ""
+                                className={`flex items-start gap-4 p-4 sm:p-6 transition-colors hover:bg-gray-50 dark:hover:bg-white/5 ${!notification.is_read ? "bg-brand-50/50 dark:bg-neutral-900/10" : ""
                                     }`}
                             >
                                 {/* Icon */}
-                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 shrink-0">
+                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-neutral-800 shrink-0">
                                     {getNotificationIcon(notification)}
                                 </div>
 
@@ -237,7 +237,7 @@ const NotificationsPage: FC = () => {
 
                 {/* Pagination */}
                 {pagination && pagination.last_page > 1 && (
-                    <div className="p-4 sm:p-6 border-t border-gray-200 dark:border-gray-800">
+                    <div className="p-4 sm:p-6 border-t border-gray-200 dark:border-white/10">
                         <Pagination
                             meta={pagination}
                             onPageChange={handlePageChange}

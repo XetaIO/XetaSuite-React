@@ -128,7 +128,7 @@ export const ItemPriceHistoryChart: FC<ItemPriceHistoryChartProps> = ({
 
     // Get trend icon and color based on price change
     const getTrendInfo = () => {
-        if (!priceHistory?.stats) return { icon: FaEquals, color: "text-gray-500", bgColor: "bg-gray-100 dark:bg-gray-800/50" };
+        if (!priceHistory?.stats) return { icon: FaEquals, color: "text-gray-500", bgColor: "bg-gray-100 dark:bg-neutral-800/50" };
 
         const change = priceHistory.stats.price_change_percent;
         if (change > 0) {
@@ -147,7 +147,7 @@ export const ItemPriceHistoryChart: FC<ItemPriceHistoryChartProps> = ({
         return {
             icon: FaEquals,
             color: "text-gray-500 dark:text-gray-400",
-            bgColor: "bg-gray-100 dark:bg-gray-800/50",
+            bgColor: "bg-gray-100 dark:bg-neutral-800/50",
         };
     };
 
@@ -160,14 +160,14 @@ export const ItemPriceHistoryChart: FC<ItemPriceHistoryChartProps> = ({
                 {/* Stats skeleton */}
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                     {[...Array(4)].map((_, i) => (
-                        <div key={i} className="rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
-                            <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                            <div className="mt-2 h-6 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                        <div key={i} className="rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
+                            <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
+                            <div className="mt-2 h-6 w-24 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                         </div>
                     ))}
                 </div>
                 {/* Chart skeleton */}
-                <div className="h-[280px] animate-pulse rounded bg-gray-100 dark:bg-gray-800" />
+                <div className="h-[280px] animate-pulse rounded bg-gray-100 dark:bg-neutral-800" />
             </div>
         );
     }
@@ -187,7 +187,7 @@ export const ItemPriceHistoryChart: FC<ItemPriceHistoryChartProps> = ({
             {/* Statistics Cards */}
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {/* Current Price */}
-                <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
                         <FaMoneyBill className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                     </div>
@@ -202,8 +202,8 @@ export const ItemPriceHistoryChart: FC<ItemPriceHistoryChartProps> = ({
                 </div>
 
                 {/* Average Price */}
-                <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-700">
+                <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 dark:bg-neutral-700">
                         <FaChartLine className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                     </div>
                     <div>
@@ -217,7 +217,7 @@ export const ItemPriceHistoryChart: FC<ItemPriceHistoryChartProps> = ({
                 </div>
 
                 {/* Min/Max Price */}
-                <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
                         <span className="text-sm font-bold text-warning-600 dark:text-warning-400">
                             ↕
@@ -234,7 +234,7 @@ export const ItemPriceHistoryChart: FC<ItemPriceHistoryChartProps> = ({
                 </div>
 
                 {/* Price Change */}
-                <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                     <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${trend.bgColor}`}>
                         <TrendIcon className={`h-5 w-5 ${trend.color}`} />
                     </div>

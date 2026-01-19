@@ -66,6 +66,22 @@ export interface DashboardData {
 }
 
 export interface ChartsData {
-    maintenances_evolution: Array<{ month: string; count: number }>;
-    incidents_evolution: Array<{ month: string; count: number }>;
+    maintenances_evolution: MaintenancesEvolution;
+    incidents_evolution: IncidentsEvolution;
+}
+
+export interface MaintenancesEvolution {
+    months: string[];
+    corrective: number[];
+    preventive: number[];
+    inspection: number[];
+    improvement: number[];
+}
+
+export interface IncidentsEvolution {
+    months: string[];
+    low: number[];
+    medium: number[];
+    high: number[];
+    critical: number[];
 }

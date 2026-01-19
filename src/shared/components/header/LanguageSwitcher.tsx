@@ -107,7 +107,7 @@ export function LanguageSwitcher({ compact = false, dropdownDirection = 'down' }
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 disabled={isChanging}
-                className={`flex items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 disabled:cursor-wait disabled:opacity-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200 ${compact ? 'h-10 w-10' : 'h-11 gap-2 px-3'
+                className={`flex items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 disabled:cursor-wait disabled:opacity-50 dark:bg-white/3 dark:border-white/5 dark:text-white/90 dark:hover:bg-neutral-900 dark:hover:text-gray-200 ${compact ? 'h-10 w-10' : 'h-11 gap-2 px-3'
                     }`}
                 aria-label="Change language"
                 aria-expanded={isOpen}
@@ -139,7 +139,7 @@ export function LanguageSwitcher({ compact = false, dropdownDirection = 'down' }
             {/* Dropdown Menu */}
             {isOpen && (
                 <div
-                    className={`absolute left-0 lg:right-0 z-50 w-40 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-800 dark:bg-gray-900 ${dropdownDirection === 'up' ? 'bottom-full mb-2 origin-bottom-right' : 'top-full mt-2 origin-top-right'
+                    className={`absolute left-0 lg:right-0 z-50 w-40 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:bg-neutral-900 dark:border-white/5 dark:text-white/90 ${dropdownDirection === 'up' ? 'bottom-full mb-2 origin-bottom-right' : 'top-full mt-2 origin-top-right'
                         }`}
                     role="listbox"
                     aria-label="Select language"
@@ -150,8 +150,8 @@ export function LanguageSwitcher({ compact = false, dropdownDirection = 'down' }
                             onClick={() => handleLanguageChange(lang)}
                             disabled={isChanging}
                             className={`flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors ${lang.code === i18n.language
-                                ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400'
-                                : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                                ? 'bg-brand-50 text-brand-600 dark:bg-neutral-800 dark:text-brand-400'
+                                : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-neutral-800'
                                 }`}
                             role="option"
                             aria-selected={lang.code === i18n.language}

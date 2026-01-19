@@ -554,7 +554,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                 <button
                                     type="button"
                                     onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
-                                    className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                    className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:bg-white/3 dark:border-white/5 dark:text-white/90 dark:focus:border-brand-800"
                                 >
                                     <span className={getTypeColor(formData.type)}>
                                         {typeOptions.find(t => t.value === formData.type)?.label || t('maintenances.form.selectType')}
@@ -562,7 +562,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                     <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isTypeDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 {isTypeDropdownOpen && (
-                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
                                         {typeOptions.map(option => (
                                             <button
                                                 key={option.value}
@@ -571,7 +571,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                     setFormData(prev => ({ ...prev, type: option.value }));
                                                     setIsTypeDropdownOpen(false);
                                                 }}
-                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                             >
                                                 <span className={getTypeColor(option.value)}>{option.label}</span>
                                                 {formData.type === option.value && <FaCheck className="h-4 w-4 text-brand-500" />}
@@ -589,7 +589,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                 <button
                                     type="button"
                                     onClick={() => setIsRealizationDropdownOpen(!isRealizationDropdownOpen)}
-                                    className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                    className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:bg-white/3 dark:border-white/5 dark:text-white/90 dark:focus:border-brand-800"
                                 >
                                     <span className={getRealizationColor(formData.realization)}>
                                         {realizationOptions.find(r => r.value === formData.realization)?.label || t('maintenances.form.selectRealization')}
@@ -597,7 +597,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                     <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isRealizationDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 {isRealizationDropdownOpen && (
-                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
                                         {realizationOptions.map(option => (
                                             <button
                                                 key={option.value}
@@ -612,7 +612,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                     }));
                                                     setIsRealizationDropdownOpen(false);
                                                 }}
-                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                             >
                                                 <span className={getRealizationColor(option.value)}>{option.label}</span>
                                                 {formData.realization === option.value && <FaCheck className="h-4 w-4 text-brand-500" />}
@@ -633,7 +633,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                 <button
                                     type="button"
                                     onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
-                                    className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                    className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:bg-white/3 dark:border-white/5 dark:text-white/90 dark:focus:border-brand-800"
                                 >
                                     <span className={getStatusColor(formData.status || 'planned')}>
                                         {statusOptions.find(s => s.value === formData.status)?.label || t('maintenances.form.selectStatus')}
@@ -641,7 +641,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                     <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isStatusDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 {isStatusDropdownOpen && (
-                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
                                         {statusOptions.map(option => (
                                             <button
                                                 key={option.value}
@@ -650,7 +650,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                     setFormData(prev => ({ ...prev, status: option.value }));
                                                     setIsStatusDropdownOpen(false);
                                                 }}
-                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                             >
                                                 <span className={getStatusColor(option.value)}>{option.label}</span>
                                                 {formData.status === option.value && <FaCheck className="h-4 w-4 text-brand-500" />}
@@ -731,7 +731,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                 <button
                                     type="button"
                                     onClick={() => setIsOperatorsDropdownOpen(!isOperatorsDropdownOpen)}
-                                    className={`flex w-full items-center justify-between rounded-lg border px-4 py-2.5 text-left text-sm focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:focus:border-brand-800 ${errors.operator_ids ? 'border-error-500 dark:border-error-500' : 'border-gray-300 dark:border-gray-700'} bg-white dark:bg-gray-900 text-gray-800 dark:text-white/90`}
+                                    className={`flex w-full items-center justify-between rounded-lg border px-4 py-2.5 text-left text-sm focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:focus:border-brand-800 ${errors.operator_ids ? 'border-error-500 dark:border-error-500' : 'border-gray-300 dark:border-white/5'} bg-white dark:bg-white/3 text-gray-800 dark:text-white/90`}
                                 >
                                     <span>
                                         {formData.operator_ids && formData.operator_ids.length > 0
@@ -741,14 +741,14 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                     <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isOperatorsDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 {isOperatorsDropdownOpen && (
-                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-                                        <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:bg-neutral-900 dark:border-white/5">
+                                        <div className="p-2 border-b border-gray-200 dark:border-white/5">
                                             <input
                                                 type="text"
                                                 placeholder={t('maintenances.form.searchOperators')}
                                                 value={operatorSearch}
                                                 onChange={(e) => setOperatorSearch(e.target.value)}
-                                                className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                                                className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none dark:border-white/5 dark:bg-white/3 dark:text-white"
                                             />
                                         </div>
                                         <div className="max-h-48 overflow-y-auto">
@@ -757,7 +757,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                     key={operator.id}
                                                     type="button"
                                                     onClick={() => toggleOperator(operator.id)}
-                                                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                                 >
                                                     <div>
                                                         <span className="text-gray-800 dark:text-white">{operator.full_name}</span>
@@ -800,7 +800,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                 <button
                                     type="button"
                                     onClick={() => setIsCompaniesDropdownOpen(!isCompaniesDropdownOpen)}
-                                    className={`flex w-full items-center justify-between rounded-lg border px-4 py-2.5 text-left text-sm focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:focus:border-brand-800 ${errors.company_ids ? 'border-error-500 dark:border-error-500' : 'border-gray-300 dark:border-gray-700'} bg-white dark:bg-gray-900 text-gray-800 dark:text-white/90`}
+                                    className={`flex w-full items-center justify-between rounded-lg border px-4 py-2.5 text-left text-sm focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:focus:border-brand-800 ${errors.company_ids ? 'border-error-500 dark:border-error-500' : 'border-gray-300 dark:border-white/5'} bg-white dark:bg-white/3 text-gray-800 dark:text-white/90`}
                                 >
                                     <span>
                                         {formData.company_ids && formData.company_ids.length > 0
@@ -810,14 +810,14 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                     <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isCompaniesDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 {isCompaniesDropdownOpen && (
-                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-                                        <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
+                                        <div className="p-2 border-b border-gray-200 dark:border-white/5">
                                             <input
                                                 type="text"
                                                 placeholder={t('maintenances.form.searchCompanies')}
                                                 value={companySearch}
                                                 onChange={(e) => setCompanySearch(e.target.value)}
-                                                className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                                                className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none dark:border-white/5 dark:bg-white/3 dark:text-white"
                                             />
                                         </div>
                                         <div className="max-h-48 overflow-y-auto">
@@ -826,7 +826,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                     key={company.id}
                                                     type="button"
                                                     onClick={() => toggleCompany(company.id)}
-                                                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                                 >
                                                     <span className="text-gray-800 dark:text-white">{company.name}</span>
                                                     {formData.company_ids?.includes(company.id) && <FaCheck className="h-4 w-4 text-brand-500" />}
@@ -863,7 +863,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                             <button
                                 type="button"
                                 onClick={() => setIsIncidentsDropdownOpen(!isIncidentsDropdownOpen)}
-                                className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:bg-white/3 dark:border-white/5 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <span>
                                     {formData.incident_ids && formData.incident_ids.length > 0
@@ -873,14 +873,14 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                 <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isIncidentsDropdownOpen ? 'rotate-180' : ''}`} />
                             </button>
                             {isIncidentsDropdownOpen && (
-                                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-                                    <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+                                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
+                                    <div className="p-2 border-b border-gray-200 dark:border-white/5">
                                         <input
                                             type="text"
                                             placeholder={t('maintenances.form.searchIncidents')}
                                             value={incidentSearch}
                                             onChange={(e) => setIncidentSearch(e.target.value)}
-                                            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                                            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none dark:border-white/5 dark:bg-white/3 dark:text-white"
                                         />
                                     </div>
                                     <div className="max-h-48 overflow-y-auto">
@@ -889,7 +889,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                 key={incident.id}
                                                 type="button"
                                                 onClick={() => toggleIncident(incident.id)}
-                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                                className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                             >
                                                 <div className="flex-1 min-w-0">
                                                     <span className="text-gray-800 dark:text-white line-clamp-1">
@@ -934,7 +934,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                 <button
                                     type="button"
                                     onClick={() => setIsItemsDropdownOpen(!isItemsDropdownOpen)}
-                                    className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                    className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-brand-800"
                                 >
                                     <span className="flex items-center gap-2">
                                         <FaPlus className="h-3 w-3" />
@@ -943,14 +943,14 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                     <FaChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isItemsDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 {isItemsDropdownOpen && (
-                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
-                                        <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+                                    <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
+                                        <div className="p-2 border-b border-gray-200 dark:border-white/5">
                                             <input
                                                 type="text"
                                                 placeholder={t('maintenances.form.searchItems')}
                                                 value={itemSearch}
                                                 onChange={(e) => setItemSearch(e.target.value)}
-                                                className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                                                className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none dark:border-white/5 dark:bg-white/3 dark:text-white"
                                             />
                                         </div>
                                         <div className="max-h-48 overflow-y-auto">
@@ -959,7 +959,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                     key={item.id}
                                                     type="button"
                                                     onClick={() => addSparePart(item)}
-                                                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                                 >
                                                     <div className="flex-1 min-w-0">
                                                         <span className="text-gray-800 dark:text-white">{item.name}</span>
@@ -983,7 +983,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                     {formData.item_movements.map(im => {
                                         const item = availableItems.find(i => i.id === im.item_id);
                                         return item ? (
-                                            <div key={im.item_id} className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-700 dark:bg-gray-800">
+                                            <div key={im.item_id} className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 dark:border-white/5 dark:bg-white/3">
                                                 <div className="flex-1">
                                                     <span className="text-sm font-medium text-gray-800 dark:text-white">{item.name}</span>
                                                     <span className="ml-2 text-xs text-gray-500">({item.current_price} {getCurrencySymbol()}/u)</span>
@@ -992,7 +992,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                     <button
                                                         type="button"
                                                         onClick={() => updateSparePartQuantity(im.item_id, im.quantity - 1)}
-                                                        className="rounded bg-gray-200 p-1 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-400"
+                                                        className="rounded bg-gray-200 p-1 hover:bg-gray-300 dark:bg-white/3 dark:hover:bg-neutral-700 dark:text-gray-400"
                                                         disabled={im.quantity <= 1}
                                                         title={t('common.decrease')}
                                                     >
@@ -1004,7 +1004,7 @@ export const MaintenanceModal: FC<MaintenanceModalProps> = ({
                                                     <button
                                                         type="button"
                                                         onClick={() => updateSparePartQuantity(im.item_id, im.quantity + 1)}
-                                                        className="rounded bg-gray-200 p-1 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-400"
+                                                        className="rounded bg-gray-200 p-1 hover:bg-gray-300 dark:bg-white/3 dark:hover:bg-neutral-700 dark:text-gray-400"
                                                         disabled={im.quantity >= item.current_stock}
                                                         title={t('common.increase')}
                                                     >

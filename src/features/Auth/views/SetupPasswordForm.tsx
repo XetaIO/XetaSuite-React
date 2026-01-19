@@ -169,7 +169,7 @@ export default function SetupPasswordForm() {
                         value={verifyData.user?.email || ''}
                         disabled
                         autoComplete="email"
-                        className="bg-gray-100 dark:bg-gray-800"
+                        className="bg-gray-100 dark:bg-neutral-800"
                     />
                 </div>
 

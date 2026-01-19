@@ -246,13 +246,13 @@ const ItemDetailPage: FC = () => {
             />
 
             {/* Header Card */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3 lg:p-6">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/5 dark:bg-white/3 lg:p-6">
                 {/* Header Row */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-center gap-3">
                         <Link
                             to="/items"
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-white/5 dark:text-gray-400 dark:hover:bg-neutral-800 dark:hover:text-gray-200"
                             title={t("common.back")}
                         >
                             <FaArrowLeft className="h-4 w-4" />
@@ -292,7 +292,7 @@ const ItemDetailPage: FC = () => {
 
                 {/* Stats */}
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
                             <FaCubes className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                         </div>
@@ -304,7 +304,7 @@ const ItemDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success-100 dark:bg-success-500/20">
                             <FaArrowUp className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
@@ -316,7 +316,7 @@ const ItemDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-error-100 dark:bg-error-500/20">
                             <FaArrowDown className="h-5 w-5 text-error-600 dark:text-error-400" />
                         </div>
@@ -328,7 +328,7 @@ const ItemDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
                             <FaMoneyBill className="h-5 w-5 text-warning-600 dark:text-warning-400" />
                         </div>
@@ -345,7 +345,7 @@ const ItemDetailPage: FC = () => {
             {/* Details Grid */}
             <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {/* Item Information */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                     <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
                         {t("items.detail.info")}
                     </h3>
@@ -421,7 +421,7 @@ const ItemDetailPage: FC = () => {
                 </div>
 
                 {/* Stock Alert Settings */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                     <h3 className="mb-4 flex items-center gap-2 text-lg font-medium text-gray-900 dark:text-white">
                         <FaTriangleExclamation className="h-4 w-4" />
                         {t("items.sections.stockAlerts")}
@@ -429,7 +429,7 @@ const ItemDetailPage: FC = () => {
 
                     <div className="space-y-4">
                         {/* Warning threshold */}
-                        <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
+                        <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-neutral-800/50">
                             <div className="flex items-center gap-3">
                                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
                                     <FaCircleExclamation className="h-4 w-4 text-warning-600 dark:text-warning-400" />
@@ -453,7 +453,7 @@ const ItemDetailPage: FC = () => {
                         </div>
 
                         {/* Critical threshold */}
-                        <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
+                        <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-neutral-800/50">
                             <div className="flex items-center gap-3">
                                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-error-100 dark:bg-error-500/20">
                                     <FaTriangleExclamation className="h-4 w-4 text-error-600 dark:text-error-400" />
@@ -488,7 +488,7 @@ const ItemDetailPage: FC = () => {
                                 {item.recipients.map((recipient) => (
                                     <div
                                         key={recipient.id}
-                                        className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50"
+                                        className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-800/50"
                                     >
                                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
                                             {recipient.full_name.charAt(0).toUpperCase()}
@@ -517,8 +517,8 @@ const ItemDetailPage: FC = () => {
 
             {/* Related Materials */}
             {(materialsMeta && materialsMeta.total > 0) && (
-                <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                    <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
+                    <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-4 dark:border-white/5">
                         <FaWrench className="h-5 w-5 text-brand-500" />
                         <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                             {t("items.sections.materials")}
@@ -532,10 +532,10 @@ const ItemDetailPage: FC = () => {
                         {isLoadingMaterials ? (
                             [...Array(3)].map((_, index) => (
                                 <div key={index} className="flex items-center gap-3 px-6 py-4">
-                                    <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                                    <div className="h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-neutral-700" />
                                     <div className="flex-1">
-                                        <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        <div className="mt-1 h-3 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
+                                        <div className="mt-1 h-3 w-24 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                     </div>
                                 </div>
                             ))
@@ -544,7 +544,7 @@ const ItemDetailPage: FC = () => {
                                 <Link
                                     key={material.id}
                                     to={`/materials/${material.id}`}
-                                    className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                                    className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 dark:hover:bg-neutral-800/50"
                                 >
                                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
                                         <FaWrench className="h-4 w-4" />
@@ -574,7 +574,7 @@ const ItemDetailPage: FC = () => {
             )}
 
             {/* Statistics Chart */}
-            <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+            <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                 <h3 className="mb-4 flex items-center gap-2 text-lg font-medium text-gray-900 dark:text-white">
                     <FaChartLine className="h-5 w-5 text-brand-500" />
                     {t("items.stats.title")}
@@ -583,8 +583,8 @@ const ItemDetailPage: FC = () => {
             </div>
 
             {/* Movements History */}
-            <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-                <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+            <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
+                <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-4 dark:border-white/5">
                     <FaArrowRightArrowLeft className="h-5 w-5 text-brand-500" />
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                         {t("items.movements.history")}
@@ -594,7 +594,7 @@ const ItemDetailPage: FC = () => {
                 <div className="overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-b border-gray-200 dark:border-gray-800">
+                            <TableRow className="border-b border-gray-200 dark:border-white/5">
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t("items.movements.fields.notes")}
                                 </TableCell>
@@ -618,24 +618,24 @@ const ItemDetailPage: FC = () => {
                         <TableBody>
                             {isLoadingMovements ? (
                                 [...Array(5)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                    <TableRow key={index} className="border-b border-gray-100 dark:border-white/5">
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-neutral-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-12 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-4 w-12 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                         </TableCell>
                                     </TableRow>
                                 ))
@@ -647,7 +647,7 @@ const ItemDetailPage: FC = () => {
                                 </TableRow>
                             ) : (
                                 movements.map((movement) => (
-                                    <TableRow key={movement.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                    <TableRow key={movement.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50">
                                         <TableCell className="px-6 py-4 text-gray-900 dark:text-white">
                                             {movement.notes || "—"}
                                         </TableCell>
@@ -709,7 +709,7 @@ const ItemDetailPage: FC = () => {
             </div>
 
             {/* Price History Chart */}
-            <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+            <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                 <h3 className="mb-4 flex items-center gap-2 text-lg font-medium text-gray-900 dark:text-white">
                     <FaChartLine className="h-5 w-5 text-brand-500" />
                     {t("items.priceHistory.title")}

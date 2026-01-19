@@ -13,7 +13,7 @@ const ComponentCard: React.FC<ComponentCardProps> = ({
 }) => {
   return (
     <div
-      className={`rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] ${className}`}
+      className={`rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3 ${className}`}
     >
       {/* Card Header */}
       <div className="px-6 py-5">
@@ -21,14 +21,14 @@ const ComponentCard: React.FC<ComponentCardProps> = ({
           {title}
         </h3>
         {desc && (
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <p className="mt-1 text-sm text-gray-500 dark:text-white/60">
             {desc}
           </p>
         )}
       </div>
 
       {/* Card Body */}
-      <div className="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+      <div className="p-4 border-t border-gray-100 dark:border-white/5 sm:p-6">
         <div className="space-y-6">{children}</div>
       </div>
     </div>

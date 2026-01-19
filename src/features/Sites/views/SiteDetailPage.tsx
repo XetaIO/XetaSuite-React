@@ -136,13 +136,13 @@ const SiteDetailPage: FC = () => {
             />
 
             {/* Site Info Card */}
-            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex-1">
                         <div className="flex items-center gap-3">
                             <Link
                                 to="/sites"
-                                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-white/5 dark:text-gray-400 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:hover:text-gray-200"
                                 title={t("common.back")}
                             >
                                 <FaArrowLeft className="h-4 w-4" />
@@ -169,7 +169,7 @@ const SiteDetailPage: FC = () => {
 
                 {/* Stats */}
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
                             <FaBuilding className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                         </div>
@@ -179,7 +179,7 @@ const SiteDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success-100 dark:bg-success-500/20">
                             <FaUsers className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
@@ -189,7 +189,7 @@ const SiteDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
                             <FaCalendar className="h-5 w-5 text-warning-600 dark:text-warning-400" />
                         </div>
@@ -206,7 +206,7 @@ const SiteDetailPage: FC = () => {
             {/* Details Grid */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {/* Contact Information */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                     <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
                         {t("sites.detail.contactInfo")}
                     </h3>
@@ -283,7 +283,7 @@ const SiteDetailPage: FC = () => {
                 </div>
 
                 {/* Managers */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                     <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
                         {t("sites.detail.managers")}
                     </h3>
@@ -292,7 +292,7 @@ const SiteDetailPage: FC = () => {
                             {site.managers.map((manager) => (
                                 <div
                                     key={manager.id}
-                                    className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50"
+                                    className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-800/50"
                                 >
                                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
                                         {manager.full_name.charAt(0).toUpperCase()}
@@ -319,9 +319,9 @@ const SiteDetailPage: FC = () => {
             </div>
 
             {/* Site Members Table */}
-            <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+            <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
                 {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-white/5 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
                             {t("sites.detail.members")}
@@ -333,7 +333,7 @@ const SiteDetailPage: FC = () => {
                 </div>
 
                 {/* Search */}
-                <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                <div className="border-b border-gray-200 px-6 py-4 dark:border-white/5">
                     <div className="relative max-w-md">
                         <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                         <input
@@ -341,7 +341,7 @@ const SiteDetailPage: FC = () => {
                             placeholder={t("common.search")}
                             value={membersSearch}
                             onChange={(e) => setMembersSearch(e.target.value)}
-                            className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                            className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                         />
                         {membersSearch && (
                             <button
@@ -366,7 +366,7 @@ const SiteDetailPage: FC = () => {
                 <div className="overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-b border-gray-200 dark:border-gray-800">
+                            <TableRow className="border-b border-gray-200 dark:border-white/5">
                                 <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t("sites.table.fullName")}
                                 </TableCell>
@@ -384,21 +384,21 @@ const SiteDetailPage: FC = () => {
                         <TableBody>
                             {isMembersLoading ? (
                                 [...Array(5)].map((_, index) => (
-                                    <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                    <TableRow key={index} className="border-b border-gray-100 dark:border-white/5">
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
-                                                <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                                <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-neutral-700" />
+                                                <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                             </div>
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-40 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-4 w-40 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-5 w-16 animate-pulse rounded-full bg-gray-200 dark:bg-neutral-700" />
                                         </TableCell>
                                         <TableCell className="px-6 py-4">
-                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                            <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                         </TableCell>
                                     </TableRow>
                                 ))
@@ -427,7 +427,7 @@ const SiteDetailPage: FC = () => {
                                 members.map((member) => (
                                     <TableRow
                                         key={member.id}
-                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+                                        className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50"
                                     >
                                         <TableCell className="px-6 py-4">
                                             <div className="flex items-center gap-3">
@@ -463,7 +463,7 @@ const SiteDetailPage: FC = () => {
                                                     member.roles.map((role) => (
                                                         <span
                                                             key={role}
-                                                            className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                                                            className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 dark:bg-neutral-700 dark:text-gray-300"
                                                         >
                                                             {role}
                                                         </span>

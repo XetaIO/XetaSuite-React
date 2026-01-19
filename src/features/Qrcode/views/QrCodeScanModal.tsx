@@ -168,7 +168,7 @@ export const QrCodeScanModal: FC<QrCodeScanModalProps> = ({
 
                         {/* Entity Icon and Name */}
                         <div className="flex flex-col items-center text-center">
-                            <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800">
+                            <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-gray-100 dark:bg-neutral-800">
                                 {scanData.type === 'material' ? (
                                     <FaWrench className="h-8 w-8 text-gray-600 dark:text-gray-400" />
                                 ) : (
@@ -214,7 +214,7 @@ export const QrCodeScanModal: FC<QrCodeScanModalProps> = ({
                                     id="qr-action-select"
                                     value={selectedAction}
                                     onChange={(e) => setSelectedAction(e.target.value)}
-                                    className="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                    className="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-white/5 dark:bg-neutral-800 dark:text-white/90 dark:focus:border-brand-800"
                                 >
                                     <option value="">{t('qrScan.selectAction')}</option>
                                     {actionOptions.map((option) => (

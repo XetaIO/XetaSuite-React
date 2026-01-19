@@ -10,9 +10,9 @@ const SecurityPage: FC = () => {
         <>
             <PageMeta title={t("account.security.pageTitle")} description={t("account.security.pageDescription")} />
 
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
+            <div className="bg-white rounded-xl border border-gray-200 dark:bg-white/3 dark:border-white/5">
                 {/* Header */}
-                <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-800">
+                <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-white/5">
                     <div className="flex items-center gap-3">
                         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-brand-50 dark:bg-brand-900/20">
                             <FaShieldHalved className="w-5 h-5 text-brand-500" />

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, type FC } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowRightToBracket, FaArrowRightFromBracket, FaPen } from "react-icons/fa6";
 import { Modal, Button, SearchableDropdown, type PinnedItem } from "@/shared/components/ui";
-import { Input, Label } from "@/shared/components/form";
+import { Input, Label, TextArea } from "@/shared/components/form";
 import { showSuccess, showError, formatCurrency } from "@/shared/utils";
 import { useSettings } from "@/features/Settings";
 import { ItemMovementManager } from "../services";
@@ -233,7 +233,7 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Item info */}
-                <div className="rounded-lg bg-gray-50 dark:bg-gray-800 p-4">
+                <div className="rounded-lg bg-gray-50 dark:bg-neutral-800 p-4">
                     <div className="flex items-center justify-between">
                         <div>
                             <h4 className="font-medium text-gray-800 dark:text-white">
@@ -381,19 +381,23 @@ export const ItemMovementModal: FC<ItemMovementModalProps> = ({
                 {/* Notes */}
                 <div>
                     <Label htmlFor="notes">{t("items.movements.fields.notes")}</Label>
-                    <textarea
+                    <TextArea
                         id="notes"
-                        value={formData.notes || ""}
-                        onChange={(e) => handleChange("notes", e.target.value)}
+                        name="notes"
                         rows={3}
-                        disabled={isLoading}
-                        placeholder={t("items.movements.fields.notes")}
-                        className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white"
+                        placeholder={t('items.movements.fields.notes')}
+                        value={formData.notes}
+                        onChange={(value) => {
+                            setFormData(prev => ({ ...prev, notes: value }));
+                            if (errors.notes) {
+                                setErrors(prev => ({ ...prev, notes: '' }));
+                            }
+                        }}
                     />
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-white/5">
                     <Button variant="outline" onClick={onClose} disabled={isLoading}>
                         {t("common.cancel")}
                     </Button>

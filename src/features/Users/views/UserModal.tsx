@@ -442,7 +442,7 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
                                 title={t("users.locale")}
                                 value={formData.locale}
                                 onChange={handleChange}
-                                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <option value="fr">{t("language.fr")}</option>
                                 <option value="en">{t("language.en")}</option>
@@ -489,8 +489,8 @@ export const UserModal: FC<UserModalProps> = ({ isOpen, onClose, user, onSuccess
                                 </Button>
                             </div>
 
-                            <div className="rounded-lg border border-gray-200 dark:border-gray-700">
-                                <div className="bg-gray-50 px-4 py-2 dark:bg-gray-800">
+                            <div className="rounded-lg border border-gray-200 dark:border-white/5">
+                                <div className="bg-gray-50 px-4 py-2 dark:bg-neutral-800">
                                     <p className="text-xs text-gray-500 dark:text-gray-400">
                                         {t("users.siteAssignmentsInfo")}
                                     </p>

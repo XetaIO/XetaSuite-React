@@ -43,7 +43,7 @@ export const ZoneTreeItem: FC<ZoneTreeItemProps> = ({
                     type="button"
                     onClick={() => onToggle(zone.id)}
                     className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${hasExpandableContent
-                        ? "text-gray-500 hover:bg-gray-200 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        ? "text-gray-500 hover:bg-gray-200 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-neutral-700 dark:hover:text-white"
                         : "invisible"
                         }`}
                     disabled={!hasExpandableContent}
@@ -99,7 +99,7 @@ export const ZoneTreeItem: FC<ZoneTreeItemProps> = ({
             {/* Expanded content: Children zones and Materials */}
             {isExpanded && hasExpandableContent && (
                 <div
-                    className="border-l border-gray-200 dark:border-gray-700"
+                    className="border-l border-gray-200 dark:border-white/5"
                     style={{ marginLeft: `${level * 24 + 24}px` }}
                 >
                     {/* Child zones first */}

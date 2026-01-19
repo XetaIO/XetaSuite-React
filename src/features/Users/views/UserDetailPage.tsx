@@ -212,12 +212,12 @@ const UserDetailPage: FC = () => {
             />
 
             {/* User Info Card */}
-            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-center gap-4">
                         <Link
                             to="/users"
-                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-white/5 dark:text-gray-400 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:hover:text-gray-200"
                             title={t("common.back")}
                         >
                             <FaArrowLeft className="h-4 w-4" />
@@ -246,7 +246,7 @@ const UserDetailPage: FC = () => {
 
                 {/* Contact & Stats */}
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
                             <FaEnvelope className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                         </div>
@@ -264,7 +264,7 @@ const UserDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success-100 dark:bg-success-500/20">
                             <FaPhone className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
@@ -282,7 +282,7 @@ const UserDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
                             <FaMobile className="h-5 w-5 text-warning-600 dark:text-warning-400" />
                         </div>
@@ -300,7 +300,7 @@ const UserDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-error-100 dark:bg-error-500/20">
                             <FaCalendar className="h-5 w-5 text-error-600 dark:text-error-400" />
                         </div>
@@ -315,9 +315,9 @@ const UserDetailPage: FC = () => {
             </div>
 
             {/* Tabs */}
-            <div className="mb-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
                 {/* Tab Headers */}
-                <div className="flex border-b border-gray-200 dark:border-gray-800">
+                <div className="flex border-b border-gray-200 dark:border-white/5">
                     {tabs.map((tab) => {
                         const isActive = activeTab === tab.key;
                         return (
@@ -355,7 +355,7 @@ const UserDetailPage: FC = () => {
                                     <div className="h-6 w-6 animate-spin rounded-full border-3 border-brand-500 border-t-transparent" />
                                 </div>
                             ) : rolesPerSite.length === 0 ? (
-                                <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800/50">
+                                <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center dark:border-white/5 dark:bg-neutral-800/50">
                                     <FaBuildingFlag className="mx-auto mb-3 h-10 w-10 text-gray-400" />
                                     <p className="text-gray-500 dark:text-gray-400">{t("users.detail.noSites")}</p>
                                 </div>
@@ -364,7 +364,7 @@ const UserDetailPage: FC = () => {
                                     {rolesPerSite.map((siteRole) => (
                                         <div
                                             key={siteRole.site.id}
-                                            className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 dark:border-gray-700 sm:flex-row sm:items-center sm:justify-between"
+                                            className="flex flex-col gap-3 rounded-xl border border-gray-200 p-4 dark:border-white/5 sm:flex-row sm:items-center sm:justify-between"
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
@@ -421,7 +421,7 @@ const UserDetailPage: FC = () => {
                                     <div className="overflow-x-auto">
                                         <Table>
                                             <TableHeader>
-                                                <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                                <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                     <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                         {t("cleanings.id")}
                                                     </TableCell>
@@ -438,7 +438,7 @@ const UserDetailPage: FC = () => {
                                             </TableHeader>
                                             <TableBody>
                                                 {cleanings.map((cleaning) => (
-                                                    <TableRow key={cleaning.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                    <TableRow key={cleaning.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50">
                                                         <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                                                             <LinkedName
                                                                 canView={canViewCleaning}
@@ -494,7 +494,7 @@ const UserDetailPage: FC = () => {
                                     <div className="overflow-x-auto">
                                         <Table>
                                             <TableHeader>
-                                                <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                                <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                     <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                         {t("maintenances.title")}
                                                     </TableCell>
@@ -511,7 +511,7 @@ const UserDetailPage: FC = () => {
                                             </TableHeader>
                                             <TableBody>
                                                 {maintenances.map((maintenance) => (
-                                                    <TableRow key={maintenance.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                    <TableRow key={maintenance.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50">
                                                         <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                                                             <LinkedName
                                                                 canView={canViewMaintenance}
@@ -567,7 +567,7 @@ const UserDetailPage: FC = () => {
                                     <div className="overflow-x-auto">
                                         <Table>
                                             <TableHeader>
-                                                <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                                <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                     <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                         {t("incidents.title")}
                                                     </TableCell>
@@ -587,7 +587,7 @@ const UserDetailPage: FC = () => {
                                             </TableHeader>
                                             <TableBody>
                                                 {incidents.map((incident) => (
-                                                    <TableRow key={incident.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                    <TableRow key={incident.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50">
                                                         <TableCell className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                                                             <LinkedName
                                                                 canView={canViewIncident}

@@ -44,7 +44,7 @@ export default function NotFoundContent({
 
                 <Link
                     to={backTo}
-                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/3 dark:hover:text-gray-200"
+                    className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-white/5 dark:bg-neutral-800 dark:text-gray-400 dark:hover:bg-white/3 dark:hover:text-gray-200"
                 >
                     {backLabel || t("errors.backToHome")}
                 </Link>

@@ -399,7 +399,7 @@ export const IncidentModal: FC<IncidentModalProps> = ({
                             <button
                                 type="button"
                                 onClick={() => setIsSeverityDropdownOpen(!isSeverityDropdownOpen)}
-                                className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <span className={getSeverityColor(formData.severity || 'medium')}>
                                     {severityOptions.find((s) => s.value === formData.severity)?.label ||
@@ -411,7 +411,7 @@ export const IncidentModal: FC<IncidentModalProps> = ({
                                 />
                             </button>
                             {isSeverityDropdownOpen && (
-                                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
                                     {severityOptions.map((option) => (
                                         <button
                                             key={option.value}
@@ -420,7 +420,7 @@ export const IncidentModal: FC<IncidentModalProps> = ({
                                                 setFormData((prev) => ({ ...prev, severity: option.value }));
                                                 setIsSeverityDropdownOpen(false);
                                             }}
-                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                         >
                                             <span className={getSeverityColor(option.value)}>{option.label}</span>
                                             {formData.severity === option.value && (
@@ -440,7 +440,7 @@ export const IncidentModal: FC<IncidentModalProps> = ({
                             <button
                                 type="button"
                                 onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
-                                className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <span className={getStatusColor(formData.status || 'open')}>
                                     {statusOptions.find((s) => s.value === formData.status)?.label ||
@@ -452,7 +452,7 @@ export const IncidentModal: FC<IncidentModalProps> = ({
                                 />
                             </button>
                             {isStatusDropdownOpen && (
-                                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
                                     {statusOptions.map((option) => (
                                         <button
                                             key={option.value}
@@ -461,7 +461,7 @@ export const IncidentModal: FC<IncidentModalProps> = ({
                                                 setFormData((prev) => ({ ...prev, status: option.value }));
                                                 setIsStatusDropdownOpen(false);
                                             }}
-                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                         >
                                             <span className={getStatusColor(option.value)}>{option.label}</span>
                                             {formData.status === option.value && (

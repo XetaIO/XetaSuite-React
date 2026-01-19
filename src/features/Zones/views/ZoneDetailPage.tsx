@@ -13,6 +13,7 @@ import { useEntityPermissions, useModal } from '@/shared/hooks';
 import { useAuth } from '@/features/Auth/hooks';
 import { formatDate } from "@/shared/utils";
 import { NotFoundContent } from '@/shared/components/errors';
+import { Input } from '@/shared/components/form';
 
 export function ZoneDetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -160,13 +161,13 @@ export function ZoneDetailPage() {
             />
 
             {/* Header Card */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3 lg:p-6">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/5 dark:bg-white/3 lg:p-6">
                 {/* Header Row */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-center gap-3">
                         <Link
                             to="/zones"
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-white/5 dark:text-gray-400 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:hover:text-gray-200"
                             title={t('common.back')}
                         >
                             <FaArrowLeft className="h-4 w-4" />
@@ -203,7 +204,7 @@ export function ZoneDetailPage() {
 
                 {/* Stats */}
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
                             <FaLayerGroup className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                         </div>
@@ -213,7 +214,7 @@ export function ZoneDetailPage() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success-100 dark:bg-success-500/20">
                             <FaWrench className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
@@ -223,7 +224,7 @@ export function ZoneDetailPage() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
                             <FaCalendar className="h-5 w-5 text-warning-600 dark:text-warning-400" />
                         </div>
@@ -240,7 +241,7 @@ export function ZoneDetailPage() {
             {/* Details Grid */}
             <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {/* Zone Information */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                     <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
                         {t('zones.detail.info')}
                     </h3>
@@ -279,12 +280,12 @@ export function ZoneDetailPage() {
                 </div>
 
                 {/* Site Information */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                     <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
                         {t('zones.detail.siteInfo')}
                     </h3>
                     {zone.site ? (
-                        <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50">
+                        <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-800/50">
                             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
                                 {zone.site.name.charAt(0).toUpperCase()}
                             </div>
@@ -304,9 +305,9 @@ export function ZoneDetailPage() {
 
             {/* Children Zones Table (for parent zones) */}
             {isParentZone && (
-                <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
                     {/* Header */}
-                    <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
                                 {t('zones.detail.childZones')}
@@ -318,15 +319,15 @@ export function ZoneDetailPage() {
                     </div>
 
                     {/* Search */}
-                    <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                    <div className="border-b border-gray-200 px-6 py-4 dark:border-white/5">
                         <div className="relative max-w-md">
-                            <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                            <input
+                            <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 z-10" />
+                            <Input
                                 type="text"
                                 placeholder={t('common.search')}
                                 value={childrenSearch}
                                 onChange={(e) => setChildrenSearch(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                className="pl-10"
                             />
                             {childrenSearch && (
                                 <button
@@ -346,7 +347,7 @@ export function ZoneDetailPage() {
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
-                                <TableRow className="border-b border-gray-200 dark:border-gray-800">
+                                <TableRow className="border-b border-gray-200 dark:border-white/5">
                                     <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t('zones.table.name')}
                                     </TableCell>
@@ -364,18 +365,18 @@ export function ZoneDetailPage() {
                             <TableBody>
                                 {isLoadingChildren ? (
                                     [...Array(3)].map((_, index) => (
-                                        <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                        <TableRow key={index} className="border-b border-gray-100 dark:border-white/5">
                                             <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                                <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                             </TableCell>
                                             <TableCell className="px-6 py-4">
-                                                <div className="h-5 w-12 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                                                <div className="h-5 w-12 animate-pulse rounded-full bg-gray-200 dark:bg-neutral-700" />
                                             </TableCell>
                                             <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                                <div className="h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                             </TableCell>
                                             <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                                <div className="h-4 w-8 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                             </TableCell>
                                         </TableRow>
                                     ))
@@ -401,7 +402,7 @@ export function ZoneDetailPage() {
                                     filteredChildren.map((child) => (
                                         <TableRow
                                             key={child.id}
-                                            className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+                                            className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50"
                                         >
                                             <TableCell className="px-6 py-4">
                                                 <Link
@@ -441,9 +442,9 @@ export function ZoneDetailPage() {
 
             {/* Materials Table (for leaf zones with allow_material) */}
             {isLeafZoneWithMaterials && (
-                <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
                     {/* Header */}
-                    <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-white/5 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
                                 {t('zones.detail.materials')}
@@ -455,15 +456,15 @@ export function ZoneDetailPage() {
                     </div>
 
                     {/* Search */}
-                    <div className="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                    <div className="border-b border-gray-200 px-6 py-4 dark:border-white/5">
                         <div className="relative max-w-md">
-                            <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                            <input
+                            <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 z-10" />
+                            <Input
                                 type="text"
                                 placeholder={t('common.search')}
                                 value={materialsSearch}
                                 onChange={(e) => setMaterialsSearch(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                className="pl-10"
                             />
                             {materialsSearch && (
                                 <button
@@ -483,7 +484,7 @@ export function ZoneDetailPage() {
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
-                                <TableRow className="border-b border-gray-200 dark:border-gray-800">
+                                <TableRow className="border-b border-gray-200 dark:border-white/5">
                                     <TableCell isHeader className="px-6 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                         {t('zones.table.materialName')}
                                     </TableCell>
@@ -495,12 +496,12 @@ export function ZoneDetailPage() {
                             <TableBody>
                                 {isLoadingMaterials ? (
                                     [...Array(3)].map((_, index) => (
-                                        <TableRow key={index} className="border-b border-gray-100 dark:border-gray-800">
+                                        <TableRow key={index} className="border-b border-gray-100 dark:border-white/5">
                                             <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                                <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                             </TableCell>
                                             <TableCell className="px-6 py-4">
-                                                <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                                <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                             </TableCell>
                                         </TableRow>
                                     ))
@@ -526,7 +527,7 @@ export function ZoneDetailPage() {
                                     filteredMaterials.map((material) => (
                                         <TableRow
                                             key={material.id}
-                                            className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50"
+                                            className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50"
                                         >
                                             <TableCell className="px-6 py-4">
                                                 <LinkedName
@@ -549,7 +550,7 @@ export function ZoneDetailPage() {
 
             {/* Empty state for zones that are neither parent nor allow materials */}
             {!isParentZone && !isLeafZoneWithMaterials && (
-                <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-white/3">
+                <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-12 text-center dark:border-white/5 dark:bg-white/3">
                     <p className="text-gray-500 dark:text-gray-400">
                         {t('zones.detail.emptyZone')}
                     </p>

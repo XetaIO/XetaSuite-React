@@ -208,7 +208,7 @@ export const QrCodeModal: FC<QrCodeModalProps> = ({
                             value={String(size)}
                             onChange={(e) => handleSizeChange(e.target.value)}
                             title={t(`${translationPrefix}.qrCode.size`)}
-                            className="h-11 w-40 appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                            className="h-11 w-40 appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-white/5 dark:bg-neutral-800 dark:text-white/90 dark:focus:border-brand-800"
                         >
                             {sizeOptions.map((opt) => (
                                 <option key={opt.value} value={opt.value}>

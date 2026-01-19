@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Button } from "@/shared/components/ui";
-import { Label, Input, Checkbox } from "@/shared/components/form";
+import { Label, Input, Checkbox, TextArea } from "@/shared/components/form";
 import { useFormModal } from "@/shared/hooks";
 import { CompanyManager } from "../services";
 import type { Company, CompanyFormData, CompanyType } from "../types";
@@ -116,17 +116,15 @@ export const CompanyModal: FC<CompanyModalProps> = ({ isOpen, onClose, company, 
 
                     <div>
                         <Label htmlFor="description">{t("companies.form.descriptionLabel")}</Label>
-                        <textarea
+                        <TextArea
                             id="description"
                             name="description"
+                            rows={4}
                             placeholder={t("companies.form.descriptionPlaceholder")}
                             value={formData.description}
-                            onChange={handleChange}
-                            rows={4}
-                            className={`w-full rounded-lg border px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 ${errors.description
-                                ? "border-error-500 focus:border-error-300 focus:ring-error-500/20"
-                                : "border-gray-300 bg-transparent text-gray-800 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800"
-                                }`}
+                            onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
+                            error={!!errors.description}
+                            hint={errors.description}
                         />
                         {errors.description && <p className="mt-1.5 text-xs text-error-500">{errors.description}</p>}
                     </div>
@@ -152,7 +150,7 @@ export const CompanyModal: FC<CompanyModalProps> = ({ isOpen, onClose, company, 
                     </div>
 
                     {/* Contact Information */}
-                    <div className="border-t border-gray-200 pt-4 dark:border-gray-700">
+                    <div className="border-t border-gray-200 pt-4 dark:border-white/5">
                         <p className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">{t("companies.form.contactInfo")}</p>
                         <div className="space-y-4">
                             <div>
@@ -183,14 +181,13 @@ export const CompanyModal: FC<CompanyModalProps> = ({ isOpen, onClose, company, 
 
                             <div>
                                 <Label htmlFor="address">{t("companies.form.addressLabel")}</Label>
-                                <textarea
+                                <TextArea
                                     id="address"
                                     name="address"
+                                    rows={2}
                                     placeholder={t("companies.form.addressPlaceholder")}
                                     value={formData.address || ""}
-                                    onChange={handleChange}
-                                    rows={2}
-                                    className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                    onChange={(value) => setFormData(prev => ({ ...prev, address: value }))}
                                 />
                             </div>
                         </div>

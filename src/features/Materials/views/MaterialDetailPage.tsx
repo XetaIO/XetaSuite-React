@@ -118,13 +118,13 @@ export function MaterialDetailPage() {
             />
 
             {/* Header Card */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3 lg:p-6">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/5 dark:bg-white/3 lg:p-6">
                 {/* Header Row */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-center gap-3">
                         <Link
                             to="/materials"
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-white/5 dark:text-gray-400 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:hover:text-gray-200"
                             title={t('common.back')}
                         >
                             <FaArrowLeft className="h-4 w-4" />
@@ -165,7 +165,7 @@ export function MaterialDetailPage() {
 
                 {/* Stats */}
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-error-100 dark:bg-error-500/20">
                             <FaTriangleExclamation className="h-5 w-5 text-error-600 dark:text-error-400" />
                         </div>
@@ -177,7 +177,7 @@ export function MaterialDetailPage() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
                             <FaScrewdriverWrench className="h-5 w-5 text-warning-600 dark:text-warning-400" />
                         </div>
@@ -189,7 +189,7 @@ export function MaterialDetailPage() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success-100 dark:bg-success-500/20">
                             <FaBroom className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
@@ -201,7 +201,7 @@ export function MaterialDetailPage() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
                             <FaCubes className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                         </div>
@@ -216,7 +216,7 @@ export function MaterialDetailPage() {
             {/* Details Grid */}
             <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {/* Material Information */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                     <h3 className="mb-4 text-lg font-medium text-gray-900 dark:text-white">
                         {t('materials.detail.info')}
                     </h3>
@@ -278,7 +278,7 @@ export function MaterialDetailPage() {
                 </div>
 
                 {/* Cleaning Alert Settings */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                     <h3 className="mb-4 flex items-center gap-2 text-lg font-medium text-gray-900 dark:text-white">
                         <FaBell className="h-4 w-4" />
                         {t('materials.cleaningAlertSettings')}
@@ -296,7 +296,7 @@ export function MaterialDetailPage() {
                                 )}
                             </div>
 
-                            <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
+                            <div className="rounded-lg bg-gray-50 p-4 dark:bg-neutral-800/50">
                                 <p className="text-sm text-gray-500 dark:text-gray-400">{t('materials.frequency')}</p>
                                 <p className="font-medium text-gray-900 dark:text-white">
                                     {t('materials.every')}{' '}
@@ -317,7 +317,7 @@ export function MaterialDetailPage() {
                                         {material.recipients.map((recipient) => (
                                             <div
                                                 key={recipient.id}
-                                                className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50"
+                                                className="flex items-center gap-3 rounded-lg bg-gray-50 p-3 dark:bg-neutral-800/50"
                                             >
                                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-medium text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
                                                     {recipient.full_name.charAt(0).toUpperCase()}

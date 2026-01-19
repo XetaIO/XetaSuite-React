@@ -72,7 +72,7 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({
             case "danger":
                 return "text-error-600 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-500/10";
             default:
-                return "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700";
+                return "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-neutral-700";
         }
     };
 
@@ -80,7 +80,7 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-neutral-800 dark:hover:text-gray-300"
                 title={t("common.actions")}
             >
                 <FaEllipsisVertical className="h-4 w-4" />
@@ -88,11 +88,10 @@ export const ActionsDropdown: FC<ActionsDropdownProps> = ({
 
             {isOpen && (
                 <div
-                    className={`absolute z-50 mt-1 min-w-45 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800 ${
-                        alignLg
-                            ? `${align === "right" ? "right-0 lg:right-auto" : "left-0 lg:left-auto"} ${alignLg === "right" ? "lg:right-0" : "lg:left-0"}`
-                            : align === "right" ? "right-0" : "left-0"
-                    }`}
+                    className={`absolute z-50 mt-1 min-w-45 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-white/5 dark:bg-neutral-800 ${alignLg
+                        ? `${align === "right" ? "right-0 lg:right-auto" : "left-0 lg:left-auto"} ${alignLg === "right" ? "lg:right-0" : "lg:left-0"}`
+                        : align === "right" ? "right-0" : "left-0"
+                        }`}
                 >
                     {visibleActions.map((action) => (
                         <button

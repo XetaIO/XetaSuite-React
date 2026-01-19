@@ -141,13 +141,15 @@ export function CleaningDetailPage() {
                 ]}
             />
 
-            <div className="space-y-6">
-                {/* Header */}
+
+            {/* Header Card */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/5 dark:bg-white/3 lg:p-6">
+                {/* Header Row */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-start gap-4">
                         <Link
                             to="/cleanings"
-                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-white/5 dark:text-gray-400 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:hover:text-gray-200"
                         >
                             <FaArrowLeft className="h-4 w-4" />
                         </Link>
@@ -181,10 +183,9 @@ export function CleaningDetailPage() {
                             )}
                             {canDelete && (
                                 <Button
-                                    variant="outline"
+                                    variant="danger"
                                     size="md"
                                     onClick={deleteModal.openModal}
-                                    className="text-error-600 hover:bg-error-50 hover:text-error-700 dark:text-error-400 dark:hover:bg-error-500/10 dark:hover:text-error-300"
                                 >
                                     <FaTrash className="mr-2 h-4 w-4" />
                                     {t('common.delete')}
@@ -198,55 +199,40 @@ export function CleaningDetailPage() {
                 {deleteError && (
                     <Alert variant="error" title={t('common.error')} message={deleteError} />
                 )}
+            </div>
 
-                {/* Content Grid */}
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                    {/* Main Info - Left Column (2 cols) */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Description Card */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+            {/* Content Grid */}
+            <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+                {/* Main Info - Left Column (2 cols) */}
+                <div className="lg:col-span-2 space-y-6">
+                    {/* Description Card */}
+                    <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
+                        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
+                            <FaCircleInfo className="h-5 w-5 text-brand-500" />
+                            {t('common.description')}
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+                            {cleaning.description || (
+                                <span className="italic text-gray-400">
+                                    {t('cleanings.noDescription')}
+                                </span>
+                            )}
+                        </p>
+                    </div>
+
+                    {/* Material Card */}
+                    {cleaning.material && (
+                        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                             <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                <FaCircleInfo className="h-5 w-5 text-brand-500" />
-                                {t('common.description')}
+                                <FaWrench className="h-5 w-5 text-brand-500" />
+                                {t('cleanings.material')}
                             </h2>
-                            <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
-                                {cleaning.description || (
-                                    <span className="italic text-gray-400">
-                                        {t('cleanings.noDescription')}
-                                    </span>
-                                )}
-                            </p>
-                        </div>
-
-                        {/* Material Card */}
-                        {cleaning.material && (
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                                <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                    <FaWrench className="h-5 w-5 text-brand-500" />
-                                    {t('cleanings.material')}
-                                </h2>
-                                {canViewMaterials ? (
-                                    <Link
-                                        to={`/materials/${cleaning.material.id}`}
-                                        className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="font-medium text-gray-900 dark:text-white">
-                                                    {cleaning.material.name}
-                                                </p>
-                                                {cleaning.material.zone && (
-                                                    <p className="mt-1 flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                                                        <FaSignsPost className="h-3 w-3" />
-                                                        {cleaning.material.zone.name}
-                                                    </p>
-                                                )}
-                                            </div>
-                                            <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400" />
-                                        </div>
-                                    </Link>
-                                ) : (
-                                    <div className="flex items-center justify-between rounded-lg border  border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 p-4">
+                            {canViewMaterials ? (
+                                <Link
+                                    to={`/materials/${cleaning.material.id}`}
+                                    className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-white/5 dark:bg-neutral-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
+                                >
+                                    <div className="flex items-center justify-between">
                                         <div>
                                             <p className="font-medium text-gray-900 dark:text-white">
                                                 {cleaning.material.name}
@@ -258,89 +244,86 @@ export function CleaningDetailPage() {
                                                 </p>
                                             )}
                                         </div>
+                                        <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400" />
                                     </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Sidebar - Right Column */}
-                    <div className="space-y-6">
-                        {/* Details Card */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                                {t('common.details')}
-                            </h2>
-                            <div className="space-y-4">
-                                {/* Site */}
-                                {cleaning.site && (
-                                    <div className="flex items-start gap-3">
-                                        <FaBuilding className="mt-0.5 h-4 w-4 text-gray-400" />
-                                        <div>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                {t('common.site')}
+                                </Link>
+                            ) : (
+                                <div className="flex items-center justify-between rounded-lg border  border-gray-100 bg-gray-50 dark:border-white/5 dark:bg-neutral-800 p-4">
+                                    <div>
+                                        <p className="font-medium text-gray-900 dark:text-white">
+                                            {cleaning.material.name}
+                                        </p>
+                                        {cleaning.material.zone && (
+                                            <p className="mt-1 flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                                                <FaSignsPost className="h-3 w-3" />
+                                                {cleaning.material.zone.name}
                                             </p>
-                                            <LinkedName
-                                                canView={canViewSites}
-                                                id={cleaning.site.id}
-                                                name={cleaning.site.name}
-                                                basePath="sites" />
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Type */}
-                                <div className="flex items-start gap-3">
-                                    <FaBroom className="mt-0.5 h-4 w-4 text-gray-400" />
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('cleanings.type')}
-                                        </p>
-                                        <p className="font-medium text-gray-900 dark:text-white">
-                                            {cleaning.type_label}
-                                        </p>
+                                        )}
                                     </div>
                                 </div>
+                            )}
+                        </div>
+                    )}
+                </div>
 
-                                {/* Created By */}
+                {/* Sidebar - Right Column */}
+                <div className="space-y-6">
+                    {/* Details Card */}
+                    <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
+                        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+                            {t('common.details')}
+                        </h2>
+                        <div className="space-y-4">
+                            {/* Site */}
+                            {cleaning.site && (
                                 <div className="flex items-start gap-3">
-                                    <FaUser className="mt-0.5 h-4 w-4 text-gray-400" />
+                                    <FaBuilding className="mt-0.5 h-4 w-4 text-gray-400" />
                                     <div>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('cleanings.createdBy')}
+                                            {t('common.site')}
                                         </p>
-                                        <p className="font-medium text-gray-900 dark:text-white">
-                                            <LinkedName
-                                                canView={canViewCreatorAndEditor}
-                                                id={cleaning?.creator?.id}
-                                                name={cleaning?.creator?.full_name || cleaning.created_by_name}
-                                                basePath="users" />
-                                        </p>
+                                        <LinkedName
+                                            canView={canViewSites}
+                                            id={cleaning.site.id}
+                                            name={cleaning.site.name}
+                                            basePath="sites" />
                                     </div>
                                 </div>
+                            )}
 
-                                {/* Created At */}
-                                <div className="flex items-start gap-3">
-                                    <FaCalendar className="mt-0.5 h-4 w-4 text-gray-400" />
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('common.createdAt')}
-                                        </p>
-                                        <p className="font-medium text-gray-900 dark:text-white">
-                                            {formatDate(cleaning.created_at)}
-                                        </p>
-                                    </div>
+                            {/* Type */}
+                            <div className="flex items-start gap-3">
+                                <FaBroom className="mt-0.5 h-4 w-4 text-gray-400" />
+                                <div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t('cleanings.type')}
+                                    </p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                        {cleaning.type_label}
+                                    </p>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* History Card */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                                {t('common.history')}
-                            </h2>
-                            <div className="space-y-4">
-                                {/* Created At */}
+                            {/* Created By */}
+                            <div className="flex items-start gap-3">
+                                <FaUser className="mt-0.5 h-4 w-4 text-gray-400" />
+                                <div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t('cleanings.createdBy')}
+                                    </p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                        <LinkedName
+                                            canView={canViewCreatorAndEditor}
+                                            id={cleaning?.creator?.id}
+                                            name={cleaning?.creator?.full_name || cleaning.created_by_name}
+                                            basePath="users" />
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Created At */}
+                            <div className="flex items-start gap-3">
+                                <FaCalendar className="mt-0.5 h-4 w-4 text-gray-400" />
                                 <div>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
                                         {t('common.createdAt')}
@@ -349,37 +332,55 @@ export function CleaningDetailPage() {
                                         {formatDate(cleaning.created_at)}
                                     </p>
                                 </div>
-
-                                {/* Updated At */}
-                                {cleaning.updated_at && (
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('common.updatedAt')}
-                                        </p>
-                                        <p className="font-medium text-gray-900 dark:text-white">
-                                            {formatDate(cleaning.updated_at)}
-                                        </p>
-                                    </div>
-                                )}
-
-                                {/* Edited By */}
-                                {cleaning.editor && (
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('common.editedBy')}
-                                        </p>
-                                        <LinkedName
-                                            canView={canViewCreatorAndEditor}
-                                            id={cleaning?.editor?.id}
-                                            name={cleaning?.editor?.full_name}
-                                            basePath="users" />
-                                    </div>
-                                )}
                             </div>
                         </div>
                     </div>
+
+                    {/* History Card */}
+                    <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
+                        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+                            {t('common.history')}
+                        </h2>
+                        <div className="space-y-4">
+                            {/* Created At */}
+                            <div>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    {t('common.createdAt')}
+                                </p>
+                                <p className="font-medium text-gray-900 dark:text-white">
+                                    {formatDate(cleaning.created_at)}
+                                </p>
+                            </div>
+
+                            {/* Updated At */}
+                            {cleaning.updated_at && (
+                                <div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t('common.updatedAt')}
+                                    </p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                        {formatDate(cleaning.updated_at)}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Edited By */}
+                            {cleaning.editor && (
+                                <div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t('common.editedBy')}
+                                    </p>
+                                    <LinkedName
+                                        canView={canViewCreatorAndEditor}
+                                        id={cleaning?.editor?.id}
+                                        name={cleaning?.editor?.full_name}
+                                        basePath="users" />
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
-            </div >
+            </div>
 
             {/* Edit Modal */}
             < CleaningModal

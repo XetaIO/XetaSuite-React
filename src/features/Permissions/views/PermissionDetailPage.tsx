@@ -154,7 +154,7 @@ const PermissionDetailPage: FC = () => {
                 <div className="flex items-center gap-4">
                     <Link
                         to="/permissions"
-                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800"
+                        className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition hover:bg-gray-50 dark:border-white/5 dark:text-gray-400 dark:hover:bg-neutral-800"
                     >
                         <FaArrowLeft className="h-4 w-4" />
                     </Link>
@@ -189,7 +189,7 @@ const PermissionDetailPage: FC = () => {
             </div>
 
             {/* Permission Info Card */}
-            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/3">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {/* Roles Count */}
                     <div className="flex items-center gap-3">
@@ -208,7 +208,7 @@ const PermissionDetailPage: FC = () => {
 
                     {/* Created At */}
                     <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-neutral-800">
                             <FaCalendar className="h-5 w-5 text-gray-500" />
                         </div>
                         <div>
@@ -223,7 +223,7 @@ const PermissionDetailPage: FC = () => {
 
                     {/* Updated At */}
                     <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 dark:bg-neutral-800">
                             <FaCalendar className="h-5 w-5 text-gray-500" />
                         </div>
                         <div>
@@ -239,9 +239,9 @@ const PermissionDetailPage: FC = () => {
             </div>
 
             {/* Roles Section */}
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+            <div className="rounded-2xl border border-gray-200 bg-white dark:border-white/10 dark:bg-white/3">
                 {/* Header */}
-                <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                <div className="flex items-center gap-2 border-b border-gray-200 px-6 py-4 dark:border-white/10">
                     <FaShield className="h-4 w-4 text-brand-500" />
                     <span className="font-medium text-gray-800 dark:text-white/90">
                         {t("permissions.rolesWithPermission")}
@@ -262,7 +262,7 @@ const PermissionDetailPage: FC = () => {
                                 placeholder={t("common.search")}
                                 value={rolesSearchInput}
                                 onChange={(e) => setRolesSearchInput(e.target.value)}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                                className="w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                             />
                             {rolesSearchInput && (
                                 <button
@@ -291,7 +291,7 @@ const PermissionDetailPage: FC = () => {
                         <>
                             <Table>
                                 <TableHeader>
-                                    <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                    <TableRow className="border-b border-gray-200 dark:border-white/5">
                                         <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                             {t("roles.name")}
                                         </TableCell>
@@ -305,7 +305,7 @@ const PermissionDetailPage: FC = () => {
                                 </TableHeader>
                                 <TableBody>
                                     {roles.map((role) => (
-                                        <TableRow key={role.id} className="border-b border-gray-100 dark:border-gray-800">
+                                        <TableRow key={role.id} className="border-b border-gray-100 dark:border-white/10">
                                             <TableCell className="px-4 py-3">
                                                 <LinkedName
                                                     canView={canViewRole}

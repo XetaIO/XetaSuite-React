@@ -136,14 +136,14 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
         <div className="fixed inset-0 z-99999 flex items-start justify-center pt-[10vh] px-4">
             {/* Backdrop */}
             <div
-                className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm"
+                className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm"
                 onClick={onClose}
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div className="relative w-full max-w-2xl bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-white/5 overflow-hidden">
                 {/* Search Input */}
-                <div className="flex items-center px-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center px-4 border-b border-gray-200 dark:border-white/5">
                     <FaMagnifyingGlass className="w-5 h-5 text-gray-400 dark:text-gray-500 shrink-0" />
                     <input
                         ref={inputRef}
@@ -158,7 +158,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
                         <FaSpinner className="w-5 h-5 text-gray-400 animate-spin" />
                     )}
                     <div className="flex items-center gap-1 ml-2">
-                        <kbd className="px-2 py-1 text-xs font-medium text-gray-500 bg-gray-100 border border-gray-200 rounded dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
+                        <kbd className="px-2 py-1 text-xs font-medium text-gray-500 bg-gray-100 border border-gray-200 rounded dark:bg-white/10 dark:border-white/5 dark:text-gray-400">
                             esc
                         </kbd>
                     </div>
@@ -220,15 +220,15 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
                                                                 onClick={() => handleNavigate(item)}
                                                                 onMouseEnter={() => setSelectedIndex(globalIndex)}
                                                                 className={`w-full px-4 py-3 flex items-start gap-3 text-left transition-colors ${isSelected
-                                                                    ? 'bg-brand-50 dark:bg-brand-900/20'
-                                                                    : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                                                                    ? 'bg-brand-50 dark:bg-neutral-800'
+                                                                    : 'hover:bg-gray-50 dark:hover:bg-neutral-800'
                                                                     }`}
                                                             >
                                                                 <div className="flex-1 min-w-0">
                                                                     <div className="flex items-center gap-2">
                                                                         <span className={`font-medium truncate ${isSelected
                                                                             ? 'text-brand-700 dark:text-brand-300'
-                                                                            : 'text-gray-900 dark:text-white'
+                                                                            : 'text-neutral-900 dark:text-white'
                                                                             }`}>
                                                                             {item.title}
                                                                         </span>
@@ -241,12 +241,12 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
                                                                 </div>
                                                                 {/* Show site name on HQ */}
                                                                 {results.is_on_headquarters && item.meta?.site && (
-                                                                    <span className="shrink-0 text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                                                                    <span className="shrink-0 text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-neutral-800 px-2 py-1 rounded">
                                                                         {item.meta.site}
                                                                     </span>
                                                                 )}
                                                                 {isSelected && (
-                                                                    <kbd className="shrink-0 px-2 py-1 text-xs font-medium text-gray-500 bg-gray-100 border border-gray-200 rounded dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
+                                                                    <kbd className="shrink-0 px-2 py-1 text-xs font-medium text-gray-500 bg-gray-100 border border-gray-200 rounded dark:bg-neutral-800 dark:border-white/5 dark:text-gray-400">
                                                                         ↵
                                                                     </kbd>
                                                                 )}
@@ -277,20 +277,20 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onClose }) =
                 </div>
 
                 {/* Footer */}
-                <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <div className="px-4 py-3 border-t border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-neutral-800/50">
                     <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                         <div className="flex items-center gap-4">
                             <span className="flex items-center gap-1">
-                                <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600">↑</kbd>
-                                <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600">↓</kbd>
+                                <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-white/10 rounded border border-gray-200 dark:border-white/5">↑</kbd>
+                                <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-white/10 rounded border border-gray-200 dark:border-white/5">↓</kbd>
                                 {t('search.navigate')}
                             </span>
                             <span className="flex items-center gap-1">
-                                <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600">↵</kbd>
+                                <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-white/10 rounded border border-gray-200 dark:border-white/5">↵</kbd>
                                 {t('search.select')}
                             </span>
                             <span className="flex items-center gap-1">
-                                <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600">esc</kbd>
+                                <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-white/10 rounded border border-gray-200 dark:border-white/5">esc</kbd>
                                 {t('search.close')}
                             </span>
                         </div>

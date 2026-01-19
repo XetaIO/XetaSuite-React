@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FaBuildingFlag } from 'react-icons/fa6';
 import { useAuth } from '@/features/Auth/hooks/useAuth';
 import type { UserSite } from '@/shared/types';
+import { Badge } from '../ui';
 
 interface SiteSwitcherProps {
     /** Compact mode for mobile - shows only icon */
@@ -73,7 +74,7 @@ export function SiteSwitcher({ compact = false, dropdownDirection = 'down', full
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 disabled={isChanging}
-                className={`flex items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 disabled:cursor-wait disabled:opacity-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200 ${fullWidth
+                className={`flex items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-700 disabled:cursor-wait disabled:opacity-50 dark:bg-white/3 dark:border-white/5 dark:text-white/90 dark:hover:bg-neutral-900 dark:hover:text-gray-200 ${fullWidth
                     ? 'h-11 w-full gap-3 px-4'
                     : compact
                         ? 'h-10 w-10'
@@ -109,7 +110,7 @@ export function SiteSwitcher({ compact = false, dropdownDirection = 'down', full
             {/* Dropdown Menu */}
             {isOpen && (
                 <div
-                    className={`absolute z-50 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-800 dark:bg-gray-900 ${fullWidth ? 'left-0 right-0 w-full' : 'right-0 w-56'
+                    className={`absolute z-50 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:bg-neutral-900 dark:border-white/5 dark:text-white/90 ${fullWidth ? 'left-0 right-0 w-full' : 'right-0 w-56'
                         } ${dropdownDirection === 'up'
                             ? 'bottom-full mb-2 origin-bottom-right'
                             : 'top-full mt-2 origin-top-right'
@@ -124,14 +125,21 @@ export function SiteSwitcher({ compact = false, dropdownDirection = 'down', full
                                 onClick={() => handleSiteChange(site)}
                                 disabled={isChanging}
                                 className={`flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm transition-colors ${site.id === user?.current_site_id
-                                    ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400'
-                                    : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                                    ? 'bg-brand-50 text-brand-600 dark:bg-neutral-800 dark:text-brand-400'
+                                    : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-neutral-800'
                                     }`}
                                 role="option"
                                 aria-selected={site.id === user?.current_site_id}
                             >
                                 <FaBuildingFlag className="h-4 w-4 shrink-0" />
-                                <span className="font-medium truncate">{site.name}</span>
+                                <span className="font-medium truncate">
+                                    {site.name}
+                                    {site.is_headquarters && (
+                                        <Badge size="sm" color="brand">
+                                            {t('common.hq')}
+                                        </Badge>
+                                    )}
+                                </span>
                                 {site.id === user?.current_site_id && (
                                     <svg
                                         className="ml-auto h-4 w-4 shrink-0"

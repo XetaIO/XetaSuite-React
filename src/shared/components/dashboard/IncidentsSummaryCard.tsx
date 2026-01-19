@@ -35,13 +35,13 @@ export default function IncidentsSummaryCard({ summary, isLoading = false }: Inc
     ];
 
     return (
-        <div className="h-full rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+        <div className="h-full rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
+            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-white/5">
                 <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
                     {t('dashboard.incidents.summary')}
                 </h3>
                 {isLoading ? (
-                    <div className="h-8 w-12 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-8 w-12 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                 ) : (
                     <span className="text-2xl font-bold text-gray-900 dark:text-white">
                         {summary.total}
@@ -51,12 +51,12 @@ export default function IncidentsSummaryCard({ summary, isLoading = false }: Inc
             <div className="p-6">
                 {isLoading ? (
                     <>
-                        <div className="h-3 w-full animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                        <div className="h-3 w-full animate-pulse rounded-full bg-gray-200 dark:bg-neutral-700" />
                         <div className="mt-4 flex justify-between">
                             {Array.from({ length: 3 }).map((_, index) => (
                                 <div key={index} className="text-center">
-                                    <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700 mx-auto" />
-                                    <div className="mt-2 h-6 w-8 animate-pulse rounded bg-gray-200 dark:bg-gray-700 mx-auto" />
+                                    <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-neutral-700 mx-auto" />
+                                    <div className="mt-2 h-6 w-8 animate-pulse rounded bg-gray-200 dark:bg-neutral-700 mx-auto" />
                                 </div>
                             ))}
                         </div>
@@ -64,7 +64,7 @@ export default function IncidentsSummaryCard({ summary, isLoading = false }: Inc
                 ) : (
                     <>
                         {/* Progress bar */}
-                        <div className="flex h-3 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+                        <div className="flex h-3 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-neutral-800">
                             {summary.total > 0 && statusItems.map((item, index) => (
                                 <div
                                     key={index}
@@ -90,7 +90,7 @@ export default function IncidentsSummaryCard({ summary, isLoading = false }: Inc
                         </div>
 
                         {/* Severity breakdown */}
-                        <div className="mt-6 border-t border-gray-100 pt-4 dark:border-gray-800">
+                        <div className="mt-6 border-t border-gray-100 pt-4 dark:border-white/5">
                             <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('dashboard.incidents.bySeverity')}</h4>
                             <div className="mt-3 grid grid-cols-4 gap-2">
                                 {severityItems.map((item, index) => (

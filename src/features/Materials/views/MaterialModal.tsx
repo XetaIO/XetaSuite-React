@@ -286,7 +286,7 @@ export const MaterialModal: FC<MaterialModalProps> = ({ isOpen, onClose, materia
                     </div>
 
                     {/* Cleaning Alert Section */}
-                    <div className="border-t border-gray-200 pt-4 dark:border-gray-700">
+                    <div className="border-t border-gray-200 pt-4 dark:border-white/5">
                         <h3 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">
                             {t('materials.cleaningAlertSettings')}
                         </h3>
@@ -310,7 +310,7 @@ export const MaterialModal: FC<MaterialModalProps> = ({ isOpen, onClose, materia
 
                         {/* Cleaning Alert Options (only visible when enabled) */}
                         {formData.cleaning_alert && (
-                            <div className="mt-4 space-y-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
+                            <div className="mt-4 space-y-4 rounded-lg bg-gray-50 p-4 dark:bg-neutral-800/50">
                                 {/* Email Notification */}
                                 <div className="flex items-start gap-3">
                                     <Checkbox
@@ -353,10 +353,10 @@ export const MaterialModal: FC<MaterialModalProps> = ({ isOpen, onClose, materia
                                             title={t('materials.form.frequencyType')}
                                             value={formData.cleaning_alert_frequency_type}
                                             onChange={handleChange}
-                                            className="mt-1.5 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                            className="mt-1.5 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-brand-800"
                                         >
                                             {frequencyOptions.map((option) => (
-                                                <option key={option.value} value={option.value} className="bg-white dark:bg-gray-900">
+                                                <option key={option.value} value={option.value} className="bg-white dark:bg-neutral-900">
                                                     {t(option.labelKey)}
                                                 </option>
                                             ))}
@@ -370,7 +370,7 @@ export const MaterialModal: FC<MaterialModalProps> = ({ isOpen, onClose, materia
                                     <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
                                         {t('materials.form.recipientsHint')}
                                     </p>
-                                    <div className="max-h-40 overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <div className="max-h-40 overflow-y-auto rounded-lg border border-gray-200 dark:border-white/5">
                                         {isLoadingOptions ? (
                                             <div className="p-3 text-center text-sm text-gray-500">
                                                 {t('common.loading')}
@@ -383,7 +383,7 @@ export const MaterialModal: FC<MaterialModalProps> = ({ isOpen, onClose, materia
                                             availableRecipients.map((recipient) => (
                                                 <div
                                                     key={recipient.id}
-                                                    className="flex items-center gap-3 border-b border-gray-100 p-3 last:border-b-0 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
+                                                    className="flex items-center gap-3 border-b border-gray-100 p-3 last:border-b-0 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800"
                                                 >
                                                     <Checkbox
                                                         id={`recipient-${recipient.id}`}

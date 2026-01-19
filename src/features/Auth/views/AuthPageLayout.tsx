@@ -11,7 +11,7 @@ interface AuthPageLayoutProps {
  */
 export default function AuthPageLayout({ children }: AuthPageLayoutProps) {
     return (
-        <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 dark:bg-neutral-950">
             <div className="fixed z-50 hidden bottom-6 right-6 sm:flex items-center gap-2">
                 <LanguageSwitcher dropdownDirection="up" />
                 <ThemeTogglerTwo />
@@ -36,7 +36,7 @@ export default function AuthPageLayout({ children }: AuthPageLayoutProps) {
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white py-8 px-6 shadow-lg rounded-xl sm:px-10 border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                <div className="bg-white py-8 px-6 shadow-lg rounded-xl sm:px-10 border border-gray-200 dark:bg-white/3 dark:border-white/5">
                     {children}
                 </div>
             </div>

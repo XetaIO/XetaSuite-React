@@ -143,9 +143,9 @@ const ZoneTreePage: FC = () => {
                 ]}
             />
 
-            <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+            <div className="rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
                 {/* Header */}
-                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-4 border-b border-gray-200 px-6 py-4 dark:border-white/5 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
                             {t("zones.tree.pageTitle")}
@@ -168,7 +168,7 @@ const ZoneTreePage: FC = () => {
                                     type="button"
                                     onClick={() => setIsSiteDropdownOpen(!isSiteDropdownOpen)}
                                     disabled={isLoadingSites}
-                                    className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-left text-sm text-gray-800 transition-colors hover:bg-gray-50 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:hover:bg-gray-800"
+                                    className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-left text-sm text-gray-800 transition-colors hover:bg-gray-50 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:hover:bg-neutral-800"
                                 >
                                     <FaBuildingFlag className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                                     <span className="max-w-37.5 truncate">
@@ -181,7 +181,7 @@ const ZoneTreePage: FC = () => {
                                 </button>
 
                                 {isSiteDropdownOpen && (
-                                    <div className="absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-xl border border-gray-200 bg-white py-1 shadow-lg ring-1 ring-black/5 dark:border-gray-700 dark:bg-gray-900">
+                                    <div className="absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-xl border border-gray-200 bg-white py-1 shadow-lg ring-1 ring-black/5 dark:border-white/5 dark:bg-neutral-900">
                                         <div className="max-h-60 overflow-y-auto">
                                             {/* Site list (HQ excluded) */}
                                             {sites.map((site) => (
@@ -194,7 +194,7 @@ const ZoneTreePage: FC = () => {
                                                     }}
                                                     className={`flex w-full items-center gap-2 px-4 py-2 text-left text-sm transition-colors ${selectedSiteId === site.id
                                                         ? "bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400"
-                                                        : "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
+                                                        : "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-800"
                                                         }`}
                                                 >
                                                     <FaBuildingFlag className="h-4 w-4" />

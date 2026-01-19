@@ -65,23 +65,20 @@ export default function RecentActivityCard({ activities, isLoading = false }: Re
     };
 
     return (
-        <div className="h-full rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+        <div className="h-full rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
+            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-white/5">
                 <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
                     {t('dashboard.activity.title')}
                 </h3>
-                <button className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">
-                    {t('common.viewAll')}
-                </button>
             </div>
-            <div className="divide-y divide-gray-100 dark:divide-gray-800">
+            <div className="divide-y divide-gray-100 dark:divide-neutral-800">
                 {isLoading ? (
                     Array.from({ length: 3 }).map((_, index) => (
                         <div key={index} className="flex items-start gap-4 p-4">
-                            <div className="h-10 w-10 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700" />
+                            <div className="h-10 w-10 animate-pulse rounded-lg bg-gray-200 dark:bg-neutral-700" />
                             <div className="flex-1">
-                                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                <div className="mt-2 h-3 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
+                                <div className="mt-2 h-3 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                             </div>
                         </div>
                     ))

@@ -256,13 +256,13 @@ const CompanyDetailPage: FC = () => {
             />
 
             {/* Company Info Card */}
-            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/3">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex-1">
                         <div className="flex items-center gap-3">
                             <Link
                                 to="/companies"
-                                className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                                className="flex h-9 w-9 items-center justify-center rounded-lg border text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-white/5 dark:text-gray-400 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:hover:text-gray-200"
                                 title={t("common.back")}
                             >
                                 <FaArrowLeft className="h-4 w-4" />
@@ -317,7 +317,7 @@ const CompanyDetailPage: FC = () => {
                 {/* Stats */}
                 <div className={`mt-6 grid grid-cols-1 gap-4 ${company.is_item_provider ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3'}`}>
                     {company.is_item_provider && (
-                        <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                        <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-500/20">
                                 <FaCubes className="h-5 w-5 text-brand-600 dark:text-brand-400" />
                             </div>
@@ -328,7 +328,7 @@ const CompanyDetailPage: FC = () => {
                         </div>
                     )}
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-500/20">
                             <FaScrewdriverWrench className="h-5 w-5 text-warning-600 dark:text-warning-400" />
                         </div>
@@ -338,7 +338,7 @@ const CompanyDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success-100 dark:bg-success-500/20">
                             <FaUser className="h-5 w-5 text-success-600 dark:text-success-400" />
                         </div>
@@ -352,7 +352,7 @@ const CompanyDetailPage: FC = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 dark:bg-neutral-800/50">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 dark:bg-purple-500/20">
                             <FaCalendar className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                         </div>
@@ -371,7 +371,7 @@ const CompanyDetailPage: FC = () => {
                 <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
                     {/* Maintenances by Site */}
                     {stats.maintenances_by_site.length > 0 && (
-                        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/3">
                             <h3 className="mb-4 text-base font-medium text-gray-800 dark:text-white/90">
                                 {t("companies.detail.charts.bySite")}
                             </h3>
@@ -386,7 +386,7 @@ const CompanyDetailPage: FC = () => {
 
                     {/* Maintenances by Type */}
                     {stats.maintenances_by_type.length > 0 && (
-                        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/3">
                             <h3 className="mb-4 text-base font-medium text-gray-800 dark:text-white/90">
                                 {t("companies.detail.charts.byType")}
                             </h3>
@@ -401,7 +401,7 @@ const CompanyDetailPage: FC = () => {
 
                     {/* Maintenances by Status */}
                     {stats.maintenances_by_status.length > 0 && (
-                        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/3">
                             <h3 className="mb-4 text-base font-medium text-gray-800 dark:text-white/90">
                                 {t("companies.detail.charts.byStatus")}
                             </h3>
@@ -416,7 +416,7 @@ const CompanyDetailPage: FC = () => {
 
                     {/* Maintenances by Month */}
                     {stats.maintenances_by_month.length > 0 && (
-                        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+                        <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/10 dark:bg-white/3">
                             <h3 className="mb-4 text-base font-medium text-gray-800 dark:text-white/90">
                                 {t("companies.detail.charts.byMonth")}
                             </h3>

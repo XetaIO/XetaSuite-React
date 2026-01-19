@@ -1,5 +1,6 @@
 {
     "common": {
+        "hq": "Siège",
         "loading": "Chargement...",
         "save": "Enregistrer",
         "cancel": "Annuler",
@@ -51,6 +52,8 @@
         "editedBy": "Modifié par",
         "site": "Site",
         "comingSoon": "Bientôt disponible",
+        "maintenances": "maintenance(s)",
+        "incidents": "incident(s)",
         "export": {
             "button": "Exporter ({{count}})",
             "exporting": "Export en cours...",
@@ -374,6 +377,8 @@
             "namePlaceholder": "Nom du site",
             "managers": "Managers",
             "managersHint": "Sélectionnez les collaborateurs qui géreront ce site",
+            "selectManagers": "Sélectionner des managers",
+            "managersSelected": "{{count}} manager(s) sélectionné(s)",
             "noUsersAvailable": "Aucun utilisateur disponible",
             "email": "Email",
             "emailPlaceholder": "email@exemple.com",

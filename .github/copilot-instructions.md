@@ -354,8 +354,8 @@ The project uses Tailwind CSS 4 with a custom TailAdmin-based theme defined in `
 ```
 
 ### Custom Utilities (defined in index.css)
-- `menu-item`, `menu-item-active`, `menu-item-inactive`
-- `menu-dropdown-item`, `menu-dropdown-item-active`
+- `menu-item`, `menu-item-inactive`
+- `menu-dropdown-item`
 - `shadow-theme-xs`, `shadow-theme-sm`, `shadow-theme-md`, `shadow-theme-lg`
 - `no-scrollbar`, `custom-scrollbar`
 

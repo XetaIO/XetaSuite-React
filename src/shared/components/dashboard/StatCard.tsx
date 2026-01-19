@@ -23,7 +23,7 @@ const colorClasses = {
 
 export default function StatCard({ title, value, icon, trend, color = "brand", isLoading = false }: StatCardProps) {
     return (
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/5 dark:bg-white/3">
             <div className="flex items-center justify-between">
                 <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${colorClasses[color]}`}>
                     {icon}
@@ -51,7 +51,7 @@ export default function StatCard({ title, value, icon, trend, color = "brand", i
             </div>
             <div className="mt-4">
                 {isLoading ? (
-                    <div className="h-8 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-8 w-20 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                 ) : (
                     <h4 className="text-2xl font-bold text-gray-900 dark:text-white">{value}</h4>
                 )}

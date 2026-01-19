@@ -38,14 +38,14 @@ const Button: React.FC<ButtonProps> = ({
   const variantClasses = {
     primary: 'bg-brand-600 text-white hover:bg-brand-700 focus:ring-brand-500',
     secondary: 'bg-slate-600 text-white hover:bg-slate-700 focus:ring-slate-500',
-    outline: 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:ring-brand-500',
+    outline: 'border border-slate-300 bg-white hover:bg-slate-50 focus:ring-brand-500',
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
   };
 
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-lg transition ${className} ${sizeClasses[size]
-        } ${variantClasses[variant]} ${disabled ? "cursor-not-allowed opacity-50" : ""} ${fullWidth ? "w-full" : ""}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-lg transition ${sizeClasses[size]
+        } ${variantClasses[variant]} ${className} ${disabled ? "cursor-not-allowed opacity-50" : ""} ${fullWidth ? "w-full" : ""}`}
       onClick={onClick}
       disabled={disabled}
       type={type}

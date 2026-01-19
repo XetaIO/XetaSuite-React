@@ -147,7 +147,7 @@ const SettingsListPage: FC = () => {
 
         return (
             <div className="flex items-center gap-2">
-                <span className="text-gray-900 dark:text-white font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                <span className="text-gray-900 dark:text-white font-mono bg-gray-100 dark:bg-neutral-800 px-2 py-1 rounded">
                     {String(setting.value)}
                 </span>
                 {canUpdate && (
@@ -177,7 +177,7 @@ const SettingsListPage: FC = () => {
             <PageMeta title={t("settings.title")} description={t("settings.applicationSettingsDescription")} />
             <PageBreadcrumb pageTitle={t("settings.title")} />
 
-            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/3 lg:p-6">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/5 dark:bg-white/3 lg:p-6">
                 <div className="mb-6">
                     <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
                         {t("settings.applicationSettings")}
@@ -202,7 +202,7 @@ const SettingsListPage: FC = () => {
                         {settings.map((setting) => (
                             <div
                                 key={setting.id}
-                                className="flex flex-col gap-2 border-b border-gray-200 pb-6 last:border-0 dark:border-gray-700 sm:flex-row sm:items-center sm:justify-between"
+                                className="flex flex-col gap-2 border-b border-gray-200 pb-6 last:border-0 dark:border-white/5 sm:flex-row sm:items-center sm:justify-between"
                             >
                                 <div className="flex-1">
                                     <Label className="text-base font-medium">

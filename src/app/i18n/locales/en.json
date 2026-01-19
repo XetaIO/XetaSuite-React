@@ -1,5 +1,6 @@
 {
     "common": {
+        "hq": "HQ",
         "loading": "Loading...",
         "save": "Save",
         "cancel": "Cancel",
@@ -51,6 +52,8 @@
         "editedBy": "Edited by",
         "site": "Site",
         "comingSoon": "Coming soon",
+        "maintenances": "maintenance(s)",
+        "incidents": "incident(s)",
         "export": {
             "button": "Export ({{count}})",
             "exporting": "Exporting...",
@@ -383,6 +386,8 @@
             "namePlaceholder": "Site name",
             "managers": "Managers",
             "managersHint": "Select the users who will manage this site",
+            "selectManagers": "Select managers",
+            "managersSelected": "{{count}} manager(s) selected",
             "noUsersAvailable": "No users available",
             "email": "Email",
             "emailPlaceholder": "email@example.com",

@@ -52,7 +52,7 @@ const UserListPage: FC = () => {
         refresh,
     } = useListPage<User, UserFilters>({
         fetchFn: UserManager.getAll,
-        defaultSortField: "last_name",
+        defaultSortField: "full_name",
         defaultSortDirection: "asc",
     });
 
@@ -133,7 +133,6 @@ const UserListPage: FC = () => {
         { width: "w-24" },
         ...(permissions.hasAnyAction ? [{ width: "w-8", right: true }] : []),
     ];
-    const colSpan = 6 + (permissions.hasAnyAction ? 1 : 0);
 
     return (
         <>
@@ -175,7 +174,7 @@ const UserListPage: FC = () => {
                         <TableHeader>
                             <TableRow className="table-header-row-border">
                                 <SortableTableHeader
-                                    field="last_name"
+                                    field="full_name"
                                     label={t("common.user")}
                                     onSort={handleSort}
                                     renderSortIcon={renderSortIcon}
@@ -208,7 +207,7 @@ const UserListPage: FC = () => {
                                 />
                             ) : users.length === 0 ? (
                                 <EmptyTableRow
-                                    colSpan={colSpan}
+                                    colSpan={6 + (permissions.hasAnyAction ? 1 : 0)}
                                     searchQuery={debouncedSearch}
                                     onClearSearch={() => setSearchQuery("")}
                                     emptyMessage={

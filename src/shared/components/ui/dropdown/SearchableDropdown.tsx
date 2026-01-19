@@ -176,7 +176,7 @@ export function SearchableDropdown<T extends DropdownOption>({
                 type="button"
                 onClick={() => !disabled && setIsOpen(!isOpen)}
                 disabled={disabled}
-                className={`flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800 ${disabled ? "cursor-not-allowed opacity-60" : ""
+                className={`flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:bg-white/3 dark:border-white/5 dark:text-white/90 dark:focus:border-brand-800 ${disabled ? "cursor-not-allowed opacity-60" : ""
                     }`}
             >
                 <span className={hasValue ? "" : "text-gray-500 dark:text-gray-400"}>
@@ -190,9 +190,9 @@ export function SearchableDropdown<T extends DropdownOption>({
 
             {/* Dropdown Panel */}
             {isOpen && (
-                <div className="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                <div className="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
                     {/* Search Input */}
-                    <div className="border-b border-gray-200 p-2 dark:border-gray-700">
+                    <div className="border-b border-gray-200 p-2 dark:border-white/5">
                         <div className="relative">
                             <FaMagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                             <input
@@ -200,7 +200,7 @@ export function SearchableDropdown<T extends DropdownOption>({
                                 placeholder={searchPlaceholder}
                                 value={search}
                                 onChange={(e) => handleSearch(e.target.value)}
-                                className="w-full rounded-md border border-gray-300 bg-transparent py-2 pl-9 pr-3 text-sm text-gray-800 placeholder-gray-400 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-gray-600 dark:text-white/90 dark:placeholder-gray-500"
+                                className="w-full rounded-md border border-gray-300 bg-transparent py-2 pl-9 pr-3 text-sm text-gray-800 placeholder-gray-400 focus:border-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-white/5 dark:text-white/90 dark:placeholder-gray-500"
                                 onClick={(e) => e.stopPropagation()}
                                 autoFocus
                             />
@@ -220,7 +220,7 @@ export function SearchableDropdown<T extends DropdownOption>({
                                     <button
                                         type="button"
                                         onClick={() => handleSelect(null)}
-                                        className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"
+                                        className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-neutral-800"
                                     >
                                         <span className="italic">{noSelectionText}</span>
                                         {!hasValue && (
@@ -234,7 +234,7 @@ export function SearchableDropdown<T extends DropdownOption>({
                                     <button
                                         type="button"
                                         onClick={() => handleSelect(pinnedItem.id)}
-                                        className="flex w-full items-center justify-between border-l-2 border-brand-500 px-4 py-2.5 text-left text-sm text-gray-800 hover:bg-gray-50 dark:text-white/90 dark:hover:bg-gray-800"
+                                        className="flex w-full items-center justify-between border-l-2 border-brand-500 px-4 py-2.5 text-left text-sm text-gray-800 hover:bg-gray-50 dark:text-white/90 dark:hover:bg-neutral-800"
                                     >
                                         <div className="flex items-center gap-2">
                                             <span className="font-medium text-gray-800 dark:text-white/90">
@@ -261,7 +261,7 @@ export function SearchableDropdown<T extends DropdownOption>({
                                             key={option.id}
                                             type="button"
                                             onClick={() => handleSelect(option.id)}
-                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-gray-800 hover:bg-gray-50 dark:text-white/90 dark:hover:bg-gray-800"
+                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-gray-800 hover:bg-gray-50 dark:text-white/90 dark:hover:bg-neutral-800"
                                         >
                                             {renderOption ? (
                                                 renderOption(option)

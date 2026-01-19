@@ -181,9 +181,9 @@ export function CompanyRelatedTabs({ company }: CompanyRelatedTabsProps) {
     );
 
     return (
-        <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+        <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-white/10 dark:bg-white/3">
             {/* Tab Headers */}
-            <div className="flex flex-wrap border-b border-gray-200 dark:border-gray-800">
+            <div className="flex flex-wrap border-b border-gray-200 dark:border-white/10">
                 {tabs.map((tab) => {
                     const isActive = activeTab === tab.key;
                     return (
@@ -220,7 +220,7 @@ export function CompanyRelatedTabs({ company }: CompanyRelatedTabsProps) {
                                 <div className="overflow-x-auto">
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                            <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                 <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t('items.fields.name')}
                                                 </TableCell>
@@ -245,7 +245,7 @@ export function CompanyRelatedTabs({ company }: CompanyRelatedTabsProps) {
                                         </TableHeader>
                                         <TableBody>
                                             {items.map((item) => (
-                                                <TableRow key={item.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                <TableRow key={item.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/10 dark:hover:bg-neutral-800/50">
                                                     <TableCell className="px-4 py-3">
                                                         <LinkedName
                                                             canView={canViewItem}
@@ -305,7 +305,7 @@ export function CompanyRelatedTabs({ company }: CompanyRelatedTabsProps) {
                                 <div className="overflow-x-auto">
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                            <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                 <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t('companies.detail.maintenance')}
                                                 </TableCell>
@@ -330,7 +330,7 @@ export function CompanyRelatedTabs({ company }: CompanyRelatedTabsProps) {
                                         </TableHeader>
                                         <TableBody>
                                             {maintenances.map((maintenance) => (
-                                                <TableRow key={maintenance.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                <TableRow key={maintenance.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/10 dark:hover:bg-neutral-800/50">
                                                     <TableCell className="px-4 py-3">
                                                         <LinkedName
                                                             canView={canViewMaintenance}

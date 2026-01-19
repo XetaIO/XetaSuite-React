@@ -169,13 +169,14 @@ export function IncidentDetailPage() {
                 ]}
             />
 
-            <div className="space-y-6">
+            {/* Header Card */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/5 dark:bg-white/3 lg:p-6">
                 {/* Header */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-center gap-4">
                         <Link
                             to="/incidents"
-                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-white/5 dark:text-gray-400 dark:bg-neutral-800 dark:hover:bg-neutral-700 dark:hover:text-gray-200"
                         >
                             <FaArrowLeft className="h-4 w-4" />
                         </Link>
@@ -212,10 +213,9 @@ export function IncidentDetailPage() {
                             )}
                             {canDelete && (
                                 <Button
-                                    variant="outline"
+                                    variant="danger"
                                     size="md"
                                     onClick={deleteModal.openModal}
-                                    className="text-error-600 hover:bg-error-50 hover:text-error-700 dark:text-error-400 dark:hover:bg-error-500/10 dark:hover:text-error-300"
                                 >
                                     <FaTrash className="mr-2 h-4 w-4" />
                                     {t('common.delete')}
@@ -224,56 +224,42 @@ export function IncidentDetailPage() {
                         </div>
                     )}
                 </div>
+            </div>
 
-                {/* Delete error */}
-                {deleteError && (
-                    <Alert variant="error" title={t('common.error')} message={deleteError} />
-                )}
 
-                {/* Content Grid */}
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                    {/* Main Info - Left Column (2 cols) */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Description Card */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+            {/* Delete error */}
+            {deleteError && (
+                <Alert variant="error" title={t('common.error')} message={deleteError} />
+            )}
+
+            {/* Content Grid */}
+            <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+                {/* Main Info - Left Column (2 cols) */}
+                <div className="lg:col-span-2 space-y-6">
+                    {/* Description Card */}
+                    <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
+                        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
+                            <FaCircleInfo className="h-5 w-5 text-brand-500" />
+                            {t('common.description')}
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+                            {incident.description}
+                        </p>
+                    </div>
+
+                    {/* Material Card */}
+                    {incident.material && (
+                        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                             <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                <FaCircleInfo className="h-5 w-5 text-brand-500" />
-                                {t('common.description')}
+                                <FaWrench className="h-5 w-5 text-brand-500" />
+                                {t('incidents.material')}
                             </h2>
-                            <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
-                                {incident.description}
-                            </p>
-                        </div>
-
-                        {/* Material Card */}
-                        {incident.material && (
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                                <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                    <FaWrench className="h-5 w-5 text-brand-500" />
-                                    {t('incidents.material')}
-                                </h2>
-                                {canViewMaterial ? (
-                                    <Link
-                                        to={`/materials/${incident.material.id}`}
-                                        className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="font-medium text-gray-900 dark:text-white">
-                                                    {incident.material.name}
-                                                </p>
-                                                {incident.material.zone && (
-                                                    <p className="mt-1 flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                                                        <FaSignsPost className="h-3 w-3" />
-                                                        {incident.material.zone.name}
-                                                    </p>
-                                                )}
-                                            </div>
-                                            <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400" />
-                                        </div>
-                                    </Link>
-                                ) : (
-                                    <div className="flex items-center justify-between rounded-lg border  border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 p-4">
+                            {canViewMaterial ? (
+                                <Link
+                                    to={`/materials/${incident.material.id}`}
+                                    className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-white/5 dark:bg-neutral-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
+                                >
+                                    <div className="flex items-center justify-between">
                                         <div>
                                             <p className="font-medium text-gray-900 dark:text-white">
                                                 {incident.material.name}
@@ -285,47 +271,40 @@ export function IncidentDetailPage() {
                                                 </p>
                                             )}
                                         </div>
+                                        <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400" />
                                     </div>
-                                )}
-                            </div>
-                        )}
+                                </Link>
+                            ) : (
+                                <div className="flex items-center justify-between rounded-lg border  border-gray-100 bg-gray-50 dark:border-white/5 dark:bg-neutral-800 p-4">
+                                    <div>
+                                        <p className="font-medium text-gray-900 dark:text-white">
+                                            {incident.material.name}
+                                        </p>
+                                        {incident.material.zone && (
+                                            <p className="mt-1 flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                                                <FaSignsPost className="h-3 w-3" />
+                                                {incident.material.zone.name}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
-                        {/* Maintenance Card (if linked) */}
-                        {incident.maintenance && (
-                            <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                                <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
-                                    <FaScrewdriverWrench className="h-5 w-5 text-brand-500" />
-                                    {t('incidents.linkedToMaintenance')}
-                                </h2>
-                                {canViewMaintenance ? (
-                                    <Link
-                                        to={`/maintenances/${incident.maintenance.id}`}
-                                        className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="font-medium text-gray-900 dark:text-white">
-                                                    {t('incidents.maintenance')} #{incident.maintenance.id}
-                                                </p>
-                                                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
-                                                    {incident.maintenance.description}
-                                                </p>
-                                                {incident.maintenance.status && (
-                                                    <div className="mt-2">
-                                                        <Badge
-                                                            color={maintenanceStatusColors[incident.maintenance.status] || 'dark'}
-                                                            size="sm"
-                                                        >
-                                                            {incident.maintenance.status}
-                                                        </Badge>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400 shrink-0 ml-4" />
-                                        </div>
-                                    </Link>
-                                ) : (
-                                    <div className="flex items-center justify-between rounded-lg border  border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 p-4">
+                    {/* Maintenance Card (if linked) */}
+                    {incident.maintenance && (
+                        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
+                            <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
+                                <FaScrewdriverWrench className="h-5 w-5 text-brand-500" />
+                                {t('incidents.linkedToMaintenance')}
+                            </h2>
+                            {canViewMaintenance ? (
+                                <Link
+                                    to={`/maintenances/${incident.maintenance.id}`}
+                                    className="block rounded-lg border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 dark:border-white/5 dark:bg-neutral-800 dark:hover:border-brand-800 dark:hover:bg-brand-900/20"
+                                >
+                                    <div className="flex items-center justify-between">
                                         <div>
                                             <p className="font-medium text-gray-900 dark:text-white">
                                                 {t('incidents.maintenance')} #{incident.maintenance.id}
@@ -344,123 +323,145 @@ export function IncidentDetailPage() {
                                                 </div>
                                             )}
                                         </div>
+                                        <FaArrowLeft className="h-4 w-4 rotate-180 text-gray-400 shrink-0 ml-4" />
                                     </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Sidebar - Right Column */}
-                    <div className="space-y-6">
-                        {/* Details Card */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                                {t('common.details')}
-                            </h2>
-                            <div className="space-y-4">
-                                {/* Site */}
-                                <div className="flex items-start gap-3">
-                                    <FaBuilding className="mt-0.5 h-4 w-4 text-gray-400" />
+                                </Link>
+                            ) : (
+                                <div className="flex items-center justify-between rounded-lg border  border-gray-100 bg-gray-50 dark:border-white/5 dark:bg-neutral-800 p-4">
                                     <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('common.site')}
-                                        </p>
                                         <p className="font-medium text-gray-900 dark:text-white">
-                                            <LinkedName
-                                                canView={canViewSite}
-                                                id={incident.site?.id}
-                                                name={incident.site?.name}
-                                                basePath="sites" />
+                                            {t('incidents.maintenance')} #{incident.maintenance.id}
                                         </p>
+                                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                                            {incident.maintenance.description}
+                                        </p>
+                                        {incident.maintenance.status && (
+                                            <div className="mt-2">
+                                                <Badge
+                                                    color={maintenanceStatusColors[incident.maintenance.status] || 'dark'}
+                                                    size="sm"
+                                                >
+                                                    {incident.maintenance.status}
+                                                </Badge>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                                {/* Reporter */}
-                                <div className="flex items-start gap-3">
-                                    <FaUser className="mt-0.5 h-4 w-4 text-gray-400" />
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('incidents.reportedBy')}
-                                        </p>
-                                        <LinkedName
-                                            canView={canViewReporterAndEditor}
-                                            id={incident.reporter?.id}
-                                            name={incident.reporter?.full_name || incident.reported_by_name}
-                                            basePath="users" />
-                                    </div>
-                                </div>
-
-                                {/* Started At */}
-                                <div className="flex items-start gap-3">
-                                    <FaCalendar className="mt-0.5 h-4 w-4 text-gray-400" />
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('incidents.startedAt')}
-                                        </p>
-                                        <p className="font-medium text-gray-900 dark:text-white">
-                                            {incident.started_at ? formatDate(incident.started_at) : '—'}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Resolved At */}
-                                {(incident.status === 'resolved' || incident.status === 'closed') && (
-                                    <div className="flex items-start gap-3">
-                                        <FaCalendarCheck className="mt-0.5 h-4 w-4 text-success-500" />
-                                        <div>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                {t('incidents.resolvedAt')}
-                                            </p>
-                                            <p className="font-medium text-gray-900 dark:text-white">
-                                                {incident.resolved_at ? formatDate(incident.resolved_at) : '—'}
-                                            </p>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+                            )}
                         </div>
+                    )}
+                </div>
 
-                        {/* Timestamps Card */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                            <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                                {t('common.history')}
-                            </h2>
-                            <div className="space-y-4">
-                                {/* Created At */}
+                {/* Sidebar - Right Column */}
+                <div className="space-y-6">
+                    {/* Details Card */}
+                    <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
+                        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+                            {t('common.details')}
+                        </h2>
+                        <div className="space-y-4">
+                            {/* Site */}
+                            <div className="flex items-start gap-3">
+                                <FaBuilding className="mt-0.5 h-4 w-4 text-gray-400" />
                                 <div>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                                        {t('common.createdAt')}
+                                        {t('common.site')}
                                     </p>
                                     <p className="font-medium text-gray-900 dark:text-white">
-                                        {formatDate(incident.created_at)}
+                                        <LinkedName
+                                            canView={canViewSite}
+                                            id={incident.site?.id}
+                                            name={incident.site?.name}
+                                            basePath="sites" />
                                     </p>
                                 </div>
+                            </div>
+                            {/* Reporter */}
+                            <div className="flex items-start gap-3">
+                                <FaUser className="mt-0.5 h-4 w-4 text-gray-400" />
+                                <div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t('incidents.reportedBy')}
+                                    </p>
+                                    <LinkedName
+                                        canView={canViewReporterAndEditor}
+                                        id={incident.reporter?.id}
+                                        name={incident.reporter?.full_name || incident.reported_by_name}
+                                        basePath="users" />
+                                </div>
+                            </div>
 
-                                {/* Updated At */}
-                                {incident.updated_at && (
+                            {/* Started At */}
+                            <div className="flex items-start gap-3">
+                                <FaCalendar className="mt-0.5 h-4 w-4 text-gray-400" />
+                                <div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t('incidents.startedAt')}
+                                    </p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                        {incident.started_at ? formatDate(incident.started_at) : '—'}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Resolved At */}
+                            {(incident.status === 'resolved' || incident.status === 'closed') && (
+                                <div className="flex items-start gap-3">
+                                    <FaCalendarCheck className="mt-0.5 h-4 w-4 text-success-500" />
                                     <div>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('common.updatedAt')}
+                                            {t('incidents.resolvedAt')}
                                         </p>
                                         <p className="font-medium text-gray-900 dark:text-white">
-                                            {formatDate(incident.updated_at)}
+                                            {incident.resolved_at ? formatDate(incident.resolved_at) : '—'}
                                         </p>
                                     </div>
-                                )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
-                                {/* Edited By */}
-                                {incident.editor && (
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t('common.editedBy')}
-                                        </p>
-                                        <LinkedName
-                                            canView={canViewReporterAndEditor}
-                                            id={incident.editor.id}
-                                            name={incident.editor.full_name}
-                                            basePath="users" />
-                                    </div>
-                                )}
+                    {/* Timestamps Card */}
+                    <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
+                        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+                            {t('common.history')}
+                        </h2>
+                        <div className="space-y-4">
+                            {/* Created At */}
+                            <div>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    {t('common.createdAt')}
+                                </p>
+                                <p className="font-medium text-gray-900 dark:text-white">
+                                    {formatDate(incident.created_at)}
+                                </p>
                             </div>
+
+                            {/* Updated At */}
+                            {incident.updated_at && (
+                                <div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t('common.updatedAt')}
+                                    </p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                        {formatDate(incident.updated_at)}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Edited By */}
+                            {incident.editor && (
+                                <div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t('common.editedBy')}
+                                    </p>
+                                    <LinkedName
+                                        canView={canViewReporterAndEditor}
+                                        id={incident.editor.id}
+                                        name={incident.editor.full_name}
+                                        basePath="users" />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

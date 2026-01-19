@@ -256,7 +256,7 @@ export const RoleModal: FC<RoleModalProps> = ({
                         type="button"
                         onClick={onClose}
                         title={t("common.close")}
-                        className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-300"
+                        className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-neutral-800 dark:hover:text-gray-300"
                     >
                         <FaXmark className="h-5 w-5" />
                     </button>
@@ -331,7 +331,7 @@ export const RoleModal: FC<RoleModalProps> = ({
 
                     {/* Edit mode notice - site cannot be changed */}
                     {isEditMode && role?.site_id !== null && (
-                        <div className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800/50">
+                        <div className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-white/5 dark:bg-neutral-800/50">
                             <FaCircleInfo className="mt-0.5 h-4 w-4 shrink-0 text-gray-500 dark:text-gray-400" />
                             <p className="text-xs text-gray-600 dark:text-gray-400">
                                 {t("roles.siteCannotBeChanged")}
@@ -369,7 +369,7 @@ export const RoleModal: FC<RoleModalProps> = ({
                         )}
                         {/* Display selected permissions as tags */}
                         {selectedPermissionIds.length > 0 && (
-                            <div className="mt-3 max-h-40 overflow-y-auto rounded-lg border border-gray-200 bg-gray-50 p-2 dark:border-gray-700 dark:bg-gray-800/50">
+                            <div className="mt-3 max-h-40 overflow-y-auto rounded-lg border border-gray-200 bg-gray-50 p-2 dark:border-white/5 dark:bg-neutral-800/50">
                                 <div className="flex flex-wrap gap-2">
                                     {getSelectedPermissions().map((permission) => (
                                         <span

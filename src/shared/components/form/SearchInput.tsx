@@ -55,7 +55,7 @@ export const SearchInput: FC<SearchInputProps> = ({
                 onChange={handleChange}
                 disabled={disabled}
                 autoFocus={autoFocus}
-                className="input-base input-with-left-icon"
+                className="input-base input-with-left-icon dark:border-white/5 dark:bg-white/3 dark:text-white"
             />
             {value && (
                 <button

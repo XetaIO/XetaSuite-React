@@ -227,10 +227,10 @@ export function MaterialStatsCharts({ materialId }: MaterialStatsChartsProps) {
                 {[1, 2].map((i) => (
                     <div
                         key={i}
-                        className="animate-pulse rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3"
+                        className="animate-pulse rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3"
                     >
-                        <div className="mb-4 h-6 w-48 rounded bg-gray-200 dark:bg-gray-700"></div>
-                        <div className="h-64 rounded bg-gray-100 dark:bg-gray-800"></div>
+                        <div className="mb-4 h-6 w-48 rounded bg-gray-200 dark:bg-neutral-700"></div>
+                        <div className="h-64 rounded bg-gray-100 dark:bg-neutral-800"></div>
                     </div>
                 ))}
             </div>
@@ -244,7 +244,7 @@ export function MaterialStatsCharts({ materialId }: MaterialStatsChartsProps) {
     return (
         <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-2">
             {/* Incidents & Maintenances Bar Chart */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                 <div className="mb-4">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                         {t('materials.charts.incidentsMaintenances')}
@@ -254,14 +254,14 @@ export function MaterialStatsCharts({ materialId }: MaterialStatsChartsProps) {
                     </p>
                 </div>
                 <div className="max-w-full overflow-x-auto custom-scrollbar">
-                    <div className="min-w-[500px]">
+                    <div className="min-w-125">
                         <Chart options={barChartOptions} series={barChartSeries} type="bar" height={280} />
                     </div>
                 </div>
             </div>
 
             {/* Cleanings & Item Movements Line Chart */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/3">
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-white/5 dark:bg-white/3">
                 <div className="mb-4">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                         {t('materials.charts.cleaningsItemMovements')}
@@ -271,7 +271,7 @@ export function MaterialStatsCharts({ materialId }: MaterialStatsChartsProps) {
                     </p>
                 </div>
                 <div className="max-w-full overflow-x-auto custom-scrollbar">
-                    <div className="min-w-[500px]">
+                    <div className="min-w-125">
                         <Chart options={lineChartOptions} series={lineChartSeries} type="area" height={280} />
                     </div>
                 </div>

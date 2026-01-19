@@ -190,16 +190,16 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
 
     // Render empty state
     const renderEmpty = (icon: React.ReactNode, message: string) => (
-        <div className="p-8 text-center">
+        <div className="p-8 flex flex-col items-center">
             <div className="mx-auto mb-3 text-gray-400">{icon}</div>
             <p className="text-gray-500 dark:text-gray-400">{message}</p>
         </div>
     );
 
     return (
-        <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+        <div className="mt-6 rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
             {/* Tab Headers */}
-            <div className="flex flex-wrap border-b border-gray-200 dark:border-gray-800">
+            <div className="flex flex-wrap border-b border-gray-200 dark:border-white/5">
                 {tabs.map((tab) => {
                     const isActive = activeTab === tab.key;
                     return (
@@ -236,7 +236,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                 <div className="overflow-x-auto">
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                            <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                 <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t('incidents.title')}
                                                 </TableCell>
@@ -253,7 +253,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                         </TableHeader>
                                         <TableBody>
                                             {incidents.map((incident) => (
-                                                <TableRow key={incident.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                <TableRow key={incident.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50">
                                                     <TableCell className="px-4 py-4 font-medium text-gray-900 dark:text-white">
                                                         <LinkedName
                                                             canView={canViewIncident}
@@ -305,7 +305,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                 <div className="overflow-x-auto">
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                            <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                 <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t('maintenances.title')}
                                                 </TableCell>
@@ -322,7 +322,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                         </TableHeader>
                                         <TableBody>
                                             {maintenances.map((maintenance) => (
-                                                <TableRow key={maintenance.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                <TableRow key={maintenance.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50">
                                                     <TableCell className="px-4 py-4 font-medium text-gray-900 dark:text-white">
                                                         <LinkedName
                                                             canView={canViewMaintenance}
@@ -371,7 +371,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                 <div className="overflow-x-auto">
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                            <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                 <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t('cleanings.id')}
                                                 </TableCell>
@@ -388,7 +388,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                         </TableHeader>
                                         <TableBody>
                                             {cleanings.map((cleaning) => (
-                                                <TableRow key={cleaning.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                <TableRow key={cleaning.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50">
                                                     <TableCell className="px-4 py-4 font-medium text-gray-900 dark:text-white">
                                                         <LinkedName
                                                             canView={canViewCleaning}
@@ -437,7 +437,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                 <div className="overflow-x-auto">
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                                            <TableRow className="border-b border-gray-200 dark:border-white/5">
                                                 <TableCell isHeader className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                                                     {t('items.fields.name')}
                                                 </TableCell>
@@ -454,7 +454,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                         </TableHeader>
                                         <TableBody>
                                             {items.map((item) => (
-                                                <TableRow key={item.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                                                <TableRow key={item.id} className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50">
                                                     <TableCell className="px-4 py-4 font-medium text-gray-900 dark:text-white">
                                                         <LinkedName
                                                             canView={canViewItem}
@@ -468,7 +468,7 @@ export function MaterialRelatedTabs({ material }: MaterialRelatedTabsProps) {
                                                     </TableCell>
                                                     <TableCell className="px-6 py-4">
                                                         <Badge
-                                                            color={item.stock_status === 'in_stock' ? 'success' : item.stock_status === 'warning' ? 'warning' : 'error'}
+                                                            color={item.stock_status === 'ok' ? 'success' : item.stock_status === 'warning' ? 'warning' : item.stock_status === 'error' ? 'error' : 'light'}
                                                             size="sm"
                                                         >
                                                             {item.current_stock} {t('common.units')}

@@ -23,8 +23,8 @@ export default function LowStockItemsCard({ items, isLoading = false }: LowStock
     };
 
     return (
-        <div className="h-full rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
-            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+        <div className="h-full rounded-2xl border border-gray-200 bg-white dark:border-white/5 dark:bg-white/3">
+            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-white/5">
                 <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
                     {t('dashboard.lowStock.title')}
                 </h3>
@@ -39,12 +39,12 @@ export default function LowStockItemsCard({ items, isLoading = false }: LowStock
                             <div key={index}>
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-                                        <div className="mt-1 h-3 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                        <div className="h-4 w-32 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
+                                        <div className="mt-1 h-3 w-20 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                     </div>
-                                    <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                                    <div className="h-4 w-16 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" />
                                 </div>
-                                <div className="mt-2 h-2 w-full animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
+                                <div className="mt-2 h-2 w-full animate-pulse rounded-full bg-gray-200 dark:bg-neutral-700" />
                             </div>
                         ))
                     ) : items.length === 0 ? (
@@ -74,7 +74,7 @@ export default function LowStockItemsCard({ items, isLoading = false }: LowStock
                                         </Badge>
                                     </div>
                                 </div>
-                                <div className="mt-2 h-2 w-full rounded-full bg-gray-100 dark:bg-gray-800">
+                                <div className="mt-2 h-2 w-full rounded-full bg-gray-100 dark:bg-neutral-800">
                                     <div
                                         className={`h-2 rounded-full transition-all ${getStockColor(item.stock_status)}`}
                                         style={{ width: `${getStockPercentage(item.current_stock, item.min_stock)}%` }}

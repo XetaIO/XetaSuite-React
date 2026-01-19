@@ -261,7 +261,7 @@ export const CleaningModal: FC<CleaningModalProps> = ({
                             <button
                                 type="button"
                                 onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
-                                className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-left text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <span className={getTypeColor(formData.type)}>
                                     {typeOptions.find((s) => s.value === formData.type)?.label ||
@@ -273,7 +273,7 @@ export const CleaningModal: FC<CleaningModalProps> = ({
                                 />
                             </button>
                             {isTypeDropdownOpen && (
-                                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-white/5 dark:bg-neutral-900">
                                     {typeOptions.map((option) => (
                                         <button
                                             key={option.value}
@@ -285,7 +285,7 @@ export const CleaningModal: FC<CleaningModalProps> = ({
                                                     setErrors((prev) => ({ ...prev, type: '' }));
                                                 }
                                             }}
-                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-gray-50 dark:hover:bg-neutral-800"
                                         >
                                             <span className={getTypeColor(option.value)}>{option.label}</span>
                                             {formData.type === option.value && (

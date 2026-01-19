@@ -286,7 +286,7 @@ const MaintenanceListPage: FC = () => {
                                     setCurrentPage(1);
                                 }}
                                 title={t('maintenances.filters.allStatuses')}
-                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-neutral-900 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <option value="">{t('maintenances.filters.allStatuses')}</option>
                                 {statusOptions.map((option) => (
@@ -303,7 +303,7 @@ const MaintenanceListPage: FC = () => {
                                     setCurrentPage(1);
                                 }}
                                 title={t('maintenances.filters.allTypes')}
-                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-neutral-900 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <option value="">{t('maintenances.filters.allTypes')}</option>
                                 {typeOptions.map((option) => (
@@ -320,7 +320,7 @@ const MaintenanceListPage: FC = () => {
                                     setCurrentPage(1);
                                 }}
                                 title={t('maintenances.filters.allRealizations')}
-                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-neutral-900 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <option value="">{t('maintenances.filters.allRealizations')}</option>
                                 {realizationOptions.map((option) => (
@@ -478,7 +478,7 @@ const MaintenanceListPage: FC = () => {
 
                 {/* Pagination */}
                 {meta && meta.last_page > 1 && (
-                    <div className="border-t border-gray-200 p-5 dark:border-gray-800">
+                    <div className="border-t border-gray-200 p-5 dark:border-white/5">
                         <Pagination
                             meta={meta}
                             onPageChange={handlePageChange}

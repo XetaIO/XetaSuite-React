@@ -45,7 +45,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
           ref={inputRef}
           id={id}
           type="checkbox"
-          className={`w-5 h-5 appearance-none cursor-pointer dark:border-gray-700 border border-gray-300 checked:border-transparent rounded-md checked:bg-brand-500 disabled:opacity-60 transition-colors duration-200
+          className={`w-5 h-5 appearance-none cursor-pointer dark:border-white/5 dark:bg-white/3 dark:checked:bg-brand-500 border border-gray-300 checked:border-transparent rounded-md checked:bg-brand-500 disabled:opacity-60 transition-colors duration-200
           ${indeterminate ? "border-transparent bg-brand-500" : ""}
           ${className}`}
           checked={checked}

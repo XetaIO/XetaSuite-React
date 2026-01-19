@@ -264,7 +264,7 @@ const IncidentListPage: FC = () => {
                                     setStatusFilter(e.target.value as IncidentStatus | '');
                                     setCurrentPage(1);
                                 }}
-                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-neutral-900 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <option value="">{t('incidents.allStatuses')}</option>
                                 {statusOptions.map((option) => (
@@ -281,7 +281,7 @@ const IncidentListPage: FC = () => {
                                     setSeverityFilter(e.target.value as IncidentSeverity | '');
                                     setCurrentPage(1);
                                 }}
-                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
+                                className="rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:bg-neutral-900 dark:text-white/90 dark:focus:border-brand-800"
                             >
                                 <option value="">{t('incidents.allSeverities')}</option>
                                 {severityOptions.map((option) => (

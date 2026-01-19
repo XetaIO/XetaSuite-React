@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, type FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Button, SearchableDropdown, type PinnedItem } from "@/shared/components/ui";
-import { Input, Label, Checkbox } from "@/shared/components/form";
+import { Input, Label, Checkbox, TextArea } from "@/shared/components/form";
 import { showSuccess, showError } from "@/shared/utils";
 import { ItemManager } from "../services";
 import type {
@@ -295,14 +295,18 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
 
                         <div>
                             <Label htmlFor="description">{t("items.fields.description")}</Label>
-                            <textarea
+                            <TextArea
                                 id="description"
-                                value={formData.description}
-                                onChange={(e) => handleChange("description", e.target.value)}
+                                name="description"
                                 rows={3}
-                                disabled={isLoading}
-                                placeholder={t("items.fields.description")}
-                                className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white"
+                                placeholder={t('items.fields.description')}
+                                value={formData.description}
+                                onChange={(value) => {
+                                    setFormData(prev => ({ ...prev, description: value }));
+                                    if (errors.description) {
+                                        setErrors(prev => ({ ...prev, description: '' }));
+                                    }
+                                }}
                             />
                         </div>
                     </div>
@@ -448,7 +452,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
 
                             {/* Recipients for alerts - shown when either warning or critical is enabled */}
                             {(formData.number_warning_enabled || formData.number_critical_enabled) && (
-                                <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+                                <div className="pt-3 border-t border-gray-200 dark:border-white/5">
                                     <Label className="mb-1">{t("items.sections.recipients")}</Label>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
                                         {t("items.recipientsHelp")}
@@ -462,7 +466,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                                             onChange={(e) => handleRecipientSearch(e.target.value)}
                                             disabled={isLoading}
                                         />
-                                        <div className="grid grid-cols-1 gap-1 max-h-32 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2">
+                                        <div className="grid grid-cols-1 gap-1 max-h-32 overflow-y-auto border border-gray-200 dark:border-white/5 rounded-lg p-2">
                                             {isLoadingDropdowns || isLoadingRecipients ? (
                                                 <div className="text-sm text-gray-500 p-1">{t("common.loading")}</div>
                                             ) : recipients.length === 0 ? (
@@ -473,7 +477,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                                                 recipients.map((recipient) => (
                                                     <label
                                                         key={recipient.id}
-                                                        className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1 rounded"
+                                                        className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 p-1 rounded"
                                                     >
                                                         <Checkbox
                                                             checked={formData.recipient_ids.includes(recipient.id)}
@@ -513,7 +517,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                                 onChange={(e) => handleMaterialSearch(e.target.value)}
                                 disabled={isLoading}
                             />
-                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 max-h-40 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 max-h-40 overflow-y-auto border border-gray-200 dark:border-white/5 rounded-lg p-3">
                                 {isLoadingDropdowns || isLoadingMaterials ? (
                                     <div className="text-sm text-gray-500 col-span-2 p-1">{t("common.loading")}</div>
                                 ) : materials.length === 0 ? (
@@ -524,7 +528,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                                     materials.map((material) => (
                                         <label
                                             key={material.id}
-                                            className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1 rounded"
+                                            className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 p-1 rounded"
                                         >
                                             <Checkbox
                                                 checked={formData.material_ids.includes(material.id)}
@@ -547,7 +551,7 @@ export const ItemModal: FC<ItemModalProps> = ({ isOpen, onClose, item, onSuccess
                     </div>
 
                     {/* Actions */}
-                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-white/5">
                         <Button variant="outline" onClick={onClose} disabled={isLoading}>
                             {t("common.cancel")}
                         </Button>

@@ -195,10 +195,6 @@
   @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
 }
 
-@utility menu-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
-}
-
 @utility menu-item-inactive {
   @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
 }
@@ -235,10 +231,6 @@
 
 @utility menu-dropdown-item {
   @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium;
-}
-
-@utility menu-dropdown-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
 }
 
 @utility menu-dropdown-item-inactive {
@@ -339,12 +331,12 @@
      -------------------------------------------------------------------------- */
   .card-base {
     @apply rounded-2xl border border-gray-200 bg-white
-           dark:border-gray-800 dark:bg-white/3;
+           dark:border-white/5 dark:bg-white/3;
   }
 
   .card-header {
     @apply flex flex-col gap-4 border-b border-gray-200 px-6 py-4
-           dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between;
+           dark:border-white/5 sm:flex-row sm:items-center sm:justify-between;
   }
 
   .card-header-title {
@@ -360,7 +352,7 @@
   }
 
   .card-body-border {
-    @apply border-b border-gray-200 px-6 py-4 dark:border-gray-800;
+    @apply border-b border-gray-200 px-6 py-4 dark:border-white/5;
   }
 
   /* --------------------------------------------------------------------------
@@ -391,16 +383,16 @@
   }
 
   .table-row-border {
-    @apply border-b border-gray-100 dark:border-gray-800;
+    @apply border-b border-gray-100 dark:border-white/5;
   }
 
   .table-row-hover {
     @apply border-b border-gray-100 hover:bg-gray-50
-           dark:border-gray-800 dark:hover:bg-white/2;
+           dark:border-white/5 dark:hover:bg-white/2;
   }
 
   .table-header-row-border {
-    @apply border-b border-gray-200 dark:border-gray-800;
+    @apply border-b border-gray-200 dark:border-white/5;
   }
 
   /* --------------------------------------------------------------------------
@@ -445,19 +437,19 @@
      Skeleton Loading Components
      -------------------------------------------------------------------------- */
   .skeleton-base {
-    @apply animate-pulse rounded bg-gray-200 dark:bg-gray-700;
+    @apply animate-pulse rounded bg-gray-200 dark:bg-neutral-700;
   }
 
   .skeleton-text {
-    @apply h-4 animate-pulse rounded bg-gray-200 dark:bg-gray-700;
+    @apply h-4 animate-pulse rounded bg-gray-200 dark:bg-neutral-700;
   }
 
   .skeleton-badge {
-    @apply h-5 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700;
+    @apply h-5 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-neutral-700;
   }
 
   .skeleton-avatar {
-    @apply h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700;
+    @apply h-10 w-10 animate-pulse rounded-full bg-gray-200 dark:bg-neutral-700;
   }
 
   /* --------------------------------------------------------------------------
@@ -495,12 +487,12 @@
 /* React Toastify - Position below header */
 :root {
   --toastify-toast-top: 94px !important;
-  --toastify-color-dark: #171f2f !important;
+  --toastify-color-dark: #262626 !important;
   --toastify-text-color-dark: var(--color-gray-300) !important;
 }
 
 .Toastify__toast {
-  @apply border border-gray-200 dark:border-gray-800;
+  @apply border border-gray-200 dark:border-white/5;
 }
 
 .apexcharts-legend-text {
@@ -512,7 +504,7 @@
 }
 
 .apexcharts-tooltip.apexcharts-theme-light {
-  @apply gap-1 !rounded-lg !border-gray-200 p-3 !shadow-theme-sm dark:!border-gray-800 dark:!bg-gray-900;
+  @apply gap-1 !rounded-lg !border-gray-200 p-3 !shadow-theme-sm dark:!border-white/5 dark:!bg-neutral-800;
 }
 
 .apexcharts-tooltip-marker {

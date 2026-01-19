@@ -118,14 +118,14 @@ export const ItemStatsChart: FC<ItemStatsChartProps> = ({ stats }) => {
 
     if (stats.length === 0) {
         return (
-            <div className="flex items-center justify-center h-[280px] text-gray-500 dark:text-gray-400">
+            <div className="flex items-center justify-center h-70 text-gray-500 dark:text-gray-400">
                 {t("items.stats.noData")}
             </div>
         );
     }
 
     return (
-        <div className="h-[280px]">
+        <div className="h-70">
             <Chart
                 options={chartOptions}
                 series={series}

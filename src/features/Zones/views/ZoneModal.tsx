@@ -131,7 +131,7 @@ export const ZoneModal: FC<ZoneModalProps> = ({
                             title={t("zones.parent")}
                             value={formData.parent_id ?? ""}
                             onChange={handleParentChange}
-                            className="mt-1.5 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:bg-gray-900 dark:focus:border-brand-800"
+                            className="mt-1.5 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/20 dark:border-white/5 dark:text-white/90 dark:bg-neutral-800 dark:focus:border-brand-800"
                         >
                             <option value="">{t("zones.form.noParent")}</option>
                             {isLoadingParents ? (

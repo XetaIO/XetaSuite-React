@@ -319,7 +319,7 @@ export const AppSidebar: React.FC = () => {
                         <button
                             onClick={() => handleSubmenuToggle(index, menuType)}
                             className={`menu-item group ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                                ? "menu-item-active"
+                                ? "bg-brand-50 text-brand-500 dark:bg-neutral-800 dark:text-brand-400"
                                 : "menu-item-inactive"
                                 } cursor-pointer ${!isExpanded && !isHovered
                                     ? "lg:justify-center"
@@ -351,7 +351,7 @@ export const AppSidebar: React.FC = () => {
                         nav.path && (
                             <Link
                                 to={nav.path}
-                                className={`menu-item group ${isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
+                                className={`menu-item group ${isActive(nav.path) ? "bg-brand-50 text-brand-500 dark:bg-neutral-800 dark:text-brand-400" : "menu-item-inactive"
                                     }`}
                             >
                                 <span
@@ -387,7 +387,7 @@ export const AppSidebar: React.FC = () => {
                                         <Link
                                             to={subItem.path}
                                             className={`menu-dropdown-item ${isActive(subItem.path)
-                                                ? "menu-dropdown-item-active"
+                                                ? "bg-brand-50 text-brand-500 dark:bg-neutral-800 dark:text-brand-400"
                                                 : "menu-dropdown-item-inactive"
                                                 }`}
                                         >
@@ -428,7 +428,7 @@ export const AppSidebar: React.FC = () => {
 
     return (
         <aside
-            className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
+            className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white border-gray-200 text-gray-900 dark:bg-neutral-950 dark:border-white/10 h-screen transition-all duration-300 ease-in-out z-50 border-r
         ${isExpanded || isMobileOpen
                     ? "w-72.5"
                     : isHovered
