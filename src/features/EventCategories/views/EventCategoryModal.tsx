@@ -7,7 +7,7 @@ import Input from '@/shared/components/form/input/InputField';
 import { showSuccess, showError } from '@/shared/utils/toast';
 import { EventCategoryManager } from '../services';
 import type { EventCategory, EventCategoryFormData } from '../types';
-import { Checkbox, TextArea } from '@/shared/components/form';
+import { TextArea } from '@/shared/components/form';
 
 interface EventCategoryModalProps {
     isOpen: boolean;
