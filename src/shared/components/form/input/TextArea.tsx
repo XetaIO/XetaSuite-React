@@ -16,7 +16,7 @@ interface TextareaProps {
 const TextArea: React.FC<TextareaProps> = ({
   id,
   name,
-  placeholder = "Enter your message", // Default placeholder
+  placeholder, // Default placeholder
   rows = 3, // Default number of rows
   value = "", // Default value
   onChange, // Callback for changes
@@ -36,9 +36,9 @@ const TextArea: React.FC<TextareaProps> = ({
   if (disabled) {
     textareaClasses += ` bg-gray-100 opacity-50 text-gray-500 border-gray-300 cursor-not-allowed opacity40 dark:bg-white/3 dark:text-gray-400 dark:border-white/5`;
   } else if (error) {
-    textareaClasses += ` bg-transparent  border-gray-300 focus:border-error-300 focus:ring-3 focus:ring-error-500/10 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-error-800`;
+    textareaClasses += `border-gray-300 focus:border-error-300 focus:ring-3 focus:ring-error-500/10 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-error-800`;
   } else {
-    textareaClasses += ` bg-transparent text-gray-900 dark:text-gray-300 text-gray-900 border-gray-300 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-brand-800`;
+    textareaClasses += `text-gray-900 border-gray-300 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-white/5 dark:bg-white/3 dark:text-white/90 dark:focus:border-brand-800 dark:placeholder:text-white/30`;
   }
 
   return (

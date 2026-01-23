@@ -188,4 +188,21 @@ export const API_ENDPOINTS = {
         BASE: '/api/v1/search',
         TYPES: '/api/v1/search/types',
     },
+    // Calendar
+    CALENDAR: {
+        BASE: '/api/v1/calendar',
+        TODAY: '/api/v1/calendar/today',
+    },
+    // Event Categories
+    EVENT_CATEGORIES: {
+        BASE: '/api/v1/event-categories',
+        DETAIL: (id: number) => `/api/v1/event-categories/${id}`,
+    },
+    // Calendar Events
+    CALENDAR_EVENTS: {
+        BASE: '/api/v1/calendar-events',
+        DETAIL: (id: number) => `/api/v1/calendar-events/${id}`,
+        UPDATE_DATES: (id: number) => `/api/v1/calendar-events/${id}/dates`,
+        AVAILABLE_EVENT_CATEGORIES: '/api/v1/calendar-events/available-event-categories',
+    },
 } as const;

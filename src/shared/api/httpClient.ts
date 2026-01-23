@@ -64,6 +64,12 @@ httpClient.interceptors.response.use(
             return Promise.reject(error);
         }
 
+        // Handle 403 Forbidden - redirect to home page
+        if (error.response?.status === 403) {
+            window.location.href = '/';
+            return Promise.reject(error);
+        }
+
         // Only show toast for server errors (5xx) automatically
         if (shouldShowToast && error.response?.status && error.response.status >= 500) {
             showError('Server error. Please try again later.');

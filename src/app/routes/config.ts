@@ -63,6 +63,12 @@ const PermissionDetailPage = lazy(() => import("@/features/Permissions/views/Per
 // Lazy load Settings feature
 const SettingsListPage = lazy(() => import("@/features/Settings/views/SettingsListPage"));
 
+// Lazy load Calendar feature
+const CalendarPage = lazy(() => import("@/features/Calendar/views/CalendarPage"));
+
+// Lazy load EventCategories feature
+const EventCategoryListPage = lazy(() => import("@/features/EventCategories/views/EventCategoryListPage"));
+
 // Lazy load Account feature
 const NotificationsPage = lazy(() => import("@/features/Account/views/NotificationsPage"));
 const ChangePasswordPage = lazy(() => import("@/features/Account/views/ChangePasswordPage"));
@@ -107,6 +113,18 @@ export const protectedRoutes: RouteConfig[] = [
         path: "/",
         element: HomePage,
         requireAuth: true,
+    },
+    {
+        path: "/calendar",
+        element: CalendarPage,
+        requireAuth: true,
+        permission: "calendarEvent.viewAny",
+    },
+    {
+        path: "/event-categories",
+        element: EventCategoryListPage,
+        requireAuth: true,
+        permission: "eventCategory.viewAny",
     },
     /*{
         path: "/unauthorized",
