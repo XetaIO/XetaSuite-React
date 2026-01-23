@@ -41,13 +41,12 @@ export function useCalendarData(
 ): UseCalendarDataReturn {
     const { t } = useTranslation();
 
-    // Refs to track loading state and prevent duplicate fetches
-    const isInitialLoadDone = useRef(false);
+    // Refs to track state without causing re-renders
     const currentDateRange = useRef<{ start: string; end: string } | null>(null);
+    const prevFiltersRef = useRef<CalendarFilters | null>(null);
 
     /**
      * Fetch calendar events for a specific date range
-     * Called by FullCalendar when view/dates change and when filters change
      */
     const fetchCalendarData = useCallback(async (
         start: string,
@@ -85,10 +84,10 @@ export function useCalendarData(
 
     /**
      * Handler for FullCalendar's datesSet event
-     * This is the main entry point for data fetching
+     * This is the ONLY entry point for data fetching on date/view changes.
      *
-     * - Prevents duplicate fetches for the same date range
-     * - Tracks current date range for filter changes
+     * On first call: saves filters to prevFiltersRef and fetches data
+     * On subsequent calls: only fetches if date range changed
      */
     const handleDatesSet = useCallback((dateInfo: { start: Date; end: Date }) => {
         const start = dateInfo.start.toISOString();
@@ -99,21 +98,38 @@ export function useCalendarData(
             return;
         }
 
-        // Update tracking refs and fetch data
+        // Update date range and fetch
         currentDateRange.current = { start, end };
-        isInitialLoadDone.current = true;
+        prevFiltersRef.current = filters;
         fetchCalendarData(start, end, filters);
     }, [fetchCalendarData, filters]);
 
-    // Refetch when filters change (only after initial load)
+    /**
+     * Refetch when filters actually change (not on initial mount)
+     * Compares with previous filters to avoid double-fetch
+     */
     useEffect(() => {
-        if (isInitialLoadDone.current && currentDateRange.current) {
-            fetchCalendarData(
-                currentDateRange.current.start,
-                currentDateRange.current.end,
-                filters
-            );
+        // Skip if no date range yet (FullCalendar hasn't mounted)
+        if (!currentDateRange.current) {
+            return;
         }
+
+        // Skip if filters haven't actually changed (initial mount case)
+        if (
+            prevFiltersRef.current !== null &&
+            prevFiltersRef.current.show_maintenances === filters.show_maintenances &&
+            prevFiltersRef.current.show_incidents === filters.show_incidents
+        ) {
+            return;
+        }
+
+        // Filters changed, update ref and fetch
+        prevFiltersRef.current = filters;
+        fetchCalendarData(
+            currentDateRange.current.start,
+            currentDateRange.current.end,
+            filters
+        );
     }, [filters, fetchCalendarData]);
 
     return {
