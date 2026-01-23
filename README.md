@@ -95,6 +95,18 @@ This SPA (Single Page Application) communicates with the Laravel backend via **S
 - **Real-time badge**: Unread indicator in header
 - **Bulk actions**: Mark all as read
 
+### 📅 Calendar & Event Categories
+
+- **Interactive calendar**: FullCalendar-based view with month, week, day, and list modes
+- **Unified display**: Calendar events, maintenances, and incidents in one view
+- **Toggle visibility**: Show/hide maintenances and incidents independently
+- **Event categories**: Color-coded categories for organizing events
+- **Drag & drop**: Move events by dragging, resize for duration changes
+- **Quick creation**: Click on calendar to create event at that time
+- **Event modal**: Rich form with searchable category dropdown
+- **Today's banner**: Dashboard widget showing current day's events
+- **Category management**: Full CRUD interface for event categories
+
 ### 🌐 Internationalization
 
 - **Multi-language**: French and English
