@@ -8,6 +8,7 @@ import {
     FaBuildingUser,
     FaBuildingFlag,
     FaBroom,
+    FaCalendarDays,
     FaChevronDown,
     FaCubes,
     FaGear,
@@ -16,6 +17,7 @@ import {
     FaShieldHalved,
     FaSignsPost,
     FaSitemap,
+    FaTags,
     FaTriangleExclamation,
     FaUsersGear,
     FaUserTie,
@@ -35,6 +37,8 @@ type NavSubItem = {
     permission?: string;
     /** If true, requires current site to be headquarters */
     requiresHQ?: boolean;
+    /** If true, this item is not shown in headquarters */
+    notHQ?: boolean;
 };
 
 type NavItem = {
@@ -45,6 +49,8 @@ type NavItem = {
     permission?: string;
     /** If true, requires current site to be headquarters */
     requiresHQ?: boolean;
+    /** If true, this item is not shown in headquarters */
+    notHQ?: boolean;
     subItems?: NavSubItem[];
 };
 
@@ -53,6 +59,25 @@ const navItems: NavItem[] = [
         icon: <LuLayoutDashboard />,
         nameKey: "sidebar.dashboard",
         path: "/"
+    },
+    {
+        icon: <FaCalendarDays />,
+        nameKey: "sidebar.calendar",
+        subItems: [
+            {
+                icon: <FaCalendarDays />,
+                nameKey: "sidebar.viewCalendar",
+                path: "/calendar",
+                permission: "calendarEvent.viewAny",
+            },
+            {
+                icon: <FaTags />,
+                nameKey: "sidebar.eventCategories",
+                path: "/event-categories",
+                permission: "eventCategory.viewAny",
+                notHQ: true,
+            },
+        ],
     },
     {
         icon: <FaScrewdriverWrench />,
@@ -205,6 +230,8 @@ export const AppSidebar: React.FC = () => {
                     const filteredSubItems = item.subItems.filter(subItem => {
                         // Check HQ requirement
                         if (subItem.requiresHQ && !isOnHeadquarters) return false;
+                        // Check notHQ requirement
+                        if (subItem.notHQ && isOnHeadquarters) return false;
                         // Check permission requirement
                         if (subItem.permission && !hasPermission(subItem.permission)) return false;
                         return true;
@@ -219,6 +246,8 @@ export const AppSidebar: React.FC = () => {
                 // For items without subItems
                 // Check HQ requirement
                 if (item.requiresHQ && !isOnHeadquarters) return null;
+                // Check notHQ requirement
+                if (item.notHQ && isOnHeadquarters) return null;
                 // Check permission requirement
                 if (item.permission && !hasPermission(item.permission)) return null;
 
@@ -475,7 +504,7 @@ export const AppSidebar: React.FC = () => {
                 </div>
             )}
 
-            <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+            <div className="flex flex-col overflow-y-auto duration-300 ease-linear custom-scrollbar">
                 <nav className="mb-6">
                     <div className="flex flex-col gap-4">
                         <div>
