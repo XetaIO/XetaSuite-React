@@ -405,12 +405,6 @@ export function ZoneDetailPage() {
                                             className="border-b border-gray-100 hover:bg-gray-50 dark:border-white/5 dark:hover:bg-neutral-800/50"
                                         >
                                             <TableCell className="px-6 py-4">
-                                                <Link
-                                                    to={`/zones/${child.id}`}
-                                                    className="font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400"
-                                                >
-                                                    {child.name}
-                                                </Link>
                                                 <LinkedName
                                                     canView={permissions.canView}
                                                     id={child.id}

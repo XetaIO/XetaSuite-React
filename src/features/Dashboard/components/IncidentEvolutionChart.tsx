@@ -1,8 +1,7 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { useTranslation } from 'react-i18next';
-import { DashboardRepository } from '../services';
 import type { IncidentsEvolution } from '../types';
 
 // Incident severity colors matching the screenshot
@@ -14,38 +13,18 @@ const SEVERITY_COLORS = {
 } as const;
 
 interface IncidentEvolutionChartProps {
-    className?: string;
+    data?: IncidentsEvolution | null;
+    isLoading?: boolean;
 }
 
-export function IncidentEvolutionChart({ className }: IncidentEvolutionChartProps) {
+export function IncidentEvolutionChart({ data, isLoading = false }: IncidentEvolutionChartProps) {
     const { t } = useTranslation();
-    const [data, setData] = useState<IncidentsEvolution | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [visibleSeries, setVisibleSeries] = useState<Record<string, boolean>>({
         low: true,
         medium: true,
         high: true,
         critical: true,
     });
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setIsLoading(true);
-                setError(null);
-                const chartsData = await DashboardRepository.getChartsData();
-                setData(chartsData.incidents_evolution);
-            } catch (err) {
-                console.error('Failed to fetch charts data:', err);
-                setError('Failed to load chart data');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
 
     const toggleSeries = (severity: keyof typeof SEVERITY_COLORS) => {
         setVisibleSeries(prev => ({
@@ -175,7 +154,7 @@ export function IncidentEvolutionChart({ className }: IncidentEvolutionChartProp
 
     if (isLoading) {
         return (
-            <div className={`flex items-center justify-center h-[310px] ${className ?? ''}`}>
+            <div className="flex items-center justify-center h-77.5">
                 <div className="animate-pulse flex flex-col items-center gap-2">
                     <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
                     <span className="text-gray-500 dark:text-gray-400 text-sm">{t('common.loading')}</span>
@@ -184,16 +163,8 @@ export function IncidentEvolutionChart({ className }: IncidentEvolutionChartProp
         );
     }
 
-    if (error) {
-        return (
-            <div className={`flex items-center justify-center h-[310px] ${className ?? ''}`}>
-                <p className="text-error-500">{error}</p>
-            </div>
-        );
-    }
-
     return (
-        <div className={className}>
+        <>
             {/* Custom Legend */}
             <div className="flex flex-wrap gap-4 mb-4">
                 {(Object.keys(SEVERITY_COLORS) as (keyof typeof SEVERITY_COLORS)[]).map(severity => (
@@ -224,7 +195,7 @@ export function IncidentEvolutionChart({ className }: IncidentEvolutionChartProp
 
             {/* Chart */}
             <div className="max-w-full overflow-x-auto custom-scrollbar">
-                <div className="min-w-[600px]">
+                <div className="min-w-150">
                     <Chart
                         key={`incident-chart-${series.length}-${data?.months?.join('-') ?? 'empty'}`}
                         options={options}
@@ -234,6 +205,6 @@ export function IncidentEvolutionChart({ className }: IncidentEvolutionChartProp
                     />
                 </div>
             </div>
-        </div>
+        </>
     );
 }

@@ -22,7 +22,7 @@ import {
   FaBroom,
 } from "react-icons/fa6";
 import { DashboardRepository } from "./services";
-import type { DashboardData } from "./types";
+import type { DashboardData, IncidentsEvolution, MaintenancesEvolution } from "./types";
 import { useAppConfig } from "@/shared/store";
 import { MaintenanceEvolutionChart, IncidentEvolutionChart } from "./components";
 
@@ -33,25 +33,31 @@ export default function Home() {
 
   // Dashboard data state
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [chartsMaintenancesData, setChartsMaintenancesData] = useState<MaintenancesEvolution | null>(null);
+  const [chartsIncidentsData, setChartsIncidentsData] = useState<IncidentsEvolution | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchDashboardData = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const data = await DashboardRepository.getStats();
+      setDashboardData(data);
+
+      const chartsData = await DashboardRepository.getChartsData();
+      setChartsIncidentsData(chartsData.incidents_evolution);
+      setChartsMaintenancesData(chartsData.maintenances_evolution);
+    } catch (err) {
+      console.error('Failed to fetch dashboard data:', err);
+      setError('Failed to load dashboard data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Fetch dashboard data on mount
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const data = await DashboardRepository.getStats();
-        setDashboardData(data);
-      } catch (err) {
-        console.error('Failed to fetch dashboard data:', err);
-        setError('Failed to load dashboard data');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchDashboardData();
   }, []);
 
@@ -276,12 +282,12 @@ export default function Home() {
         {/* Charts Row */}
         <div className="col-span-12 xl:col-span-7">
           <ComponentCard title={t('dashboard.charts.maintenanceEvolution')} desc={t('dashboard.charts.maintenanceEvolutionDesc')}>
-            <MaintenanceEvolutionChart />
+            <MaintenanceEvolutionChart data={chartsMaintenancesData} isLoading={isLoading} />
           </ComponentCard>
         </div>
         <div className="col-span-12 xl:col-span-5">
           <ComponentCard title={t('dashboard.charts.incidentsByMonth')} desc={t('dashboard.charts.incidentsByMonthDesc')}>
-            <IncidentEvolutionChart />
+            <IncidentEvolutionChart data={chartsIncidentsData} isLoading={isLoading} />
           </ComponentCard>
         </div>
       </div>

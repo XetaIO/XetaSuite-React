@@ -1,8 +1,7 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { useTranslation } from 'react-i18next';
-import { DashboardRepository } from '../services';
 import type { MaintenancesEvolution } from '../types';
 
 // Maintenance type colors matching the screenshot
@@ -14,37 +13,18 @@ const MAINTENANCE_COLORS = {
 } as const;
 
 interface MaintenanceEvolutionChartProps {
-    className?: string;
+    data: MaintenancesEvolution | null;
+    isLoading?: boolean;
 }
 
-export function MaintenanceEvolutionChart({ className }: MaintenanceEvolutionChartProps) {
+export function MaintenanceEvolutionChart({ data, isLoading = false }: MaintenanceEvolutionChartProps) {
     const { t } = useTranslation();
-    const [data, setData] = useState<MaintenancesEvolution | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [visibleSeries, setVisibleSeries] = useState<Record<string, boolean>>({
         corrective: true,
         preventive: true,
         inspection: true,
         improvement: true,
     });
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setIsLoading(true);
-                setError(null);
-                const chartsData = await DashboardRepository.getChartsData();
-                setData(chartsData.maintenances_evolution);
-            } catch (err) {
-                setError('Failed to load chart data :' + err);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
 
     const toggleSeries = (type: keyof typeof MAINTENANCE_COLORS) => {
         setVisibleSeries(prev => ({
@@ -188,7 +168,7 @@ export function MaintenanceEvolutionChart({ className }: MaintenanceEvolutionCha
 
     if (isLoading) {
         return (
-            <div className={`flex items-center justify-center h-77.5 ${className ?? ''}`}>
+            <div className="flex items-center justify-center h-77.5">
                 <div className="animate-pulse flex flex-col items-center gap-2">
                     <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
                     <span className="text-gray-500 dark:text-gray-400 text-sm">{t('common.loading')}</span>
@@ -197,16 +177,8 @@ export function MaintenanceEvolutionChart({ className }: MaintenanceEvolutionCha
         );
     }
 
-    if (error) {
-        return (
-            <div className={`flex items-center justify-center h-77.5 ${className ?? ''}`}>
-                <p className="text-error-500">{error}</p>
-            </div>
-        );
-    }
-
     return (
-        <div className={className}>
+        <>
             {/* Custom Legend */}
             <div className="flex flex-wrap gap-4 mb-4">
                 {(Object.keys(MAINTENANCE_COLORS) as (keyof typeof MAINTENANCE_COLORS)[]).map(type => (
@@ -246,6 +218,6 @@ export function MaintenanceEvolutionChart({ className }: MaintenanceEvolutionCha
                     />
                 </div>
             </div>
-        </div>
+        </>
     );
 }
