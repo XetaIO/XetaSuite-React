@@ -1424,6 +1424,27 @@
             "password": "Password",
             "security": "Security"
         },
+        "tokens": {
+            "title": "Personal access tokens",
+            "description": "Used to authenticate API and MCP calls.",
+            "create": "Create a token",
+            "loading": "Loading…",
+            "empty": "No tokens created.",
+            "createdAt": "Created on {{date}}",
+            "expiresAt": "Expires on {{date}}",
+            "lastUsedAt": "Last used on {{date}}",
+            "revoke": "Revoke",
+            "revokeSuccess": "Token revoked.",
+            "createSuccess": "Token created successfully.",
+            "createdModalTitle": "Token created — copy it now",
+            "createdModalWarning": "This token will no longer be displayed after closing this window.",
+            "copy": "Copy",
+            "copied": "Copied to clipboard!",
+            "newTokenTitle": "New access token",
+            "tokenNameLabel": "Token name",
+            "tokenNamePlaceholder": "e.g.: MCP Claude",
+            "expiryDateLabel": "Expiration date (optional)"
+        },
         "password": {
             "pageTitle": "Change my password",
             "description": "Update your password to secure your account",
