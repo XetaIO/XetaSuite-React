@@ -1415,6 +1415,27 @@
             "password": "Mot de passe",
             "security": "Sécurité"
         },
+        "tokens": {
+            "title": "Tokens d'accès personnel",
+            "description": "Utilisés pour authentifier les appels API et MCP.",
+            "create": "Créer un token",
+            "loading": "Chargement…",
+            "empty": "Aucun token créé.",
+            "createdAt": "Créé le {{date}}",
+            "expiresAt": "Expire le {{date}}",
+            "lastUsedAt": "Dernière utilisation le {{date}}",
+            "revoke": "Révoquer",
+            "revokeSuccess": "Token révoqué.",
+            "createSuccess": "Token créé avec succès.",
+            "createdModalTitle": "Token créé — copiez-le maintenant",
+            "createdModalWarning": "Ce token ne sera plus affiché après la fermeture de cette fenêtre.",
+            "copy": "Copier",
+            "copied": "Copié dans le presse-papiers !",
+            "newTokenTitle": "Nouveau token d'accès",
+            "tokenNameLabel": "Nom du token",
+            "tokenNamePlaceholder": "ex : MCP Claude",
+            "expiryDateLabel": "Date d'expiration (optionnel)"
+        },
         "password": {
             "pageTitle": "Changer mon mot de passe",
             "description": "Mettez à jour votre mot de passe pour sécuriser votre compte",
